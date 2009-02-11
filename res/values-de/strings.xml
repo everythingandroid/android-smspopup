@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- App Strings -->
+   <string name="app_name">SMS Popup</string>   
+   <string name="new_text_at">Neue Nachricht um %s eingetroffen</string>
+   <string name="unread_text_waiting">%d andere, ungelesene Nachricht(en)</string>
+   <string name="mms_subject">Betreff:</string>
+
+<!-- Notification Strings -->
+   <string name="notification_multiple_title">Neue Nachrichten</string>
+   <string name="notification_multiple_text">%d ungelesene Nachrichten.</string>
+   <string name="notification_scroll_privacy">Neue Nachricht von: %s</string>
+   <string name="unknown_name">unbekannt</string>
+
+<!-- Button Strings -->   
+   <string name="button_close">Beenden</string>
+   <string name="button_reply">Antworten</string>
+   <string name="button_inbox">Posteingang</string>
+   <string name="button_view">Öffnen</string>
+   <string name="button_view_mms">MMS öffnen</string>
+   
+   <!-- Not yet implemented -->
+   <string name="button_delete">Löschen</string>
+   <string name="button_next">Nächste</string>
+   <string name="button_previous">Letzte</string>
+   <string name="button_unlock">Freigabe</string>
+   
+<!-- Main Preferences -->
+   <string name="pref_config_title">SMS Popup Einstellungen</string>
+   <string name="pref_other_title">Sonstiges</string>
+
+   <string name="pref_enabled_title">SMS Popup aktivieren</string>
+   <string name="pref_enabled_summaryon">SMS Popup ist aktiviert</string>
+   <string name="pref_enabled_summaryoff">SMS Popup ist deaktiviert</string>
+
+   <string name="pref_about_title">Über</string>
+   <string name="pref_about_summary">Über SMS Popup</string>
+   <string name="pref_about_text">Entwickelt von: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nDeutsche Übersetzung: Feyyaz A.\nEmail: f_alingan@hotmail.com \nWebsite: http://www.yenio.com\n\nSMS Popup ist ein simples Programm welches - ähnlich wie beim iPhone - bei empfangener Nachricht ein Fenster mit den wichtigsten Informationen über die Nachricht (z.B. Versender und wenn vorhanden, ein Kontaktbild) anzeigt.\n\nIch freue mich über jegliche Kommentare, Vorschläge oder gefundene Bugs.\n\nDanke an Min Tran für das Icon\n(http://min.frexy.com)</string>
+   
+   <string name="pref_sendemail_title">E-mail an den Entwickler</string>
+   <string name="pref_sendemail_summary">Schreibe Kommentar oder melde Bugs via E-Mail</string>
+   <string name="pref_sendemail_dialog">Sollen Informationen über das genutzte System mitgeschickt werden (Diese Informationen helfen, das Problem schneller zu lösen.)?</string>
+   <string name="pref_sendemail_buttonok">Ja</string>
+   <string name="pref_sendemail_buttoncancel">Nein</string>
+   
+<!-- Additional Preferences -->
+   <string name="pref_additional_title">Zusätzliche Einstellungen</string>
+   <string name="pref_additional_summary">Zusätzliche SMS Popup Einstellungen</string>
+
+   <string name="pref_timeout_title">Zeit bis zum Energiesparmodus</string>
+   <string name="pref_timeout_summary">Der Bildschirm schaltet nach Ablauf dieser Zeit automatisch in den Energiesparmodus</string>
+      
+   <string name="pref_privacy_title">Privatsphäre</string>
+   <string name="pref_privacy_summaryon">Inhalt der Mitteilung wird erst nach Freigabe angezeigt</string>
+   <string name="pref_privacy_summaryoff">Inhalt der Mitteilung ist sofort ersichtlich</string>
+   
+   <string name="pref_markread_title">Als gelesen markieren</string>
+   <string name="pref_markread_summaryon">Bei \"Schliessen\" werden die Nachrichten als gelesen markiert</string>
+   <string name="pref_markread_summaryoff">Bei \"Schliessen\" werden die Nachrichten als ungelesen markiert</string>
+
+   <string name="pref_onlyShowOnKeyguard_title">Popup einschränken</string>
+   <string name="pref_onlyShowOnKeyguard_summaryon">Popup wird nur angezeigt, wenn die Tastatur gebraucht wird</string>
+   <string name="pref_onlyShowOnKeyguard_summaryoff">Popup wird immer angezeigt</string>
+
+   <!-- Not yet implemented -->
+   <string name="pref_require_unlock_title">Buttons bei Display-Sperre</string>
+   <string name="pref_require_unlock_summaryon">Buttons werden versteckt bis der Bildschirm gesperrt ist</string>
+   <string name="pref_require_unlock_summaryoff">Buttons werden sofort angezeigt</string>
+
+   <!-- Not yet implemented -->
+   <string name="pref_inbox_app_title">Wähle Standartprogramm für den Posteingang</string>
+   <string name="pref_inbox_app_summary">Wähle das Programm, welches bei mehreren Nachrichten gestartet wird</string>
+   <string name="pref_inbox_app_info">Bei "antworten" übernimmt das telefoneigene Programm!</string>
+
+   <!-- Not yet implemented -->
+   <string name="pref_show_delete_button_title">Zeige den "löschen" Button</string>
+   <string name="pref_show_delete_button_summaryon">"Löschen" Button wird angezeigt</string>
+   <string name="pref_show_delete_button_summaryoff">"Löschen" Button wird nicht angezeigt</string>
+   
+   <string name="pref_blur_title">Unschärfe vom Hintergrund</string>
+   <string name="pref_blur_summaryon">Hintergrund wird unscharf beim Anzeigen der Nachricht</string>
+   <string name="pref_blur_summaryoff">Hintergrund bleibt klar beim Anzeigen der Nachricht</string>
+
+<!-- Notification Preferences -->
+   <string name="pref_notif_title">Benachrichtigungen</string>
+   <string name="pref_notif_summary">Einstellungen der Benachrichtigungen</string>
+   
+   <string name="pref_notif_enabled_title">Benachrichtigungen einstellen</string>
+   <string name="pref_notif_enabled_summaryon">Benachrichtigungen werden angezeigt</string>
+   <string name="pref_notif_enabled_summaryoff">Benachrichtigungen werden nicht angezeigt</string>
+   <string name="pref_notif_enabled_warning">Um Konflikte und mehrere gleiche Benachrichtigungen zu vermeiden, sollten die systemeigenen SMS-Benachrichtigungen, sowie alle Programme, welche eine Meldung beim Empfangen von einer SMS anzeigen, abgeschaltet werden.\n\nUm die systemeigene Benachrichtigung abzustellen: Nachrichten -> Einstellungen -> Alle Markierungen bei Benachrichtigungen löschen\n</string>
+
+   <string name="pref_notif_test_title">Benachrichtigungen testen</string>
+   <string name="pref_notif_test_summary">Hier wird die Benachrichtigung getestet</string>
+   <string name="pref_notif_test_message">Benachrichtigung wird jetzt angezeigt!</string>
+   
+   <string name="pref_notif_sound_title">Töne bei Benachrichtigungen</string>
+   <string name="pref_notif_sound_summary">Dieser Ton wird beim Empfang abgespielt</string>
+
+   <string name="pref_vibrate_title">Vibrationen</string>
+   <string name="pref_vibrate_summaryon">Vibration ist an</string>
+   <string name="pref_vibrate_summaryoff">Vibration ist aus</string>
+
+   <string name="pref_vibrate_pattern_title">Muster der Vibrationsbenachrichtigung</string>
+   <string name="pref_vibrate_pattern_summary">Einstellen der Vibrationsbenachrichtigung</string>
+   <string name="pref_vibrate_pattern_ok">Eigene Vibrationsbenachrichtigungen einstellen</string>
+   <string name="pref_vibrate_pattern_bad">Eigene Einstellung ist ungültig. Standard wird eingestellt</string>
+   <string name="pref_vibrate_pattern_help">Eigenen Vibrationswert einstellen im Muster:\nmillisOff (in Millisekunden aus), millisOn (in Millisekunden ein), etc.\n\nZum Beispiel:\n0,1000\n0,500,200,500,200,500</string>
+
+   <string name="pref_flashled_title">LED Anzeige</string>
+   <string name="pref_flashled_summaryon">LED soll bei empfangener Nachricht blinken</string>
+   <string name="pref_flashled_summaryoff">LED soll bei empfangener Nachricht nicht blinken</string>
+   
+   <string name="pref_flashled_color_title">LED Farbe</string>
+   <string name="pref_flashled_color_summary">Die Farbe des LED</string>
+
+   <string name="pref_notif_repeat_title">Aktivierung von Erinnerungen</string>
+   <string name="pref_notif_repeat_summaryon">Erinnerungen für ungelesene Nachrichten ist aktiviert</string>
+   <string name="pref_notif_repeat_summaryoff">Erinnerungen für ungelesene Nachrichten ist deaktiviert</string>
+   
+   <string name="pref_notif_repeat_interval_title">Intervall für Erinnerungen</string>
+   <string name="pref_notif_repeat_interval_summary">Die Zeitperiode zwischen den Benachrichtigungen</string>
+   <string name="pref_notif_repeat_interval_dialogTitle">Intervall (in Minuten)</string>
+   
+   <string name="pref_notif_repeat_times_title">Anzahl der Erinnerungen</string>
+   <string name="pref_notif_repeat_times_summary">Die Anzahl der Erinnerungen welche gespeichert sind</string>
+
+   <!-- Not yet implemented -->
+   <string name="pref_notif_repeat_screen_on_title">Display-Anzeige für Erinnerungen</string>
+   <string name="pref_notif_repeat_screen_on_summaryon">Erinnerungen schalten das Display ein</string>
+   <string name="pref_notif_repeat_screen_on_summaryoff">Erinnerungen schalten das Display nicht ein</string>
+   <string name="pref_notif_repeat_screen_on_warning">Achtung - Das Aktivieren der Anzeige für Erinnerungen kann die Akku-Dauer extrem verringern</string>   
+
+<!-- Arrays for drop-down prefs -->
+   <string-array name="pref_timeout_entries">
+      <item>10 Sekunden</item>
+      <item>20 Sekunden</item>
+      <item>30 Sekunden</item>
+      <item>1 Minute</item>
+      <item>2 Minuten</item>
+      <item>5 Minuten</item>
+      <item>10 Minuten</item>
+   </string-array>
+   
+   <string-array name="pref_vibrate_pattern_entries">
+      <item>normal</item>
+      <item>lang vibrieren</item>
+      <item>mehrmals kurz</item>
+      <item>mehrmals lang</item>
+      <item>eigene</item>
+   </string-array>
+         
+   <string-array name="pref_led_color_entries">
+      <item>blau</item>
+      <item>grün</item>
+      <item>rot</item>
+      <item>orange</item>
+      <item>magenta</item>
+      <item>cyan</item>
+   </string-array>
+      
+   <string-array name="pref_notif_repeat_times_entries">
+      <item>1</item>
+      <item>2</item>
+      <item>3</item>
+      <item>4</item>
+      <item>5</item>
+      <item>10</item>
+      <item>wiederhole weiterhin</item>
+   </string-array>
+</resources>
