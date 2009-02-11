@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<!-- App Strings -->
+   <string name="app_name">SMS Popup</string>   
+   <string name="new_text_at">New message at %s</string>
+   <string name="unread_text_waiting">%d other unread message(s)</string>
+   <string name="mms_subject">Subject:</string>
+
+<!-- Notification Strings -->
+   <string name="notification_multiple_title">New messages</string>
+   <string name="notification_multiple_text"><xliff:g ctype="bold">%d</xliff:g> unread messages.</string>
+   <string name="notification_scroll"><xliff:g ctype="bold">%s</xliff:g>: %s</string>
+   <string name="notification_scroll_privacy">New message from: <xliff:g ctype="bold">%s</xliff:g></string>
+   <string name="unknown_name">Unknown</string>
+
+<!-- Button Strings -->   
+   <string name="button_close">Close</string>
+   <string name="button_reply">Reply</string>
+   <string name="button_inbox">Inbox</string>
+   <string name="button_view">View</string>
+   <string name="button_view_mms">View MMS</string>
+   <string name="button_delete">Delete</string>
+   <string name="button_next">Next</string>
+   <string name="button_previous">Previous</string>
+   <string name="button_unlock">Unlock</string>
+   
+<!-- Main Preferences -->
+   <string name="pref_config_title">SMS Popup Configuration</string>
+   <string name="pref_other_title">Other</string>
+
+   <string name="pref_enabled_key">enabled</string>
+   <string name="pref_enabled_title">Enable SMS Popup</string>
+   <string name="pref_enabled_summaryon">SMS Popup is enabled</string>
+   <string name="pref_enabled_summaryoff">SMS Popup is disabled</string>
+   
+   <string name="pref_about_key">about</string>
+   <string name="pref_about_title">About</string>
+   <string name="pref_about_summary">About SMS Popup</string>
+   <string name="pref_about_text">Created by: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup is a simple application that shows a dialog when an SMS is received, similar to the iPhone - turning on the screen and unlocking the keyguard if needed.  It shows the most recent message, who it\'s from and the contact picture if available.\n\nFeel free to email me any comments, suggestions or bugs.\n\nGerman translation by: Feyyaz A.\nEmail: f_alingan@hotmail.com\nWebsite: http://www.yenio.com\n\nDutch translation by: mellie@xs4all.nl\n\nCredits to Min Tran for the app icon.\n(http://min.frexy.com)</string>
+   
+   <string name="pref_sendemail_key">sendemail</string>
+   <string name="pref_sendemail_title">E-mail the Developer</string>
+   <string name="pref_sendemail_summary">E-mail comments or bugs to the developer</string>
+   <string name="pref_sendemail_dialog">Can I include your system information in the e-mail (this will help me troubleshoot bugs easier)?</string>
+   <string name="pref_sendemail_buttonok">Sure</string>
+   <string name="pref_sendemail_buttoncancel">No way</string>
+   
+<!-- Additional Preferences -->
+   <string name="pref_additional_title">Additional Settings</string>
+   <string name="pref_additional_summary">Additional SMS Popup configuration</string>
+
+   <string name="pref_timeout_key">timeout</string>
+   <string name="pref_timeout_title">Screen Timeout</string>
+   <string name="pref_timeout_summary">The screen will sleep after this time</string>
+   <string name="pref_timeout_default">30</string>
+      
+   <string name="pref_privacy_key">privacy</string>
+   <string name="pref_privacy_title">Privacy Mode</string>
+   <string name="pref_privacy_summaryon">Contents of the message will only be shown after unlock</string>
+   <string name="pref_privacy_summaryoff">Contents of the message will be shown immediately</string>
+   <string name="pref_privacy_default">false</string>
+   
+   <string name="pref_markread_key">markread</string>
+   <string name="pref_markread_title">Mark Read</string>
+   <string name="pref_markread_summaryon">Messages will be marked as read when clicking \"Close\"</string>
+   <string name="pref_markread_summaryoff">Messages will not be marked as read when clicking \"Close\"</string>
+   <string name="pref_markread_default">true</string>
+
+   <string name="pref_onlyShowOnKeyguard_key">showonkeyguard</string>
+   <string name="pref_onlyShowOnKeyguard_title">Restrict Popup</string>
+   <string name="pref_onlyShowOnKeyguard_summaryon">Popup window will only show when keyguard is engaged</string>
+   <string name="pref_onlyShowOnKeyguard_summaryoff">Popup will always show</string>
+   <string name="pref_onlyShowOnKeyguard_default">false</string>
+
+   <string name="pref_require_unlock_key">requireunlock</string>
+   <string name="pref_require_unlock_title">Require Screen Unlock</string>
+   <string name="pref_require_unlock_summaryon">Buttons will be hidden till screen is unlocked</string>
+   <string name="pref_require_unlock_summaryoff">Buttons will show immediately</string>
+   <string name="pref_require_unlock_default">false</string>
+
+   <string name="pref_inbox_app_key">inboxapp</string>
+   <string name="pref_inbox_app_title">Choose Inbox App</string>
+   <string name="pref_inbox_app_summary">Choose the application that is launched for multiple messages</string>
+   <string name="pref_inbox_app_info">Note that the "Reply" messaging application is set by the system</string>
+
+   <string name="pref_show_delete_button_key">showdelete</string>
+   <string name="pref_show_delete_button_title">Show a Delete Button</string>
+   <string name="pref_show_delete_button_summaryon">Delete button is enabled</string>
+   <string name="pref_show_delete_button_summaryoff">Delete button is disabled</string>
+   <string name="pref_show_delete_button_default">false</string>
+   
+   <string name="pref_blur_key">blur</string>
+   <string name="pref_blur_title">Blur Background</string>
+   <string name="pref_blur_summaryon">The background behind the message window will be blurred out</string>
+   <string name="pref_blur_summaryoff">The background behind the message window will not be blurred</string>
+   <string name="pref_blur_default">true</string>
+
+<!-- Notification Preferences -->
+   <string name="pref_notif_title">Notifications</string>
+   <string name="pref_notif_summary">Notification configuration</string>
+   
+   <string name="pref_notif_enabled_key">notification</string>   
+   <string name="pref_notif_enabled_title">Enable Notifications</string>
+   <string name="pref_notif_enabled_summaryon">Notifications are enabled</string>
+   <string name="pref_notif_enabled_summaryoff">Notifications are disabled</string>
+   <string name="pref_notif_enabled_default">false</string>
+   <string name="pref_notif_enabled_warning">To avoid conflicts and multiple alerts, please disable the system SMS notifications and any other apps that provide a notification when a SMS is received.\n\nTo turn off the system notification, go to the messaging app, hit menu -> settings and un-check notifications.</string>
+
+   <string name="pref_notif_test_key">notiftest</string>   
+   <string name="pref_notif_test_title">Test Notification</string>
+   <string name="pref_notif_test_summary">Test out your notification</string>
+   <string name="pref_notif_test_message">Testing your notification now!</string>
+   
+   <string name="pref_notif_sound_key">notifsound</string>   
+   <string name="pref_notif_sound_title">Notification Sound</string>
+   <string name="pref_notif_sound_summary">This sound will play when a message is received</string>
+
+   <string name="pref_vibrate_key">vibrate</string>
+   <string name="pref_vibrate_title">Vibrate</string>
+   <string name="pref_vibrate_summaryon">Vibrate is on</string>
+   <string name="pref_vibrate_summaryoff">Vibrate is off</string>
+   <string name="pref_vibrate_default">true</string>
+
+   <string name="pref_vibrate_pattern_key">vibrate_pattern</string>
+   <string name="pref_vibrate_pattern_title">Vibrate Pattern</string>
+   <string name="pref_vibrate_pattern_summary">Set the vibration pattern</string>
+   <string name="pref_vibrate_pattern_default">0,1200</string>
+   <string name="pref_vibrate_pattern_custom_val">custom</string>
+   <string name="pref_vibrate_pattern_custom_key">vibrate_pattern_custom</string>
+   <string name="pref_vibrate_pattern_ok">Custom vibrate pattern set</string>
+   <string name="pref_vibrate_pattern_bad">Custom vibrate pattern invalid, using default</string>
+   <string name="pref_vibrate_pattern_help">Enter a custom vibrate pattern, in the format:\nmillisOff, millisOn, etc.\n\nFor example:\n0,1000\n0,500,200,500,200,500</string>
+
+   <string name="pref_flashled_key">flashled</string>   
+   <string name="pref_flashled_title">Blink LED</string>
+   <string name="pref_flashled_summaryon">Blink LED when a message is received</string>
+   <string name="pref_flashled_summaryoff">Do not blink LED when a message is received</string>
+   <string name="pref_flashled_default">true</string>
+   
+   <string name="pref_flashled_color_key">flashled_color</string>   
+   <string name="pref_flashled_color_title">LED Color</string>
+   <string name="pref_flashled_color_summary">The color of the LED</string>
+   <string name="pref_flashled_color_default">Yellow</string>
+
+   <string name="pref_notif_repeat_key">notif_repeat</string>   
+   <string name="pref_notif_repeat_title">Enable Reminders</string>
+   <string name="pref_notif_repeat_summaryon">Unread message reminders are enabled</string>
+   <string name="pref_notif_repeat_summaryoff">Unread message reminders are disabled</string>
+   <string name="pref_notif_repeat_default">false</string>
+   
+   <string name="pref_notif_repeat_interval_key">notif_repeat_interval</string>   
+   <string name="pref_notif_repeat_interval_title">Reminder Interval</string>
+   <string name="pref_notif_repeat_interval_summary">The time period between notification reminders</string>
+   <string name="pref_notif_repeat_interval_default">5</string>
+   <string name="pref_notif_repeat_interval_dialogTitle">Interval (minutes)</string>
+   
+   <string name="pref_notif_repeat_times_key">notif_repeat_num</string>   
+   <string name="pref_notif_repeat_times_title">Number of Reminders</string>
+   <string name="pref_notif_repeat_times_summary">The number of reminder notifications to play</string>
+   <string name="pref_notif_repeat_times_default">2</string>
+
+   <string name="pref_notif_repeat_screen_on_key">notif_repeat_screen_on</string>   
+   <string name="pref_notif_repeat_screen_on_title">Screen on for Reminders</string>
+   <string name="pref_notif_repeat_screen_on_summaryon">Reminders will turn screen on again</string>
+   <string name="pref_notif_repeat_screen_on_summaryoff">Reminders will not turn screen on</string>
+   <string name="pref_notif_repeat_screen_on_warning">Warning - turning the screen on for reminders can significantly affect battery life</string>
+   <string name="pref_notif_repeat_screen_on_default">false</string>
+</resources>
