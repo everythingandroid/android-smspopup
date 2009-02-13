@@ -55,7 +55,7 @@ public class SmsMmsMessage {
 		threadId = SMSPopupUtils.getThreadIdFromAddress(context, fromAddress);
 		
 		if (contactName == null) {
-			contactName = context.getString(R.string.unknown_name);
+			contactName = context.getString(android.R.string.unknownName);
 		}
 	}
 
@@ -75,7 +75,7 @@ public class SmsMmsMessage {
 		threadId = _threadId;
 
 		if (contactName == null) {
-			contactName = context.getString(R.string.unknown_name);
+			contactName = context.getString(android.R.string.unknownName);
 		}
 	}
 
@@ -197,5 +197,9 @@ public class SmsMmsMessage {
 
 	public void incrementReminderCount() {
 		reminderCount++;
+	}
+	
+	public void delete() {
+		SMSPopupUtils.deleteMessage(context, threadId, timestamp, messageType);
 	}
 }

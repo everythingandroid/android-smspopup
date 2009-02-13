@@ -31,7 +31,10 @@ public class SMSPopupUtils {
 			Uri.withAppendedPath(MMS_SMS_CONTENT_URI, "threadID");
 	public static final Uri CONVERSATION_CONTENT_URI =
 			Uri.withAppendedPath(MMS_SMS_CONTENT_URI, "conversations");
-	public static final Uri SMS_INBOX_CONTENT_URI = Uri.parse("content://sms/inbox");
+	public static final Uri SMS_CONTENT_URI = Uri.parse("content://sms");
+	// public static final Uri SMS_INBOX_CONTENT_URI =
+	// Uri.parse("content://sms/inbox");
+	public static final Uri SMS_INBOX_CONTENT_URI = Uri.withAppendedPath(SMS_CONTENT_URI, "inbox");
 	public static final Uri MMS_CONTENT_URI = Uri.parse("content://mms");
 	public static final Uri MMS_INBOX_CONTENT_URI = Uri.withAppendedPath(MMS_CONTENT_URI, "inbox");
 	
@@ -177,6 +180,52 @@ public class SMSPopupUtils {
 				Log.v("error marking thread read");
 			}
 			Log.v("thread id " + threadId + " marked as read, result = " + result);
+		}
+	}
+	
+	// TODO: clean up
+	public static void deleteMessage(Context context, long threadId, long timestamp, int messageType) {
+		int id = 0;
+		if (threadId > 0) {
+			
+			ContentResolver myCR = context.getContentResolver();
+
+			Cursor cursor =
+				myCR.query(
+							ContentUris.withAppendedId(CONVERSATION_CONTENT_URI, threadId),
+							new String[] { "_id", "date", "thread_id" },
+							"thread_id=" + threadId + " and " + "date=" + timestamp, null, "date desc");
+			if (cursor != null) {
+				try {
+					if (cursor.moveToFirst()) {
+						// for (int i = 0; i < cursor.getColumnNames().length; i++) {
+						// Log.v("Column: " + cursor.getColumnNames()[i]);
+						//							
+						// }
+						// Log.v("_id = " + cursor.getInt(0));
+						// Log.v("date = " + cursor.getLong(1) + " (timestamp = " +
+						// timestamp + ")");
+						// Log.v("threadId = " + cursor.getInt(2));
+						id = cursor.getInt(0);
+					}
+				} finally {
+					cursor.close();
+				}
+			}
+			
+			if (id > 0) {
+				Uri deleteUri;
+
+				if (SmsMmsMessage.MESSAGE_TYPE_MMS == messageType) {
+					deleteUri = Uri.withAppendedPath(MMS_CONTENT_URI, String.valueOf(id));
+				} else if (SmsMmsMessage.MESSAGE_TYPE_MMS == messageType) {
+					deleteUri = Uri.withAppendedPath(SMS_CONTENT_URI, String.valueOf(id));
+				} else {
+					return;
+				}
+				int count = myCR.delete(deleteUri, null, null);
+				Log.v("Messages deleted: " + count);
+			}
 		}
 	}
 	
@@ -420,7 +469,7 @@ public class SMSPopupUtils {
 				cursor.close();
 			}
 		}
-		return context.getString(R.string.unknown_name);
+		return context.getString(android.R.string.unknownName);
 	}
 	
 	public static final Pattern NAME_ADDR_EMAIL_PATTERN = Pattern

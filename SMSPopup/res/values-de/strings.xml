@@ -10,7 +10,6 @@
    <string name="notification_multiple_title">Neue Nachrichten</string>
    <string name="notification_multiple_text">%d ungelesene Nachrichten.</string>
    <string name="notification_scroll_privacy">Neue Nachricht von: %s</string>
-   <string name="unknown_name">unbekannt</string>
 
 <!-- Button Strings -->   
    <string name="button_close">Beenden</string>
@@ -18,9 +17,9 @@
    <string name="button_inbox">Posteingang</string>
    <string name="button_view">Öffnen</string>
    <string name="button_view_mms">MMS öffnen</string>
+   <string name="button_delete">Löschen</string>
    
    <!-- Not yet implemented -->
-   <string name="button_delete">Löschen</string>
    <string name="button_next">Nächste</string>
    <string name="button_previous">Letzte</string>
    <string name="button_unlock">Freigabe</string>
@@ -72,10 +71,11 @@
    <string name="pref_inbox_app_summary">Wähle das Programm, welches bei mehreren Nachrichten gestartet wird</string>
    <string name="pref_inbox_app_info">Bei "antworten" übernimmt das telefoneigene Programm!</string>
 
-   <!-- Not yet implemented -->
    <string name="pref_show_delete_button_title">Zeige den "löschen" Button</string>
    <string name="pref_show_delete_button_summaryon">"Löschen" Button wird angezeigt</string>
    <string name="pref_show_delete_button_summaryoff">"Löschen" Button wird nicht angezeigt</string>
+   <string name="pref_show_delete_button_dialog_title">Nachricht löschen</string>
+   <string name="pref_show_delete_button_dialog_text">Sind Sie sicher?</string>
    
    <string name="pref_blur_title">Unschärfe vom Hintergrund</string>
    <string name="pref_blur_summaryon">Hintergrund wird unscharf beim Anzeigen der Nachricht</string>

@@ -12,6 +12,11 @@
 		</activity>
 		<activity android:name=".SMSPopupActivity" android:theme="@android:style/Theme.Dialog"
 			android:launchMode="singleInstance" android:taskAffinity="net.everythingandroid.smspopup.popup" />
+			<intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:mimeType="vnd.android-dir/vnd.everythingandroid.smspopup" />			   
+			</intent-filter>
 		<receiver android:name=".SMSReceiver">
 			<intent-filter>
 				<action android:name="android.provider.Telephony.SMS_RECEIVED" />

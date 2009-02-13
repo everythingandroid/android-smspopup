@@ -2,6 +2,9 @@ package net.everythingandroid.smspopup;
 
 import net.everythingandroid.smspopup.ManageKeyguard.LaunchOnKeyguardExit;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -34,6 +37,7 @@ public class SMSPopupActivity extends Activity {
 	private boolean wasVisible = false;
 	
 	private final double WIDTH = 0.8;
+	private static final int DELETE_DIALOG = 0;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -80,12 +84,9 @@ public class SMSPopupActivity extends Activity {
 		//The close button
 		Button closeButton = (Button) findViewById(R.id.closeButton);
 		closeButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				
+			public void onClick(View v) {				
 				Intent i = new Intent(SMSPopupActivity.this.getApplicationContext(),
 				      SMSPopupUtilsService.class);
-				// i.putExtra(SMSPopupUtilsService.EXTRAS_THREAD_ID,
-				// message.getThreadId());
 				i.setAction(SMSPopupUtilsService.ACTION_MARK_THREAD_READ);
 				i.putExtras(message.toBundle());
 				SMSPopupUtilsService.beginStartingService(
@@ -159,6 +160,30 @@ public class SMSPopupActivity extends Activity {
 			}
 		});		
 
+		// The Delete button
+		Button deleteButton = (Button) findViewById(R.id.deleteButton);
+		
+		if (myPrefs.getBoolean(getString(R.string.pref_show_delete_button_key), Boolean
+				.valueOf(getString(R.string.pref_show_delete_button_default)))) {
+			deleteButton.setVisibility(View.VISIBLE);
+		} else {
+			deleteButton.setVisibility(View.GONE);
+		}
+
+		deleteButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				// exitingKeyguardSecurely = true;
+				// ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
+				// public void LaunchOnKeyguardExitSuccess() {
+				// Intent reply = message.getReplyIntent();
+				// SMSPopupActivity.this.getApplicationContext().startActivity(reply);
+				// }
+				// });
+				showDialog(DELETE_DIALOG);
+			}
+		});		
+
+		
 		
 		if (bundle == null) {		
 			populateViews(getIntent().getExtras());
@@ -249,6 +274,7 @@ public class SMSPopupActivity extends Activity {
 		// TODO: instead of clearing all notifications here, I should really
 		// update the notifications instead (in the case the user cleared 1
 		// notification but still has other unread messages waiting
+		Log.v("myFinish()");
 		
 		// Clear all notifications
 		ManageNotification.clearAll(getApplicationContext());
@@ -382,5 +408,31 @@ public class SMSPopupActivity extends Activity {
 
 		// ClearAllReceiver.clearAll(!exitingKeyguardSecurely);
 		super.onDestroy();
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case DELETE_DIALOG:
+			return new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle(getString(R.string.pref_show_delete_button_dialog_title))
+				.setMessage(getString(R.string.pref_show_delete_button_dialog_text))
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						Intent i =
+								new Intent(SMSPopupActivity.this.getApplicationContext(),
+										SMSPopupUtilsService.class);
+						i.setAction(SMSPopupUtilsService.ACTION_DELETE_MESSAGE);
+						i.putExtras(message.toBundle());
+						SMSPopupUtilsService.beginStartingService(SMSPopupActivity.this
+								.getApplicationContext(), i);
+						myFinish();
+					}
+				})
+				.setNegativeButton(android.R.string.cancel, null)
+				.create();			
+		}
+		return null;
 	}
 }
