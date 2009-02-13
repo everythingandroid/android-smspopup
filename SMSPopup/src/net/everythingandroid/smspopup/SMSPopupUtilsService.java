@@ -14,6 +14,8 @@ import android.os.Process;
 public class SMSPopupUtilsService extends Service {
 	public static final String ACTION_MARK_THREAD_READ =
 			"net.everythingandroid.smspopup.ACTION_MARK_THREAD_READ";
+	public static final String ACTION_DELETE_MESSAGE =
+			"net.everythingandroid.smspopup.ACTION_DELETE_MESSAGE";	
 	public static final String ACTION_OTHER = "net.everythingandroid.smspopup.ACTION_OTHER";
 
 	private Context context;
@@ -68,6 +70,10 @@ public class SMSPopupUtilsService extends Service {
 				Log.v("SMSPopupUtilsService: marking thread read");
 				SmsMmsMessage message = new SmsMmsMessage(context, intent.getExtras());
 				message.setThreadRead();
+			} else if (ACTION_DELETE_MESSAGE.equals(action)) {
+				Log.v("SMSPopupUtilsService: deleting message");
+				SmsMmsMessage message = new SmsMmsMessage(context, intent.getExtras());
+				message.delete();
 			} else if (ACTION_OTHER.equals(action)) {
 				
 			}
