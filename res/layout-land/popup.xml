@@ -101,7 +101,7 @@
 		android:gravity="center" android:layout_height="wrap_content">
 		<Button android:layout_height="wrap_content" android:id="@+id/closeButton"
 			android:layout_weight="1" android:layout_width="0sp" android:text="@string/button_close"
-			android:layout_margin="1sp" />
+			android:layout_margin="1sp" /><Button android:layout_height="wrap_content" android:layout_weight="1" android:layout_width="0sp" android:layout_margin="1sp" android:id="@+id/deleteButton" android:text="@string/button_delete"/>
 		<Button android:layout_height="wrap_content" android:id="@+id/replyButton"
 			android:layout_weight="1" android:layout_width="0sp" android:text="@string/button_reply"
 			android:layout_margin="1sp" />

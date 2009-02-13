@@ -10,7 +10,6 @@
    <string name="notification_multiple_title">Nieuwe berichten</string>
    <string name="notification_multiple_text">%d ongelezen berichten.</string>
    <string name="notification_scroll_privacy">Nieuw bericht van: %s</string>
-   <string name="unknown_name">Onbekend</string>
 
 <!-- Button Strings -->   
    <string name="button_close">Sluiten</string>
@@ -18,9 +17,9 @@
    <string name="button_inbox">Inbox</string>
    <string name="button_view">Bekijk</string>
    <string name="button_view_mms">Bekijk MMS</string>
+   <string name="button_delete">Verwijderen</string>
    
    <!-- Not yet implemented -->
-   <string name="button_delete">Verwijderen</string>
    <string name="button_next">Volgende</string>
    <string name="button_previous">Vorige</string>
    <string name="button_unlock">Ontgrendelen</string>
@@ -35,7 +34,7 @@
 
    <string name="pref_about_title">Over</string>
    <string name="pref_about_summary">Over SMS Popup</string>
-   <string name="pref_about_text">Gemaakt door: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nNederlandse vertaling door mellie@xs4all.nl\n\nSMS Popup is a eenvoudige applicatie die, net als op de iPhone, een popup toont als er een SMS bericht is ontvangen - Indien nodig wordt het scherm geactiveerd en ontgrendeld. Het nieuwste bericht met de afzender en eventueel zijn of haar foto wordt getoond.\n\nSuggesties, commentaar of meldingen van bugs kunnen gemaild worden.\n\nApplicatie icoon is gemaakt door Min Tran.\n(http://min.frexy.com)</string>
+   <string name="pref_about_text">Gemaakt door: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nNederlandse vertaling door mellie@xs4all.nl\n\nSMS Popup is a eenvoudige applicatie die, net als op de iPhone, een popup toont als er een SMS bericht is ontvangen - Indien nodig wordt het scherm geactiveerd en ontgrendeld. Het nieuwste bericht met de afzender en eventueel zijn of haar foto wordt getoond.\n\nSuggesties, commentaar of meldingen van bugs kunnen gemaild worden.\n\nApplicatie icoon is gemaakt door Min Tran.\n(http://min.frexy.com)\n</string>
    
    <string name="pref_sendemail_title">E-mail de ontwikkelaar</string>
    <string name="pref_sendemail_summary">E-mail commentaar of bugs naar de ontwikkelaar</string>
@@ -72,10 +71,11 @@
    <string name="pref_inbox_app_summary">Kies hier de applicatie die wordt gestart om meerdere SMS berichten te bekijken</string>
    <string name="pref_inbox_app_info">De applicatie die wordt gestart bij "Beantwoorden" wordt door het systeem zelf bepaald.</string>
 
-   <!-- Not yet implemented -->
    <string name="pref_show_delete_button_title">Toon verwijder knop</string>
    <string name="pref_show_delete_button_summaryon">Verwijder knop is actief</string>
    <string name="pref_show_delete_button_summaryoff">Verwijder knop is niet actief</string>
+   <string name="pref_show_delete_button_dialog_title">Bericht verwijderen</string>
+   <string name="pref_show_delete_button_dialog_text">Weet je het zeker?</string>
    
    <string name="pref_blur_title">Achtergrond vaag?</string>
    <string name="pref_blur_summaryon">De achtergrond vervagen (blur)</string>
