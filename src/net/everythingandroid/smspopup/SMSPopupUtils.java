@@ -413,7 +413,7 @@ public class SMSPopupUtils {
 					String address = getMmsFrom(context, cursor.getLong(0));
 					long threadId = cursor.getLong(1);
 					long timestamp = cursor.getLong(2) * 1000;
-					String subject = cursor.getString(3).trim();
+					String subject = cursor.getString(3);
 					// int charset = cursor.getInt(4);
 					// MmsMessage message = new MmsMessage(address, thread_id,
 					// timestamp, subject, charset);
