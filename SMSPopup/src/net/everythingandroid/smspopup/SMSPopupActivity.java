@@ -354,18 +354,10 @@ public class SMSPopupActivity extends Activity {
 			mmsLinearLayout.setVisibility(View.VISIBLE);
 			
 			// If no MMS subject, hide the subject text view
-			boolean subjectAvailable = true;
-			if (message.getMessageBody() == null) {
-				subjectAvailable = false;
+			if (message.getMessageBody().length() > 0) {
+				mmsSubjectTV.setVisibility(View.VISIBLE);				
 			} else {
-				if (message.getMessageBody().length() == 0) {
-					subjectAvailable = false;
-				}
-			}
-			if (!subjectAvailable) {
 				mmsSubjectTV.setVisibility(View.GONE);
-			} else {
-				mmsSubjectTV.setVisibility(View.VISIBLE);
 			}
 		} else {
 			// Otherwise hide MMS layout and show either the view button if in

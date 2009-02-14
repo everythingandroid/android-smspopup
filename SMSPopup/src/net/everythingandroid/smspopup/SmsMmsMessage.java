@@ -29,7 +29,7 @@ public class SmsMmsMessage {
 	
 	private String fromAddress = null;
 	private String messageBody = null;
-	private long timestamp;
+	private long timestamp = 0;
 	private int unreadCount = 0;
 	private long threadId = 0;
 	private String contactId = null;
@@ -159,10 +159,16 @@ public class SmsMmsMessage {
 	}
 	
 	public String getContactName() {
+		if (contactName == null) {
+			contactName = context.getString(android.R.string.unknownName);
+		}
 		return contactName;
 	}
 
 	public String getMessageBody() {
+		if (messageBody == null) {
+			messageBody = "";
+		}
 		return messageBody;
 	}
 	
