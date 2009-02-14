@@ -189,13 +189,14 @@ public class SMSPopupUtils {
 		if (threadId > 0) {
 			
 			ContentResolver myCR = context.getContentResolver();
-
+			//Log.v("trying to find message to delete: thread_id = " + threadId + ", date = " + timestamp);
 			Cursor cursor =
 				myCR.query(
 							ContentUris.withAppendedId(CONVERSATION_CONTENT_URI, threadId),
 							new String[] { "_id", "date", "thread_id" },
 							"thread_id=" + threadId + " and " + "date=" + timestamp, null, "date desc");
 			if (cursor != null) {
+				//Log.v("cursor was not null");
 				try {
 					if (cursor.moveToFirst()) {
 						// for (int i = 0; i < cursor.getColumnNames().length; i++) {
@@ -214,11 +215,12 @@ public class SMSPopupUtils {
 			}
 			
 			if (id > 0) {
+				//Log.v("id of message to delete is " + id);
 				Uri deleteUri;
 
 				if (SmsMmsMessage.MESSAGE_TYPE_MMS == messageType) {
 					deleteUri = Uri.withAppendedPath(MMS_CONTENT_URI, String.valueOf(id));
-				} else if (SmsMmsMessage.MESSAGE_TYPE_MMS == messageType) {
+				} else if (SmsMmsMessage.MESSAGE_TYPE_SMS == messageType) {
 					deleteUri = Uri.withAppendedPath(SMS_CONTENT_URI, String.valueOf(id));
 				} else {
 					return;
