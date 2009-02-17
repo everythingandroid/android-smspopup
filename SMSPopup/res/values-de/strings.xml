@@ -113,6 +113,11 @@
    
    <string name="pref_flashled_color_title">LED Farbe</string>
    <string name="pref_flashled_color_summary">Die Farbe des LED</string>
+   <string name="pref_flashled_color_custom_dialog_red">rot:</string>
+   <string name="pref_flashled_color_custom_dialog_green">grün:</string>
+   <string name="pref_flashled_color_custom_dialog_blue">blau:</string>
+   <string name="pref_flashled_color_custom_dialog_preview">vorschau:</string>
+   <string name="pref_flashled_color_custom_set">Custom LED color set</string>   
 
    <string name="pref_notif_repeat_title">Aktivierung von Erinnerungen</string>
    <string name="pref_notif_repeat_summaryon">Erinnerungen für ungelesene Nachrichten ist aktiviert</string>
@@ -125,7 +130,6 @@
    <string name="pref_notif_repeat_times_title">Anzahl der Erinnerungen</string>
    <string name="pref_notif_repeat_times_summary">Die Anzahl der Erinnerungen welche gespeichert sind</string>
 
-   <!-- Not yet implemented -->
    <string name="pref_notif_repeat_screen_on_title">Display-Anzeige für Erinnerungen</string>
    <string name="pref_notif_repeat_screen_on_summaryon">Erinnerungen schalten das Display ein</string>
    <string name="pref_notif_repeat_screen_on_summaryoff">Erinnerungen schalten das Display nicht ein</string>

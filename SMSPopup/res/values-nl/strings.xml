@@ -113,6 +113,11 @@
    
    <string name="pref_flashled_color_title">Kleur LED</string>
    <string name="pref_flashled_color_summary">De kleur van de LED</string>
+   <string name="pref_flashled_color_custom_dialog_red">Rood:</string>
+   <string name="pref_flashled_color_custom_dialog_green">Groen:</string>
+   <string name="pref_flashled_color_custom_dialog_blue">Blauw:</string>
+   <string name="pref_flashled_color_custom_dialog_preview">Preview:</string>
+   <string name="pref_flashled_color_custom_set">Custom LED color set</string>
 
    <string name="pref_notif_repeat_title">Activeer herinneringen</string>
    <string name="pref_notif_repeat_summaryon">Herinneringen voor ongelezen berichten zijn actief</string>
@@ -125,7 +130,6 @@
    <string name="pref_notif_repeat_times_title">Aantal herinneringen</string>
    <string name="pref_notif_repeat_times_summary">Het aantal herinneringen dat afgespeeld moeten worden</string>
 
-   <!-- Not yet implemented -->
    <string name="pref_notif_repeat_screen_on_title">Herinneringen scherm </string>
    <string name="pref_notif_repeat_screen_on_summaryon">Herinneringen activeren het scherm</string>
    <string name="pref_notif_repeat_screen_on_summaryoff">Herinneringen activeren het scherm niet</string>

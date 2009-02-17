@@ -20,6 +20,12 @@
 		         android:entries="@array/pref_timeout_entries"
 		         android:entryValues="@array/pref_timeout_values"
 		         android:defaultValue="@string/pref_timeout_default" />
+            <CheckBoxPreference 
+               android:key="@string/pref_dimscreen_key"
+               android:title="@string/pref_dimscreen_title"
+               android:summaryOn="@string/pref_dimscreen_summaryon"
+               android:summaryOff="@string/pref_dimscreen_summaryoff"
+               android:defaultValue="@string/pref_dimscreen_default" />		         
 		      <CheckBoxPreference 
 		         android:key="@string/pref_privacy_key"
 		         android:title="@string/pref_privacy_title"
@@ -94,7 +100,7 @@
 					android:summaryOff="@string/pref_flashled_summaryoff"
 					android:defaultValue="@string/pref_flashled_default"
 					android:dependency="@string/pref_notif_enabled_key" />
-				<ListPreference
+				<net.everythingandroid.smspopup.preferences.CustomLEDColorListPreference
 				   android:key="@string/pref_flashled_color_key"
 					android:title="@string/pref_flashled_color_title"
 					android:summary="@string/pref_flashled_color_summary"
@@ -132,6 +138,12 @@
                android:dialogTitle="@string/pref_notif_repeat_interval_dialogTitle"
                android:defaultValue="@string/pref_notif_repeat_interval_default"
                android:dependency="@string/pref_notif_repeat_key" />
+            <CheckBoxPreference android:key="@string/pref_notif_repeat_screen_on_key"
+               android:title="@string/pref_notif_repeat_screen_on_title"
+               android:summaryOn="@string/pref_notif_repeat_screen_on_summaryon"
+               android:summaryOff="@string/pref_notif_repeat_screen_on_summaryoff"
+               android:defaultValue="@string/pref_notif_repeat_screen_on_default"
+               android:dependency="@string/pref_notif_repeat_key" />               
 			</PreferenceCategory>
 		</PreferenceScreen>
 	</PreferenceCategory>

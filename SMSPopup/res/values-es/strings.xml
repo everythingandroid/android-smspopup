@@ -113,6 +113,11 @@
    
    <string name="pref_flashled_color_title">Color del LED</string>
    <string name="pref_flashled_color_summary">El color del LED</string>
+   <string name="pref_flashled_color_custom_dialog_red">Rojo:</string>
+   <string name="pref_flashled_color_custom_dialog_green">Verde:</string>
+   <string name="pref_flashled_color_custom_dialog_blue">Azul:</string>
+   <string name="pref_flashled_color_custom_dialog_preview">Previa:</string>
+   <string name="pref_flashled_color_custom_set">Custom LED color set</string>
 
    <string name="pref_notif_repeat_title">Habilitar Recordatorios</string>
    <string name="pref_notif_repeat_summaryon">Recordatorios de mensajes sin leer habilitados</string>
@@ -125,7 +130,6 @@
    <string name="pref_notif_repeat_times_title">Número de Recordatorios</string>
    <string name="pref_notif_repeat_times_summary">El número de notificaciones de recordatorio para reproducir</string>
 
-   <!-- Not yet implemented -->
    <string name="pref_notif_repeat_screen_on_title">Pantalla encendida para los Recordatorios</string>
    <string name="pref_notif_repeat_screen_on_summaryon">Los recordatorios encienden la pantalla de nuevo</string>
    <string name="pref_notif_repeat_screen_on_summaryoff">Los recordatorios no encienden la pantalla de nuevo</string>
