@@ -144,24 +144,39 @@ public class SMSReceiverService extends Service {
 
 	private void handleMmsReceived(Intent intent) {
 		Log.v("MMS received!");
-		SmsMmsMessage mmsMessage = SMSPopupUtils.getMmsDetails(context);
-		if (mmsMessage != null) {
-			SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-			boolean onlyShowOnKeyguard = myPrefs.getBoolean(context
-			      .getString(R.string.pref_onlyShowOnKeyguard_key), Boolean.valueOf(context
-			      .getString(R.string.pref_onlyShowOnKeyguard_default)));
-
-			if (ManageKeyguard.inKeyguardRestrictedInputMode() || !onlyShowOnKeyguard) {
-				Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
-				Intent popup = mmsMessage.getPopupIntent();
-				ManageWakeLock.acquirePartial(context);
-				context.startActivity(popup);
+		SmsMmsMessage mmsMessage = null;
+		int count = 0;
+		int MMS_RETRY = 5;
+		int MMS_RETRY_PAUSE = 2000;
+		
+		while (mmsMessage == null && count < MMS_RETRY) {
+			mmsMessage = SMSPopupUtils.getMmsDetails(context);
+			if (mmsMessage != null) {
+				Log.v("MMS found in content provider");
+				SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+				boolean onlyShowOnKeyguard = myPrefs.getBoolean(context
+				      .getString(R.string.pref_onlyShowOnKeyguard_key), Boolean.valueOf(context
+				      .getString(R.string.pref_onlyShowOnKeyguard_default)));
+	
+				if (ManageKeyguard.inKeyguardRestrictedInputMode() || !onlyShowOnKeyguard) {
+					Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
+					Intent popup = mmsMessage.getPopupIntent();
+					ManageWakeLock.acquirePartial(context);
+					context.startActivity(popup);
+				} else {
+					Log.v("^^^^^^Not in keyguard, only using notification");
+					ManageNotification.show(context, mmsMessage);
+					ReminderReceiver.scheduleReminder(context, mmsMessage);
+				}
 			} else {
-				Log.v("^^^^^^Not in keyguard, only using notification");
-				ManageNotification.show(context, mmsMessage);
-				ReminderReceiver.scheduleReminder(context, mmsMessage);
+				Log.v("MMS not found, sleeping (count is " + count + ")");
+				count++;
+				try {
+					Thread.sleep(MMS_RETRY_PAUSE);
+				} catch (InterruptedException e) {
+					//e.printStackTrace();
+				}
 			}
-			
 		}
 	}
 	
