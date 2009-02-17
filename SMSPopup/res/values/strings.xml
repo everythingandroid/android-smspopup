@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
 <!-- App Strings -->
    <string name="app_name">SMS Popup</string>   
    <string name="new_text_at">New message at %s</string>
@@ -8,9 +8,9 @@
 
 <!-- Notification Strings -->
    <string name="notification_multiple_title">New messages</string>
-   <string name="notification_multiple_text"><xliff:g ctype="bold">%d</xliff:g> unread messages.</string>
-   <string name="notification_scroll"><xliff:g ctype="bold">%s</xliff:g>: %s</string>
-   <string name="notification_scroll_privacy">New message from: <xliff:g ctype="bold">%s</xliff:g></string>
+   <string name="notification_multiple_text">%d unread messages.</string>
+   <string name="notification_scroll">%s: %s</string>
+   <string name="notification_scroll_privacy">New message from: %s</string>
 
 <!-- Button Strings -->   
    <string name="button_close">Close</string>
@@ -52,6 +52,12 @@
    <string name="pref_timeout_title">Screen Timeout</string>
    <string name="pref_timeout_summary">The screen will sleep after this time</string>
    <string name="pref_timeout_default">30</string>
+
+   <string name="pref_dimscreen_key">dimscreen</string>
+   <string name="pref_dimscreen_title">Dim Popup Screen</string>
+   <string name="pref_dimscreen_summaryon">Popup screen will be dim (saves battery)</string>
+   <string name="pref_dimscreen_summaryoff">Popup screen will be bright</string>
+   <string name="pref_dimscreen_default">false</string>
       
    <string name="pref_privacy_key">privacy</string>
    <string name="pref_privacy_title">Privacy Mode</string>
@@ -126,11 +132,13 @@
    <string name="pref_vibrate_pattern_title">Vibrate Pattern</string>
    <string name="pref_vibrate_pattern_summary">Set the vibration pattern</string>
    <string name="pref_vibrate_pattern_default">0,1200</string>
-   <string name="pref_vibrate_pattern_custom_val">custom</string>
    <string name="pref_vibrate_pattern_custom_key">vibrate_pattern_custom</string>
    <string name="pref_vibrate_pattern_ok">Custom vibrate pattern set</string>
    <string name="pref_vibrate_pattern_bad">Custom vibrate pattern invalid, using default</string>
    <string name="pref_vibrate_pattern_help">Enter a custom vibrate pattern, in the format:\nmillisOff, millisOn, etc.\n\nFor example:\n0,1000\n0,500,200,500,200,500</string>
+   
+   <!-- Value to set trigger custom dialogs -->
+   <string name="pref_custom_val">custom</string>
 
    <string name="pref_flashled_key">flashled</string>   
    <string name="pref_flashled_title">Blink LED</string>
@@ -142,6 +150,12 @@
    <string name="pref_flashled_color_title">LED Color</string>
    <string name="pref_flashled_color_summary">The color of the LED</string>
    <string name="pref_flashled_color_default">Yellow</string>
+   <string name="pref_flashled_color_custom_key">flashled_color_custom</string>   
+   <string name="pref_flashled_color_custom_dialog_red">Red:</string>
+   <string name="pref_flashled_color_custom_dialog_green">Green:</string>
+   <string name="pref_flashled_color_custom_dialog_blue">Blue:</string>
+   <string name="pref_flashled_color_custom_dialog_preview">Preview:</string>
+   <string name="pref_flashled_color_custom_set">Custom LED color set</string>
 
    <string name="pref_notif_repeat_key">notif_repeat</string>   
    <string name="pref_notif_repeat_title">Enable Reminders</string>

@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -48,6 +49,8 @@ public class SMSPopupUtils {
 	
 	private static final String TIME_FORMAT_12_HOUR = "h:mm a";
 	private static final String TIME_FORMAT_24_HOUR = "H:mm";
+	private static final String AUTHOR_CONTACT_INFO = "Adam K <adam@everythingandroid.net>";
+
 	
 	public static String getPersonName(Context context, String id, String address) {
 		if (id == null) {
@@ -183,20 +186,27 @@ public class SMSPopupUtils {
 		}
 	}
 	
-	// TODO: clean up
-	public static void deleteMessage(Context context, long threadId, long timestamp, int messageType) {
+	public static void deleteMessage(Context context, long threadId, long _timestamp, int messageType) {
 		int id = 0;
+		long timestamp = _timestamp;
 		if (threadId > 0) {
 			
+			// It seems MMS timestamps are stored in a seconds, whereas SMS
+			// is in millis
+			if (SmsMmsMessage.MESSAGE_TYPE_MMS == messageType) {
+				timestamp = _timestamp / 1000;
+				Log.v("deleteMessage() - adjusted timestmap for MMS (" + _timestamp + " -> " + timestamp + ")");
+			}
+			
 			ContentResolver myCR = context.getContentResolver();
-			//Log.v("trying to find message to delete: thread_id = " + threadId + ", date = " + timestamp);
+			Log.v("trying to find message to delete: thread_id = " + threadId + ", date = " + timestamp);
 			Cursor cursor =
 				myCR.query(
 							ContentUris.withAppendedId(CONVERSATION_CONTENT_URI, threadId),
 							new String[] { "_id", "date", "thread_id" },
 							"thread_id=" + threadId + " and " + "date=" + timestamp, null, "date desc");
 			if (cursor != null) {
-				//Log.v("cursor was not null");
+//				Log.v("cursor was not null");
 				try {
 					if (cursor.moveToFirst()) {
 						// for (int i = 0; i < cursor.getColumnNames().length; i++) {
@@ -215,7 +225,7 @@ public class SMSPopupUtils {
 			}
 			
 			if (id > 0) {
-				//Log.v("id of message to delete is " + id);
+				Log.v("id of message to delete is " + id);
 				Uri deleteUri;
 
 				if (SmsMmsMessage.MESSAGE_TYPE_MMS == messageType) {
@@ -235,7 +245,7 @@ public class SMSPopupUtils {
 		Intent conversations = new Intent(Intent.ACTION_MAIN);
 		//conversations.addCategory(Intent.CATEGORY_DEFAULT);
 		conversations.setType(SMS_MIME_TYPE);
-		//TODO: use FLAG_ACTIVITY_RESET_TASK_IF_NEEDED??
+		// should I be using FLAG_ACTIVITY_RESET_TASK_IF_NEEDED??
 		int flags =
 			Intent.FLAG_ACTIVITY_NEW_TASK |
 			Intent.FLAG_ACTIVITY_SINGLE_TOP |
@@ -247,7 +257,7 @@ public class SMSPopupUtils {
 
 	public static Intent getSmsToIntentFromThreadId(Context context, long threadId) {
 		Intent popup = new Intent(Intent.ACTION_VIEW);
-		//TODO: use FLAG_ACTIVITY_RESET_TASK_IF_NEEDED??
+		// should I be using FLAG_ACTIVITY_RESET_TASK_IF_NEEDED??
 		int flags =
 			Intent.FLAG_ACTIVITY_NEW_TASK |
 			Intent.FLAG_ACTIVITY_SINGLE_TOP |
@@ -263,8 +273,8 @@ public class SMSPopupUtils {
 	}
 	
 	public static void launchEmailToIntent(Context context, String subject, boolean includeDebug) {
-		Intent msg = new Intent(Intent.ACTION_SEND);  
-		String[] recipients={"Adam K <adam@everythingandroid.net>"};  
+		Intent msg = new Intent(Intent.ACTION_SEND);
+		String[] recipients={AUTHOR_CONTACT_INFO};  
 
 		String body = "";
 		
@@ -272,12 +282,15 @@ public class SMSPopupUtils {
 			body = "\n\n----------\nSysinfo - " + Build.FINGERPRINT + "\n"
 				+ "Model: " + Build.MODEL + "\n\n";
 
+			// Array of preference keys to include in email
 			String[] pref_keys = {
 				context.getString(R.string.pref_enabled_key),
 				context.getString(R.string.pref_timeout_key),
 				context.getString(R.string.pref_privacy_key),
+				context.getString(R.string.pref_dimscreen_key),
 				context.getString(R.string.pref_markread_key),
 				context.getString(R.string.pref_onlyShowOnKeyguard_key),
+				context.getString(R.string.pref_show_delete_button_key),				
 				context.getString(R.string.pref_blur_key),
 				context.getString(R.string.pref_notif_enabled_key),
 				context.getString(R.string.pref_notif_sound_key),
@@ -299,12 +312,18 @@ public class SMSPopupUtils {
 				try {
 					body += pref_keys[i] + ": " + String.valueOf(m.get(pref_keys[i])) + "\n";
 				} catch (NullPointerException e) {
-					
+					// Nothing to do here
 				}
 			}
-			body +=
-					"locale: " + context.getResources().getConfiguration().locale.getDisplayName()
-							+ "\n";
+			
+			// Add locale info
+			body += "locale: " 
+				+ context.getResources().getConfiguration().locale.getDisplayName()
+				+ "\n";
+			
+			// Add audio info
+			AudioManager myAM = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+			myAM.getStreamVolume(AudioManager.STREAM_RING);
 		}
 		
 		msg.putExtra(Intent.EXTRA_EMAIL, recipients);  
@@ -492,10 +511,11 @@ public class SMSPopupUtils {
 	private static String getDisplayName(Context context, String email) {
 		Matcher match = NAME_ADDR_EMAIL_PATTERN.matcher(email);
 		if (match.matches()) {
-			// email has display name
+			// email has display name, return that
 			return getEmailDisplayName(match.group(1));
 		}
 
+		// otherwise let's check the contacts list for a user with this email
 		Cursor cursor = context.getContentResolver().query(
 		      Contacts.ContactMethods.CONTENT_EMAIL_URI,
 		      new String[] { Contacts.ContactMethods.NAME },

@@ -39,6 +39,7 @@
 		<item>Yellow</item>
 		<item>Magenta</item>
 		<item>Cyan</item>
+      <item>custom</item>		
 	</string-array>
    <string-array name="pref_led_color_entries">
       <item>Blue</item>
@@ -47,6 +48,7 @@
       <item>Orange</item>
       <item>Magenta</item>
       <item>Cyan</item>
+      <item>Custom</item>
    </string-array>   
    <string-array name="pref_notif_repeat_interval_entries">
       <item>1</item>

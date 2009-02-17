@@ -24,11 +24,21 @@ public class ManageWakeLock {
 			Log.v("**Wakelock already held");
 			return;
 		}
+		
+		SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
 		ManageKeyguard.disableKeyguard(context);
 		
-		int flags = 
-			PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+		int flags;
+		
+		if (myPrefs.getBoolean(context.getString(R.string.pref_dimscreen_key), 
+				Boolean.parseBoolean(context.getString(R.string.pref_dimscreen_default)))) {
+			flags = PowerManager.SCREEN_DIM_WAKE_LOCK;			
+		} else {
+			flags = PowerManager.SCREEN_BRIGHT_WAKE_LOCK;
+		}
+		
+		flags |= 
 			PowerManager.ACQUIRE_CAUSES_WAKEUP |
 			PowerManager.ON_AFTER_RELEASE;
 
@@ -36,10 +46,7 @@ public class ManageWakeLock {
 		Log.v("**Wakelock acquired");
 		myWakeLock.setReferenceCounted(false);
 		myWakeLock.acquire();
-		
-		
-		SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-		
+				
 		//Fetch wakelock/screen timeout from preferences
 		int timeout = Integer.valueOf(
 				myPrefs.getString(

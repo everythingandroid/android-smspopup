@@ -37,7 +37,7 @@ public class CustomVibrateListPreference extends ListPreference {
 	   
 	   if (positiveResult) {	   
 	   	getPrefs();
-			if (context.getString(R.string.pref_vibrate_pattern_custom_val).equals(vibrate_pattern)) {
+			if (context.getString(R.string.pref_custom_val).equals(vibrate_pattern)) {
 				showDialog();
 			}
 		}
@@ -47,11 +47,12 @@ public class CustomVibrateListPreference extends ListPreference {
 		if (myPrefs == null) {
 			myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		}
-		vibrate_pattern = myPrefs.getString(context.getString(R.string.pref_vibrate_pattern_key),
+		vibrate_pattern = myPrefs.getString(
+				context.getString(R.string.pref_vibrate_pattern_key),
 		      context.getString(R.string.pref_vibrate_pattern_default));
-		vibrate_pattern_custom = myPrefs.getString(context
-		      .getString(R.string.pref_vibrate_pattern_custom_key), context
-		      .getString(R.string.pref_vibrate_pattern_default));
+		vibrate_pattern_custom = myPrefs.getString(
+				context.getString(R.string.pref_vibrate_pattern_custom_key),
+				context.getString(R.string.pref_vibrate_pattern_default));
 	}
 	
 	private void showDialog() {
@@ -64,48 +65,46 @@ public class CustomVibrateListPreference extends ListPreference {
 		
 		et.setText(vibrate_pattern_custom);
 
-		new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert).setTitle(
-		      R.string.pref_vibrate_pattern_title).setView(v).setPositiveButton(android.R.string.ok,
-		      new DialogInterface.OnClickListener() {
-			      public void onClick(DialogInterface dialog, int whichButton) {
-				      SharedPreferences.Editor settings = myPrefs.edit();
-				      String new_pattern = et.getText().toString();
-				      dialogShowing = false;
-				      if (ManageNotification.parseVibratePattern(et.getText().toString()) != null) {
-					      settings
-					            .putString(context.getString(R.string.pref_vibrate_pattern_custom_key),
-					                  new_pattern);
-					      
-					      Toast.makeText(context, context.getString(R.string.pref_vibrate_pattern_ok),
-					            Toast.LENGTH_LONG).show();
-				      } else {
-					      settings.putString(
-					            context.getString(R.string.pref_vibrate_pattern_custom_key), context
-					                  .getString(R.string.pref_vibrate_pattern_default));
-					      Toast.makeText(context, context.getString(R.string.pref_vibrate_pattern_bad),
-					            Toast.LENGTH_LONG).show();
+		new AlertDialog.Builder(context)
+			.setIcon(android.R.drawable.ic_dialog_info)
+			.setTitle(R.string.pref_vibrate_pattern_title)
+			.setView(v)
+			.setNegativeButton(android.R.string.cancel, null)
+			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+		      public void onClick(DialogInterface dialog, int whichButton) {
+			      SharedPreferences.Editor settings = myPrefs.edit();
+			      String new_pattern = et.getText().toString();
+			      dialogShowing = false;
+			      if (ManageNotification.parseVibratePattern(et.getText().toString()) != null) {
+				      settings.putString(
+				      		context.getString(R.string.pref_vibrate_pattern_custom_key), 
+				      		new_pattern);
+				      
+				      Toast.makeText(context,
+				      		context.getString(R.string.pref_vibrate_pattern_ok),
+				            Toast.LENGTH_LONG).show();
+			      } else {
+				      settings.putString(
+				            context.getString(R.string.pref_vibrate_pattern_custom_key), 
+				            context.getString(R.string.pref_vibrate_pattern_default));
+				      Toast.makeText(context, 
+				      		context.getString(R.string.pref_vibrate_pattern_bad),
+				            Toast.LENGTH_LONG).show();
 				}
 				settings.commit();
-			}
-		}).show();
+			}})
+			.show();
 		dialogShowing = true;
 	}
 
 	@Override
    protected void onRestoreInstanceState(Parcelable state) {
-	   // Log.v("onRestoreInstanceState()");
 		super.onRestoreInstanceState(state);
 	   if (dialogShowing) {
 	   	getPrefs();
 			showDialog();
 	   }	   
    }
-
-	 @Override
-	protected Parcelable onSaveInstanceState() {
-		// Log.v("onSaveInstanceState()");
-		return super.onSaveInstanceState();
-	}
 	
 	@Override
    protected View onCreateDialogView() {

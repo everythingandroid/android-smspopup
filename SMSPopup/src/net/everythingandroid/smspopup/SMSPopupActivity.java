@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
@@ -172,13 +173,6 @@ public class SMSPopupActivity extends Activity {
 
 		deleteButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				// exitingKeyguardSecurely = true;
-				// ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
-				// public void LaunchOnKeyguardExitSuccess() {
-				// Intent reply = message.getReplyIntent();
-				// SMSPopupActivity.this.getApplicationContext().startActivity(reply);
-				// }
-				// });
 				showDialog(DELETE_DIALOG);
 			}
 		});		
@@ -354,10 +348,10 @@ public class SMSPopupActivity extends Activity {
 			mmsLinearLayout.setVisibility(View.VISIBLE);
 			
 			// If no MMS subject, hide the subject text view
-			if (message.getMessageBody().length() > 0) {
-				mmsSubjectTV.setVisibility(View.VISIBLE);				
-			} else {
+			if (TextUtils.isEmpty(message.getMessageBody())) {
 				mmsSubjectTV.setVisibility(View.GONE);
+			} else {
+				mmsSubjectTV.setVisibility(View.VISIBLE);
 			}
 		} else {
 			// Otherwise hide MMS layout and show either the view button if in

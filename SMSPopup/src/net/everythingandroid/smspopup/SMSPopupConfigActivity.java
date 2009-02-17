@@ -36,6 +36,43 @@ public class SMSPopupConfigActivity extends PreferenceActivity {
 		EmailDialogPreference emailPref = (EmailDialogPreference) findPreference(getString(R.string.pref_sendemail_key));
 		emailPref.setVersion(version);
 
+		
+//		ContentResolver myCR = getContentResolver();
+//		long timestamp = Long.valueOf("1234635824");
+//		long threadId = 40;
+//		int id = 0;
+//		Log.v("trying to find message to delete: thread_id = " + threadId + ", date = " + timestamp);
+//		Cursor cursor =
+//			myCR.query(
+//						ContentUris.withAppendedId(SMSPopupUtils.CONVERSATION_CONTENT_URI, threadId),
+//						new String[] { "_id", "date", "thread_id" },
+//						"thread_id=" + threadId + " and " + "date=" + timestamp,
+//						//null,
+//						null, "date desc");
+//		if (cursor != null) {
+//			Log.v("cursor was not null");
+//			try {
+//				if (cursor.moveToFirst()) {
+//					// for (int i = 0; i < cursor.getColumnNames().length; i++) {
+//					// Log.v("Column: " + cursor.getColumnNames()[i]);
+//					//							
+//					// }
+//					// Log.v("_id = " + cursor.getInt(0));
+//					// Log.v("date = " + cursor.getLong(1) + " (timestamp = " +
+//					// timestamp + ")");
+//					// Log.v("threadId = " + cursor.getInt(2));
+//					id = cursor.getInt(0);
+//					long date = cursor.getLong(1);
+//					long thread = cursor.getLong(2);
+//					Log.v("id = " + id);
+//					Log.v("date = " + date);
+//					Log.v("thread = " + thread);
+//				}
+//			} finally {
+//				cursor.close();
+//			}
+//		}
+
 		// Preference inboxPref = (Preference)
 		// findPreference(getString(R.string.pref_inbox_app_key));
 		// Intent inboxChooseIntent = new Intent();
