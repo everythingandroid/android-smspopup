@@ -46,6 +46,10 @@
    <string name="pref_additional_title">Zusätzliche Einstellungen</string>
    <string name="pref_additional_summary">Zusätzliche SMS Popup Einstellungen</string>
 
+   <string name="pref_dimscreen_title">Popup Anzeige verdunkeln</string>
+   <string name="pref_dimscreen_summaryon">Popup Anzeige ist dunkel(schont den Akku)</string>
+   <string name="pref_dimscreen_summaryoff">Popup Anzeige ist hell</string>   
+
    <string name="pref_timeout_title">Zeit bis zum Energiesparmodus</string>
    <string name="pref_timeout_summary">Der Bildschirm schaltet nach Ablauf dieser Zeit automatisch in den Energiesparmodus</string>
       
@@ -74,8 +78,8 @@
    <string name="pref_show_delete_button_title">Zeige den "löschen" Button</string>
    <string name="pref_show_delete_button_summaryon">"Löschen" Button wird angezeigt</string>
    <string name="pref_show_delete_button_summaryoff">"Löschen" Button wird nicht angezeigt</string>
-   <string name="pref_show_delete_button_dialog_title">Nachricht löschen</string>
-   <string name="pref_show_delete_button_dialog_text">Sind Sie sicher?</string>
+   <string name="pref_show_delete_button_dialog_title">Nachricht löschen?</string>
+   <string name="pref_show_delete_button_dialog_text">Wirklich löschen?</string>
    
    <string name="pref_blur_title">Unschärfe vom Hintergrund</string>
    <string name="pref_blur_summaryon">Hintergrund wird unscharf beim Anzeigen der Nachricht</string>
@@ -113,11 +117,26 @@
    
    <string name="pref_flashled_color_title">LED Farbe</string>
    <string name="pref_flashled_color_summary">Die Farbe des LED</string>
-   <string name="pref_flashled_color_custom_dialog_red">rot:</string>
-   <string name="pref_flashled_color_custom_dialog_green">grün:</string>
-   <string name="pref_flashled_color_custom_dialog_blue">blau:</string>
-   <string name="pref_flashled_color_custom_dialog_preview">vorschau:</string>
-   <string name="pref_flashled_color_custom_set">Custom LED color set</string>   
+   <string name="pref_flashled_color_custom_dialog_red">Rot:</string>
+   <string name="pref_flashled_color_custom_dialog_green">Grün:</string>
+   <string name="pref_flashled_color_custom_dialog_blue">Blau:</string>
+   <string name="pref_flashled_color_custom_dialog_preview">Preview:</string>
+   <string name="pref_flashled_color_custom_set">Eigene LED Farbeinstellung</string>
+
+   <string name="pref_flashled_pattern_title">LED Blink Zeit</string>
+   <string name="pref_flashled_pattern_summary">Setze die Zeit für das Blinken des LED</string>
+   <string name="pref_flashled_pattern_ok">Eigene Blinkzeit einstellen</string>
+   <string name="pref_flashled_pattern_bad">Eigene Blinkzeit ist ungültig, Standardeinstellung wird verwendet</string>
+   <string name="pref_flashled_pattern_help">Zeit (in Millisekunden) für das Ein- und Ausschalten der LED eingeben</string>
+   <string name="pref_flashled_pattern_help_on">Zeit bis zum Einschalten:</string>
+   <string name="pref_flashled_pattern_help_off">Zeit bis zum Ausschalten:</string>
+   
+   <string-array name="pref_led_pattern_entries">
+      <item>Schnell</item>
+      <item>Normal</item>
+      <item>Langsam</item>
+      <item>Eigene...</item>
+   </string-array>         
 
    <string name="pref_notif_repeat_title">Aktivierung von Erinnerungen</string>
    <string name="pref_notif_repeat_summaryon">Erinnerungen für ungelesene Nachrichten ist aktiviert</string>

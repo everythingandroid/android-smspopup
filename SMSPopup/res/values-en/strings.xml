@@ -48,6 +48,10 @@
 
    <string name="pref_timeout_title">Screen Timeout</string>
    <string name="pref_timeout_summary">The screen will sleep after this time</string>
+   
+   <string name="pref_dimscreen_title">Dim Popup Screen</string>
+   <string name="pref_dimscreen_summaryon">Popup screen will be dim (saves battery)</string>
+   <string name="pref_dimscreen_summaryoff">Popup screen will be bright</string>   
       
    <string name="pref_privacy_title">Privacy Mode</string>
    <string name="pref_privacy_summaryon">Contents of the message will only be shown after unlock</string>
@@ -119,6 +123,21 @@
    <string name="pref_flashled_color_custom_dialog_preview">Preview:</string>
    <string name="pref_flashled_color_custom_set">Custom LED color set</string>
 
+   <string name="pref_flashled_pattern_title">LED Blink Rate</string>
+   <string name="pref_flashled_pattern_summary">Set the speed the LED blinks</string>
+   <string name="pref_flashled_pattern_ok">Custom LED blink rate set</string>
+   <string name="pref_flashled_pattern_bad">Custom LED blink rate is invalid, using default</string>
+   <string name="pref_flashled_pattern_help">Enter the time in milliseconds to turn the LED on and off</string>
+   <string name="pref_flashled_pattern_help_on">Time on:</string>
+   <string name="pref_flashled_pattern_help_off">Time off:</string>
+   
+   <string-array name="pref_led_pattern_entries">
+      <item>Fast</item>
+      <item>Normal</item>
+      <item>Slow</item>
+      <item>Custom</item>
+   </string-array>
+   
    <string name="pref_notif_repeat_title">Enable Reminders</string>
    <string name="pref_notif_repeat_summaryon">Unread message reminders are enabled</string>
    <string name="pref_notif_repeat_summaryoff">Unread message reminders are disabled</string>

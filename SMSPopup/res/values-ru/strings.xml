@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- App Strings -->
+   <string name="app_name">SMS Popup</string>
+   <string name="new_text_at">Новое сообщение в %s</string>
+   <string name="unread_text_waiting">Осталось %d непрочитанных(ое) сообщений(е)</string>
+   <string name="mms_subject">Тема:</string>
+   
+<!-- Notification Strings -->
+   <string name="notification_multiple_title">Новые сообщения</string>
+   <string name="notification_multiple_text">%d непрочитанных(ое) сообщений(е).</string>
+   <string name="notification_scroll_privacy">Новое сообщение от: %s</string>
+
+<!-- Button Strings -->
+   <string name="button_close">Закрыть</string>
+   <string name="button_reply">Ответить</string>
+   <string name="button_inbox">Входящие</string>
+   <string name="button_view">Просмотр</string>
+   <string name="button_view_mms">Просмотр MMS</string>
+   <string name="button_delete">Удалить</string>
+   
+   <!-- Not yet implemented -->
+   <string name="button_next">Следующее</string>
+   <string name="button_previous">Предыдущее</string>
+   <string name="button_unlock">Разблокировать</string>
+   
+<!-- Main Preferences -->   
+   <string name="pref_config_title">Установки SMS Popup</string>
+   <string name="pref_other_title">Другие</string>
+   
+   <string name="pref_enabled_title">Включить SMS Popup</string>
+   <string name="pref_enabled_summaryon">SMS Popup включен</string>
+   <string name="pref_enabled_summaryoff">SMS Popup выключен</string>
+   
+   <string name="pref_about_title">О программе</string>
+   <string name="pref_about_summary">О SMS Popup</string>
+   <string name="pref_about_text">Автор: Adam K\nEmail: adam@everythingandroid.net\nБлог: http://www.everythingandroid.net\n\nSMS Popup простое приложение, которое выводит входящее SMS сообщение в виде всплывающего диалогового окна, подобно iPhone – включает экран и снимает блокировку при необходимости. Отображает последнее сообщение, от кого оно получено и фото контакта при его налчии.\n\nПишите мне свои любые комментарии, предложения или сообщения об ошибках.\n\nПеревод на Немецкий: Feyyaz A.\nEmail: f_alingan@hotmail.com\nWebsite: http://www.yenio.com\n\nПеревод на Голландский: mellie@xs4all.nl\n\nПеревод на Испанский: Diego Fernández\nEmail: profediego@gmail.com\n\nПеревод на Русский: Artem Kavalerov\nEmail: artem.kavalerov@gmail.com\n\nОтдельное спасибо Min Tran за иконку приложения.\n(http://min.frexy.com)\n</string>
+   
+   <string name="pref_sendemail_title">E-mail Разработчика</string>
+   <string name="pref_sendemail_summary">Отправить комментарий или сообщить об ошибке на E-mail</string>
+   <string name="pref_sendemail_dialog">Могу я добавить информацию о вашей системе в e-mail (это позволяет мне эффективней устранять ошибки)?</string>
+   <string name="pref_sendemail_buttonok">Да, согласен</string>
+   <string name="pref_sendemail_buttoncancel">Нет</string>
+
+<!-- Additional Preferences -->
+   <string name="pref_additional_title">Дополнительные настройки</string>
+   <string name="pref_additional_summary">Дополнительные установки SMS Popup</string>
+   
+   <string name="pref_timeout_title">Время ожидания экрана</string>
+   <string name="pref_timeout_summary">Экран перейдет в спящий режим спустя заданное время</string>
+   
+   <string name="pref_dimscreen_title">Яркость экрана окна</string>
+   <string name="pref_dimscreen_summaryon">Тусклый экран всплывающего окна (экономия батареи)</string>
+   <string name="pref_dimscreen_summaryoff">Яркий экран всплывающего окна</string>
+   
+   <string name="pref_privacy_title">Режим приватности</string>
+   <string name="pref_privacy_summaryon">Содержимое сообщения будет показано только после разблокировки</string>
+   <string name="pref_privacy_summaryoff">Содержимое сообщения будет показано сразу</string>
+   
+   <string name="pref_markread_title">Отметить прочитанным</string>
+   <string name="pref_markread_summaryon">При нажатии на \"Закрыть\", сообщение будет отмечено как прочитанное</string>
+   <string name="pref_markread_summaryoff">При нажатии на \"Закрыть\", сообщение не будет отмечено как прочитанное</string>
+   
+   <string name="pref_onlyShowOnKeyguard_title">Ограничить вывод окна</string>
+   <string name="pref_onlyShowOnKeyguard_summaryon">Всплывающее окно только при включенной блокировке</string>
+   <string name="pref_onlyShowOnKeyguard_summaryoff">Всплывающее окно всегда выводится</string>
+   
+   <!-- Not yet implemented -->
+   <string name="pref_require_unlock_title">Запрос разблокировки экрана</string>
+   <string name="pref_require_unlock_summaryon">Кнопки спрятаны при блокировке</string>
+   <string name="pref_require_unlock_summaryoff">Кнопки отображаются всегда</string>
+   
+   <!-- Not yet implemented -->
+   <string name="pref_inbox_app_title">Выберите приложение для входящих</string>
+   <string name="pref_inbox_app_summary">Выберите приложение, которое будет использоваться для нескольких сообщений</string>
+   <string name="pref_inbox_app_info">Примечание: для "Ответа" используется системное приложение</string>
+   
+   <string name="pref_show_delete_button_title">Вывести кнопку "Удалить"</string>
+   <string name="pref_show_delete_button_summaryon">Кнопка "Удалить" включена</string>
+   <string name="pref_show_delete_button_summaryoff">Кнопка "Удалить" выключена</string>
+   <string name="pref_show_delete_button_dialog_title">Удалить сообщение</string>
+   <string name="pref_show_delete_button_dialog_text">Вы уверены?</string>
+   
+   <string name="pref_blur_title">Размытие фона</string>
+   <string name="pref_blur_summaryon">Фон за окном сообщения будет размыт</string>
+   <string name="pref_blur_summaryoff">Фон за окном сообщения не будет размыт</string>
+
+<!-- Notification Preferences -->   
+   <string name="pref_notif_title">Уведомления</string>
+   <string name="pref_notif_summary">Установки уведомлений</string>
+   
+   <string name="pref_notif_enabled_title">Включить уведомления</string>
+   <string name="pref_notif_enabled_summaryon">Уведомления включены</string>
+   <string name="pref_notif_enabled_summaryoff">Уведомления выключены</string>
+   <string name="pref_notif_enabled_warning">Во избежание конфликтов и дуюлирования оповещений, отключите системные SMS уведомления и любые иные приложения для уведомления о входящих SMS.\n\nЧтобы выключить системные уведомления, зайдите в сообщения, нажмите меню -&gt; настройки и снимите галочку с уведомлений.</string>
+   
+   <string name="pref_notif_test_title">Тест уведомления</string>
+   <string name="pref_notif_test_summary">Протестировать ваше уведомление</string>
+   <string name="pref_notif_test_message">Идет тест уведомления!</string>
+   
+   <string name="pref_notif_sound_title">Звук уведомления</string>
+   <string name="pref_notif_sound_summary">Этот звук будет воспроизводиться при входящем сообщении</string>
+   
+   <string name="pref_vibrate_title">Вибро</string>
+   <string name="pref_vibrate_summaryon">Вибро включено</string>
+   <string name="pref_vibrate_summaryoff">Вибро выключено</string>
+   
+   <string name="pref_vibrate_pattern_title">Шаблон вибро</string>
+   <string name="pref_vibrate_pattern_summary">Установить шаблон вибро</string>
+   <string name="pref_vibrate_pattern_ok">Установка собственного шаблона вибро</string>
+   <string name="pref_vibrate_pattern_bad">Шаблон вибро задан некорректно, включен шаблон по умолчанию</string>
+   <string name="pref_vibrate_pattern_help">Введите собственный шаблон, в формате:\nмсекВыкл, мсекВкл, и т.д..\n\nПример:\n0,1000\n0,500,200,500,200,500</string>
+   
+   <string name="pref_flashled_title">Мигание светодиодом</string>
+   <string name="pref_flashled_summaryon">Мигать светодиодом при входящем сообщении</string>
+   <string name="pref_flashled_summaryoff">Не использовать светодиод для оповещения</string>
+   
+   <string name="pref_flashled_color_title">Цвет светодиода</string>
+   <string name="pref_flashled_color_summary">Цвет светодиода</string>
+   <string name="pref_flashled_color_custom_dialog_red">Красный:</string>
+   <string name="pref_flashled_color_custom_dialog_green">Зеленый:</string>
+   <string name="pref_flashled_color_custom_dialog_blue">Синий:</string>
+   <string name="pref_flashled_color_custom_dialog_preview">Просмотр:</string>
+   <string name="pref_flashled_color_custom_set">Установка цвета светодиода</string>
+   
+   <string name="pref_flashled_pattern_title">Частота мигания светодиода</string>
+   <string name="pref_flashled_pattern_summary">Установите скорость мигания светодиода</string>
+   <string name="pref_flashled_pattern_ok">Установка частоты мигания светодиода</string>
+   <string name="pref_flashled_pattern_bad">Задана некорректная частота мигания, используется частота по умолчанию</string>
+   <string name="pref_flashled_pattern_help">Введите время в миллисекундах для включения и выключения светодиода</string>
+   <string name="pref_flashled_pattern_help_on">Время вкл:</string>
+   <string name="pref_flashled_pattern_help_off">Время выкл:</string>
+
+   <string-array name="pref_led_pattern_entries">
+      <item>Быстро</item>
+		<item>Нормально</item>
+		<item>Медленно</item>
+		<item>Собственное</item>
+	</string-array>
+
+   <string name="pref_notif_repeat_title">Включить напоминания</string>
+   <string name="pref_notif_repeat_summaryon">Напоминания о непрочитанных сообщениях включены</string>
+   <string name="pref_notif_repeat_summaryoff">Напоминания о непрочитанных сообщениях выключены</string>
+   
+   <string name="pref_notif_repeat_interval_title">Интервал напоминаний</string>
+   <string name="pref_notif_repeat_interval_summary">Время между включениями напоминаний</string>
+   <string name="pref_notif_repeat_interval_dialogTitle">Интервал (минуты)</string>
+   
+   <string name="pref_notif_repeat_times_title">Количество напоминаний</string>
+   <string name="pref_notif_repeat_times_summary">Кол-во напоминаний, которые будут сделаны</string>
+   
+   <string name="pref_notif_repeat_screen_on_title">Включить экран для напоминаний</string>
+   <string name="pref_notif_repeat_screen_on_summaryon">Напоминания снова включат экран</string>
+   <string name="pref_notif_repeat_screen_on_summaryoff">Напоминания не включат экран</string>
+   <string name="pref_notif_repeat_screen_on_warning">Внимание – включение экрана для напоминаний может значительно повлиять на время автономной работы</string>
+
+<!-- Arrays for drop-down prefs -->
+   <string-array name="pref_timeout_entries">
+	   <item>10 секунд</item>
+		<item>20 секунд</item>
+		<item>30 секунд</item>
+		<item>1 минута</item>
+		<item>2 минуты</item>
+		<item>5 минут</item>
+		<item>10 минут</item>
+	</string-array>
+
+	<string-array name="pref_vibrate_pattern_entries">
+		<item>Нормальное</item>
+		<item>Продолжительное</item>
+		<item>Несколько коротких</item>
+		<item>Несколько продолжительных</item>
+		<item>Собственное</item>
+	</string-array>
+
+   <string-array name="pref_led_color_entries">
+	   <item>Синий</item>
+		<item>Зеленый</item>
+		<item>Красный</item>
+		<item>Оранжевый</item>
+		<item>Пурпурный</item>
+		<item>Голубой</item>
+		<item>Собственный</item>
+   </string-array>
+
+   <string-array name="pref_notif_repeat_times_entries">
+	   <item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>10</item>
+		<item>Бесконечно</item>
+   </string-array>
+</resources>
