@@ -39,8 +39,8 @@ public class ManageWakeLock {
 		}
 		
 		flags |= 
-			PowerManager.ACQUIRE_CAUSES_WAKEUP |
-			PowerManager.ON_AFTER_RELEASE;
+			PowerManager.ACQUIRE_CAUSES_WAKEUP; 
+			//PowerManager.ON_AFTER_RELEASE;
 
 		myWakeLock = myPM.newWakeLock(flags, Log.LOGTAG);
 		Log.v("**Wakelock acquired");
@@ -89,4 +89,11 @@ public class ManageWakeLock {
 		releaseFull();
 		releasePartial();
 	}
+	
+	// This is not supported by the API at this time :(
+//	public static synchronized void goToSleep(Context context) {
+//		setPM(context);
+//		myPM.goToSleep(SystemClock.uptimeMillis() + 2000);
+//		
+//	}
 }

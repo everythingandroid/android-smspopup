@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_height="wrap_content"
-	xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:orientation="vertical"
-	android:paddingLeft="5sp"
-	android:paddingRight="5sp" android:id="@+id/CustomLEDColorLinearLayout">
+	android:id="@+id/LEDPatternLinearLayout" android:layout_height="wrap_content" android:paddingLeft="10sp" android:paddingRight="10sp">
+	<TextView android:layout_height="fill_parent" android:id="@+id/LEDPatternTextView" android:text="@string/pref_flashled_pattern_help" android:paddingBottom="8sp" android:layout_width="fill_parent"></TextView><LinearLayout android:orientation="horizontal" android:id="@+id/LEDPatternLinearLayout2" android:paddingLeft="5sp" android:layout_width="fill_parent" android:layout_height="fill_parent"><LinearLayout android:layout_width="wrap_content" android:orientation="vertical" android:layout_height="fill_parent" android:id="@+id/LEDPatternLabelLinearLayout">
+<TextView android:layout_width="wrap_content" android:text="@string/pref_flashled_pattern_help_on" android:id="@+id/LEDOnTextView" android:paddingRight="10sp" android:layout_height="fill_parent" android:layout_weight="1" android:gravity="center"></TextView><TextView android:layout_width="wrap_content" android:text="@string/pref_flashled_pattern_help_off" android:id="@+id/LEDOffTextView" android:paddingRight="10sp" android:layout_weight="1" android:layout_height="fill_parent" android:gravity="center"></TextView></LinearLayout><LinearLayout android:layout_width="wrap_content" android:orientation="vertical" android:layout_height="fill_parent" android:id="@+id/LEDPatternEditTextLinearLayout"><EditText android:singleLine="true" android:id="@+id/LEDOnEditText" android:layout_width="wrap_content" android:selectAllOnFocus="true" android:numeric="integer" android:maxLength="5" android:layout_height="wrap_content" android:layout_margin="1sp"></EditText><EditText android:singleLine="true" android:layout_height="wrap_content" android:id="@+id/LEDOffEditText" android:layout_width="wrap_content" android:maxLength="5" android:numeric="integer" android:selectAllOnFocus="true" android:layout_margin="1sp"></EditText></LinearLayout>
+</LinearLayout>
+	
+   
+	
 	
 
-
-
-<ScrollView android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/CustomLEDColorScrollView"><LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="fill_parent" android:id="@+id/ScrollViewLinearLayout" android:paddingLeft="5sp" android:paddingRight="5sp" android:paddingBottom="2sp" android:paddingTop="2sp"><LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/PreviewLinearLayout" android:gravity="left|center"><TextView android:layout_height="wrap_content" android:id="@+id/PreviewTextView" android:layout_width="wrap_content" android:layout_gravity="center" android:gravity="right" android:text="@string/pref_flashled_color_custom_dialog_preview" android:paddingRight="15sp"></TextView>
-<ImageView android:layout_height="wrap_content" android:layout_gravity="center" android:id="@+id/PreviewImageView" android:layout_width="wrap_content" android:maxHeight="30sp" android:minHeight="30sp" android:maxWidth="50sp" android:minWidth="50sp"></ImageView>
-</LinearLayout><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/RedTextView" android:text="@string/pref_flashled_color_custom_dialog_red" android:paddingTop="5sp"></TextView><SeekBar android:id="@+id/RedSeekBar" android:layout_height="wrap_content" android:layout_width="fill_parent" android:max="255"></SeekBar><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/GreenTextView" android:text="@string/pref_flashled_color_custom_dialog_green" android:paddingTop="5sp"></TextView><SeekBar android:id="@+id/GreenSeekBar" android:layout_height="wrap_content" android:layout_width="fill_parent" android:max="255"></SeekBar><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/BlueTextView" android:text="@string/pref_flashled_color_custom_dialog_blue" android:paddingTop="5sp"></TextView><SeekBar android:id="@+id/BlueSeekBar" android:layout_height="wrap_content" android:layout_width="fill_parent" android:max="255"></SeekBar>
-
-
-</LinearLayout>
-</ScrollView>
 </LinearLayout>

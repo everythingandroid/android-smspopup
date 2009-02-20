@@ -49,6 +49,10 @@
    <string name="pref_timeout_title">Scherm timeout</string>
    <string name="pref_timeout_summary">Het scherm wordt gedeactiveerd na dit aantal seconden</string>
       
+   <string name="pref_dimscreen_title">Helderheid popup scherm</string>
+   <string name="pref_dimscreen_summaryon">Popup scherm is donker (bespaart batterij)</string>
+   <string name="pref_dimscreen_summaryoff">Popup screen is helder</string>   
+      
    <string name="pref_privacy_title">Privacy modus</string>
    <string name="pref_privacy_summaryon">De inhoud van de SMS wordt alleen getoond nadat het scherm ontgrendeld is</string>
    <string name="pref_privacy_summaryoff">De inhoud van de SMS wordt direct getoond</string>
@@ -74,7 +78,7 @@
    <string name="pref_show_delete_button_title">Toon verwijder knop</string>
    <string name="pref_show_delete_button_summaryon">Verwijder knop is actief</string>
    <string name="pref_show_delete_button_summaryoff">Verwijder knop is niet actief</string>
-   <string name="pref_show_delete_button_dialog_title">Bericht verwijderen</string>
+   <string name="pref_show_delete_button_dialog_title">Verwijder bericht</string>
    <string name="pref_show_delete_button_dialog_text">Weet je het zeker?</string>
    
    <string name="pref_blur_title">Achtergrond vaag?</string>
@@ -116,8 +120,23 @@
    <string name="pref_flashled_color_custom_dialog_red">Rood:</string>
    <string name="pref_flashled_color_custom_dialog_green">Groen:</string>
    <string name="pref_flashled_color_custom_dialog_blue">Blauw:</string>
-   <string name="pref_flashled_color_custom_dialog_preview">Preview:</string>
-   <string name="pref_flashled_color_custom_set">Custom LED color set</string>
+   <string name="pref_flashled_color_custom_dialog_preview">Voorbeeld:</string>
+   <string name="pref_flashled_color_custom_set">Aangepaste kleur LED</string>
+
+   <string name="pref_flashled_pattern_title">Knipper snelheid LED</string>
+   <string name="pref_flashled_pattern_summary">Zet de knipper snelheid van de LED</string>
+   <string name="pref_flashled_pattern_ok">Aangepaste knipper snelheid LED</string>
+   <string name="pref_flashled_pattern_bad">Aangepaste knipper snelheid LED is ongeldig, standaard snelheid wordt gebruikt</string>
+   <string name="pref_flashled_pattern_help">Geef de tijden in milliseconden waarmee de LED moet knipperen</string>
+   <string name="pref_flashled_pattern_help_on">Aan:</string>
+   <string name="pref_flashled_pattern_help_off">Uit:</string>
+
+   <string-array name="pref_led_pattern_entries">
+      <item>Snel</item>
+      <item>Normaal</item>
+      <item>Langzaam</item>
+      <item>Aangepast</item>
+   </string-array>         
 
    <string name="pref_notif_repeat_title">Activeer herinneringen</string>
    <string name="pref_notif_repeat_summaryon">Herinneringen voor ongelezen berichten zijn actief</string>

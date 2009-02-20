@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Parcelable;
 import android.preference.ListPreference;
 import android.preference.PreferenceManager;
@@ -69,7 +70,16 @@ public class CustomVibrateListPreference extends ListPreference {
 			.setIcon(android.R.drawable.ic_dialog_info)
 			.setTitle(R.string.pref_vibrate_pattern_title)
 			.setView(v)
-			.setNegativeButton(android.R.string.cancel, null)
+			.setOnCancelListener(new OnCancelListener() {
+				public void onCancel(DialogInterface dialog) {
+					dialogShowing = false;
+				}
+			})
+			.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+		      public void onClick(DialogInterface dialog, int whichButton) {
+		      	dialogShowing = false;
+		      }
+			})
 			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 		      public void onClick(DialogInterface dialog, int whichButton) {
 			      SharedPreferences.Editor settings = myPrefs.edit();
