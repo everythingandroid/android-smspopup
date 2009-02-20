@@ -48,6 +48,10 @@
 
    <string name="pref_timeout_title">Tiempo de Pantalla</string>
    <string name="pref_timeout_summary">La pantalla se apagará despues de este tiempo</string>
+
+   <string name="pref_dimscreen_title">Atenuar la pantalla Popup</string>
+   <string name="pref_dimscreen_summaryon">La pantalla Popup será atenuada (ahorra batería)</string>
+   <string name="pref_dimscreen_summaryoff">La pantalla Popup será brillante</string>   
       
    <string name="pref_privacy_title">Modo de Privacidad</string>
    <string name="pref_privacy_summaryon">Los contenidos del mensaje se mostrarán solo después de desbloquearlo</string>
@@ -74,8 +78,8 @@
    <string name="pref_show_delete_button_title">Muestra un Botón de Borrar</string>
    <string name="pref_show_delete_button_summaryon">Botón de Borrar Habilitado</string>
    <string name="pref_show_delete_button_summaryoff">Botón de Borrar deshabilitado</string>
-   <string name="pref_show_delete_button_dialog_title">Borrar mensaje</string>
-   <string name="pref_show_delete_button_dialog_text">¿Estás seguro?</string>
+   <string name="pref_show_delete_button_dialog_title">Borrar Mensaje</string>
+   <string name="pref_show_delete_button_dialog_text">Está seguro?</string>
    
    <string name="pref_blur_title">Fondo Borroso</string>
    <string name="pref_blur_summaryon">El fondo detrás de la ventana de mensaje se tornará borroso</string>
@@ -116,8 +120,23 @@
    <string name="pref_flashled_color_custom_dialog_red">Rojo:</string>
    <string name="pref_flashled_color_custom_dialog_green">Verde:</string>
    <string name="pref_flashled_color_custom_dialog_blue">Azul:</string>
-   <string name="pref_flashled_color_custom_dialog_preview">Previa:</string>
-   <string name="pref_flashled_color_custom_set">Custom LED color set</string>
+   <string name="pref_flashled_color_custom_dialog_preview">Vista Previa:</string>
+   <string name="pref_flashled_color_custom_set">Personalizar color del LED</string>
+
+   <string name="pref_flashled_pattern_title">Ritmo de Parpadeo del LED</string>
+   <string name="pref_flashled_pattern_summary">Establecer la velocidad de parpadeo del LED</string>
+   <string name="pref_flashled_pattern_ok">Personalizar el ritmo de parpadeo del LED</string>
+   <string name="pref_flashled_pattern_bad">Ritmo de personalización del LED inválida, usando el predeterminado</string>
+   <string name="pref_flashled_pattern_help">Ingrese el tiempo en milisegundos para encender y apagar el LED</string>
+   <string name="pref_flashled_pattern_help_on">Tiempo encendido:</string>
+   <string name="pref_flashled_pattern_help_off">Tiempo apagado:</string>
+
+   <string-array name="pref_led_pattern_entries">
+      <item>Rápido</item>
+      <item>Normal</item>
+      <item>Lento</item>
+      <item>Personalizado</item>
+   </string-array>         
 
    <string name="pref_notif_repeat_title">Habilitar Recordatorios</string>
    <string name="pref_notif_repeat_summaryon">Recordatorios de mensajes sin leer habilitados</string>

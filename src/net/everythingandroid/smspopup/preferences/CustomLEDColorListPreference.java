@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Color;
 import android.os.Parcelable;
 import android.preference.ListPreference;
@@ -82,7 +83,7 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
 		int green = Color.green(color);
 		int blue = Color.blue(color);
 		
-		View v = inflater.inflate(R.layout.ledpatterndialog, null);
+		View v = inflater.inflate(R.layout.ledcolordialog, null);
 
 		redSeekBar = (SeekBar) v.findViewById(R.id.RedSeekBar);
 		greenSeekBar = (SeekBar) v.findViewById(R.id.GreenSeekBar);
@@ -112,7 +113,16 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
 			.setIcon(android.R.drawable.ic_dialog_info)
 			.setTitle(R.string.pref_flashled_color_title)
 			.setView(v)
-			.setNegativeButton(android.R.string.cancel, null)
+			.setOnCancelListener(new OnCancelListener() {
+				public void onCancel(DialogInterface dialog) {
+					dialogShowing = false;
+				}
+			})			
+			.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+		      public void onClick(DialogInterface dialog, int whichButton) {
+		      	dialogShowing = false;
+		      }
+			})
 			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 		      public void onClick(DialogInterface dialog, int whichButton) {
 			      SharedPreferences.Editor settings = myPrefs.edit();

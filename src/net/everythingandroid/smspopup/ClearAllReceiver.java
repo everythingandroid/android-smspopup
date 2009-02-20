@@ -16,6 +16,11 @@ public class ClearAllReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		Log.v("ClearAllReceiver: onReceive()");
 		clearAll();
+		
+		// goToSleep() is not supported by the API at this time, this means
+		// the device will stay on for the user selected timeout after the
+		// WakeLock is released :(
+		//ManageWakeLock.goToSleep(context);
 	}
 		
 	/*

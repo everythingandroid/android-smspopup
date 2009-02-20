@@ -23,9 +23,6 @@ public class ManageNotification {
 	private static NotificationManager myNM = null;
 	private static SharedPreferences myPrefs = null;
 	
-	// TODO: make LED blink pattern configurable?
-	private static final int[] led_pattern = { 1250, 1250 };
-
 	/*
 	 * Create the NotificationManager
 	 */
@@ -114,15 +111,20 @@ public class ManageNotification {
 			String flashLedColCustom = myPrefs.getString(
 			      context.getString(R.string.pref_flashled_color_custom_key), 
 			      context.getString(R.string.pref_flashled_color_default));
+			String flashLedPattern = myPrefs.getString(
+			      context.getString(R.string.pref_flashled_pattern_key), 
+			      context.getString(R.string.pref_flashled_pattern_default));
+			String flashLedPatternCustom = myPrefs.getString(
+			      context.getString(R.string.pref_flashled_pattern_custom_key), 
+			      context.getString(R.string.pref_flashled_pattern_default));
 
-			
 			// The default system ringtone
 			// ("content://settings/system/notification_sound")
 			String defaultRingtone = Settings.System.DEFAULT_NOTIFICATION_URI.toString();
 
 			// Try and parse the user ringtone, use the default if it fails
-			Uri alarmSoundURI = Uri.parse(myPrefs.getString(context
-			      .getString(R.string.pref_notif_sound_key), defaultRingtone));
+			Uri alarmSoundURI = Uri.parse(myPrefs.getString(
+					context.getString(R.string.pref_notif_sound_key), defaultRingtone));
 
 			// The notification title, sub-text and text that will scroll
 			String contentTitle;
@@ -186,9 +188,31 @@ public class ManageNotification {
 				// Set up LED pattern and color
 				if (flashLed) {
 					notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+
+					/*					 
+					 * Set up LED blinking pattern
+					 */
+					int[] led_pattern = null;
+					
+					if (context.getString(R.string.pref_custom_val).equals(flashLedPattern)) {
+						led_pattern = parseLEDPattern(flashLedPatternCustom);
+					} else {
+						led_pattern = parseLEDPattern(flashLedPattern);
+					}
+					
+					if (led_pattern == null) {
+						led_pattern = parseLEDPattern(myPrefs.getString(
+						      context.getString(R.string.pref_flashled_pattern_key), 
+						      context.getString(R.string.pref_flashled_pattern_default)));
+					}
+					
 					notification.ledOnMS = led_pattern[0];
 					notification.ledOffMS = led_pattern[1];
 					
+					/*					 
+					 * Set up LED color
+					 */
+
 					// Check if a custom color is set
 					if (context.getString(R.string.pref_custom_val).equals(flashLedCol)) {
 						flashLedCol = flashLedColCustom;
@@ -205,8 +229,10 @@ public class ManageNotification {
 					}
 					notification.ledARGB = col;
 				}
-	
-				// Set up vibrate pattern
+
+				/*					 
+				 * Set up vibrate pattern
+				 */
 				if (vibrate) {
 					long[] vibrate_pattern = null;
 					if (context.getString(R.string.pref_custom_val).equals(
@@ -241,7 +267,7 @@ public class ManageNotification {
 
 			// Set intent to execute if the "clear all" notifications button is
 			// pressed -
-			// basically stop any future reminders.
+			// sically stop any future reminders.
 			Intent deleteIntent = new Intent(new Intent(context, ReminderReceiver.class));
 			deleteIntent.setAction(Intent.ACTION_DELETE);
 			PendingIntent pendingDeleteIntent = PendingIntent
@@ -324,5 +350,40 @@ public class ManageNotification {
 		}
 		
 		return null;
+	}
+	
+	public static int[] parseLEDPattern(String stringPattern) {
+		int[] arrayPattern = new int[2];
+		int on, off;
+		String[] splitPattern = stringPattern.split(",");
+		
+		if (splitPattern.length != 2) {
+			return null;
+		}
+		
+		int LED_PATTERN_MIN_SECONDS = 0;
+		int LED_PATTERN_MAX_SECONDS = 60000;
+
+		try {
+			on = Integer.parseInt(splitPattern[0]);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+		
+		try {
+			off = Integer.parseInt(splitPattern[1]);
+		} catch (NumberFormatException e) {
+			return null;	
+		}
+		
+		if (on >= LED_PATTERN_MIN_SECONDS && on <= LED_PATTERN_MAX_SECONDS &&
+			 off >= LED_PATTERN_MIN_SECONDS && off <= LED_PATTERN_MAX_SECONDS) {
+			arrayPattern[0] = on;
+			arrayPattern[1] = off;
+			return arrayPattern;
+		}
+		 
+		return null;
 	}	
+
 }

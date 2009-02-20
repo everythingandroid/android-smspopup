@@ -49,7 +49,19 @@
       <item>Magenta</item>
       <item>Cyan</item>
       <item>Custom</item>
-   </string-array>   
+   </string-array>
+   <string-array name="pref_led_pattern_values">
+      <item>300,300</item>
+      <item>1000,1000</item>
+      <item>3000,3000</item>
+      <item>custom</item>     
+   </string-array>
+   <string-array name="pref_led_pattern_entries">
+      <item>Fast</item>
+      <item>Normal</item>
+      <item>Slow</item>
+      <item>Custom</item>
+   </string-array>         
    <string-array name="pref_notif_repeat_interval_entries">
       <item>1</item>
       <item>2</item>
