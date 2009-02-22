@@ -80,8 +80,8 @@ public class CustomLEDPatternListPreference extends ListPreference {
 		final EditText onEditText = (EditText) v.findViewById(R.id.LEDOnEditText);
 		final EditText offEditText = (EditText) v.findViewById(R.id.LEDOffEditText);
 		
-//		onEditText.setText(String.valueOf(led_pattern[0]));
-//		offEditText.setText(String.valueOf(led_pattern[1]));
+		onEditText.setText(String.valueOf(led_pattern[0]));
+		offEditText.setText(String.valueOf(led_pattern[1]));
 		
 		new AlertDialog.Builder(context)
 			.setIcon(android.R.drawable.ic_dialog_info)

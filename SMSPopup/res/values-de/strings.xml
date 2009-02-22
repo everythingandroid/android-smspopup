@@ -88,6 +88,12 @@
 <!-- Notification Preferences -->
    <string name="pref_notif_title">Benachrichtigungen</string>
    <string name="pref_notif_summary">Einstellungen der Benachrichtigungen</string>
+
+   <!-- Category headings -->
+   <string name="pref_notif_category_title">Benachrichtigungen</string>
+   <string name="pref_vibrate_category_title">Vibrationen</string>
+   <string name="pref_flashled_category_title">LED</string>
+   <string name="pref_reminder_category_title">Erinnerungen</string>
    
    <string name="pref_notif_enabled_title">Benachrichtigungen einstellen</string>
    <string name="pref_notif_enabled_summaryon">Benachrichtigungen werden angezeigt</string>
