@@ -1,6 +1,5 @@
 package net.everythingandroid.smspopup;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -14,19 +13,18 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.Process;
 import android.preference.PreferenceManager;
-import android.telephony.gsm.SmsManager;
 import android.telephony.gsm.SmsMessage;
 
 public class SMSReceiverService extends Service {
 	private static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 	private static final String ACTION_MMS_RECEIVED = "android.provider.Telephony.WAP_PUSH_RECEIVED";
 	private static final String MMS_DATA_TYPE = "application/vnd.wap.mms-message";
-   private static final String ACTION_MESSAGE_SENT = "com.android.mms.transaction.MESSAGE_SENT";
+   //private static final String ACTION_MESSAGE_SENT = "com.android.mms.transaction.MESSAGE_SENT";
 
 	private Context context;
    private ServiceHandler mServiceHandler;
 	private Looper mServiceLooper;
-	private int mResultCode;
+//	private int mResultCode;
 	
 	static final Object mStartingServiceSync = new Object();
 	static PowerManager.WakeLock mStartingService;
@@ -45,7 +43,7 @@ public class SMSReceiverService extends Service {
 	public void onStart(Intent intent, int startId) {
    	Log.v("SMSReceiverService: onStart()");
 		
-   	mResultCode = intent.getIntExtra("result", 0);
+   	//mResultCode = intent.getIntExtra("result", 0);
 		Message msg = mServiceHandler.obtainMessage();
 		msg.arg1 = startId;
 		msg.obj = intent;
@@ -81,8 +79,8 @@ public class SMSReceiverService extends Service {
 				handleSmsReceived(intent);
 			} else if (ACTION_MMS_RECEIVED.equals(action) && MMS_DATA_TYPE.equals(dataType)) {
 				handleMmsReceived(intent);
-			} else if (ACTION_MESSAGE_SENT.equals(action)) {
-				handleMessageSent(intent);
+//			} else if (ACTION_MESSAGE_SENT.equals(action)) {
+//				handleMessageSent(intent);
 			}
 
 			// NOTE: We MUST not call stopSelf() directly, since we need to
@@ -149,14 +147,20 @@ public class SMSReceiverService extends Service {
 		int MMS_RETRY = 5;
 		int MMS_RETRY_PAUSE = 2000;
 		
+		// Ok this is super hacky, but fixes the case where this code
+		// runs before the system MMS transaction service (that stores
+		// the MMS details in the database).  This should really be
+		// a content listener that waits for a while then gives up...
 		while (mmsMessage == null && count < MMS_RETRY) {
 			mmsMessage = SMSPopupUtils.getMmsDetails(context);
 			if (mmsMessage != null) {
 				Log.v("MMS found in content provider");
-				SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-				boolean onlyShowOnKeyguard = myPrefs.getBoolean(context
-				      .getString(R.string.pref_onlyShowOnKeyguard_key), Boolean.valueOf(context
-				      .getString(R.string.pref_onlyShowOnKeyguard_default)));
+				SharedPreferences myPrefs =
+					PreferenceManager.getDefaultSharedPreferences(context);
+				boolean onlyShowOnKeyguard = myPrefs.getBoolean(
+						context.getString(R.string.pref_onlyShowOnKeyguard_key),
+						Boolean.valueOf(
+								context.getString(R.string.pref_onlyShowOnKeyguard_default)));
 	
 				if (ManageKeyguard.inKeyguardRestrictedInputMode() || !onlyShowOnKeyguard) {
 					Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
@@ -168,7 +172,7 @@ public class SMSReceiverService extends Service {
 					ManageNotification.show(context, mmsMessage);
 					ReminderReceiver.scheduleReminder(context, mmsMessage);
 				}
-			} else {
+			} else {				
 				Log.v("MMS not found, sleeping (count is " + count + ")");
 				count++;
 				try {
@@ -179,64 +183,13 @@ public class SMSReceiverService extends Service {
 			}
 		}
 	}
-	
-	private void handleMessageSent(Intent intent) {
-		if (mResultCode != Activity.RESULT_OK && mResultCode != SmsManager.RESULT_ERROR_RADIO_OFF) {
-			// TODO: create a notification when a message fails to send, it would
-			// be nice to use the built-in messaging app's class for this, but alas
-			// it is not available to be called from another app.
-			// (in Mms.git called UndeliveredMessagesActivity.java)
-			
-			// MessagingNotification.notifySendFailed(getApplicationContext(),
-			// false);
 
-			// boolean isMms = false;
-			// boolean isDownload = false;
-			//			
-			// NotificationManager nm =
-			// (NotificationManager)
-			// context.getSystemService(Context.NOTIFICATION_SERVICE);
-			//
-			// Intent failedIntent = null;
-			//			
-			// failedIntent = new Intent(context,
-			// UndeliveredMessagesActivity.class);
-			// PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
-			// failedIntent, 0);
-			//
-			// Notification notification = new Notification();
-			// notification.icon =
-			// isMms ? R.drawable.stat_notify_mms_failed :
-			// R.drawable.stat_notify_sms_failed;
-			//
-			// String title =
-			// isDownload ?
-			// context.getString(R.string.message_download_failed_title) : context
-			// .getString(R.string.message_send_failed_title);
-			// notification.tickerText = title;
-			//
-			// notification.setLatestEventInfo(context, title, context
-			// .getString(R.string.message_failed_body), pendingIntent);
-			//
-			// boolean vibrate = true;
-			// if (vibrate) {
-			// notification.defaults |= Notification.DEFAULT_VIBRATE;
-			// }
-			//
-			// String ringtoneStr =
-			// sp.getString(MessagingPreferenceActivity.NOTIFICATION_RINGTONE,
-			// null);
-			// notification.sound = TextUtils.isEmpty(ringtoneStr) ? null :
-			// Uri.parse(ringtoneStr);
-			//
-			// if (isDownload) {
-			// nm.notify(DOWNLOAD_FAILED_NOTIFICATION_ID, notification);
-			// } else {
-			// nm.notify(MESSAGE_FAILED_NOTIFICATION_ID, notification);
-			// }
-
-		}
-	}
+//	Unfortunately the system Mms app does not broadcast messages being sent to
+// all receivers.
+//	private void handleMessageSent(Intent intent) {
+//		if (mResultCode != Activity.RESULT_OK && mResultCode != SmsManager.RESULT_ERROR_RADIO_OFF) {
+//		}
+//	}
 
    /**
 	 * Start the service to process the current event notifications, acquiring

@@ -34,7 +34,7 @@
    
    <string name="pref_about_title">О программе</string>
    <string name="pref_about_summary">О SMS Popup</string>
-   <string name="pref_about_text">Автор: Adam K\nEmail: adam@everythingandroid.net\nБлог: http://www.everythingandroid.net\n\nSMS Popup простое приложение, которое выводит входящее SMS сообщение в виде всплывающего диалогового окна, подобно iPhone – включает экран и снимает блокировку при необходимости. Отображает последнее сообщение, от кого оно получено и фото контакта при его налчии.\n\nПишите мне свои любые комментарии, предложения или сообщения об ошибках.\n\nПеревод на Немецкий: Feyyaz A.\nEmail: f_alingan@hotmail.com\nWebsite: http://www.yenio.com\n\nПеревод на Голландский: mellie@xs4all.nl\n\nПеревод на Испанский: Diego Fernández\nEmail: profediego@gmail.com\n\nПеревод на Русский: Artem Kavalerov\nEmail: artem.kavalerov@gmail.com\n\nОтдельное спасибо Min Tran за иконку приложения.\n(http://min.frexy.com)\n</string>
+   <string name="pref_about_text">Автор: Adam K\nEmail: adam@everythingandroid.net\nБлог: http://www.everythingandroid.net\n\nПеревод Перевод на Русский: Artem Kavalerov\nEmail: artem.kavalerov@gmail.com\n\nSMS Popup простое приложение, которое выводит входящее SMS сообщение в виде всплывающего диалогового окна, подобно iPhone – включает экран и снимает блокировку при необходимости. Отображает последнее сообщение, от кого оно получено и фото контакта при его налчии.\n\nПишите мне свои любые комментарии, предложения или сообщения об ошибках.\n\nОтдельное спасибо Min Tran за иконку приложения.\n(http://min.frexy.com)\n</string>
    
    <string name="pref_sendemail_title">E-mail Разработчика</string>
    <string name="pref_sendemail_summary">Отправить комментарий или сообщить об ошибке на E-mail</string>
@@ -88,6 +88,12 @@
 <!-- Notification Preferences -->   
    <string name="pref_notif_title">Уведомления</string>
    <string name="pref_notif_summary">Установки уведомлений</string>
+
+   <!-- Category headings -->
+   <string name="pref_notif_category_title">Установки уведомлений</string>
+   <string name="pref_vibrate_category_title">Вибро</string>
+   <string name="pref_flashled_category_title">светодиодом</string>
+   <string name="pref_reminder_category_title">Напоминания</string>
    
    <string name="pref_notif_enabled_title">Включить уведомления</string>
    <string name="pref_notif_enabled_summaryon">Уведомления включены</string>

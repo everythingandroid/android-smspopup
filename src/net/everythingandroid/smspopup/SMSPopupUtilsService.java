@@ -13,11 +13,17 @@ import android.os.Process;
 
 public class SMSPopupUtilsService extends Service {
 	public static final String ACTION_MARK_THREAD_READ =
-			"net.everythingandroid.smspopup.ACTION_MARK_THREAD_READ";
+		"net.everythingandroid.smspopup.ACTION_MARK_THREAD_READ";
+	
+	public static final String ACTION_MARK_MESSAGE_READ =
+		"net.everythingandroid.smspopup.ACTION_MARK_MESSAGE_READ";
+	
 	public static final String ACTION_DELETE_MESSAGE =
-			"net.everythingandroid.smspopup.ACTION_DELETE_MESSAGE";	
-	public static final String ACTION_OTHER = "net.everythingandroid.smspopup.ACTION_OTHER";
-
+		"net.everythingandroid.smspopup.ACTION_DELETE_MESSAGE";
+	
+	public static final String ACTION_UPDATE_NOTIFICATION =
+		"net.everythingandroid.smspopup.ACTION_UPDATE_NOTIFICATION";
+		
 	private Context context;
    private ServiceHandler mServiceHandler;
 	private Looper mServiceLooper;
@@ -67,15 +73,42 @@ public class SMSPopupUtilsService extends Service {
 			String action = intent.getAction();
 			
 			if (ACTION_MARK_THREAD_READ.equals(action)) {
-				Log.v("SMSPopupUtilsService: marking thread read");
+				Log.v("SMSPopupUtilsService: Marking thread read");
 				SmsMmsMessage message = new SmsMmsMessage(context, intent.getExtras());
 				message.setThreadRead();
+			} else if (ACTION_MARK_MESSAGE_READ.equals(action)) {
+				Log.v("SMSPopupUtilsService: Marking message read");
+				SmsMmsMessage message = new SmsMmsMessage(context, intent.getExtras());
+				message.setMessageRead();
 			} else if (ACTION_DELETE_MESSAGE.equals(action)) {
-				Log.v("SMSPopupUtilsService: deleting message");
+				Log.v("SMSPopupUtilsService: Deleting message");
 				SmsMmsMessage message = new SmsMmsMessage(context, intent.getExtras());
 				message.delete();
-			} else if (ACTION_OTHER.equals(action)) {
+			} else if (ACTION_UPDATE_NOTIFICATION.equals(action)) {
+				Log.v("SMSPopupUtilsService: Updating notification");
+
+				// In the case the user is "replying" to the message (ie. starting an
+				// external intent) we need to ignore all messages in the thread when
+				// calculating the unread messages to show in the status notification
+				boolean ignoreThread = 
+					intent.getBooleanExtra(SmsMmsMessage.EXTRAS_REPLYING, false);				
+
+				SmsMmsMessage message;
+				if (ignoreThread) {
+					// If ignoring messages from the tread, pass the full message over
+					message = new SmsMmsMessage(context, intent.getExtras());
+				} else {
+					// Otherwise we can just calculate unread messages by checking the
+					// database as normal
+					message = null;
+				}
 				
+				// Get the most recent message + total message counts
+				SmsMmsMessage recentMessage = 
+					SMSPopupUtils.getRecentMessage(context, message);
+				
+				// Update the notification in the status bar
+				ManageNotification.update(context, recentMessage);
 			}
 			
 			// NOTE: We MUST not call stopSelf() directly, since we need to
@@ -101,7 +134,7 @@ public class SMSPopupUtilsService extends Service {
 			context.startService(intent);
 		}
 	}
-
+	
 	/**
 	 * Called back by the service when it has finished processing notifications,
 	 * releasing the wake lock if the service is now stopping.
@@ -115,5 +148,5 @@ public class SMSPopupUtilsService extends Service {
 				}
 			}
 		}
-	}
+	}	
 }

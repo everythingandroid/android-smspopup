@@ -36,6 +36,7 @@ public class SMSPopupActivity extends Activity {
 	private LinearLayout mmsLinearLayout;
 	private ScrollView messageScrollView;
 	private boolean wasVisible = false;
+	private boolean replying = false;
 	
 	private final double WIDTH = 0.8;
 	private static final int DELETE_DIALOG = 0;
@@ -88,7 +89,7 @@ public class SMSPopupActivity extends Activity {
 			public void onClick(View v) {				
 				Intent i = new Intent(SMSPopupActivity.this.getApplicationContext(),
 				      SMSPopupUtilsService.class);
-				i.setAction(SMSPopupUtilsService.ACTION_MARK_THREAD_READ);
+				i.setAction(SMSPopupUtilsService.ACTION_MARK_MESSAGE_READ);
 				i.putExtras(message.toBundle());
 				SMSPopupUtilsService.beginStartingService(
 						SMSPopupActivity.this.getApplicationContext(), i);
@@ -107,9 +108,10 @@ public class SMSPopupActivity extends Activity {
 					public void LaunchOnKeyguardExitSuccess() {
 						Intent i = SMSPopupUtils.getSmsIntent();
 						SMSPopupActivity.this.getApplicationContext().startActivity(i);
+						myFinish();
                }
-				});				
-				myFinish();
+				});
+				//myFinish();
 			}
 		});
 
@@ -123,7 +125,6 @@ public class SMSPopupActivity extends Activity {
 						Intent i = getIntent();
 						i.putExtra(SmsMmsMessage.EXTRAS_NOTIFY, false);
 						startActivity(i);
-						// finish();
                }
 				});
 			}
@@ -138,10 +139,12 @@ public class SMSPopupActivity extends Activity {
 					public void LaunchOnKeyguardExitSuccess() {
 						Intent reply = message.getReplyIntent();
 						SMSPopupActivity.this.getApplicationContext().startActivity(reply);
+						replying = true;
+						myFinish();
                }
 				});
-				ManageNotification.clearAll(SMSPopupActivity.this.getApplicationContext(), true);
-				myFinish();
+				//ManageNotification.clearAll(SMSPopupActivity.this.getApplicationContext(), true);
+				//myFinish();
 			}
 		});		
 
@@ -154,18 +157,19 @@ public class SMSPopupActivity extends Activity {
 					public void LaunchOnKeyguardExitSuccess() {
 						Intent reply = message.getReplyIntent();
 						SMSPopupActivity.this.getApplicationContext().startActivity(reply);
+						myFinish();
 					}
 				});
-				ManageNotification.clearAll(SMSPopupActivity.this.getApplicationContext(), true);
-				myFinish();
+				//ManageNotification.clearAll(SMSPopupActivity.this.getApplicationContext(), true);
+				//myFinish();
 			}
 		});		
 
 		// The Delete button
 		Button deleteButton = (Button) findViewById(R.id.deleteButton);
 		
-		if (myPrefs.getBoolean(getString(R.string.pref_show_delete_button_key), Boolean
-				.valueOf(getString(R.string.pref_show_delete_button_default)))) {
+		if (myPrefs.getBoolean(getString(R.string.pref_show_delete_button_key),
+				Boolean.valueOf(getString(R.string.pref_show_delete_button_default)))) {
 			deleteButton.setVisibility(View.VISIBLE);
 		} else {
 			deleteButton.setVisibility(View.GONE);
@@ -265,17 +269,32 @@ public class SMSPopupActivity extends Activity {
 	}
 	
 	private void myFinish() {
-		// TODO: instead of clearing all notifications here, I should really
-		// update the notifications instead (in the case the user cleared 1
-		// notification but still has other unread messages waiting
 		Log.v("myFinish()");
 		
-		// Clear all notifications
-		ManageNotification.clearAll(getApplicationContext());
+		// Start a service that will update the notification in the status bar
+		Intent i = new Intent(
+				SMSPopupActivity.this.getApplicationContext(),
+				SMSPopupUtilsService.class);
+		i.setAction(SMSPopupUtilsService.ACTION_UPDATE_NOTIFICATION);
+		
+		// Convert current message to bundle
+		i.putExtras(message.toBundle());
+		
+		// We need to know if the user is replying - if so, the entire thread id should
+		// be ignored when working out the message tally in the notification bar.  We
+		// can't rely on the system database as it may take a little while for the reply
+		// intent to fire and load up the messaging up (after which the messages will be
+		// marked read in the database).
+		i.putExtra(SmsMmsMessage.EXTRAS_REPLYING, replying);
+		
+		// Start the service
+		SMSPopupUtilsService.beginStartingService(
+				SMSPopupActivity.this.getApplicationContext(), i);
 		
 		// Cancel any reminder notifications
 		ReminderReceiver.cancelReminder(getApplicationContext());
 		
+		// Finish up the activity
 		finish();
 	}
 	
@@ -406,13 +425,13 @@ public class SMSPopupActivity extends Activity {
 				.setMessage(getString(R.string.pref_show_delete_button_dialog_text))
 				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
-						Intent i =
-								new Intent(SMSPopupActivity.this.getApplicationContext(),
-										SMSPopupUtilsService.class);
+						Intent i = new Intent(
+								SMSPopupActivity.this.getApplicationContext(),
+								SMSPopupUtilsService.class);
 						i.setAction(SMSPopupUtilsService.ACTION_DELETE_MESSAGE);
 						i.putExtras(message.toBundle());
-						SMSPopupUtilsService.beginStartingService(SMSPopupActivity.this
-								.getApplicationContext(), i);
+						SMSPopupUtilsService.beginStartingService(
+								SMSPopupActivity.this.getApplicationContext(), i);
 						myFinish();
 					}
 				})

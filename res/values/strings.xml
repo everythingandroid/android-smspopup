@@ -35,7 +35,7 @@
    <string name="pref_about_key">about</string>
    <string name="pref_about_title">About</string>
    <string name="pref_about_summary">About SMS Popup</string>
-   <string name="pref_about_text">Created by: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup is a simple application that shows a dialog when an SMS is received, similar to the iPhone - turning on the screen and unlocking the keyguard if needed.  It shows the most recent message, who it\'s from and the contact picture if available.\n\nFeel free to email me any comments, suggestions or bugs.\n\nGerman translation by: Feyyaz A.\nEmail: f_alingan@hotmail.com\nWebsite: http://www.yenio.com\n\nDutch translation by: mellie@xs4all.nl\n\nSpanish translation by: Diego Fernández\nEmail: profediego@gmail.com\n\nCredits to Min Tran for the app icon.\n(http://min.frexy.com)\n</string>
+   <string name="pref_about_text">Created by: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup is a simple application that shows a dialog when an SMS is received - turning on the screen and unlocking the keyguard if needed.  It shows the most recent message, who it\'s from and the contact picture if available.\n\nFeel free to email me any comments, suggestions or bugs.\n\nGerman translation by: Feyyaz A.\nEmail: f_alingan@hotmail.com\nWebsite: http://www.yenio.com\n\nDutch translation by: mellie@xs4all.nl\n\nSpanish translation by: Diego Fernández\nEmail: profediego@gmail.com\n\nRussian translation by: Artem Kavalerov\nEmail: artem.kavalerov@gmail.com\n\nCredits to Min Tran for the app icon.\n(http://min.frexy.com)\n</string>
    
    <string name="pref_sendemail_key">sendemail</string>
    <string name="pref_sendemail_title">E-mail the Developer</string>
@@ -106,6 +106,12 @@
    <string name="pref_notif_title">Notifications</string>
    <string name="pref_notif_summary">Notification configuration</string>
    
+   <!-- Category headings -->
+   <string name="pref_notif_category_title">Notification Configuration</string>
+   <string name="pref_vibrate_category_title">Vibrate Configuration</string>
+   <string name="pref_flashled_category_title">LED Configuration</string>
+   <string name="pref_reminder_category_title">Reminder Configuration</string>
+
    <string name="pref_notif_enabled_key">notification</string>   
    <string name="pref_notif_enabled_title">Enable Notifications</string>
    <string name="pref_notif_enabled_summaryon">Notifications are enabled</string>
@@ -121,8 +127,6 @@
    <string name="pref_notif_sound_key">notifsound</string>   
    <string name="pref_notif_sound_title">Notification Sound</string>
    <string name="pref_notif_sound_summary">This sound will play when a message is received</string>
-
-   <string name="pref_vibrate_category_title">Vibrate Configuration</string>
 
    <string name="pref_vibrate_key">vibrate</string>
    <string name="pref_vibrate_title">Vibrate</string>
@@ -141,8 +145,6 @@
    
    <!-- Value to set trigger custom dialogs -->
    <string name="pref_custom_val">custom</string>
-
-   <string name="pref_flashled_category_title">LED Configuration</string>
 
    <string name="pref_flashled_key">flashled</string>   
    <string name="pref_flashled_title">Blink LED</string>
@@ -171,8 +173,6 @@
    <string name="pref_flashled_pattern_help">Enter the time in milliseconds to turn the LED on and off</string>
    <string name="pref_flashled_pattern_help_on">Time on:</string>
    <string name="pref_flashled_pattern_help_off">Time off:</string>
-
-   <string name="pref_reminder_category_title">Reminder Configuration</string>
 
    <string name="pref_notif_repeat_key">notif_repeat</string>   
    <string name="pref_notif_repeat_title">Enable Reminders</string>
