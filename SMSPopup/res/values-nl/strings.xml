@@ -89,6 +89,12 @@
    <string name="pref_notif_title">Notificaties</string>
    <string name="pref_notif_summary">Notificatie configuratie</string>
    
+   <!-- Category headings -->
+   <string name="pref_notif_category_title">Notificatie configuratie</string>
+   <string name="pref_vibrate_category_title">Vibratie</string>
+   <string name="pref_flashled_category_title">LED</string>
+   <string name="pref_reminder_category_title">Herinneringen</string>   
+   
    <string name="pref_notif_enabled_title">Activeer notificaties</string>
    <string name="pref_notif_enabled_summaryon">Notificaties zijn actief</string>
    <string name="pref_notif_enabled_summaryoff">Notificaties zijn niet actief</string>

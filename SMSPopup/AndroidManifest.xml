@@ -25,10 +25,6 @@
             <action android:name="android.provider.Telephony.WAP_PUSH_RECEIVED" />
             <data android:mimeType="application/vnd.wap.mms-message" />
          </intent-filter>
-         <intent-filter>                
-            <action android:name="com.android.mms.transaction.MESSAGE_SENT" />
-            <data android:scheme="content" />
-         </intent-filter>         			
 		</receiver>
 		<receiver android:name=".ClearAllReceiver" />
 		<receiver android:name=".ReminderReceiver" />

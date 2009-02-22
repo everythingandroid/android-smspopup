@@ -88,5 +88,10 @@ public class SMSPopupConfigActivity extends PreferenceActivity {
 
 		// inboxPref.setIntent(inboxChooseIntent);
 
-	}	
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();		
+	}
 }

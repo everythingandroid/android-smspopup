@@ -63,7 +63,7 @@
 		   android:title="@string/pref_notif_title"
 			android:summary="@string/pref_notif_summary"
 			android:dependency="@string/pref_enabled_key">
-		   <PreferenceCategory android:title="@string/pref_notif_summary">
+		   <PreferenceCategory android:title="@string/pref_notif_category_title">
 				<net.everythingandroid.smspopup.preferences.DialogCheckBoxPreference
 					android:key="@string/pref_notif_enabled_key" android:title="@string/pref_notif_enabled_title"
 					android:summaryOn="@string/pref_notif_enabled_summaryon"

@@ -19,9 +19,11 @@ public class SmsMmsMessage {
 	private static final String EXTRAS_CONTACT_NAME = PREFIX + "EXTRAS_CONTACT_NAME";
 	private static final String EXTRAS_CONTACT_PHOTO = PREFIX + "EXTRAS_CONTACT_PHOTO";
 	private static final String EXTRAS_MESSAGE_TYPE = PREFIX + "EXTRAS_MESSAGE_TYPE";
+	private static final String EXTRAS_MESSAGE_ID = PREFIX + "EXTRAS_MESSAGE_ID";	
 	public static final String EXTRAS_NOTIFY = PREFIX + "EXTRAS_NOTIFY";
 	public static final String EXTRAS_REMINDER_COUNT = PREFIX + "EXTRAS_REMINDER_COUNT";
-
+	public static final String EXTRAS_REPLYING = PREFIX + "EXTRAS_REPLYING";
+	
 	public static final int MESSAGE_TYPE_SMS = 0;
 	public static final int MESSAGE_TYPE_MMS = 1;
 
@@ -38,7 +40,13 @@ public class SmsMmsMessage {
 	private int messageType = 0;
 	private boolean notify = true;
 	private int reminderCount = 0;
-		
+	private long messageId = 0;
+
+	/*
+	 * Construct SmsMmsMessage with minimal information - this is useful for when
+	 * a raw SMS comes in which just contains address, body and timestamp.  We
+	 * must then look in the database for the rest of the information 
+	 */
 	public SmsMmsMessage(Context _context, String _fromAddress, String _messageBody,
 	      long _timestamp, int _messageType) {
 		context = _context;
@@ -54,31 +62,72 @@ public class SmsMmsMessage {
 		unreadCount = SMSPopupUtils.getUnreadMessagesCount(context);
 		threadId = SMSPopupUtils.getThreadIdFromAddress(context, fromAddress);
 		
+		setMessageId();
+		
 		if (contactName == null) {
 			contactName = context.getString(android.R.string.unknownName);
 		}
 	}
 
+	/*
+	 * Construct SmsMmsMessage for getMmsDetails() - info fetched from the MMS
+	 * database table
+	 */
 	public SmsMmsMessage(Context _context, String _fromAddress, String _messageBody,
-	      long _timestamp, long _threadId, int _messageType) {
+	      long _timestamp, long _threadId, int _unreadCount, int _messageType) {
 		context = _context;
 		fromAddress = _fromAddress;
 		messageBody = _messageBody;
 		timestamp = _timestamp;
 		messageType = _messageType;
 
+		// TODO: I think contactId can come the MMS table, this would save
+		// this database lookup
 		contactId = SMSPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
+		
 		contactName = SMSPopupUtils.getPersonName(context, contactId, fromAddress);
 		contactPhoto = SMSPopupUtils.getPersonPhoto(context, contactId);
 
-		unreadCount = SMSPopupUtils.getUnreadMessagesCount(context);
+		unreadCount = _unreadCount;
 		threadId = _threadId;
 
+		setMessageId();
+		
 		if (contactName == null) {
 			contactName = context.getString(android.R.string.unknownName);
 		}
 	}
 
+	/*
+	 * Construct SmsMmsMessage for getSmsDetails() - info fetched from the SMS
+	 * database table
+	 */
+	public SmsMmsMessage(Context _context, String _fromAddress, String _contactId, 
+			String _messageBody, long _timestamp, long _threadId,
+			int _unreadCount, int _messageType) {
+		context = _context;
+		fromAddress = _fromAddress;
+		messageBody = _messageBody;
+		timestamp = _timestamp;
+		messageType = _messageType;
+		contactId = _contactId;
+		
+		contactName = SMSPopupUtils.getPersonName(context, contactId, fromAddress);
+		contactPhoto = SMSPopupUtils.getPersonPhoto(context, contactId);
+
+		unreadCount = _unreadCount;
+		threadId = _threadId;
+
+		setMessageId();
+		
+		if (contactName == null) {
+			contactName = context.getString(android.R.string.unknownName);
+		}
+	}
+	
+	/*
+	 * Construct SmsMmsMessage from an extras bundle
+	 */
 	public SmsMmsMessage(Context _context, Bundle b) {
 		context = _context;
 		fromAddress = b.getString(EXTRAS_FROM_ADDRESS);
@@ -92,8 +141,13 @@ public class SmsMmsMessage {
 		messageType = b.getInt(EXTRAS_MESSAGE_TYPE, MESSAGE_TYPE_SMS);
 		notify = b.getBoolean(EXTRAS_NOTIFY, false);
 		reminderCount = b.getInt(EXTRAS_REMINDER_COUNT, 0);
+		messageId = b.getLong(EXTRAS_MESSAGE_ID, 0);
 	}
 
+	/*
+	 * Construct SmsMmsMessage by specifying all data, only used for testing the
+	 * notification from the preferences screen
+	 */
 	public SmsMmsMessage(Context _context, String _fromAddress, String _messageBody,
 	      long _timestamp, String _contactId, String _contactName, byte[] _contactPhoto,
 	      int _unreadCount, long _threadId, int _messageType) {
@@ -109,6 +163,9 @@ public class SmsMmsMessage {
 		messageType = _messageType;
 	}
 	
+	/*
+	 * Convert all SmsMmsMessage data to an extras bundle to send via an intent
+	 */
 	public Bundle toBundle() {
 		Bundle b = new Bundle();
 		b.putString(EXTRAS_FROM_ADDRESS, fromAddress);
@@ -122,6 +179,7 @@ public class SmsMmsMessage {
 		b.putInt(EXTRAS_MESSAGE_TYPE, messageType);
 		b.putBoolean(EXTRAS_NOTIFY, notify);
 		b.putInt(EXTRAS_REMINDER_COUNT, reminderCount);
+		b.putLong(EXTRAS_MESSAGE_ID, messageId);
 		return b;
 	}
 
@@ -146,6 +204,11 @@ public class SmsMmsMessage {
 		SMSPopupUtils.setThreadRead(context, threadId);
 	}
 
+	public void setMessageRead() {
+		setMessageId();
+		SMSPopupUtils.setMessageRead(context, messageId, messageType);
+	}
+	
 	public int getUnreadCount() {
 		return unreadCount;
 	}
@@ -180,10 +243,6 @@ public class SmsMmsMessage {
 		return messageType;
 	}
 	
-	public long getTime() {
-		return timestamp;
-	}
-
 	public boolean getNotify() {
 		return notify;
 	}
@@ -192,11 +251,6 @@ public class SmsMmsMessage {
 		return reminderCount;
 	}
 
-	public boolean refreshRecentMessage() {
-		// TODO
-		return true;
-	}
-	
 	public void updateReminderCount(int count) {
 		reminderCount = count;
 	}
@@ -206,6 +260,17 @@ public class SmsMmsMessage {
 	}
 	
 	public void delete() {
-		SMSPopupUtils.deleteMessage(context, threadId, timestamp, messageType);
+		SMSPopupUtils.deleteMessage(context, getMessageId(), messageType);
+	}
+	
+	public void setMessageId() {
+		messageId = SMSPopupUtils.findMessageId(context, threadId, timestamp, messageType);
+	}
+	
+	public long getMessageId() {
+		if (messageId == 0) {
+			setMessageId();
+		}
+		return messageId;
 	}
 }

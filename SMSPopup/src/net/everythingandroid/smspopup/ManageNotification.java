@@ -63,7 +63,14 @@ public class ManageNotification {
 	 * re-play the vibrate/sound, just update the text).
 	 */
 	public static void update(Context context, SmsMmsMessage message) {
-		notify(context, message, true, NOTIFICATION_ALERT);
+		if (message != null) {
+			if (message.getUnreadCount() > 0) {
+				notify(context, message, true, NOTIFICATION_ALERT);
+				return;
+			}
+		}
+		// TODO: Should reply flag be set to true?
+		ManageNotification.clearAll(context, true);
 	}
 
 	/*
@@ -302,8 +309,8 @@ public class ManageNotification {
 
 		if (reply || myPrefs.getBoolean(
 		      context.getString(R.string.pref_markread_key),
-		      Boolean.parseBoolean(context
-		            .getString(R.string.pref_markread_default)))) {
+		      Boolean.parseBoolean(
+		      		context.getString(R.string.pref_markread_default)))) {
 			createNM(context);
 			if (myNM != null) {
 				myNM.cancelAll();
