@@ -330,8 +330,8 @@ public class SMSPopupActivity extends Activity {
 			tv.setText("");
 		} else {	
 			String textWaiting = String.format(
-			      getString(R.string.unread_text_waiting), message
-			      .getUnreadCount() - 1);
+			      getString(R.string.unread_text_waiting), 
+			      message.getUnreadCount() - 1);
 			tv.setText(textWaiting);
 			mLL.setVisibility(View.VISIBLE);
 		}
