@@ -152,14 +152,19 @@ public class ManageNotification {
 				// If we're in privacy mode and the keyguard is on then just display
 				// the name of the person, otherwise scroll the name and message
 				if (privacyMode && ManageKeyguard.inKeyguardRestrictedInputMode()) {
-					scrollText = 
-						String.format(
-							context.getString(R.string.notification_scroll_privacy),
-					      contactName);
+//					scrollText = 
+//						String.format(
+//							context.getString(R.string.notification_scroll_privacy),
+//					      contactName);
+             scrollText = 
+                context.getString(R.string.notification_scroll_privacy, contactName);
+
 				} else {
-					scrollText = String.format(context.getString(R.string.notification_scroll),
-							contactName,
-							messageBody);
+//					scrollText = String.format(context.getString(R.string.notification_scroll),
+//							contactName,
+//							messageBody);
+               scrollText = context.getString(R.string.notification_scroll,
+                  contactName, messageBody);					
 				}
 			}
 			// If more than one message waiting ...
@@ -277,8 +282,8 @@ public class ManageNotification {
 			// sically stop any future reminders.
 			Intent deleteIntent = new Intent(new Intent(context, ReminderReceiver.class));
 			deleteIntent.setAction(Intent.ACTION_DELETE);
-			PendingIntent pendingDeleteIntent = PendingIntent
-			      .getBroadcast(context, 0, deleteIntent, 0);
+			PendingIntent pendingDeleteIntent = 
+			   PendingIntent.getBroadcast(context, 0, deleteIntent, 0);
 
 			notification.deleteIntent = pendingDeleteIntent;
 

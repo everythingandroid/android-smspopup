@@ -122,6 +122,9 @@ public class SMSPopupUtils {
 			return null;
 		byte photo[] = null;
 
+		//TODO: switch to API method:
+		//Contacts.People.loadContactPhoto(arg0, arg1, arg2, arg3)
+		
 		Cursor cursor = context.getContentResolver().query(
 		      Uri.withAppendedPath(Contacts.Photos.CONTENT_URI, id),
 		      new String[] { PhotosColumns.DATA }, null, null, null);
@@ -402,33 +405,74 @@ public class SMSPopupUtils {
 		context.startActivity(Intent.createChooser(msg, "Send E-mail"));		
 	}
 	
+   public static int getUnreadMessagesCount(Context context, long timestamp) {
+      int unreadSms = getUnreadSmsCount(context, timestamp);
+      int unreadMms = getUnreadMmsCount(context);
+      return (unreadSms + unreadMms);
+   }	
+	
 	public static int getUnreadMessagesCount(Context context) {
-		int unreadSms = getUnreadSmsCount(context);
-		int unreadMms = getUnreadMmsCount(context);
-		return (unreadSms + unreadMms);
+	   return getUnreadMessagesCount(context, 0);
+//		int unreadSms = getUnreadSmsCount(context);
+//		int unreadMms = getUnreadMmsCount(context);
+//		return (unreadSms + unreadMms);
 	}
 	
 	public static int getUnreadSmsCount(Context context) {
-		
-		String SMS_READ_COLUMN = "read";
-		String UNREAD_CONDITION = SMS_READ_COLUMN + "=0";
-		
-		int count = 0;
-		
-		Cursor cursor = context.getContentResolver().query(
-				SMS_INBOX_CONTENT_URI,
-				new String[] { SMS_ID },
-		      UNREAD_CONDITION, null, null);
-		
-		if (cursor != null) {
-			try {
-				count = cursor.getCount();
-			} finally {
-				cursor.close();
-			}
-		}
-		Log.v("sms unread count = " + count);
-		return count;
+		return getUnreadSmsCount(context, 0);
+//		String SMS_READ_COLUMN = "read";
+//		String UNREAD_CONDITION = SMS_READ_COLUMN + "=0";
+//		
+//		int count = 0;
+//		
+//		Cursor cursor = context.getContentResolver().query(
+//				SMS_INBOX_CONTENT_URI,
+//				new String[] { SMS_ID },
+//		      UNREAD_CONDITION, null, null);
+//		
+//		if (cursor != null) {
+//			try {
+//				count = cursor.getCount();
+//			} finally {
+//				cursor.close();
+//			}
+//		}
+//		Log.v("sms unread count = " + count);
+//		return count;
+	}
+
+	  public static int getUnreadSmsCount(Context context, long timestamp) {    
+	      String SMS_READ_COLUMN = "read";
+	      String UNREAD_CONDITION = SMS_READ_COLUMN + "=0";
+	      
+	      if (timestamp > 0) {
+	         Log.v("getUnreadSmsCount(), timestamp = " + timestamp);
+	         UNREAD_CONDITION += " and date<" + String.valueOf(timestamp);
+	      }
+	      
+	      int count = 0;
+	      
+	      Cursor cursor = context.getContentResolver().query(
+	            SMS_INBOX_CONTENT_URI,
+	            new String[] { SMS_ID },
+	            UNREAD_CONDITION, null, null);
+	      
+	      if (cursor != null) {
+	         try {
+	            count = cursor.getCount();
+	         } finally {
+	            cursor.close();
+	         }
+	      }
+	      
+	      // We ignored the latest incoming message so add one to the total count
+	      if (timestamp > 0) {
+	         Log.v("adding 1 to unread, previous count was " + count);
+	         count += 1;	         
+	      }
+	      
+	      Log.v("sms unread count = " + count);
+	      return count;
 	}
 	
 	public static int getUnreadMmsCount(Context context) {

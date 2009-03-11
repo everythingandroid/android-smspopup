@@ -59,7 +59,7 @@ public class SmsMmsMessage {
 		contactName = SMSPopupUtils.getPersonName(context, contactId, fromAddress);
 		contactPhoto = SMSPopupUtils.getPersonPhoto(context, contactId);
 
-		unreadCount = SMSPopupUtils.getUnreadMessagesCount(context);
+		unreadCount = SMSPopupUtils.getUnreadMessagesCount(context, timestamp);
 		threadId = SMSPopupUtils.getThreadIdFromAddress(context, fromAddress);
 		
 		setMessageId();
