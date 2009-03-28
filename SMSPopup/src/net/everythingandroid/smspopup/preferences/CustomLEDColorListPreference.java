@@ -70,8 +70,8 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
 	}
 	
 	private void showDialog() {
-		LayoutInflater inflater = (LayoutInflater) context
-		      .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater =
+			(LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		int color = Color.parseColor(context.getString(R.string.pref_flashled_color_default));
 		try {

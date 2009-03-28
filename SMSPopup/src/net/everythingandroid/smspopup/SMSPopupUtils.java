@@ -285,7 +285,7 @@ public class SMSPopupUtils {
 	 * Tries to delete a message from the system database, given the thread id,
 	 * the timestamp of the message and the message type (sms/mms).
 	 */
-	public static void deleteMessage(Context context, long messageId, int messageType) {
+	public static void deleteMessage(Context context, long messageId, long threadId, int messageType) {
 
 		if (messageId > 0) {
 			Log.v("id of message to delete is " + messageId);
@@ -300,6 +300,11 @@ public class SMSPopupUtils {
 			}
 			int count = context.getContentResolver().delete(deleteUri, null, null);
 			Log.v("Messages deleted: " + count);
+			if (count == 1) {
+				//TODO: should only set the thread read if there are no more unread
+				// messages
+				setThreadRead(context, threadId);
+			}
 		}
 	}
 	
@@ -528,16 +533,18 @@ public class SMSPopupUtils {
 					// Log.v("columns " + i + ": " + columns[i] + ": "
 					// + cursor.getString(i));
 					// }
+					long messageId = cursor.getLong(0);
 					long threadId = cursor.getLong(1);
 					String address = cursor.getString(2);
 					long contactId = cursor.getLong(3);
 					String contactId_string = String.valueOf(contactId);
 					long timestamp = cursor.getLong(4);
+					
 					String body = cursor.getString(5);
-
+					
 					SmsMmsMessage smsMessage = new SmsMmsMessage(
 							context, address, contactId_string, body, timestamp,
-							threadId, count, SmsMmsMessage.MESSAGE_TYPE_SMS);
+							threadId, count, messageId, SmsMmsMessage.MESSAGE_TYPE_SMS);
 					
 					return smsMessage;
 
