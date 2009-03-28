@@ -3,12 +3,12 @@
 <!-- App Strings -->
    <string name="app_name">SMS Popup</string>
    <string name="new_text_at">Новое сообщение в %s</string>
-   <string name="unread_text_waiting">Осталось %d непрочитанных(ое) сообщений(е)</string>
+   <string name="unread_text_waiting">Осталось %d непрочитанное(ых) сообщение(й)</string>
    <string name="mms_subject">Тема:</string>
    
 <!-- Notification Strings -->
    <string name="notification_multiple_title">Новые сообщения</string>
-   <string name="notification_multiple_text">%d непрочитанных(ое) сообщений(е).</string>
+   <string name="notification_multiple_text">%d непрочитанное(ых) сообщение(й).</string>
    <string name="notification_scroll_privacy">Новое сообщение от: %s</string>
 
 <!-- Button Strings -->
@@ -49,9 +49,9 @@
    <string name="pref_timeout_title">Время ожидания экрана</string>
    <string name="pref_timeout_summary">Экран перейдет в спящий режим спустя заданное время</string>
    
-   <string name="pref_dimscreen_title">Яркость экрана окна</string>
-   <string name="pref_dimscreen_summaryon">Тусклый экран всплывающего окна (экономия батареи)</string>
-   <string name="pref_dimscreen_summaryoff">Яркий экран всплывающего окна</string>
+   <string name="pref_dimscreen_title">Снизить яркость окна</string>
+   <string name="pref_dimscreen_summaryon">Тусклый экран уведомления (экономия батареи)</string>
+   <string name="pref_dimscreen_summaryoff">Яркий экран уведомления</string>
    
    <string name="pref_privacy_title">Режим приватности</string>
    <string name="pref_privacy_summaryon">Содержимое сообщения будет показано только после разблокировки</string>

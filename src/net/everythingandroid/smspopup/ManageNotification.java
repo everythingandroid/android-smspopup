@@ -26,17 +26,17 @@ public class ManageNotification {
 	/*
 	 * Create the NotificationManager
 	 */
-	private static synchronized void createNM(Context context) {
+	private static void createNM(Context context) {
 		if (myNM == null) {
-			myNM = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
+			myNM = 
+				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		}
 	}
 
 	/*
 	 * Create the PreferenceManager
 	 */
-	private static synchronized void createPM(Context context) {
+	private static void createPM(Context context) {
 		if (myPrefs == null) {
 			myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		}
@@ -60,7 +60,7 @@ public class ManageNotification {
 
 	/*
 	 * Only update the notification given the SmsMmsMessage (ie. do not play
-	 * re-play the vibrate/sound, just update the text).
+	 * the vibrate/sound, just update the text).
 	 */
 	public static void update(Context context, SmsMmsMessage message) {
 		if (message != null) {
@@ -69,6 +69,7 @@ public class ManageNotification {
 				return;
 			}
 		}
+		
 		// TODO: Should reply flag be set to true?
 		ManageNotification.clearAll(context, true);
 	}
@@ -76,7 +77,7 @@ public class ManageNotification {
 	/*
 	 * The main notify method, this thing is WAY too long. Needs to be broken up.
 	 */
-	private static synchronized void notify(Context context, SmsMmsMessage message,
+	private static void notify(Context context, SmsMmsMessage message,
 	      boolean onlyUpdate, int notif) {
 
 		// Make sure the PreferenceManager is created
@@ -99,14 +100,15 @@ public class ManageNotification {
 			createNM(context);
 
 			// Get some preferences: vibrate and vibrate_pattern prefs
-			boolean vibrate = myPrefs.getBoolean(context.getString(R.string.pref_vibrate_key), Boolean
-			      .valueOf(context.getString(R.string.pref_vibrate_default)));
-			String vibrate_pattern_raw = myPrefs.getString(context
-			      .getString(R.string.pref_vibrate_pattern_key), context
-			      .getString(R.string.pref_vibrate_pattern_default));
-			String vibrate_pattern_custom_raw = myPrefs.getString(context
-			      .getString(R.string.pref_vibrate_pattern_custom_key), context
-			      .getString(R.string.pref_vibrate_pattern_default));
+			boolean vibrate = myPrefs.getBoolean(context.getString(
+					R.string.pref_vibrate_key),
+					Boolean.valueOf(context.getString(R.string.pref_vibrate_default)));
+			String vibrate_pattern_raw = myPrefs.getString(
+					context.getString(R.string.pref_vibrate_pattern_key),
+					context.getString(R.string.pref_vibrate_pattern_default));
+			String vibrate_pattern_custom_raw = myPrefs.getString(
+					context.getString(R.string.pref_vibrate_pattern_custom_key),
+					context.getString(R.string.pref_vibrate_pattern_default));
 
 			// Get LED preferences
 			boolean flashLed = myPrefs.getBoolean(
@@ -258,6 +260,22 @@ public class ManageNotification {
 					} else {
 						notification.defaults = Notification.DEFAULT_VIBRATE;
 					}
+				} else {
+					// Vibrate is disabled, but we should still vibrate if the phone
+					// is in vibrate mode
+					AudioManager AM = 
+						(AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+					if (AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode()) {
+						// TODO: could use custom vibrate here, but would need to update
+						// the preferences UI to reflect this ability
+						
+						// Use default vibrate pattern
+						notification.defaults = Notification.DEFAULT_VIBRATE;
+					}
+					
+//					if (AM.shouldVibrate(AudioManager.VIBRATE_TYPE_NOTIFICATION)) {
+//						notification.defaults = Notification.DEFAULT_VIBRATE;
+//					}
 				}
 	
 				// Notification sound
@@ -301,7 +319,7 @@ public class ManageNotification {
 		clear(context, NOTIFICATION_ALERT);
 	}
 
-	public static synchronized void clear(Context context, int notif) {
+	public static void clear(Context context, int notif) {
 		createNM(context);
 		if (myNM != null) {
 			Log.v("Notification cleared");
@@ -309,7 +327,7 @@ public class ManageNotification {
 		}		
 	}
 
-	public static synchronized void clearAll(Context context, boolean reply) {
+	public static void clearAll(Context context, boolean reply) {
 		createPM(context);
 
 		if (reply || myPrefs.getBoolean(
@@ -325,7 +343,7 @@ public class ManageNotification {
 	}
 	
 	public static void clearAll(Context context) {
-		clearAll(context, false);
+		clearAll(context, true);
 	}
 
 	/*

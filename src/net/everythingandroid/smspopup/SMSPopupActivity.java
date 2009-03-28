@@ -37,10 +37,13 @@ public class SMSPopupActivity extends Activity {
 	private ScrollView messageScrollView;
 	private boolean wasVisible = false;
 	private boolean replying = false;
+	private boolean inbox = false;
 	
 	private final double WIDTH = 0.8;
 	private static final int DELETE_DIALOG = 0;
 
+	//private TTS myTts;
+	
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
@@ -108,6 +111,7 @@ public class SMSPopupActivity extends Activity {
 					public void LaunchOnKeyguardExitSuccess() {
 						Intent i = SMSPopupUtils.getSmsIntent();
 						SMSPopupActivity.this.getApplicationContext().startActivity(i);
+						inbox = true;
 						myFinish();
                }
 				});
@@ -149,6 +153,8 @@ public class SMSPopupActivity extends Activity {
 		});		
 
 		// The ViewMMS button
+		// TODO: this is really the same listener as the "Reply" button, they should
+		// be combined
 		Button viewMmsButton = (Button) findViewById(R.id.ViewMmsButton);
 		viewMmsButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -157,6 +163,7 @@ public class SMSPopupActivity extends Activity {
 					public void LaunchOnKeyguardExitSuccess() {
 						Intent reply = message.getReplyIntent();
 						SMSPopupActivity.this.getApplicationContext().startActivity(reply);
+						replying = true;
 						myFinish();
 					}
 				});
@@ -181,8 +188,6 @@ public class SMSPopupActivity extends Activity {
 			}
 		});		
 
-		
-		
 		if (bundle == null) {		
 			populateViews(getIntent().getExtras());
 		} else {
@@ -271,26 +276,31 @@ public class SMSPopupActivity extends Activity {
 	private void myFinish() {
 		Log.v("myFinish()");
 		
-		// Start a service that will update the notification in the status bar
-		Intent i = new Intent(
-				SMSPopupActivity.this.getApplicationContext(),
-				SMSPopupUtilsService.class);
-		i.setAction(SMSPopupUtilsService.ACTION_UPDATE_NOTIFICATION);
+		if (inbox) {
+			ManageNotification.clearAll(getApplicationContext());
+		} else {
 		
-		// Convert current message to bundle
-		i.putExtras(message.toBundle());
-		
-		// We need to know if the user is replying - if so, the entire thread id should
-		// be ignored when working out the message tally in the notification bar.  We
-		// can't rely on the system database as it may take a little while for the reply
-		// intent to fire and load up the messaging up (after which the messages will be
-		// marked read in the database).
-		i.putExtra(SmsMmsMessage.EXTRAS_REPLYING, replying);
-		
-		// Start the service
-		SMSPopupUtilsService.beginStartingService(
-				SMSPopupActivity.this.getApplicationContext(), i);
-		
+			// Start a service that will update the notification in the status bar
+			Intent i = new Intent(
+					getApplicationContext(),
+					SMSPopupUtilsService.class);
+			i.setAction(SMSPopupUtilsService.ACTION_UPDATE_NOTIFICATION);
+			
+			// Convert current message to bundle
+			i.putExtras(message.toBundle());
+			
+			// We need to know if the user is replying - if so, the entire thread id should
+			// be ignored when working out the message tally in the notification bar.  We
+			// can't rely on the system database as it may take a little while for the reply
+			// intent to fire and load up the messaging up (after which the messages will be
+			// marked read in the database).
+			i.putExtra(SmsMmsMessage.EXTRAS_REPLYING, replying);
+			
+			// Start the service
+			SMSPopupUtilsService.beginStartingService(
+					SMSPopupActivity.this.getApplicationContext(), i);
+		}
+			
 		// Cancel any reminder notifications
 		ReminderReceiver.cancelReminder(getApplicationContext());
 		
@@ -391,6 +401,9 @@ public class SMSPopupActivity extends Activity {
 		// Time to acquire a full WakeLock (turn on screen)
 		ManageWakeLock.acquireFull(getApplicationContext());
 		
+		replying = false;
+		inbox = false;
+		
 		// See if a notification has been played for this message...
 		if (message.getNotify()) {
 			// Store extra to signify we have already notified for this message
@@ -440,4 +453,34 @@ public class SMSPopupActivity extends Activity {
 		}
 		return null;
 	}
+	
+/*
+ * Text-to-speech: this works, but needs some refining
+ */
+	
+//	@Override
+//	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+//		switch (item.getItemId()) {
+//		case 0:
+//			myTts = new TTS(this, ttsInitListener, true);
+//			return true;
+//		}
+//		return super.onMenuItemSelected(featureId, item);
+//	}
+//	
+//   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
+//      public void onInit(int version) {
+//        myTts.speak(message.getMessageBody(), 0, null);
+//      }
+//    };
+//	
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		super.onCreateOptionsMenu(menu);
+//		
+//		MenuItem PrefMenuItem = menu.add(0, 0, 0, "TTS");
+//		PrefMenuItem.setIcon(android.R.drawable.ic_menu_preferences);
+//
+//		return true;
+//	}
 }
