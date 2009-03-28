@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
 
 public class SmsMmsMessage {
 	private static final String PREFIX = "net.everythingandroid.smspopup.";
@@ -104,7 +106,7 @@ public class SmsMmsMessage {
 	 */
 	public SmsMmsMessage(Context _context, String _fromAddress, String _contactId, 
 			String _messageBody, long _timestamp, long _threadId,
-			int _unreadCount, int _messageType) {
+			int _unreadCount, long _messageId, int _messageType) {
 		context = _context;
 		fromAddress = _fromAddress;
 		messageBody = _messageBody;
@@ -118,7 +120,7 @@ public class SmsMmsMessage {
 		unreadCount = _unreadCount;
 		threadId = _threadId;
 
-		setMessageId();
+		messageId = _messageId;
 		
 		if (contactName == null) {
 			contactName = context.getString(android.R.string.unknownName);
@@ -260,7 +262,7 @@ public class SmsMmsMessage {
 	}
 	
 	public void delete() {
-		SMSPopupUtils.deleteMessage(context, getMessageId(), messageType);
+		SMSPopupUtils.deleteMessage(context, getMessageId(), threadId, messageType);
 	}
 	
 	public void setMessageId() {
@@ -272,5 +274,105 @@ public class SmsMmsMessage {
 			setMessageId();
 		}
 		return messageId;
+	}
+	
+//	public boolean equals(SmsMmsMessage compareMessage) {
+//		boolean equals = false;
+//		if (PhoneNumberUtils.compare(this.fromAddress, compareMessage.fromAddress) &&
+//				this.compareTimeStamp(compareMessage.timestamp) &&
+//				this.messageType == compareMessage.messageType) {
+//			equals = true;
+//		}
+//		return equals;
+//	}
+	
+	public boolean equals(String fromAddress, 
+			long timestamp, long timestamp_provider, String body) {
+		boolean equals = false;
+		if (PhoneNumberUtils.compare(this.fromAddress, fromAddress) &&
+				this.compareTimeStamp(timestamp, timestamp_provider) &&
+				this.compareBody(body)) {
+			equals = true;
+		}
+		return equals;
+	}	
+	
+
+//	private boolean compareTimeStamp(long compareTimestamp) {
+//		return compareTimeStamp(compareTimestamp, 0);
+//	}
+
+	/*
+	 * Compares the timestamps of a message, this is super hacky because the way
+	 * which builds of Android store SMS timestamps changed in the cupcake branch -
+	 * pre-cupcake it stored the timestamp provided by the telecom provider;
+	 * post-cupcake it stored the system timestamp.
+	 * Unfortunately this means we need to use 2 different ways to determine if
+	 * the received message timestamp is sufficiently equal to the database timestamp :(
+	 */
+	private boolean compareTimeStamp(long compareTimestamp, long providerTimestamp) {
+		final int MESSAGE_COMPARE_TIME_BUFFER = 1500;
+		final int buildVersion = Integer.valueOf(Build.VERSION.INCREMENTAL);
+
+		/*
+		 * On March 28th, 2009 - these are the latest builds that I could find:
+		 * 128600 TMI-RC9 (Tmobile EU)
+		 * 126986 PLAT-RC33 (Tmobile US)
+		 * 129975 Emulator (from Android 1.1 SDK r1)
+		 * Hopefully anything later will have the updated SMS code that uses the system
+		 * timestamp rather than the SMS timestamp
+		 */
+		final int LATEST_BUILD = 129975;
+		boolean PRE_CUPCAKE = false;
+		if (buildVersion <= LATEST_BUILD) {
+			PRE_CUPCAKE = true;
+		}
+
+		/*
+		 * If pre-cupcake we can just do a direct comparison as the Mms app stores the
+		 * timestamp from the telecom provider (in the sms pdu)
+		 */
+		if (PRE_CUPCAKE) {
+			Log.v("Build is pre-cupcake ("+buildVersion+"), doing direct SMS timestamp comparison");
+			Log.v("DB timestamp = " + timestamp);
+			Log.v("Intent timestamp = " + providerTimestamp);
+			if (timestamp == providerTimestamp) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		/*
+		 * If post-cupcake, the system stores a system timestamp - the only problem is
+		 * we have no way of knowing the exact time the system app used.  So what
+		 * we'll do is compare against our own system timestamp and add a buffer in.
+		 * This is an awful way of doing this, but I don't see any other way around it :(
+		 */
+		Log.v("Build is post-cupcake ("+buildVersion+"), doing approx. SMS timestamp comparison");
+		Log.v("DB timestamp = " + timestamp);
+		Log.v("Intent timestamp = " + compareTimestamp);
+		
+		if (timestamp < (compareTimestamp + MESSAGE_COMPARE_TIME_BUFFER) 
+				&& timestamp > (compareTimestamp - MESSAGE_COMPARE_TIME_BUFFER)) {			
+			return true;
+		}		
+		return false;
+	}
+	
+	/*
+	 * Compare message body
+	 */
+	private boolean compareBody(String compareBody) {
+		if (compareBody != null) {
+			if (messageBody.length() != compareBody.length()) {
+				return false;
+			}
+			
+			if (messageBody.equals(compareBody)) {
+				return true;
+			}						
+		}
+		return false;
 	}
 }
