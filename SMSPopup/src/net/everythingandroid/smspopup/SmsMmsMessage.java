@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 
@@ -113,6 +112,9 @@ public class SmsMmsMessage {
 		timestamp = _timestamp;
 		messageType = _messageType;
 		contactId = _contactId;
+		
+		if ("0".equals(contactId))
+			contactId = null;
 		
 		contactName = SMSPopupUtils.getPersonName(context, contactId, fromAddress);
 		contactPhoto = SMSPopupUtils.getPersonPhoto(context, contactId);
@@ -276,6 +278,10 @@ public class SmsMmsMessage {
 		return messageId;
 	}
 	
+	public String getContactId() {
+		return contactId;
+	}
+		
 //	public boolean equals(SmsMmsMessage compareMessage) {
 //		boolean equals = false;
 //		if (PhoneNumberUtils.compare(this.fromAddress, compareMessage.fromAddress) &&
@@ -297,7 +303,6 @@ public class SmsMmsMessage {
 		return equals;
 	}	
 	
-
 //	private boolean compareTimeStamp(long compareTimestamp) {
 //		return compareTimeStamp(compareTimestamp, 0);
 //	}
@@ -311,8 +316,8 @@ public class SmsMmsMessage {
 	 * the received message timestamp is sufficiently equal to the database timestamp :(
 	 */
 	private boolean compareTimeStamp(long compareTimestamp, long providerTimestamp) {
-		final int MESSAGE_COMPARE_TIME_BUFFER = 1500;
-		final int buildVersion = Integer.valueOf(Build.VERSION.INCREMENTAL);
+		final int MESSAGE_COMPARE_TIME_BUFFER = 2000;
+//		final int buildVersion = Integer.valueOf(Build.VERSION.INCREMENTAL);
 
 		/*
 		 * On March 28th, 2009 - these are the latest builds that I could find:
@@ -322,41 +327,48 @@ public class SmsMmsMessage {
 		 * Hopefully anything later will have the updated SMS code that uses the system
 		 * timestamp rather than the SMS timestamp
 		 */
-		final int LATEST_BUILD = 129975;
-		boolean PRE_CUPCAKE = false;
-		if (buildVersion <= LATEST_BUILD) {
-			PRE_CUPCAKE = true;
-		}
+//		final int LATEST_BUILD = 129975;
+//		boolean PRE_CUPCAKE = false;
+//		if (buildVersion <= LATEST_BUILD) {
+//			PRE_CUPCAKE = true;
+//		}
+
+		Log.v("DB timestamp = " + timestamp);
+		Log.v("Provider timestamp = " + providerTimestamp);
+		Log.v("System timestamp = " + compareTimestamp);
 
 		/*
 		 * If pre-cupcake we can just do a direct comparison as the Mms app stores the
 		 * timestamp from the telecom provider (in the sms pdu)
 		 */
-		if (PRE_CUPCAKE) {
-			Log.v("Build is pre-cupcake ("+buildVersion+"), doing direct SMS timestamp comparison");
-			Log.v("DB timestamp = " + timestamp);
-			Log.v("Intent timestamp = " + providerTimestamp);
+//		if (PRE_CUPCAKE) {
+//			Log.v("Build is pre-cupcake ("+buildVersion+"), doing direct SMS timestamp comparison");
+//			Log.v("DB timestamp = " + timestamp);
+//			Log.v("Intent timestamp = " + providerTimestamp);
 			if (timestamp == providerTimestamp) {
+				Log.v("SMS Compare: compareTimestamp() - intent timestamp = provider timestamp");
 				return true;
-			} else {
-				return false;
-			}
-		}
+			} //else {
+//				return false;
+//			}
+//		}
 		
 		/*
-		 * If post-cupcake, the system stores a system timestamp - the only problem is
+		 * If post-cupcake, the system app stores a system timestamp - the only problem is
 		 * we have no way of knowing the exact time the system app used.  So what
 		 * we'll do is compare against our own system timestamp and add a buffer in.
 		 * This is an awful way of doing this, but I don't see any other way around it :(
 		 */
-		Log.v("Build is post-cupcake ("+buildVersion+"), doing approx. SMS timestamp comparison");
-		Log.v("DB timestamp = " + timestamp);
-		Log.v("Intent timestamp = " + compareTimestamp);
+//		Log.v("Build is post-cupcake ("+buildVersion+"), doing approx. SMS timestamp comparison");
+//		Log.v("DB timestamp = " + timestamp);
+//		Log.v("Intent timestamp = " + compareTimestamp);
 		
 		if (timestamp < (compareTimestamp + MESSAGE_COMPARE_TIME_BUFFER) 
-				&& timestamp > (compareTimestamp - MESSAGE_COMPARE_TIME_BUFFER)) {			
+				&& timestamp > (compareTimestamp - MESSAGE_COMPARE_TIME_BUFFER)) {
+			Log.v("SMS Compare: compareTimestamp() - timestamp is approx. the same");
 			return true;
 		}		
+		Log.v("SMS Compare: compareTimestamp() - return false");
 		return false;
 	}
 	
@@ -366,13 +378,16 @@ public class SmsMmsMessage {
 	private boolean compareBody(String compareBody) {
 		if (compareBody != null) {
 			if (messageBody.length() != compareBody.length()) {
+				Log.v("SMS Compare: compareBody() - length is different");
 				return false;
 			}
 			
 			if (messageBody.equals(compareBody)) {
+				Log.v("SMS Compare: compareBody() - messageBody is the same");
 				return true;
-			}						
+			}		
 		}
+		Log.v("SMS Compare: compareBody() - return false");
 		return false;
 	}
 }

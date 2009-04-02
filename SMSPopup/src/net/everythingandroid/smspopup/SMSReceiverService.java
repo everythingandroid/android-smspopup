@@ -26,16 +26,15 @@ public class SMSReceiverService extends Service {
 	 * checking the system message database for the latest incoming message
 	 */
 	private static final int MESSAGE_RETRY = 5;
-	private static final int MESSAGE_RETRY_PAUSE = 400;
+	private static final int MESSAGE_RETRY_PAUSE = 500;
 
-	
 	private Context context;
    private ServiceHandler mServiceHandler;
 	private Looper mServiceLooper;
 //	private int mResultCode;
 	
-	static final Object mStartingServiceSync = new Object();
-	static PowerManager.WakeLock mStartingService;
+	private static final Object mStartingServiceSync = new Object();
+	private static PowerManager.WakeLock mStartingService;
 	
 	@Override
 	public void onCreate() {
@@ -151,11 +150,13 @@ public class SMSReceiverService extends Service {
 					
 					//while (smsMessage == null && count < SMS_RETRY && !equalToIntent) {
 					while (count < MESSAGE_RETRY && !equalToIntent) {
+						count++;
 						smsMessage = SMSPopupUtils.getSmsDetails(context);
 						if (smsMessage != null) {
 							// The local database matches the data received from the intent
 //							if (smsMessageFromIntent.equals(smsMessage)) {
-							if (smsMessage.equals(address, timestamp, timestamp_provider, body)) {
+							if (smsMessage.equals(address, timestamp, timestamp_provider, body)
+									|| count == MESSAGE_RETRY) {
 								equalToIntent = true;
 								
 								Log.v("SMS in DB matches Intent");
@@ -173,10 +174,8 @@ public class SMSReceiverService extends Service {
 								}								
 							}
 						}
-						
 						if (!equalToIntent) {		
 							Log.v("SMS not found, sleeping (count is " + count + ")");
-							count++;
 							try {
 								Thread.sleep(MESSAGE_RETRY_PAUSE);
 							} catch (InterruptedException e) {
@@ -187,8 +186,8 @@ public class SMSReceiverService extends Service {
 					
 					// After while loop
 					if (!equalToIntent) {
-						// Aw oh, we tried hard, but couldn't find the incoming message
-						// in the system database.
+						// Aw oh, we tried hard, but couldn't find an exact match for the 
+						// incoming message in the system database.
 						// TODO: not sure what we should do here, play the notification anyway?
 					}
 				}

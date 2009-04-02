@@ -32,7 +32,11 @@ public class SMSPopupConfigActivity extends PreferenceActivity {
 			(DialogPreference) findPreference(getString(R.string.pref_about_key));
 		aboutPref.setDialogTitle(getString(R.string.app_name) + version);
 		aboutPref.setDialogLayoutResource(R.layout.about);
-		
+
+//		DialogPreference releaseNotesPref =
+//			(DialogPreference) findPreference(getString(R.string.pref_releasenotes_key));
+//		releaseNotesPref.setDialogLayoutResource(R.layout.releasenotes);
+				
 		EmailDialogPreference emailPref = (EmailDialogPreference) findPreference(getString(R.string.pref_sendemail_key));
 		emailPref.setVersion(version);
 	}	
