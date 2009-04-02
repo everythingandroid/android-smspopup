@@ -1,6 +1,5 @@
 package net.everythingandroid.smspopup.preferences;
 
-import net.everythingandroid.smspopup.Log;
 import net.everythingandroid.smspopup.ManageNotification;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.SmsMmsMessage;
@@ -9,6 +8,7 @@ import android.content.DialogInterface;
 import android.media.AudioManager;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class TestNotificationDialogPreference extends DialogPreference {
@@ -35,29 +35,31 @@ public class TestNotificationDialogPreference extends DialogPreference {
 	@Override
 	protected View onCreateDialogView() {
 
+		String LOGTAG = "SMS Popup";
+		
 		AudioManager AM = 
 			(AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
 
 		switch (AM.getMode()) {
 			case AudioManager.MODE_NORMAL:
-				Log.v("MODE_NORMAL"); break;
+				Log.v(LOGTAG, "MODE_NORMAL"); break;
 			case AudioManager.MODE_IN_CALL:
-				Log.v("MODE_IN_CALL"); break;
+				Log.v(LOGTAG, "MODE_IN_CALL"); break;
 			case AudioManager.MODE_RINGTONE:
-				Log.v("MODE_RINGTONE"); break;
+				Log.v(LOGTAG, "MODE_RINGTONE"); break;
 			default:
-				Log.v("MODE is UNKNOWN"); break;
+				Log.v(LOGTAG, "MODE is UNKNOWN"); break;
 		}
 		
 		switch (AM.getRouting(AudioManager.MODE_NORMAL)) {
 			case AudioManager.ROUTE_SPEAKER:
-				Log.v("ROUTE_SPEAKER"); break;
+				Log.v(LOGTAG, "ROUTE_SPEAKER"); break;
 			case AudioManager.ROUTE_BLUETOOTH:
-				Log.v("ROUTE_BLUETOOTH"); break;
+				Log.v(LOGTAG, "ROUTE_BLUETOOTH"); break;
 			case AudioManager.ROUTE_HEADSET:
-				Log.v("ROUTE_HEADSET"); break;
+				Log.v(LOGTAG, "ROUTE_HEADSET"); break;
 			default:
-				Log.v("ROUTE is UNKNOWN"); break;
+				Log.v(LOGTAG, "ROUTE is UNKNOWN"); break;
 		}
 		
 		//AM.shouldVibrate(vibrateType);
@@ -73,12 +75,12 @@ public class TestNotificationDialogPreference extends DialogPreference {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		Log.v("---END---");
+		Log.v(LOGTAG, "---END---");
 		
 		// Create a fake SmsMmsMessage
 		String testPhone = "123-456-7890";
-		SmsMmsMessage message = new SmsMmsMessage(c, testPhone, c
-		      .getString(R.string.pref_notif_test_title), 0, null, testPhone, null, 1, 0,
+		SmsMmsMessage message = new SmsMmsMessage(c, testPhone,
+		      c.getString(R.string.pref_notif_test_title), 0, null, testPhone, null, 1, 0,
 		      SmsMmsMessage.MESSAGE_TYPE_SMS);
 		
 		// Show notification

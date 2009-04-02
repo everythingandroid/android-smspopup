@@ -11,16 +11,22 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.view.ContextMenu;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.google.tts.TTS;
 
 public class SMSPopupActivity extends Activity {
 	private SmsMmsMessage message;
@@ -39,10 +45,14 @@ public class SMSPopupActivity extends Activity {
 	private boolean replying = false;
 	private boolean inbox = false;
 	
-	private final double WIDTH = 0.8;
+	private static final double WIDTH = 0.8;
 	private static final int DELETE_DIALOG = 0;
 
-	//private TTS myTts;
+	private static final int CONTEXT_TTS_ID = Menu.FIRST;
+	private static final int CONTEXT_VIEW_CONTACT_ID = Menu.FIRST + 1;
+	private static final int CONTEXT_ADD_CONTACT_ID = Menu.FIRST + 2;
+	
+	private TTS myTts = null;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -81,11 +91,12 @@ public class SMSPopupActivity extends Activity {
 		mmsSubjectTV = (TextView) findViewById(R.id.MmsSubjectTextView);
 		
 		viewButtonLayout = (LinearLayout) findViewById(R.id.ViewButtonLinearLayout);
-		
-		messageScrollView = (ScrollView) findViewById(R.id.MessageScrollView);
-		
+		messageScrollView = (ScrollView) findViewById(R.id.MessageScrollView);		
 		mmsLinearLayout = (LinearLayout) findViewById(R.id.MmsLinearLayout);
-				
+		
+		// Enable long-press context menu
+		registerForContextMenu(findViewById(R.id.MainLinearLayout));
+		
 		//The close button
 		Button closeButton = (Button) findViewById(R.id.closeButton);
 		closeButton.setOnClickListener(new OnClickListener() {
@@ -234,6 +245,10 @@ public class SMSPopupActivity extends Activity {
 		super.onPause();
 		Log.v("SMSPopupActivity: onPause()");
 
+		if (myTts != null) {
+			myTts.shutdown();
+		}
+		
 		if (wasVisible) {
 			//Cancel the receiver that will clear our locks
 			ClearAllReceiver.removeCancel(getApplicationContext());
@@ -334,9 +349,11 @@ public class SMSPopupActivity extends Activity {
 		// Show/hide the LinearLayout and update the unread message count
 		// if there are >1 unread messages waiting
 		LinearLayout mLL = (LinearLayout) findViewById(R.id.UnreadCountLinearLayout);
+		ImageView dividerIV = (ImageView) findViewById(R.id.ImageView1);
 		TextView tv = (TextView) findViewById(R.id.UnreadCountTextView);
 		if (message.getUnreadCount() <= 1) {
 			mLL.setVisibility(View.GONE);
+			dividerIV.setVisibility(View.GONE);
 			tv.setText("");
 		} else {	
 			String textWaiting = String.format(
@@ -344,6 +361,7 @@ public class SMSPopupActivity extends Activity {
 			      message.getUnreadCount() - 1);
 			tv.setText(textWaiting);
 			mLL.setVisibility(View.VISIBLE);
+			dividerIV.setVisibility(View.VISIBLE);
 		}
 		
 		// Update TextView that contains the timestamp for the incoming message
@@ -397,7 +415,6 @@ public class SMSPopupActivity extends Activity {
 	}
 	
 	private void wakeApp() {
-
 		// Time to acquire a full WakeLock (turn on screen)
 		ManageWakeLock.acquireFull(getApplicationContext());
 		
@@ -423,11 +440,13 @@ public class SMSPopupActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		Log.v("onDestroy()");
-
 		// ClearAllReceiver.clearAll(!exitingKeyguardSecurely);
 		super.onDestroy();
 	}
 	
+	/*
+	 * Create Dialog
+	 */
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
@@ -453,34 +472,53 @@ public class SMSPopupActivity extends Activity {
 		}
 		return null;
 	}
+
+	/*
+	 * Create Context Menu (Long-press menu)
+	 */
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		
+		menu.add(Menu.NONE, CONTEXT_TTS_ID, Menu.NONE, "Text-to-speech");
+		
+//		String contactId = message.getContactId();
+//		if (contactId == null || new String("0").equals(contactId)) {
+//			menu.add(0, 0, 0, "Create contact");
+//		} else {
+//			menu.add(0, 1, 0,  "View contact");
+//		}
+	}
+
+	/*
+	 * Context Menu Item Selected
+	 */
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case CONTEXT_TTS_ID:
+				if (myTts == null) {
+					myTts = new TTS(this, ttsInitListener, true);
+				} else {
+					speakMessage();
+				}
+			case CONTEXT_VIEW_CONTACT_ID:
+				
+			case CONTEXT_ADD_CONTACT_ID:
+		}		
+		return super.onContextItemSelected(item);
+	}
 	
 /*
  * Text-to-speech: this works, but needs some refining
- */
+ */	
+	private TTS.InitListener ttsInitListener = new TTS.InitListener() {
+		public void onInit(int version) {
+			speakMessage();
+		}
+	};
 	
-//	@Override
-//	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-//		switch (item.getItemId()) {
-//		case 0:
-//			myTts = new TTS(this, ttsInitListener, true);
-//			return true;
-//		}
-//		return super.onMenuItemSelected(featureId, item);
-//	}
-//	
-//   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
-//      public void onInit(int version) {
-//        myTts.speak(message.getMessageBody(), 0, null);
-//      }
-//    };
-//	
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		super.onCreateOptionsMenu(menu);
-//		
-//		MenuItem PrefMenuItem = menu.add(0, 0, 0, "TTS");
-//		PrefMenuItem.setIcon(android.R.drawable.ic_menu_preferences);
-//
-//		return true;
-//	}
+	private void speakMessage() {
+		myTts.speak(message.getMessageBody(), 0, null);
+	}
 }

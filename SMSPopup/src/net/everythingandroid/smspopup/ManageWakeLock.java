@@ -8,16 +8,17 @@ import android.preference.PreferenceManager;
 public class ManageWakeLock {
 	private static PowerManager.WakeLock myWakeLock = null;
 	private static PowerManager.WakeLock myPartialWakeLock = null;
-	private static PowerManager myPM = null;
+//	private static PowerManager myPM = null;
 	
-	public static synchronized void setPM(Context context) {
-		if (myPM == null) {
-			myPM = (PowerManager) context.getSystemService(Context.POWER_SERVICE);			
-		}
-	}
+//	public static synchronized void setPM(Context context) {
+//		if (myPM == null) {
+//			myPM = (PowerManager) context.getSystemService(Context.POWER_SERVICE);			
+//		}
+//	}
 
 	public static synchronized void acquireFull(Context context) {
-		setPM(context);
+		//setPM(context);
+		PowerManager myPM = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 		
 		if (myWakeLock != null) {
 			//myWakeLock.release();
@@ -58,11 +59,13 @@ public class ManageWakeLock {
 	}
 
 	public static synchronized void acquirePartial(Context context) {
-		setPM(context);
+		//setPM(context);
+		PowerManager myPM = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 		
 		if (myPartialWakeLock != null) {
 			return;
 		}
+		
 		myPartialWakeLock = myPM.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG + ": partial");
 		Log.v("**Wakelock (partial) acquired");
 		myPartialWakeLock.setReferenceCounted(false);

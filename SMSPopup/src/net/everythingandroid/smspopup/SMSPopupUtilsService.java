@@ -28,8 +28,8 @@ public class SMSPopupUtilsService extends Service {
    private ServiceHandler mServiceHandler;
 	private Looper mServiceLooper;
 	
-	static final Object mStartingServiceSync = new Object();
-	static PowerManager.WakeLock mStartingService;
+	private static final Object mStartingServiceSync = new Object();
+	private static PowerManager.WakeLock mStartingService;
 	
 	@Override
 	public void onCreate() {
