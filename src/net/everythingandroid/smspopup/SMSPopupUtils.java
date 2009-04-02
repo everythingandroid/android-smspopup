@@ -120,6 +120,10 @@ public class SMSPopupUtils {
 	public static byte[] getPersonPhoto(Context context, String id) {
 		if (id == null)
 			return null;
+		
+		if ("0".equals(id))
+			return null;
+		
 		byte photo[] = null;
 
 		//TODO: switch to API method:
@@ -135,9 +139,6 @@ public class SMSPopupUtils {
 					photo = cursor.getBlob(0);
 					if (photo != null) {
 						return photo;
-						// Log.v("Found photo for person: " + id);
-						// bitmap = BitmapFactory.decodeStream(new
-						// ByteArrayInputStream(photo));
 					}
 				}
 			} finally {
@@ -398,8 +399,34 @@ public class SMSPopupUtils {
 				+ "\n";
 			
 			// Add audio info
-			AudioManager myAM = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-			myAM.getStreamVolume(AudioManager.STREAM_RING);
+			AudioManager AM = 
+				(AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
+			String audioMode = "audio_mode: ";
+			switch (AM.getMode()) {
+				case AudioManager.MODE_NORMAL:
+					audioMode += "MODE_NORMAL"; break;
+				case AudioManager.MODE_IN_CALL:
+					audioMode += "MODE_IN_CALL"; break;
+				case AudioManager.MODE_RINGTONE:
+					audioMode += "MODE_RINGTONE"; break;
+				default:
+					audioMode += "MODE is UNKNOWN"; break;
+			}
+			body += audioMode + "\n";
+
+			String audioRouting = "audio_routing: ";
+			switch (AM.getRouting(AudioManager.MODE_NORMAL)) {
+				case AudioManager.ROUTE_SPEAKER:
+					audioRouting += "ROUTE_SPEAKER"; break;
+				case AudioManager.ROUTE_BLUETOOTH:
+					audioRouting += "ROUTE_BLUETOOTH"; break;
+				case AudioManager.ROUTE_HEADSET:
+					audioRouting += "ROUTE_HEADSET"; break;
+				default:
+					audioRouting += "ROUTE is UNKNOWN"; break;
+			}
+			body += audioRouting + "\n";
 		}
 		
 		msg.putExtra(Intent.EXTRA_EMAIL, recipients);  

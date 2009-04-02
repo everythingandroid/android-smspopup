@@ -162,13 +162,29 @@
 		</PreferenceScreen>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/pref_other_title">
-		<DialogPreference
-		   android:key="@string/pref_about_key"
-			android:dialogIcon="@drawable/smspopup_icon"
-			android:title="@string/pref_about_title"
-			android:dialogTitle="@string/app_name"
-			android:summary="@string/pref_about_summary"
-			android:negativeButtonText="@null" />
+<!-- 	
+      <DialogPreference
+         android:key="@string/pref_releasenotes_key"
+         android:dialogIcon="@drawable/smspopup_icon"
+         android:title="@string/pref_releasenotes_title"
+         android:summary="@string/pref_releasenotes_summary"
+         android:dialogTitle="@string/pref_releasenotes_title"         
+         android:negativeButtonText="@null" />
+ -->         	
+      <PreferenceScreen
+         android:key="@string/pref_faq_key"
+         android:title="@string/pref_faq_title"
+         android:summary="@string/pref_faq_summary">
+         <intent android:action="android.intent.action.VIEW"
+            android:data="@string/pref_faq_url" />
+      </PreferenceScreen>
+      <DialogPreference
+         android:key="@string/pref_about_key"
+         android:dialogIcon="@drawable/smspopup_icon"
+         android:title="@string/pref_about_title"
+         android:dialogTitle="@string/app_name"
+         android:summary="@string/pref_about_summary"
+         android:negativeButtonText="@null" />               			
       <net.everythingandroid.smspopup.preferences.EmailDialogPreference
          android:key="@string/pref_sendemail_key"
          android:title="@string/pref_sendemail_title"

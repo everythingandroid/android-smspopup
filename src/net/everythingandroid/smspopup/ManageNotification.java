@@ -20,27 +20,27 @@ import android.provider.Settings;
 public class ManageNotification {
 	public static final int NOTIFICATION_ALERT = 1337;
 	public static final int NOTIFICATION_TEST = 888;
-	private static NotificationManager myNM = null;
-	private static SharedPreferences myPrefs = null;
+	//private static NotificationManager myNM = null;
+	//private static SharedPreferences myPrefs = null;
 	
 	/*
 	 * Create the NotificationManager
 	 */
-	private static void createNM(Context context) {
-		if (myNM == null) {
-			myNM = 
-				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		}
-	}
+//	private static void createNM(Context context) {
+//		if (myNM == null) {
+//			myNM = 
+//				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//		}
+//	}
 
 	/*
 	 * Create the PreferenceManager
 	 */
-	private static void createPM(Context context) {
-		if (myPrefs == null) {
-			myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-		}
-	}
+//	private static void createPM(Context context) {
+//		if (myPrefs == null) {
+//			myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+//		}
+//	}
 	
 	/*
 	 * Show/play the notification given a SmsMmsMessage and a notification ID
@@ -81,7 +81,9 @@ public class ManageNotification {
 	      boolean onlyUpdate, int notif) {
 
 		// Make sure the PreferenceManager is created
-		createPM(context);
+		//createPM(context);
+		SharedPreferences myPrefs = 
+			PreferenceManager.getDefaultSharedPreferences(context);
 		
 		// Fetch info from the message object
 		int unreadCount = message.getUnreadCount();
@@ -97,8 +99,10 @@ public class ManageNotification {
 						context.getString(R.string.pref_notif_enabled_default)))) {
 			
 			// Make sure the NotificationManager is created
-			createNM(context);
-
+			//createNM(context);
+			NotificationManager myNM = 
+				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			
 			// Get some preferences: vibrate and vibrate_pattern prefs
 			boolean vibrate = myPrefs.getBoolean(context.getString(
 					R.string.pref_vibrate_key),
@@ -247,7 +251,11 @@ public class ManageNotification {
 				/*					 
 				 * Set up vibrate pattern
 				 */
-				if (vibrate) {
+				AudioManager AM = 
+					(AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+	
+				// If vibrate is ON, or if phone is set to vibrate
+				if (vibrate || AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode()) {
 					long[] vibrate_pattern = null;
 					if (context.getString(R.string.pref_custom_val).equals(
 					      vibrate_pattern_raw)) {
@@ -260,22 +268,6 @@ public class ManageNotification {
 					} else {
 						notification.defaults = Notification.DEFAULT_VIBRATE;
 					}
-				} else {
-					// Vibrate is disabled, but we should still vibrate if the phone
-					// is in vibrate mode
-					AudioManager AM = 
-						(AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-					if (AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode()) {
-						// TODO: could use custom vibrate here, but would need to update
-						// the preferences UI to reflect this ability
-						
-						// Use default vibrate pattern
-						notification.defaults = Notification.DEFAULT_VIBRATE;
-					}
-					
-//					if (AM.shouldVibrate(AudioManager.VIBRATE_TYPE_NOTIFICATION)) {
-//						notification.defaults = Notification.DEFAULT_VIBRATE;
-//					}
 				}
 	
 				// Notification sound
@@ -320,25 +312,34 @@ public class ManageNotification {
 	}
 
 	public static void clear(Context context, int notif) {
-		createNM(context);
-		if (myNM != null) {
-			Log.v("Notification cleared");
-			myNM.cancel(notif);
-		}		
+		NotificationManager myNM = 
+			(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		myNM.cancel(notif);
+//		createNM(context);
+//		if (myNM != null) {
+//			Log.v("Notification cleared");
+//			myNM.cancel(notif);
+//		}		
 	}
 
 	public static void clearAll(Context context, boolean reply) {
-		createPM(context);
-
+		SharedPreferences myPrefs = 
+			PreferenceManager.getDefaultSharedPreferences(context);
+		
 		if (reply || myPrefs.getBoolean(
 		      context.getString(R.string.pref_markread_key),
 		      Boolean.parseBoolean(
 		      		context.getString(R.string.pref_markread_default)))) {
-			createNM(context);
-			if (myNM != null) {
-				myNM.cancelAll();
-				Log.v("All notifications cleared");
-			}
+			NotificationManager myNM = 
+				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			myNM.cancelAll();
+						
+//			createNM(context);
+//			
+//			if (myNM != null) {
+//				myNM.cancelAll();
+//				Log.v("All notifications cleared");
+//			}
 		}	
 	}
 	
