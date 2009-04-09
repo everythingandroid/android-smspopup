@@ -43,7 +43,7 @@ public class SmsMmsMessage {
 	private int reminderCount = 0;
 	private long messageId = 0;
 
-	/*
+	/**
 	 * Construct SmsMmsMessage with minimal information - this is useful for when
 	 * a raw SMS comes in which just contains address, body and timestamp.  We
 	 * must then look in the database for the rest of the information 
@@ -70,7 +70,7 @@ public class SmsMmsMessage {
 		}
 	}
 
-	/*
+	/**
 	 * Construct SmsMmsMessage for getMmsDetails() - info fetched from the MMS
 	 * database table
 	 */
@@ -99,7 +99,7 @@ public class SmsMmsMessage {
 		}
 	}
 
-	/*
+	/**
 	 * Construct SmsMmsMessage for getSmsDetails() - info fetched from the SMS
 	 * database table
 	 */
@@ -129,7 +129,7 @@ public class SmsMmsMessage {
 		}
 	}
 	
-	/*
+	/**
 	 * Construct SmsMmsMessage from an extras bundle
 	 */
 	public SmsMmsMessage(Context _context, Bundle b) {
@@ -148,7 +148,7 @@ public class SmsMmsMessage {
 		messageId = b.getLong(EXTRAS_MESSAGE_ID, 0);
 	}
 
-	/*
+	/**
 	 * Construct SmsMmsMessage by specifying all data, only used for testing the
 	 * notification from the preferences screen
 	 */
@@ -167,7 +167,7 @@ public class SmsMmsMessage {
 		messageType = _messageType;
 	}
 	
-	/*
+	/**
 	 * Convert all SmsMmsMessage data to an extras bundle to send via an intent
 	 */
 	public Bundle toBundle() {
@@ -292,9 +292,12 @@ public class SmsMmsMessage {
 //		return equals;
 //	}
 	
-	public boolean equals(String fromAddress, 
-			long timestamp, long timestamp_provider, String body) {
+	/**
+	 * Check if this message is sufficiently the same as the provided parameters
+	 */
+	public boolean equals(String fromAddress, long timestamp, long timestamp_provider, String body) {
 		boolean equals = false;
+		
 		if (PhoneNumberUtils.compare(this.fromAddress, fromAddress) &&
 				this.compareTimeStamp(timestamp, timestamp_provider) &&
 				this.compareBody(body)) {

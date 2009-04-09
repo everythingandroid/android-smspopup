@@ -13,6 +13,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 
 /*
  * This class handles the Notifications (sounds/vibrate/LED)
@@ -197,10 +198,13 @@ public class ManageNotification {
 			notification.flags = Notification.FLAG_AUTO_CANCEL;
 			
 			// Set audio stream to ring
-			notification.audioStreamType = AudioManager.STREAM_RING;
+			//notification.audioStreamType = AudioManager.STREAM_RING;
+		 	notification.audioStreamType = Notification.STREAM_DEFAULT;
 
-			// If this is a new notification (not updating a notification)
-			// then set LED, vibrate and ringtone to fire
+		 	/*
+			 * If this is a new notification (not updating a notification)
+			 * then set LED, vibrate and ringtone to fire
+			 */
 			if (!onlyUpdate) {
 			
 				// Set up LED pattern and color
@@ -230,7 +234,6 @@ public class ManageNotification {
 					/*					 
 					 * Set up LED color
 					 */
-
 					// Check if a custom color is set
 					if (context.getString(R.string.pref_custom_val).equals(flashLedCol)) {
 						flashLedCol = flashLedColCustom;
@@ -247,31 +250,41 @@ public class ManageNotification {
 					}
 					notification.ledARGB = col;
 				}
-
-				/*					 
-				 * Set up vibrate pattern
+				
+				TelephonyManager TM =
+					(TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+				int callState = TM.getCallState();
+				
+				/*
+				 * Make sure we're not in a call
 				 */
-				AudioManager AM = 
-					(AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-	
-				// If vibrate is ON, or if phone is set to vibrate
-				if (vibrate || AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode()) {
-					long[] vibrate_pattern = null;
-					if (context.getString(R.string.pref_custom_val).equals(
-					      vibrate_pattern_raw)) {
-						vibrate_pattern = parseVibratePattern(vibrate_pattern_custom_raw);
-					} else {
-						vibrate_pattern = parseVibratePattern(vibrate_pattern_raw);
+				if (callState != TelephonyManager.CALL_STATE_OFFHOOK && 
+						callState != TelephonyManager.CALL_STATE_RINGING) {
+					/*					 
+					 * Set up vibrate pattern
+					 */
+					AudioManager AM = 
+						(AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		
+					// If vibrate is ON, or if phone is set to vibrate
+					if (vibrate || AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode()) {
+						long[] vibrate_pattern = null;
+						if (context.getString(R.string.pref_custom_val).equals(
+						      vibrate_pattern_raw)) {
+							vibrate_pattern = parseVibratePattern(vibrate_pattern_custom_raw);
+						} else {
+							vibrate_pattern = parseVibratePattern(vibrate_pattern_raw);
+						}
+						if (vibrate_pattern != null) {
+							notification.vibrate = vibrate_pattern;
+						} else {
+							notification.defaults = Notification.DEFAULT_VIBRATE;
+						}
 					}
-					if (vibrate_pattern != null) {
-						notification.vibrate = vibrate_pattern;
-					} else {
-						notification.defaults = Notification.DEFAULT_VIBRATE;
-					}
+		
+					// Notification sound
+					notification.sound = alarmSoundURI;
 				}
-	
-				// Notification sound
-				notification.sound = alarmSoundURI;
 			}
 			
 			// Set the PendingIntent if the status message is clicked
