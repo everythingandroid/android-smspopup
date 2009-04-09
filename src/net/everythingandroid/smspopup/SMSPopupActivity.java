@@ -509,16 +509,23 @@ public class SMSPopupActivity extends Activity {
 		return super.onContextItemSelected(item);
 	}
 	
-/*
- * Text-to-speech: this works, but needs some refining
- */	
+	/*
+	 * Text-to-speech: this works, but needs some refining
+	 */	
 	private TTS.InitListener ttsInitListener = new TTS.InitListener() {
 		public void onInit(int version) {
 			speakMessage();
 		}
 	};
 	
+	/*
+	 * Speak the message out using TTS library
+	 */
 	private void speakMessage() {
+		// We'll use update notification to stop the sound playing
+		ManageNotification.update(getApplicationContext(), message);
+		
+		// Speak the message!
 		myTts.speak(message.getMessageBody(), 0, null);
 	}
 }
