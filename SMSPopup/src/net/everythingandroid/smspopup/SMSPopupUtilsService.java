@@ -95,7 +95,7 @@ public class SMSPopupUtilsService extends Service {
 
 				SmsMmsMessage message;
 				if (ignoreThread) {
-					// If ignoring messages from the tread, pass the full message over
+					// If ignoring messages from the thread, pass the full message over
 					message = new SmsMmsMessage(context, intent.getExtras());
 				} else {
 					// Otherwise we can just calculate unread messages by checking the

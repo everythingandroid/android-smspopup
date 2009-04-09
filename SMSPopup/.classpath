@@ -2,6 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="C:/Documents and Settings/Adam/My Documents/workspace/Android-tts/TTS_library_stub_1.3.2_Market.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Adam/workspace/Android-tts/TTS_library_stub_1.3.2_Market.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
