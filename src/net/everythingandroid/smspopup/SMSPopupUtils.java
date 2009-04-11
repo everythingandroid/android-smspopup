@@ -27,6 +27,8 @@ import android.telephony.gsm.SmsMessage;
 import android.text.TextUtils;
 
 public class SMSPopupUtils {
+	private int test = 0;
+	
 	//Content URIs for SMS app, these may change in future SDK
 	public static final Uri MMS_SMS_CONTENT_URI = Uri.parse("content://mms-sms/");
 	public static final Uri THREAD_ID_CONTENT_URI =
