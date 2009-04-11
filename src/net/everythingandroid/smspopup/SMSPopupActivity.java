@@ -522,6 +522,8 @@ public class SMSPopupActivity extends Activity {
 	 * Speak the message out using TTS library
 	 */
 	private void speakMessage() {
+		ClearAllReceiver.removeCancel(getApplicationContext());
+		
 		// We'll use update notification to stop the sound playing
 		ManageNotification.update(getApplicationContext(), message);
 		
