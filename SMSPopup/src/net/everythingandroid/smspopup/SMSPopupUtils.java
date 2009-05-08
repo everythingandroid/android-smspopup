@@ -2,16 +2,22 @@ package net.everythingandroid.smspopup;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RecentTaskInfo;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -851,5 +857,90 @@ public class SMSPopupUtils {
 			msgs[i] = SmsMessage.createFromPdu(pdus[i]);
 		}
 		return msgs;
+	}
+	
+	/**
+	 * This function will see if the most recent activity was the system messaging app so we can suppress
+	 * the popup as the user is likely already viewing messages or composing a new message
+	 */
+	public static final boolean inMessagingApp(Context context) {
+		// TODO: move these to static strings somewhere
+		final String PACKAGE_NAME = "com.android.mms";
+		final String COMPOSE_CLASS_NAME = "com.android.mms.ui.ComposeMessageActivity";
+		final String CONVO_CLASS_NAME = "com.android.mms.ui.ConversationList";
+		
+		ActivityManager mAM = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		List<RecentTaskInfo> mActivityList = mAM.getRecentTasks(1, 0);		
+		Iterator<RecentTaskInfo> mIterator = mActivityList.iterator();
+		
+		if (mIterator.hasNext()) {
+			RecentTaskInfo mRecentTask = (RecentTaskInfo) mIterator.next();
+			Intent recentTaskIntent = mRecentTask.baseIntent; 
+
+			if (recentTaskIntent != null) {
+				ComponentName recentTaskComponentName = recentTaskIntent.getComponent();
+				if (recentTaskComponentName != null) {
+					String recentTaskClassName = recentTaskComponentName.getClassName();
+					if (PACKAGE_NAME.equals(recentTaskComponentName.getPackageName()) &&
+							(COMPOSE_CLASS_NAME.equals(recentTaskClassName) ||
+							 CONVO_CLASS_NAME.equals(recentTaskClassName))) {
+						Log.v("User in messaging app");
+						return true;
+					}
+				}
+				/*				
+				These appear to be the 2 main intents that mean the user is using the messaging app
+				
+				action "android.intent.action.MAIN"				
+				data null
+				class "com.android.mms.ui.ConversationList"
+				package "com.android.mms"
+				
+				
+				action "android.intent.action.VIEW"
+				data "content://mms-sms/threadID/3"
+				class "com.android.mms.ui.ComposeMessageActivity"
+				package "com.android.mms"
+				*/
+			}
+		}		
+		return false;
+	}
+	
+	/**
+	 * Enables or disables the main SMS receiver
+	 */
+	public static void enableSMSPopup(Context context, boolean enable) {
+		PackageManager pm = (PackageManager) context.getPackageManager();
+		ComponentName cn = new ComponentName(context, SMSReceiver.class);
+
+		// Update preference so it reflects in the preference activity
+		SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);		
+		SharedPreferences.Editor settings = myPrefs.edit();
+		settings.putBoolean(context.getString(R.string.pref_enabled_key), enable);
+		settings.commit();
+
+		if (enable) {
+			Log.v("SMSPopup receiver is enabled");
+			pm.setComponentEnabledSetting(cn, 
+					PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, 
+					PackageManager.DONT_KILL_APP);
+
+			// Send a broadcast to disable other SMS Popup apps
+			disableOtherSMSPopup(context);
+			
+		} else {
+			Log.v("SMSPopup receiver is disabled");			
+			pm.setComponentEnabledSetting(cn, 
+					PackageManager.COMPONENT_ENABLED_STATE_DISABLED, 
+					PackageManager.DONT_KILL_APP);
+		}
+	}
+	
+	public static void disableOtherSMSPopup(Context context) {
+		// Send a broadcast to disable SMS Popup Pro
+		Intent i = new Intent(ExternalEventReceiver.ACTION_SMSPOPUP_DISABLE);
+		i.setClassName("net.everythingandroid.smspopuppro", "net.everythingandroid.smspopuppro.ExternalEventReceiver");
+		context.sendBroadcast(i);
 	}
 }

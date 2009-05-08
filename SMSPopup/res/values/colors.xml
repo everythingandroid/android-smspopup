@@ -3,5 +3,7 @@
     <color name="dark_grey">#EE444444</color>
     <color name="light_grey">#77FFFFFF</color>
     <drawable name="dark_grey_d">#EE444444</drawable>
-    <drawable name="light_grey_d">#80FFFFFF</drawable>    
+    <drawable name="light_grey_d">#80FFFFFF</drawable>
+    <drawable name="translucent_background">#e0000000</drawable>
+    <drawable name="transparent_background">#00000000</drawable>
 </resources>
