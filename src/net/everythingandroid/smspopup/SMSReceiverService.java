@@ -29,7 +29,7 @@ public class SMSReceiverService extends Service {
 	private static final int MESSAGE_RETRY_PAUSE = 500;
 
 	private Context context;
-   private ServiceHandler mServiceHandler;
+	private ServiceHandler mServiceHandler;
 	private Looper mServiceLooper;
 //	private int mResultCode;
 	
@@ -46,7 +46,7 @@ public class SMSReceiverService extends Service {
 		mServiceHandler = new ServiceHandler(mServiceLooper);	
 	}
 	
-   @Override
+	@Override
 	public void onStart(Intent intent, int startId) {
    	Log.v("SMSReceiverService: onStart()");
 		
@@ -204,7 +204,8 @@ public class SMSReceiverService extends Service {
 		
 		ManageKeyguard.initialize(context);
 
-		if (ManageKeyguard.inKeyguardRestrictedInputMode() || !onlyShowOnKeyguard) {
+		if (ManageKeyguard.inKeyguardRestrictedInputMode() || 
+				(!onlyShowOnKeyguard && !SMSPopupUtils.inMessagingApp(context))) {
 			Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
 			Intent popup = smsMessage.getPopupIntent();						
 			ManageWakeLock.acquirePartial(context);

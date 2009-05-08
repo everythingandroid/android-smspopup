@@ -28,8 +28,9 @@ public class ManageKeyguard {
 		}
 	}
 
-	public static boolean inKeyguardRestrictedInputMode() {
+	public static synchronized boolean inKeyguardRestrictedInputMode() {
 		if (myKM != null) {
+			Log.v("--inKeyguardRestrictedInputMode = " + myKM.inKeyguardRestrictedInputMode());
 			return myKM.inKeyguardRestrictedInputMode();
 		}
 		return false;
