@@ -44,13 +44,18 @@ public class SMSPopupActivity extends Activity {
 	private boolean wasVisible = false;
 	private boolean replying = false;
 	private boolean inbox = false;
+	private boolean privacyMode = false;
 	
 	private static final double WIDTH = 0.8;
 	private static final int DELETE_DIALOG = 0;
 
-	private static final int CONTEXT_TTS_ID = Menu.FIRST;
-	private static final int CONTEXT_VIEW_CONTACT_ID = Menu.FIRST + 1;
-	private static final int CONTEXT_ADD_CONTACT_ID = Menu.FIRST + 2;
+	private static final int CONTEXT_TTS_ID 		= Menu.FIRST;
+	private static final int CONTEXT_CLOSE_ID 	= Menu.FIRST + 1;
+	private static final int CONTEXT_REPLY_ID 	= Menu.FIRST + 2;
+	private static final int CONTEXT_DELETE_ID 	= Menu.FIRST + 3;
+	
+//	private static final int CONTEXT_VIEW_CONTACT_ID = Menu.FIRST + 1;
+//	private static final int CONTEXT_ADD_CONTACT_ID = Menu.FIRST + 2;
 	
 	private TTS myTts = null;
 	
@@ -74,6 +79,11 @@ public class SMSPopupActivity extends Activity {
 	      getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
 	      	WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
 		}
+		
+		//Fetch privacy mode		
+		privacyMode = myPrefs.getBoolean(
+				getString(R.string.pref_privacy_key),
+				Boolean.valueOf(getString(R.string.pref_privacy_default)));
 		
 		//This sets the minimum width of the activity to 75% of the screen size
 		//only needed because the theme of this activity is "dialog" so it looks
@@ -100,16 +110,8 @@ public class SMSPopupActivity extends Activity {
 		//The close button
 		Button closeButton = (Button) findViewById(R.id.closeButton);
 		closeButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {				
-				Intent i = new Intent(SMSPopupActivity.this.getApplicationContext(),
-				      SMSPopupUtilsService.class);
-				i.setAction(SMSPopupUtilsService.ACTION_MARK_MESSAGE_READ);
-				i.putExtras(message.toBundle());
-				SMSPopupUtilsService.beginStartingService(
-						SMSPopupActivity.this.getApplicationContext(), i);
-				
-				// Finish up this activity
-				myFinish();
+			public void onClick(View v) {
+				closeMessage();
 			}
 		});
 		
@@ -117,16 +119,7 @@ public class SMSPopupActivity extends Activity {
 		Button inboxButton = (Button) findViewById(R.id.InboxButton);
 		inboxButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				exitingKeyguardSecurely = true;
-				ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
-					public void LaunchOnKeyguardExitSuccess() {
-						Intent i = SMSPopupUtils.getSmsIntent();
-						SMSPopupActivity.this.getApplicationContext().startActivity(i);
-						inbox = true;
-						myFinish();
-               }
-				});
-				//myFinish();
+				gotoInbox();
 			}
 		});
 
@@ -134,14 +127,7 @@ public class SMSPopupActivity extends Activity {
 		Button viewButton = (Button) findViewById(R.id.ViewButton);
 		viewButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				exitingKeyguardSecurely = true;
-				ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
-					public void LaunchOnKeyguardExitSuccess() {
-						Intent i = getIntent();
-						i.putExtra(SmsMmsMessage.EXTRAS_NOTIFY, false);
-						startActivity(i);
-               }
-				});
+				viewMessage();
 			}
 		});
 		
@@ -149,55 +135,41 @@ public class SMSPopupActivity extends Activity {
 		Button replyButton = (Button) findViewById(R.id.replyButton);
 		replyButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				exitingKeyguardSecurely = true;
-				ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
-					public void LaunchOnKeyguardExitSuccess() {
-						Intent reply = message.getReplyIntent();
-						SMSPopupActivity.this.getApplicationContext().startActivity(reply);
-						replying = true;
-						myFinish();
-               }
-				});
-				//ManageNotification.clearAll(SMSPopupActivity.this.getApplicationContext(), true);
-				//myFinish();
+				replyToMessage();
 			}
 		});		
 
 		// The ViewMMS button
-		// TODO: this is really the same listener as the "Reply" button, they should
-		// be combined
 		Button viewMmsButton = (Button) findViewById(R.id.ViewMmsButton);
 		viewMmsButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				exitingKeyguardSecurely = true;
-				ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
-					public void LaunchOnKeyguardExitSuccess() {
-						Intent reply = message.getReplyIntent();
-						SMSPopupActivity.this.getApplicationContext().startActivity(reply);
-						replying = true;
-						myFinish();
-					}
-				});
-				//ManageNotification.clearAll(SMSPopupActivity.this.getApplicationContext(), true);
-				//myFinish();
+				replyToMessage();
 			}
 		});		
 
 		// The Delete button
 		Button deleteButton = (Button) findViewById(R.id.deleteButton);
 		
-		if (myPrefs.getBoolean(getString(R.string.pref_show_delete_button_key),
-				Boolean.valueOf(getString(R.string.pref_show_delete_button_default)))) {
-			deleteButton.setVisibility(View.VISIBLE);
-		} else {
-			deleteButton.setVisibility(View.GONE);
-		}
-
 		deleteButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				showDialog(DELETE_DIALOG);
 			}
-		});		
+		});
+		
+		// See if user wants all buttons hidden
+		if (!myPrefs.getBoolean(getString(R.string.pref_show_buttons_key),
+				Boolean.valueOf(getString(R.string.pref_show_buttons_default)))) {
+			LinearLayout mButtonLinearLayout =
+				(LinearLayout) findViewById(R.id.ButtonLinearLayout);
+			mButtonLinearLayout.setVisibility(View.GONE);
+		} else { // Otherwise see if user wants the delete button visible
+			if (myPrefs.getBoolean(getString(R.string.pref_show_delete_button_key),
+					Boolean.valueOf(getString(R.string.pref_show_delete_button_default)))) {
+				deleteButton.setVisibility(View.VISIBLE);
+			} else {
+				deleteButton.setVisibility(View.GONE);
+			}
+		}
 
 		if (bundle == null) {		
 			populateViews(getIntent().getExtras());
@@ -237,7 +209,7 @@ public class SMSPopupActivity extends Activity {
 		Log.v("SMSPopupActivity: onResume()");
 		wasVisible = false;
 		//Reset exitingKeyguardSecurely bool to false
-		exitingKeyguardSecurely = false;		
+		exitingKeyguardSecurely = false;
 	}
 	
 	@Override
@@ -276,6 +248,7 @@ public class SMSPopupActivity extends Activity {
 			// to prevent doing some things 2 times but this seemed to be the only
 			// reliable way (?)
 			wasVisible = true;
+			refreshPrivacy();
 		}
 	}
 
@@ -288,6 +261,10 @@ public class SMSPopupActivity extends Activity {
 		outState.putAll(bundle);
 	}
 	
+	/*
+	 * Customized activity finish.  Ensures the notification is in sync and cancels
+	 * any scheduled reminders (as the user has interrupted the app.
+	 */
 	private void myFinish() {
 		Log.v("myFinish()");
 		
@@ -323,6 +300,9 @@ public class SMSPopupActivity extends Activity {
 		finish();
 	}
 	
+	/*
+	 * Populate all the main SMS/MMS views with content from the actual SmsMmsMessage
+	 */
 	private void populateViews(Bundle b) {
 		// Store bundle
 		bundle = b;
@@ -330,8 +310,26 @@ public class SMSPopupActivity extends Activity {
 		// Regenerate the SmsMmsMessage from the extras bundle
 		message = new SmsMmsMessage(getApplicationContext(), bundle);
 
-		// Refresh privacy settings (hide/show message)
-		refreshPrivacy();
+		// If it's a MMS message, just show the MMS layout
+		if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
+			viewButtonLayout.setVisibility(View.GONE);
+			messageScrollView.setVisibility(View.GONE);
+			mmsLinearLayout.setVisibility(View.VISIBLE);
+			
+			// If no MMS subject, hide the subject text view
+			if (TextUtils.isEmpty(message.getMessageBody())) {
+				mmsSubjectTV.setVisibility(View.GONE);
+			} else {
+				mmsSubjectTV.setVisibility(View.VISIBLE);
+			}
+		} else {
+			// Otherwise hide MMS layout
+			mmsLinearLayout.setVisibility(View.GONE);
+			//messageScrollView.setVisibility(View.VISIBLE);
+
+			// Refresh privacy settings (hide/show message) depending on privacy setting
+			refreshPrivacy();			
+		}
 		
 		// Find the ImageView that will show the contact photo
 		ImageView iv = (ImageView) findViewById(R.id.FromImageView);
@@ -378,42 +376,64 @@ public class SMSPopupActivity extends Activity {
 		headerTV.setText(headerText);		
 	}
 	
-	private void refreshPrivacy() {	
+	/*
+	 * This handles hiding and showing various views depending on the privacy settings
+	 * of the app and the current state of the phone (keyguard on or off) 
+	 */
+	private void refreshPrivacy() {
 		
-		//We need to init the keyguard class so we can check if the keyguard is on
-		ManageKeyguard.initialize(getApplicationContext());
+		if (privacyMode) {
+			//We need to init the keyguard class so we can check if the keyguard is on
+			ManageKeyguard.initialize(getApplicationContext());
 
-		//Fetch privacy mode		
-		boolean privacyMode = myPrefs.getBoolean(
-				getString(R.string.pref_privacy_key),
-				Boolean.valueOf(getString(R.string.pref_privacy_default)));
-		
-		// If it's a MMS message, just show the MMS layout
-		if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
-			viewButtonLayout.setVisibility(View.GONE);
-			messageScrollView.setVisibility(View.GONE);
-			mmsLinearLayout.setVisibility(View.VISIBLE);
-			
-			// If no MMS subject, hide the subject text view
-			if (TextUtils.isEmpty(message.getMessageBody())) {
-				mmsSubjectTV.setVisibility(View.GONE);
-			} else {
-				mmsSubjectTV.setVisibility(View.VISIBLE);
-			}
-		} else {
-			// Otherwise hide MMS layout and show either the view button if in
-			// privacy mode or the message body textview if not
-			mmsLinearLayout.setVisibility(View.GONE);
-			if (privacyMode && ManageKeyguard.inKeyguardRestrictedInputMode()) {
+			if (ManageKeyguard.inKeyguardRestrictedInputMode()) {
+				Log.v("PRIVACY: HIDING MESSAGE");
 				viewButtonLayout.setVisibility(View.VISIBLE);
 				messageScrollView.setVisibility(View.GONE);
 			} else {
+				Log.v("NO PRIVACY: SHOW MESSAGE");
 				viewButtonLayout.setVisibility(View.GONE);
 				messageScrollView.setVisibility(View.VISIBLE);
 			}
+		} else {
+			messageScrollView.setVisibility(View.VISIBLE);
 		}
+		
+//		// If it's a MMS message, just show the MMS layout
+//		if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
+//			viewButtonLayout.setVisibility(View.GONE);
+//			messageScrollView.setVisibility(View.GONE);
+//			mmsLinearLayout.setVisibility(View.VISIBLE);
+//			
+//			// If no MMS subject, hide the subject text view
+//			if (TextUtils.isEmpty(message.getMessageBody())) {
+//				mmsSubjectTV.setVisibility(View.GONE);
+//			} else {
+//				mmsSubjectTV.setVisibility(View.VISIBLE);
+//			}
+//		} else {
+//			// Otherwise hide MMS layout and show either the view button if in
+//			// privacy mode or the message body textview if not
+//			mmsLinearLayout.setVisibility(View.GONE);
+//
+//			if (privacyMode && ManageKeyguard.inKeyguardRestrictedInputMode()) {
+//			//if (privacyMode && myKM.inKeyguardRestrictedInputMode()) {
+//				Log.v("PRIVACY: HIDING MESSAGE");
+//				viewButtonLayout.setVisibility(View.VISIBLE);
+//				messageScrollView.setVisibility(View.GONE);
+//			} else {
+//				Log.v("NO PRIVACY: SHOW MESSAGE");
+//				viewButtonLayout.setVisibility(View.GONE);
+//				messageScrollView.setVisibility(View.VISIBLE);
+//			}
+//		}
 	}
-	
+
+	/*
+	 * Wake up the activity, this will acquire the wakelock (turn on the screen) and
+	 * sound the notification if needed.  This is called once all preparation is done
+	 * for this activity (end of onCreate()).
+	 */
 	private void wakeApp() {
 		// Time to acquire a full WakeLock (turn on screen)
 		ManageWakeLock.acquireFull(getApplicationContext());
@@ -437,13 +457,6 @@ public class SMSPopupActivity extends Activity {
 		}
 	}
 
-	@Override
-	protected void onDestroy() {
-		Log.v("onDestroy()");
-		// ClearAllReceiver.clearAll(!exitingKeyguardSecurely);
-		super.onDestroy();
-	}
-	
 	/*
 	 * Create Dialog
 	 */
@@ -457,14 +470,7 @@ public class SMSPopupActivity extends Activity {
 				.setMessage(getString(R.string.pref_show_delete_button_dialog_text))
 				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
-						Intent i = new Intent(
-								SMSPopupActivity.this.getApplicationContext(),
-								SMSPopupUtilsService.class);
-						i.setAction(SMSPopupUtilsService.ACTION_DELETE_MESSAGE);
-						i.putExtras(message.toBundle());
-						SMSPopupUtilsService.beginStartingService(
-								SMSPopupActivity.this.getApplicationContext(), i);
-						myFinish();
+						deleteMessage();
 					}
 				})
 				.setNegativeButton(android.R.string.cancel, null)
@@ -480,14 +486,19 @@ public class SMSPopupActivity extends Activity {
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		
-		menu.add(Menu.NONE, CONTEXT_TTS_ID, Menu.NONE, "Text-to-speech");
-		
-//		String contactId = message.getContactId();
-//		if (contactId == null || new String("0").equals(contactId)) {
-//			menu.add(0, 0, 0, "Create contact");
-//		} else {
-//			menu.add(0, 1, 0,  "View contact");
-//		}
+		menu.add(Menu.NONE, CONTEXT_TTS_ID, Menu.NONE, getString(R.string.button_tts));
+
+		// If all buttons are hidden then lets add all options to the context menu
+		if (!myPrefs.getBoolean(getString(R.string.pref_show_buttons_key),
+				Boolean.valueOf(getString(R.string.pref_show_buttons_default)))) {
+			
+			// TODO: make a "mark read" check box here			
+			menu.add(Menu.NONE, CONTEXT_CLOSE_ID, Menu.NONE, getString(R.string.button_close));
+			menu.add(Menu.NONE, CONTEXT_REPLY_ID, Menu.NONE, getString(R.string.button_reply));			
+			menu.add(Menu.NONE, CONTEXT_DELETE_ID, Menu.NONE, getString(R.string.button_delete));
+//			.setCheckable(true)
+//			.setIcon(android.R.drawable.ic_menu_delete);
+		}		
 	}
 
 	/*
@@ -502,9 +513,17 @@ public class SMSPopupActivity extends Activity {
 				} else {
 					speakMessage();
 				}
-			case CONTEXT_VIEW_CONTACT_ID:
-				
-			case CONTEXT_ADD_CONTACT_ID:
+				break;
+			case CONTEXT_CLOSE_ID:
+				closeMessage();
+				break;
+			case CONTEXT_REPLY_ID:
+				replyToMessage();
+				break;
+			case CONTEXT_DELETE_ID:
+				//showDialog(DELETE_DIALOG);
+				deleteMessage();
+				break;
 		}		
 		return super.onContextItemSelected(item);
 	}
@@ -519,7 +538,7 @@ public class SMSPopupActivity extends Activity {
 	};
 	
 	/*
-	 * Speak the message out using TTS library
+	 * Speak the message out loud using TTS library
 	 */
 	private void speakMessage() {
 		ClearAllReceiver.removeCancel(getApplicationContext());
@@ -529,5 +548,87 @@ public class SMSPopupActivity extends Activity {
 		
 		// Speak the message!
 		myTts.speak(message.getMessageBody(), 0, null);
+	}
+
+	/*
+	 * Close the message window/popup, mark the message read if the user has this option on
+	 */
+	private void closeMessage() {
+		Intent i = new Intent(SMSPopupActivity.this.getApplicationContext(),
+				SMSPopupUtilsService.class);
+		i.setAction(SMSPopupUtilsService.ACTION_MARK_MESSAGE_READ);
+		i.putExtras(message.toBundle());
+		SMSPopupUtilsService.beginStartingService(
+				SMSPopupActivity.this.getApplicationContext(), i);
+
+		// Finish up this activity
+		myFinish();
+
+	}
+	
+	/*
+	 * Reply to the current message, start the reply intent
+	 */
+	private void replyToMessage() {
+		exitingKeyguardSecurely = true;
+		ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
+			public void LaunchOnKeyguardExitSuccess() {
+				Intent reply = message.getReplyIntent();
+				SMSPopupActivity.this.getApplicationContext().startActivity(reply);
+				replying = true;
+				myFinish();
+			}
+		});
+		//ManageNotification.clearAll(SMSPopupActivity.this.getApplicationContext(), true);
+		//myFinish();
+	}
+	
+	/*
+	 * View the private message (this basically just unlocks the keyguard and then
+	 * reloads the activity).
+	 */
+	private void viewMessage() {
+		exitingKeyguardSecurely = true;
+		ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
+			public void LaunchOnKeyguardExitSuccess() {
+				// NOTE: not doing anything here now, the views will just be refreshed in refreshPrivacy()
+				// this will just unlock the keyguard 
+//				Intent i = getIntent();
+//				//popup.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+//				i.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);				
+//				i.putExtra(SmsMmsMessage.EXTRAS_NOTIFY, false);
+//				startActivity(i);
+			}
+		});
+	}
+	
+	/*
+	 * Take the user to the messaging app inbox
+	 */
+	private void gotoInbox() {
+		exitingKeyguardSecurely = true;
+		ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
+			public void LaunchOnKeyguardExitSuccess() {
+				Intent i = SMSPopupUtils.getSmsIntent();
+				SMSPopupActivity.this.getApplicationContext().startActivity(i);
+				inbox = true;
+				myFinish();
+			}
+		});
+		//myFinish();
+	}
+
+	/*
+	 * Delete the current message from the system database
+	 */
+	private void deleteMessage() {
+		Intent i = new Intent(
+				SMSPopupActivity.this.getApplicationContext(),
+				SMSPopupUtilsService.class);
+		i.setAction(SMSPopupUtilsService.ACTION_DELETE_MESSAGE);
+		i.putExtras(message.toBundle());
+		SMSPopupUtilsService.beginStartingService(
+				SMSPopupActivity.this.getApplicationContext(), i);
+		myFinish();
 	}
 }

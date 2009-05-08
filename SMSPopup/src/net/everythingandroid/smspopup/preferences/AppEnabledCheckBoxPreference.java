@@ -1,13 +1,9 @@
 package net.everythingandroid.smspopup.preferences;
 
-import net.everythingandroid.smspopup.Log;
-import net.everythingandroid.smspopup.SMSReceiver;
-import android.content.ComponentName;
+import net.everythingandroid.smspopup.SMSPopupUtils;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.preference.CheckBoxPreference;
 import android.util.AttributeSet;
-
 
 public class AppEnabledCheckBoxPreference extends CheckBoxPreference {
 	private Context context;
@@ -30,21 +26,7 @@ public class AppEnabledCheckBoxPreference extends CheckBoxPreference {
 
 	@Override
 	protected void onClick() {
-		super.onClick();
-		
-		PackageManager pm = (PackageManager) context.getPackageManager();
-		ComponentName cn = new ComponentName(context, SMSReceiver.class);
-
-		if (isChecked()) {
-			Log.v("SMSPopup receiver is enabled");
-			pm.setComponentEnabledSetting(cn, 
-					PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, 
-					PackageManager.DONT_KILL_APP);
-		} else {
-			Log.v("SMSPopup receiver is disabled");
-			pm.setComponentEnabledSetting(cn, 
-					PackageManager.COMPONENT_ENABLED_STATE_DISABLED, 
-					PackageManager.DONT_KILL_APP);
-		}
+		super.onClick();		
+		SMSPopupUtils.enableSMSPopup(context, isChecked());
 	}
 }

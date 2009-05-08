@@ -22,6 +22,7 @@
    <string name="button_next">Next</string>
    <string name="button_previous">Previous</string>
    <string name="button_unlock">Unlock</string>
+   <string name="button_tts">Text-to-speech</string>
    
 <!-- Main Preferences -->
    <string name="pref_config_title">SMS Popup Configuration</string>
@@ -97,6 +98,12 @@
    <string name="pref_inbox_app_title">Choose Inbox App</string>
    <string name="pref_inbox_app_summary">Choose the application that is launched for multiple messages</string>
    <string name="pref_inbox_app_info">Note that the "Reply" messaging application is set by the system</string>
+
+   <string name="pref_show_buttons_key">showbuttons</string>
+   <string name="pref_show_buttons_title">Show Buttons</string>
+   <string name="pref_show_buttons_summaryon">Buttons on popup are visible</string>
+   <string name="pref_show_buttons_summaryoff">Buttons are hidden in long press menu</string>
+   <string name="pref_show_buttons_default">true</string>
 
    <string name="pref_show_delete_button_key">showdelete</string>
    <string name="pref_show_delete_button_title">Show a Delete Button</string>

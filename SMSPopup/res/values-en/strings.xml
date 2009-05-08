@@ -18,6 +18,7 @@
    <string name="button_view">View</string>
    <string name="button_view_mms">View MMS</string>
    <string name="button_delete">Delete</string>
+   <string name="button_tts">Text-to-speech</string>
    
    <!-- Not yet implemented -->
    <string name="button_next">Next</string>
@@ -74,6 +75,10 @@
    <string name="pref_inbox_app_title">Choose Inbox App</string>
    <string name="pref_inbox_app_summary">Choose the application that is launched for multiple messages</string>
    <string name="pref_inbox_app_info">Note that the "Reply" messaging application is set by the system</string>
+
+   <string name="pref_show_buttons_title">Show Buttons</string>
+   <string name="pref_show_buttons_summaryon">Buttons on popup are visible</string>
+   <string name="pref_show_buttons_summaryoff">Buttons are hidden in long press menu</string>
 
    <string name="pref_show_delete_button_title">Show a Delete Button</string>
    <string name="pref_show_delete_button_summaryon">Delete button is enabled</string>
