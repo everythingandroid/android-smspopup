@@ -326,6 +326,7 @@ public class SMSPopupActivity extends Activity {
 		} else {
 			// Otherwise hide MMS layout
 			mmsLinearLayout.setVisibility(View.GONE);
+			
 			//messageScrollView.setVisibility(View.VISIBLE);
 
 			// Refresh privacy settings (hide/show message) depending on privacy setting
@@ -396,6 +397,7 @@ public class SMSPopupActivity extends Activity {
 				messageScrollView.setVisibility(View.VISIBLE);
 			}
 		} else {
+			viewButtonLayout.setVisibility(View.GONE);
 			messageScrollView.setVisibility(View.VISIBLE);
 		}
 		
