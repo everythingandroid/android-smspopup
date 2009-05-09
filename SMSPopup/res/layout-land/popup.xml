@@ -48,7 +48,7 @@
 		</ScrollView><LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/MmsLinearLayout" android:orientation="vertical" android:layout_weight="1" android:paddingBottom="7sp" android:paddingTop="7sp">
          <TextView android:autoLink="all" android:layout_width="fill_parent" android:textColor="#FFFFFF" android:textSize="16sp" android:shadowColor="@android:color/white" android:paddingRight="5sp" android:paddingLeft="5sp" android:gravity="center" android:id="@+id/MmsSubjectTextView" android:layout_height="wrap_content" android:paddingBottom="12sp" android:text="@string/mms_subject" />
          <Button android:layout_width="wrap_content" android:text="@string/button_view_mms" android:id="@+id/ViewMmsButton" android:layout_height="wrap_content" android:layout_gravity="center" android:minWidth="150sp"></Button>
-      </LinearLayout><LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center" android:id="@+id/ViewButtonLinearLayout" android:layout_weight="1" android:paddingTop="7sp" android:paddingBottom="7sp">
+      </LinearLayout><LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center" android:id="@+id/ViewButtonLinearLayout" android:layout_weight="1" android:paddingTop="7sp" android:paddingBottom="7sp" android:visibility="gone">
 			<Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ViewButton" android:text="@string/button_view" android:minWidth="150sp"></Button>
 		</LinearLayout>
 	<LinearLayout android:id="@+id/ButtonLinearLayout"
