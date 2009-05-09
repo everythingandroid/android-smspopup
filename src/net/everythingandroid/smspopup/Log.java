@@ -7,10 +7,11 @@ public class Log {
 
 	private static final boolean DEBUG = true;
 	//private static final boolean DEBUG = false;
-	static final boolean LOGV = DEBUG ? Config.LOGD : Config.LOGV;
+	//static final boolean LOGV = DEBUG ? Config.LOGD : Config.LOGV;
 
 	public static void v(String msg) {
-		if (LOGV) {
+		if (DEBUG) {
+		//if (LOGV) {
 			android.util.Log.v(LOGTAG, msg);
 		}
 	}

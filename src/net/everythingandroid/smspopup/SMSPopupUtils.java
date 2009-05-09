@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import android.app.ActivityManager;
-import android.app.ActivityManager.RecentTaskInfo;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -866,11 +865,31 @@ public class SMSPopupUtils {
 	public static final boolean inMessagingApp(Context context) {
 		// TODO: move these to static strings somewhere
 		final String PACKAGE_NAME = "com.android.mms";
-		final String COMPOSE_CLASS_NAME = "com.android.mms.ui.ComposeMessageActivity";
+		//final String COMPOSE_CLASS_NAME = "com.android.mms.ui.ComposeMessageActivity";
 		final String CONVO_CLASS_NAME = "com.android.mms.ui.ConversationList";
 		
 		ActivityManager mAM = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-		List<RecentTaskInfo> mActivityList = mAM.getRecentTasks(1, 0);		
+		
+		List<RunningTaskInfo> mRunningTaskList = mAM.getRunningTasks(1);
+		Iterator<RunningTaskInfo> mIterator = mRunningTaskList.iterator();
+		if (mIterator.hasNext()) {
+			RunningTaskInfo mRunningTask = (RunningTaskInfo) mIterator.next();
+			if (mRunningTask != null) {
+				ComponentName runningTaskComponent = mRunningTask.baseActivity;
+
+//				Log.v("baseActivity = " + mRunningTask.baseActivity.toString());
+//				Log.v("topActivity = " + mRunningTask.topActivity.toString());
+
+				if (PACKAGE_NAME.equals(runningTaskComponent.getPackageName()) &&
+						 CONVO_CLASS_NAME.equals(runningTaskComponent.getClassName())) {
+					Log.v("User in messaging app - from running task");
+					return true;
+				}				
+			}
+		}
+
+		/*
+		List<RecentTaskInfo> mActivityList = mAM.getRecentTasks(1, 0);
 		Iterator<RecentTaskInfo> mIterator = mActivityList.iterator();
 		
 		if (mIterator.hasNext()) {
@@ -888,22 +907,24 @@ public class SMSPopupUtils {
 						return true;
 					}
 				}
-				/*				
-				These appear to be the 2 main intents that mean the user is using the messaging app
-				
-				action "android.intent.action.MAIN"				
-				data null
-				class "com.android.mms.ui.ConversationList"
-				package "com.android.mms"
-				
-				
-				action "android.intent.action.VIEW"
-				data "content://mms-sms/threadID/3"
-				class "com.android.mms.ui.ComposeMessageActivity"
-				package "com.android.mms"
-				*/
 			}
-		}		
+		}
+		*/
+		
+		/*				
+		These appear to be the 2 main intents that mean the user is using the messaging app
+		
+		action "android.intent.action.MAIN"				
+		data null
+		class "com.android.mms.ui.ConversationList"
+		package "com.android.mms"
+				
+		action "android.intent.action.VIEW"
+		data "content://mms-sms/threadID/3"
+		class "com.android.mms.ui.ComposeMessageActivity"
+		package "com.android.mms"
+		*/
+		
 		return false;
 	}
 	
