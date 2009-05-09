@@ -45,6 +45,7 @@ public class SMSPopupActivity extends Activity {
 	private boolean replying = false;
 	private boolean inbox = false;
 	private boolean privacyMode = false;
+	private boolean messageViewed = true;
 	
 	private static final double WIDTH = 0.8;
 	private static final int DELETE_DIALOG = 0;
@@ -381,17 +382,16 @@ public class SMSPopupActivity extends Activity {
 	 * of the app and the current state of the phone (keyguard on or off) 
 	 */
 	private void refreshPrivacy() {
-		
+		messageViewed = true;
 		if (privacyMode) {
 			//We need to init the keyguard class so we can check if the keyguard is on
 			ManageKeyguard.initialize(getApplicationContext());
 
 			if (ManageKeyguard.inKeyguardRestrictedInputMode()) {
-				Log.v("PRIVACY: HIDING MESSAGE");
+				messageViewed = false;
 				viewButtonLayout.setVisibility(View.VISIBLE);
 				messageScrollView.setVisibility(View.GONE);
 			} else {
-				Log.v("NO PRIVACY: SHOW MESSAGE");
 				viewButtonLayout.setVisibility(View.GONE);
 				messageScrollView.setVisibility(View.VISIBLE);
 			}
@@ -554,13 +554,14 @@ public class SMSPopupActivity extends Activity {
 	 * Close the message window/popup, mark the message read if the user has this option on
 	 */
 	private void closeMessage() {
-		Intent i = new Intent(SMSPopupActivity.this.getApplicationContext(),
-				SMSPopupUtilsService.class);
-		i.setAction(SMSPopupUtilsService.ACTION_MARK_MESSAGE_READ);
-		i.putExtras(message.toBundle());
-		SMSPopupUtilsService.beginStartingService(
-				SMSPopupActivity.this.getApplicationContext(), i);
-
+		if (messageViewed) {
+			Intent i = new Intent(SMSPopupActivity.this.getApplicationContext(),
+					SMSPopupUtilsService.class);
+			i.setAction(SMSPopupUtilsService.ACTION_MARK_MESSAGE_READ);
+			i.putExtras(message.toBundle());
+			SMSPopupUtilsService.beginStartingService(
+					SMSPopupActivity.this.getApplicationContext(), i);
+		}
 		// Finish up this activity
 		myFinish();
 
