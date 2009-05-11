@@ -382,7 +382,8 @@ public class SMSPopupActivity extends Activity {
 	 * This handles hiding and showing various views depending on the privacy settings
 	 * of the app and the current state of the phone (keyguard on or off) 
 	 */
-	private void refreshPrivacy() {
+	final private void refreshPrivacy() {
+		Log.v("refreshPrivacy()");
 		messageViewed = true;
 		if (privacyMode) {
 			//We need to init the keyguard class so we can check if the keyguard is on
@@ -582,8 +583,6 @@ public class SMSPopupActivity extends Activity {
 				myFinish();
 			}
 		});
-		//ManageNotification.clearAll(SMSPopupActivity.this.getApplicationContext(), true);
-		//myFinish();
 	}
 	
 	/*
@@ -593,14 +592,15 @@ public class SMSPopupActivity extends Activity {
 	private void viewMessage() {
 		exitingKeyguardSecurely = true;
 		ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
-			public void LaunchOnKeyguardExitSuccess() {
-				// NOTE: not doing anything here now, the views will just be refreshed in refreshPrivacy()
-				// this will just unlock the keyguard 
-//				Intent i = getIntent();
-//				//popup.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-//				i.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);				
-//				i.putExtra(SmsMmsMessage.EXTRAS_NOTIFY, false);
-//				startActivity(i);
+			public void LaunchOnKeyguardExitSuccess() {				
+				// Yet another fix for the View button in privacy mode :(
+				// This will remotely call refreshPrivacy in case the user doesn't have the security pattern on
+				// (so the screen will not refresh and therefore the popup will not come out of privacy mode)
+				runOnUiThread(new Runnable() {
+					public void run() {
+						refreshPrivacy();
+					}
+				});
 			}
 		});
 	}
@@ -618,7 +618,6 @@ public class SMSPopupActivity extends Activity {
 				myFinish();
 			}
 		});
-		//myFinish();
 	}
 
 	/*
