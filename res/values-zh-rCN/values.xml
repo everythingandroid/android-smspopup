@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- App Strings -->
+<string name="app_name">SMS Popup</string>
+<string name="new_text_at">新短信：%s</string>
+<string name="unread_text_waiting">%d 其他未读短信</string>
+<string name="mms_subject">主题:</string>
+<!-- Notification Strings -->
+<string name="notification_multiple_title">新短信</string>
+<string name="notification_multiple_text">%d 个未读短信。</string>
+<string name="notification_scroll_privacy">新短信来源: %s</string>
+<!-- Button Strings -->
+<string name="button_close">关闭</string>
+<string name="button_reply">回复</string>
+<string name="button_inbox">收件箱</string>
+<string name="button_view">查看</string>
+<string name="button_view_mms">查看彩信</string>
+<string name="button_delete">删除</string>
+<!-- Not yet implemented -->
+<string name="button_next">下一条</string>
+<string name="button_previous">上一条</string>
+<string name="button_unlock">解锁</string>
+<!-- Main Preferences -->
+<string name="pref_config_title">SMS Popup设置</string>
+<string name="pref_other_title">其他</string>
+<string name="pref_enabled_title">启用SMS Popup</string>
+<string name="pref_enabled_summaryon">SMS Popup已启用</string>
+<string name="pref_enabled_summaryoff">SMS Popup已关闭</string>
+<string name="pref_about_title">关于</string>
+<string name="pref_about_summary">关于SMS Popup</string>
+<string name="pref_about_text">开发者: Adam K\nEmail: adam@everythingandroid.net\n博客: http://www.everythingandroid.net\n\nSMS Popup 是一款简单的应用程序，当您收到短信时会弹出对话框-如果需要也可以同时开启屏幕，解锁键盘。它显示最近的短信, 发件人以及联系人图标（需提前设置）。\n\n您可以随时通过email进行评论，提出建议和bug。\n\n中文汉化: www.hiapk.com \n\n德语版翻译: Feyyaz A.\nEmail: f_alingan@hotmail.com\n网站: http://www.yenio.com\n\nDutch 翻译: mellie@xs4all.nl\n\n西班牙语版翻译: Diego Fernández\nEmail: profediego@gmail.com\n\n俄罗斯语版翻译: Artem Kavalerov\nEmail: artem.kavalerov@gmail.com\n\n感谢Min Tran提供图标。\n(http://min.frexy.com)\n</string>
+<string name="pref_sendemail_title">给开发者发E-mail</string>
+<string name="pref_sendemail_summary">通过E-mail给开发者发送评论或提交Bug。</string>
+<string name="pref_sendemail_dialog">是否允许我把您的系统信息添加至e-mail中(这将帮助我更快修复bug)?</string>
+<string name="pref_sendemail_buttonok">同意</string>
+<string name="pref_sendemail_buttoncancel">拒绝</string>
+<!-- Additional Preferences -->
+<string name="pref_additional_title">更多设置</string>
+<string name="pref_additional_summary">其他 SMS Popup 设置</string>
+<string name="pref_timeout_title">屏幕超时</string>
+<string name="pref_timeout_summary">超过此事件屏幕将进入睡眠状态</string>
+<string name="pref_dimscreen_title">半亮弹出窗口</string>
+<string name="pref_dimscreen_summaryon">半亮显示弹出窗口(节省电量)</string>
+<string name="pref_dimscreen_summaryoff">全亮显示弹出窗口</string>
+<string name="pref_privacy_title">隐私模式</string>
+<string name="pref_privacy_summaryon">只在解锁后显示短信内容</string>
+<string name="pref_privacy_summaryoff">之间显示短信内容</string>
+<string name="pref_markread_title">标记已读</string>
+<string name="pref_markread_summaryon">点击\"关闭\"后，标记短信为已读</string>
+<string name="pref_markread_summaryoff">点击\"关闭\"后，不标记短信为已读</string>
+<string name="pref_onlyShowOnKeyguard_title">禁止弹出</string>
+<string name="pref_onlyShowOnKeyguard_summaryon">仅在解锁后显示弹出窗口</string>
+<string name="pref_onlyShowOnKeyguard_summaryoff">总是弹出</string>
+<!-- Not yet implemented -->
+<string name="pref_require_unlock_title">需要解锁屏幕</string>
+<string name="pref_require_unlock_summaryon">屏幕解锁前隐藏按钮</string>
+<string name="pref_require_unlock_summaryoff">直接显示按钮</string>
+<!-- Not yet implemented -->
+<string name="pref_inbox_app_title">选择收件箱程序</string>
+<string name="pref_inbox_app_summary">选择多条短信时启用的程序</string>
+<string name="pref_inbox_app_info">请注意：“回复”短信程序是系统设置的</string>
+<string name="pref_show_delete_button_title">显示删除按钮</string>
+<string name="pref_show_delete_button_summaryon">已启用删除按钮</string>
+<string name="pref_show_delete_button_summaryoff">已关闭删除按钮</string>
+<string name="pref_show_delete_button_dialog_title">删除短信</string>
+<string name="pref_show_delete_button_dialog_text">确定？</string>
+<string name="pref_blur_title">模糊背景</string>
+<string name="pref_blur_summaryon">短信界面下方的窗口将被模糊显示</string>
+<string name="pref_blur_summaryoff">短信界面下方的窗口不会被模糊显示</string>
+<!-- Notification Preferences -->
+<string name="pref_notif_title">通知</string>
+<string name="pref_notif_summary">通知设置</string>
+<!-- Category headings -->
+<string name="pref_notif_category_title">通知设置</string>
+<string name="pref_vibrate_category_title">振动设置</string>
+<string name="pref_flashled_category_title">LED灯设置</string>
+<string name="pref_reminder_category_title">提醒设置</string>
+<string name="pref_notif_enabled_title">启用通知</string>
+<string name="pref_notif_enabled_summaryon">已启用通知</string>
+<string name="pref_notif_enabled_summaryoff">已关闭通知</string>
+<string name="pref_notif_enabled_warning">为避免冲突和多次通知，请关闭系统短信通知以及其他收到短信时进行通知的软件。\n\n关闭系统短信通知步骤：打开短信程序，点击菜单 -> 设置并取消通知。</string>
+<string name="pref_notif_test_title">测试通知</string>
+<string name="pref_notif_test_summary">测试通知</string>
+<string name="pref_notif_test_message">正在测试通知！</string>
+<string name="pref_notif_sound_title">通知声</string>
+<string name="pref_notif_sound_summary">收到短信时播放此铃音</string>
+<string name="pref_vibrate_title">振动</string>
+<string name="pref_vibrate_summaryon">振动已开启</string>
+<string name="pref_vibrate_summaryoff">振动已关闭</string>
+<string name="pref_vibrate_pattern_title">振动模式</string>
+<string name="pref_vibrate_pattern_summary">设置振动模式</string>
+<string name="pref_vibrate_pattern_ok">自定义振动模式</string>
+<string name="pref_vibrate_pattern_bad">自定义振动模式不可用, 使用默认</string>
+<string name="pref_vibrate_pattern_help">输入自定义振动模式格式:\n停止振动毫秒数, 开始振动毫秒数, 等等.\n\n例如:\n0,1000\n0,500,200,500,200,500</string>
+<string name="pref_flashled_title">LED灯闪烁</string>
+<string name="pref_flashled_summaryon">收到短信时LED灯闪烁</string>
+<string name="pref_flashled_summaryoff">收到短信时LED灯不闪烁</string>
+<string name="pref_flashled_color_title">LED灯颜色</string>
+<string name="pref_flashled_color_summary">LED灯的颜色</string>
+<string name="pref_flashled_color_custom_dialog_red">红:</string>
+<string name="pref_flashled_color_custom_dialog_green">绿:</string>
+<string name="pref_flashled_color_custom_dialog_blue">蓝:</string>
+<string name="pref_flashled_color_custom_dialog_preview">预览:</string>
+<string name="pref_flashled_color_custom_set">自定义LED灯颜色</string>
+<string name="pref_flashled_pattern_title">LED灯闪烁频率</string>
+<string name="pref_flashled_pattern_summary">设置LED灯闪烁频率</string>
+<string name="pref_flashled_pattern_ok">自定义LED灯闪烁频率</string>
+<string name="pref_flashled_pattern_bad">自定义LED灯闪烁频率无效,使用默认</string>
+<string name="pref_flashled_pattern_help">输入LED灯开关的毫秒数</string>
+<string name="pref_flashled_pattern_help_on">开启时间:</string>
+<string name="pref_flashled_pattern_help_off">关闭时间:</string>
+<string-array name="pref_led_pattern_entries">
+<item>Fast</item>
+<item>Normal</item>
+<item>Slow</item>
+<item>Custom</item>
+</string-array>
+<string name="pref_notif_repeat_title">启用提醒</string>
+<string name="pref_notif_repeat_summaryon">在有未读短信时进行提醒</string>
+<string name="pref_notif_repeat_summaryoff">在有未读短信时不进行提醒</string>
+<string name="pref_notif_repeat_interval_title">提醒间隔</string>
+<string name="pref_notif_repeat_interval_summary">两次提醒间的时间间隔</string>
+<string name="pref_notif_repeat_interval_dialogTitle">间隔 (分钟)</string>
+<string name="pref_notif_repeat_times_title">提醒次数</string>
+<string name="pref_notif_repeat_times_summary">出现提醒通知的次数</string>
+<string name="pref_notif_repeat_screen_on_title">提醒时开启屏幕</string>
+<string name="pref_notif_repeat_screen_on_summaryon">提醒时屏幕变亮</string>
+<string name="pref_notif_repeat_screen_on_summaryoff">提醒时屏幕不变亮</string>
+<string name="pref_notif_repeat_screen_on_warning">警告 - 提醒时开启屏幕很消耗电量</string>
+<!-- Arrays for drop-down prefs -->
+<string-array name="pref_timeout_entries">
+<item>10 秒钟</item>
+<item>20 秒钟</item>
+<item>30 秒钟</item>
+<item>1 分钟</item>
+<item>2 分钟</item>
+<item>5 分钟</item>
+<item>10 分钟</item>
+</string-array>
+<string-array name="pref_vibrate_pattern_entries">
+<item>普通</item>
+<item>长振动</item>
+<item>多次短振动</item>
+<item>多次长振动</item>
+<item>自定义</item>
+</string-array>
+<string-array name="pref_led_color_entries">
+<item>蓝</item>
+<item>绿</item>
+<item>红</item>
+<item>橙</item>
+<item>紫</item>
+<item>青</item>
+<item>自定义</item>
+</string-array>
+<string-array name="pref_notif_repeat_times_entries">
+<item>1</item>
+<item>2</item>
+<item>3</item>
+<item>4</item>
+<item>5</item>
+<item>10</item>
+<item>不断重复</item>
+</string-array>
+</resources> 
