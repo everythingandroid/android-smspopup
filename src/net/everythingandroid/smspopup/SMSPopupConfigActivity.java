@@ -1,12 +1,12 @@
 package net.everythingandroid.smspopup;
 
 import net.everythingandroid.smspopup.preferences.AppEnabledCheckBoxPreference;
+import net.everythingandroid.smspopup.preferences.DialogPreference;
 import net.everythingandroid.smspopup.preferences.EmailDialogPreference;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.preference.DialogPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
