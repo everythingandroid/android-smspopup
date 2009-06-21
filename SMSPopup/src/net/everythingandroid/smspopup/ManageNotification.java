@@ -23,26 +23,26 @@ public class ManageNotification {
 	public static final int NOTIFICATION_TEST = 888;
 	//private static NotificationManager myNM = null;
 	//private static SharedPreferences myPrefs = null;
-	
+
 	/*
 	 * Create the NotificationManager
 	 */
-//	private static void createNM(Context context) {
-//		if (myNM == null) {
-//			myNM = 
-//				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//		}
-//	}
+	//	private static void createNM(Context context) {
+	//		if (myNM == null) {
+	//			myNM =
+	//				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+	//		}
+	//	}
 
 	/*
 	 * Create the PreferenceManager
 	 */
-//	private static void createPM(Context context) {
-//		if (myPrefs == null) {
-//			myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-//		}
-//	}
-	
+	//	private static void createPM(Context context) {
+	//		if (myPrefs == null) {
+	//			myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+	//		}
+	//	}
+
 	/*
 	 * Show/play the notification given a SmsMmsMessage and a notification ID
 	 * (really just NOTIFICATION_ALERT for the main alert and NOTIFICATION_TEST
@@ -70,7 +70,7 @@ public class ManageNotification {
 				return;
 			}
 		}
-		
+
 		// TODO: Should reply flag be set to true?
 		ManageNotification.clearAll(context, true);
 	}
@@ -79,13 +79,13 @@ public class ManageNotification {
 	 * The main notify method, this thing is WAY too long. Needs to be broken up.
 	 */
 	private static void notify(Context context, SmsMmsMessage message,
-	      boolean onlyUpdate, int notif) {
+			boolean onlyUpdate, int notif) {
 
 		// Make sure the PreferenceManager is created
 		//createPM(context);
-		SharedPreferences myPrefs = 
+		SharedPreferences myPrefs =
 			PreferenceManager.getDefaultSharedPreferences(context);
-		
+
 		// Fetch info from the message object
 		int unreadCount = message.getUnreadCount();
 		String messageBody = message.getMessageBody();
@@ -96,14 +96,14 @@ public class ManageNotification {
 		// if not, we're done :)
 		if (unreadCount > 0 &&
 				myPrefs.getBoolean(context.getString(R.string.pref_notif_enabled_key),
-					Boolean.parseBoolean(
-						context.getString(R.string.pref_notif_enabled_default)))) {
-			
+						Boolean.parseBoolean(
+								context.getString(R.string.pref_notif_enabled_default)))) {
+
 			// Make sure the NotificationManager is created
 			//createNM(context);
-			NotificationManager myNM = 
+			NotificationManager myNM =
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-			
+
 			// Get some preferences: vibrate and vibrate_pattern prefs
 			boolean vibrate = myPrefs.getBoolean(context.getString(
 					R.string.pref_vibrate_key),
@@ -118,19 +118,19 @@ public class ManageNotification {
 			// Get LED preferences
 			boolean flashLed = myPrefs.getBoolean(
 					context.getString(R.string.pref_flashled_key),
-			      Boolean.valueOf(context.getString(R.string.pref_flashled_default)));
+					Boolean.valueOf(context.getString(R.string.pref_flashled_default)));
 			String flashLedCol = myPrefs.getString(
-			      context.getString(R.string.pref_flashled_color_key), 
-			      context.getString(R.string.pref_flashled_color_default));
+					context.getString(R.string.pref_flashled_color_key),
+					context.getString(R.string.pref_flashled_color_default));
 			String flashLedColCustom = myPrefs.getString(
-			      context.getString(R.string.pref_flashled_color_custom_key), 
-			      context.getString(R.string.pref_flashled_color_default));
+					context.getString(R.string.pref_flashled_color_custom_key),
+					context.getString(R.string.pref_flashled_color_default));
 			String flashLedPattern = myPrefs.getString(
-			      context.getString(R.string.pref_flashled_pattern_key), 
-			      context.getString(R.string.pref_flashled_pattern_default));
+					context.getString(R.string.pref_flashled_pattern_key),
+					context.getString(R.string.pref_flashled_pattern_default));
 			String flashLedPatternCustom = myPrefs.getString(
-			      context.getString(R.string.pref_flashled_pattern_custom_key), 
-			      context.getString(R.string.pref_flashled_pattern_default));
+					context.getString(R.string.pref_flashled_pattern_custom_key),
+					context.getString(R.string.pref_flashled_pattern_default));
 
 			// The default system ringtone
 			// ("content://settings/system/notification_sound")
@@ -144,13 +144,13 @@ public class ManageNotification {
 			String contentTitle;
 			String contentText;
 			String scrollText;
-			
+
 			// The default intent when the notification is clicked (Inbox)
 			Intent smsIntent = SMSPopupUtils.getSmsIntent();
 
 			// See if user wants some privacy
 			boolean privacyMode = myPrefs.getBoolean(context.getString(R.string.pref_privacy_key),
-			      Boolean.valueOf(context.getString(R.string.pref_privacy_default)));
+					Boolean.valueOf(context.getString(R.string.pref_privacy_default)));
 
 			// If we're updating the notification, do not set the ticker text
 			if (onlyUpdate) {
@@ -159,19 +159,19 @@ public class ManageNotification {
 				// If we're in privacy mode and the keyguard is on then just display
 				// the name of the person, otherwise scroll the name and message
 				if (privacyMode && ManageKeyguard.inKeyguardRestrictedInputMode()) {
-//					scrollText = 
-//						String.format(
-//							context.getString(R.string.notification_scroll_privacy),
-//					      contactName);
-             scrollText = 
-                context.getString(R.string.notification_scroll_privacy, contactName);
+					//					scrollText =
+					//						String.format(
+					//							context.getString(R.string.notification_scroll_privacy),
+					//					      contactName);
+					scrollText =
+						context.getString(R.string.notification_scroll_privacy, contactName);
 
 				} else {
-//					scrollText = String.format(context.getString(R.string.notification_scroll),
-//							contactName,
-//							messageBody);
-               scrollText = context.getString(R.string.notification_scroll,
-                  contactName, messageBody);					
+					//					scrollText = String.format(context.getString(R.string.notification_scroll),
+					//							contactName,
+					//							messageBody);
+					scrollText = context.getString(R.string.notification_scroll,
+							contactName, messageBody);
 				}
 			}
 			// If more than one message waiting ...
@@ -192,56 +192,56 @@ public class ManageNotification {
 
 			// Set the icon, scrolling text and timestamp
 			Notification notification =
-					new Notification(R.drawable.stat_notify_sms, scrollText, timestamp);
-			
+				new Notification(R.drawable.stat_notify_sms, scrollText, timestamp);
+
 			// Set auto-cancel flag
 			notification.flags = Notification.FLAG_AUTO_CANCEL;
-			
+
 			// Set audio stream to ring
 			//notification.audioStreamType = AudioManager.STREAM_RING;
-		 	notification.audioStreamType = Notification.STREAM_DEFAULT;
+			notification.audioStreamType = Notification.STREAM_DEFAULT;
 
-		 	/*
+			/*
 			 * If this is a new notification (not updating a notification)
 			 * then set LED, vibrate and ringtone to fire
 			 */
 			if (!onlyUpdate) {
-			
+
 				// Set up LED pattern and color
 				if (flashLed) {
 					notification.flags |= Notification.FLAG_SHOW_LIGHTS;
 
-					/*					 
+					/*
 					 * Set up LED blinking pattern
 					 */
 					int[] led_pattern = null;
-					
+
 					if (context.getString(R.string.pref_custom_val).equals(flashLedPattern)) {
 						led_pattern = parseLEDPattern(flashLedPatternCustom);
 					} else {
 						led_pattern = parseLEDPattern(flashLedPattern);
 					}
-					
+
 					if (led_pattern == null) {
 						led_pattern = parseLEDPattern(myPrefs.getString(
-						      context.getString(R.string.pref_flashled_pattern_key), 
-						      context.getString(R.string.pref_flashled_pattern_default)));
+								context.getString(R.string.pref_flashled_pattern_key),
+								context.getString(R.string.pref_flashled_pattern_default)));
 					}
-					
+
 					notification.ledOnMS = led_pattern[0];
 					notification.ledOffMS = led_pattern[1];
-					
-					/*					 
+
+					/*
 					 * Set up LED color
 					 */
 					// Check if a custom color is set
 					if (context.getString(R.string.pref_custom_val).equals(flashLedCol)) {
 						flashLedCol = flashLedColCustom;
 					}
-					
+
 					// Default in case the parse fails
 					int col = Color.parseColor(context.getString(R.string.pref_flashled_color_default));
-					
+
 					// Try and parse the color
 					try {
 						col = Color.parseColor(flashLedCol);
@@ -250,27 +250,27 @@ public class ManageNotification {
 					}
 					notification.ledARGB = col;
 				}
-				
+
 				TelephonyManager TM =
 					(TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 				int callState = TM.getCallState();
-				
+
 				/*
 				 * Make sure we're not in a call
 				 */
-				if (callState != TelephonyManager.CALL_STATE_OFFHOOK && 
+				if (callState != TelephonyManager.CALL_STATE_OFFHOOK &&
 						callState != TelephonyManager.CALL_STATE_RINGING) {
-					/*					 
+					/*
 					 * Set up vibrate pattern
 					 */
-					AudioManager AM = 
+					AudioManager AM =
 						(AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		
+
 					// If vibrate is ON, or if phone is set to vibrate
 					if (vibrate || AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode()) {
 						long[] vibrate_pattern = null;
 						if (context.getString(R.string.pref_custom_val).equals(
-						      vibrate_pattern_raw)) {
+								vibrate_pattern_raw)) {
 							vibrate_pattern = parseVibratePattern(vibrate_pattern_custom_raw);
 						} else {
 							vibrate_pattern = parseVibratePattern(vibrate_pattern_raw);
@@ -281,17 +281,17 @@ public class ManageNotification {
 							notification.defaults = Notification.DEFAULT_VIBRATE;
 						}
 					}
-		
+
 					// Notification sound
 					notification.sound = alarmSoundURI;
 				}
 			}
-			
+
 			// Set the PendingIntent if the status message is clicked
 			PendingIntent notifIntent = PendingIntent.getActivity(context, 0, smsIntent, 0);
 
 			// Set the messages that show when the status bar is pulled down
-			notification.setLatestEventInfo(context, contentTitle, 
+			notification.setLatestEventInfo(context, contentTitle,
 					String.format(contentText, unreadCount), notifIntent);
 
 			// Set number of events that this notification signifies (unread
@@ -305,57 +305,57 @@ public class ManageNotification {
 			// sically stop any future reminders.
 			Intent deleteIntent = new Intent(new Intent(context, ReminderReceiver.class));
 			deleteIntent.setAction(Intent.ACTION_DELETE);
-			PendingIntent pendingDeleteIntent = 
-			   PendingIntent.getBroadcast(context, 0, deleteIntent, 0);
+			PendingIntent pendingDeleteIntent =
+				PendingIntent.getBroadcast(context, 0, deleteIntent, 0);
 
 			notification.deleteIntent = pendingDeleteIntent;
 
 			// Seems this is needed for the .number value to take effect
 			// on the Notification
 			myNM.cancelAll();
-			
+
 			// Finally: run the notification!
 			Log.v("*** Notify running ***");
 			myNM.notify(notif, notification);
 		}
 	}
-	
+
 	public static void clear(Context context) {
 		clear(context, NOTIFICATION_ALERT);
 	}
 
 	public static void clear(Context context, int notif) {
-		NotificationManager myNM = 
+		NotificationManager myNM =
 			(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		myNM.cancel(notif);
-//		createNM(context);
-//		if (myNM != null) {
-//			Log.v("Notification cleared");
-//			myNM.cancel(notif);
-//		}		
+		//		createNM(context);
+		//		if (myNM != null) {
+		//			Log.v("Notification cleared");
+		//			myNM.cancel(notif);
+		//		}
 	}
 
 	public static void clearAll(Context context, boolean reply) {
-		SharedPreferences myPrefs = 
+		SharedPreferences myPrefs =
 			PreferenceManager.getDefaultSharedPreferences(context);
-		
+
 		if (reply || myPrefs.getBoolean(
-		      context.getString(R.string.pref_markread_key),
-		      Boolean.parseBoolean(
-		      		context.getString(R.string.pref_markread_default)))) {
-			NotificationManager myNM = 
+				context.getString(R.string.pref_markread_key),
+				Boolean.parseBoolean(
+						context.getString(R.string.pref_markread_default)))) {
+			NotificationManager myNM =
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			myNM.cancelAll();
-						
-//			createNM(context);
-//			
-//			if (myNM != null) {
-//				myNM.cancelAll();
-//				Log.v("All notifications cleared");
-//			}
-		}	
+
+			//			createNM(context);
+			//
+			//			if (myNM != null) {
+			//				myNM.cancelAll();
+			//				Log.v("All notifications cleared");
+			//			}
+		}
 	}
-	
+
 	public static void clearAll(Context context) {
 		clearAll(context, true);
 	}
@@ -369,7 +369,7 @@ public class ManageNotification {
 		Long l;
 		String[] splitPattern = stringPattern.split(",");
 		int VIBRATE_PATTERN_MAX_SECONDS = 60000;
-		int VIBRATE_PATTERN_MAX_PATTERN = 30;
+		int VIBRATE_PATTERN_MAX_PATTERN = 100;
 
 		for (int i = 0; i < splitPattern.length; i++) {
 			try {
@@ -382,7 +382,7 @@ public class ManageNotification {
 			}
 			arrayListPattern.add(l);
 		}
-		
+
 		// TODO: can i just cast the whole ArrayList into long[]?
 		int size = arrayListPattern.size();
 		if (size > 0 && size < VIBRATE_PATTERN_MAX_PATTERN) {
@@ -392,19 +392,19 @@ public class ManageNotification {
 			}
 			return pattern;
 		}
-		
+
 		return null;
 	}
-	
+
 	public static int[] parseLEDPattern(String stringPattern) {
 		int[] arrayPattern = new int[2];
 		int on, off;
 		String[] splitPattern = stringPattern.split(",");
-		
+
 		if (splitPattern.length != 2) {
 			return null;
 		}
-		
+
 		int LED_PATTERN_MIN_SECONDS = 0;
 		int LED_PATTERN_MAX_SECONDS = 60000;
 
@@ -413,21 +413,21 @@ public class ManageNotification {
 		} catch (NumberFormatException e) {
 			return null;
 		}
-		
+
 		try {
 			off = Integer.parseInt(splitPattern[1]);
 		} catch (NumberFormatException e) {
-			return null;	
+			return null;
 		}
-		
+
 		if (on >= LED_PATTERN_MIN_SECONDS && on <= LED_PATTERN_MAX_SECONDS &&
-			 off >= LED_PATTERN_MIN_SECONDS && off <= LED_PATTERN_MAX_SECONDS) {
+				off >= LED_PATTERN_MIN_SECONDS && off <= LED_PATTERN_MAX_SECONDS) {
 			arrayPattern[0] = on;
 			arrayPattern[1] = off;
 			return arrayPattern;
 		}
-		 
+
 		return null;
-	}	
+	}
 
 }
