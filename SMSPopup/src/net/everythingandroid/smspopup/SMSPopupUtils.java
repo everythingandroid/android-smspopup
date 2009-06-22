@@ -1,7 +1,5 @@
 package net.everythingandroid.smspopup;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +22,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Contacts;
-import android.provider.Settings;
 import android.provider.Contacts.PeopleColumns;
 import android.provider.Contacts.PhotosColumns;
 import android.telephony.PhoneNumberUtils;
@@ -51,8 +48,6 @@ public class SMSPopupUtils {
 	public static final int MESSAGE_TYPE_SMS = 1;
 	public static final int MESSAGE_TYPE_MMS = 2;
 
-	private static final String TIME_FORMAT_12_HOUR = "h:mm a";
-	private static final String TIME_FORMAT_24_HOUR = "H:mm";
 	private static final String AUTHOR_CONTACT_INFO = "Adam K <adam@everythingandroid.net>";
 
 	/**
@@ -805,24 +800,6 @@ public class SMSPopupUtils {
 
 	public static SmsMmsMessage getRecentMessage(Context context) {
 		return getRecentMessage(context, null);
-	}
-
-	/*
-	 * Format a unix timestamp to a string suitable for display to the user according
-	 * to their system settings (12 or 24 hour time)
-	 */
-	public static String formatTimestamp(Context context, long timestamp) {
-		String HOURS_24 = "24";
-		String hours;
-		hours = Settings.System.getString(context.getContentResolver(), Settings.System.TIME_12_24);
-
-		SimpleDateFormat mSDF = new SimpleDateFormat();
-		if (HOURS_24.equals(hours)) {
-			mSDF.applyLocalizedPattern(TIME_FORMAT_24_HOUR);
-		} else {
-			mSDF.applyLocalizedPattern(TIME_FORMAT_12_HOUR);
-		}
-		return mSDF.format(new Date(timestamp));
 	}
 
 	/**
