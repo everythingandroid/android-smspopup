@@ -9,7 +9,7 @@ public class Log {
 
 	public static void v(String msg) {
 		if (DEBUG) {
-		//if (LOGV) {
+			//if (LOGV) {
 			android.util.Log.v(LOGTAG, msg);
 		}
 	}
