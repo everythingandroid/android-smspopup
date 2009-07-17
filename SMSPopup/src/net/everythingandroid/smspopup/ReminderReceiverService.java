@@ -85,7 +85,7 @@ public class ReminderReceiverService extends Service {
   }
 
   private void processReminder(Intent intent) {
-    int unreadSms = SMSPopupUtils.getUnreadMessagesCount(context);
+    int unreadSms = SMSPopupUtils_.getUnreadMessagesCount(context);
     if (unreadSms > 0) {
       Bundle b = intent.getExtras();
       SmsMmsMessage message = new SmsMmsMessage(context, b);
