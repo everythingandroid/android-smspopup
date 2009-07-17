@@ -23,7 +23,10 @@ public class SMSPopupUtilsService extends Service {
 	
 	public static final String ACTION_UPDATE_NOTIFICATION =
 		"net.everythingandroid.smspopup.ACTION_UPDATE_NOTIFICATION";
-		
+	
+	public static final String ACTION_QUICKREPLY =
+		"net.everythingandroid.smspopup.ACTION_QUICKREPLY";
+			
 	private Context context;
    private ServiceHandler mServiceHandler;
 	private Looper mServiceLooper;
@@ -84,6 +87,11 @@ public class SMSPopupUtilsService extends Service {
 				Log.v("SMSPopupUtilsService: Deleting message");
 				SmsMmsMessage message = new SmsMmsMessage(context, intent.getExtras());
 				message.delete();
+			} else if (ACTION_QUICKREPLY.equals(action)) {
+				Log.v("SMSPopupUtilsService: Quick Reply to message");
+				SmsMmsMessage message = new SmsMmsMessage(context, intent.getExtras());
+				message.setThreadRead();
+				message.replyToMessage(intent.getStringExtra(SmsMmsMessage.EXTRAS_QUICKREPLY));
 			} else if (ACTION_UPDATE_NOTIFICATION.equals(action)) {
 				Log.v("SMSPopupUtilsService: Updating notification");
 

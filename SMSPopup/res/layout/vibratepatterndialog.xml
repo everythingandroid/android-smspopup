@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent" android:orientation="vertical" android:id="@+id/CustomVibrateLinearLayout" android:paddingLeft="5sp" android:paddingRight="5sp" android:layout_height="fill_parent"><ScrollView android:id="@+id/CustomVibrateScrollView" android:layout_width="fill_parent" android:layout_height="fill_parent"><LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:id="@+id/CustomVibrateLinearLayout2" android:layout_height="fill_parent"><TextView android:layout_width="fill_parent" android:id="@+id/CustomVibrateTextView" android:text="@string/pref_vibrate_pattern_help" android:paddingBottom="4sp" android:layout_height="fill_parent"></TextView><EditText android:layout_width="fill_parent" android:id="@+id/CustomVibrateEditText" android:text="@string/pref_vibrate_pattern_default" android:singleLine="true" android:layout_height="wrap_content" android:layout_marginRight="10sp" android:selectAllOnFocus="true"></EditText></LinearLayout>
-</ScrollView>
-
-
-
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:orientation="vertical"
+  android:id="@+id/CustomVibrateLinearLayout"
+  android:paddingLeft="5sp"
+  android:paddingRight="5sp"
+  android:layout_height="fill_parent">
+  <ScrollView
+    android:id="@+id/CustomVibrateScrollView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="fill_parent"
+      android:id="@+id/CustomVibrateLinearLayout2"
+      android:layout_height="fill_parent">
+      <TextView
+        android:layout_width="fill_parent"
+        android:id="@+id/CustomVibrateTextView"
+        android:text="@string/pref_vibrate_pattern_help"
+        android:paddingBottom="4sp"
+        android:layout_height="fill_parent"></TextView>
+      <EditText
+        android:layout_width="fill_parent"
+        android:id="@+id/CustomVibrateEditText"
+        android:text="@string/pref_vibrate_pattern_default"
+        android:singleLine="true"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10sp"
+        android:selectAllOnFocus="true"></EditText>
+    </LinearLayout>
+  </ScrollView>
 </LinearLayout>
