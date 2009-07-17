@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="c_pref_notif_enabled_key">c_notification</string>
+	<string name="c_pref_notif_test_key">c_notiftest</string>
+	<string name="c_pref_notif_sound_key">c_notifsound</string>
+	<string name="c_pref_vibrate_key">c_vibrate</string>
+	<string name="c_pref_vibrate_pattern_key">c_vibrate_pattern</string>
+	<string name="c_pref_vibrate_pattern_custom_key">c_vibrate_pattern_custom</string>
+	<string name="c_pref_flashled_key">c_flashled</string>
+	<string name="c_pref_flashled_color_key">c_flashled_color</string>
+	<string name="c_pref_flashled_color_custom_key">c_flashled_color_custom</string>
+	<string name="c_pref_flashled_pattern_key">c_flashled_pattern</string>
+	<string name="c_pref_flashled_pattern_custom_key">c_flashled_pattern_custom</string>
+	<string name="c_pref_category">c_pref_category</string>
+	
+	<string name="contacts_key">contacts_key</string>
+	<string name="quickmessages_key">quickmessages_key</string>
+	
+	<string name="contact_customization_add">Add Contact</string>
+	<string name="contact_customization_edit">Edit</string>
+	<string name="contact_customization_remove">Remove</string>
+	<string name="contact_customization_save">Save</string>
+	<string name="contact_customization_removed_toast">Contact customization removed</string>
+	
+	<string name="pref_notif_default_title">Default Notifications</string>
+	<string name="pref_notif_default_summary">Notifications for all contacts without an individual customization</string>
+
+	<string name="pref_contacts_title">Contacts Notifications</string>
+	<string name="pref_contacts_summary">Individual contact customization</string>
+	
+	<string name="pref_quickmessage_title">Quick Messages</string>
+	
+	<string name="pref_notif_help_key">notif_help</string>
+	<string name="pref_notif_help_title">Help - I'm confused!</string>
+	<string name="pref_notif_help_summary">Notifications Help</string>
+	<string name="pref_notif_help_message">Help goes here</string>
+	
+</resources>

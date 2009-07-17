@@ -35,11 +35,11 @@
    
    <string name="pref_about_title">A propos</string>
    <string name="pref_about_summary">A propos de SMS Popup</string>
-   <string name="pref_about_text">Créé par: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup est une application simple a pour but de montrer une pop-up de dialogue quand un SMS arrive sur votre Android - allumant ainsi l'écran et débloquant le schéma de blocage si nécesaire. Il montre le message le plus récent, son destinataire et la photo du contact si elle existe.\n\nVous pouvez m'envoyer vos remarques, suggestions ou bugs par mail.\n\nTraduction Française par: Norman Obry nEmail: norman.obry@free.fr\n\nTraduction Allemande par: Feyyaz A.\nEmail: f_alingan@hotmail.com\nSite: http://www.yenio.com\n\nTraduction Hollandaise par: mellie@xs4all.nl\n\nTraduction Espagnole par: Diego Fernández\nEmail: profediego@gmail.com\n\nTraduction Russe par: Artem Kavalerov\nEmail: artem.kavalerov@gmail.com\n\nCredits à Min Tran pour l'icône de l'application.\n(http://min.frexy.com)\n</string>
+   <string name="pref_about_text">Créé par: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup est une application simple a pour but de montrer une pop-up de dialogue quand un SMS arrive sur votre Android - allumant ainsi l\'écran et débloquant le schéma de blocage si nécesaire. Il montre le message le plus récent, son destinataire et la photo du contact si elle existe.\n\nVous pouvez m\'envoyer vos remarques, suggestions ou bugs par mail.\n\nTraduction Française par: Norman Obry nEmail: norman.obry@free.fr\n\nTraduction Allemande par: Feyyaz A.\nEmail: f_alingan@hotmail.com\nSite: http://www.yenio.com\n\nTraduction Hollandaise par: mellie@xs4all.nl\n\nTraduction Espagnole par: Diego Fernández\nEmail: profediego@gmail.com\n\nTraduction Russe par: Artem Kavalerov\nEmail: artem.kavalerov@gmail.com\n\nCredits à Min Tran pour l\'icône de l\'application.\n(http://min.frexy.com)\n</string>
    
    <string name="pref_sendemail_title">Mailer le développeur</string>
    <string name="pref_sendemail_summary">Mailer des commentaires ou bugs au développeur</string>
-   <string name="pref_sendemail_dialog">Puis-je inclure les informations de votre système dans le mail(cela m'aidera à analyser les  bugs plus facilement)?</string>
+   <string name="pref_sendemail_dialog">Puis-je inclure les informations de votre système dans le mail(cela m\'aidera à analyser les  bugs plus facilement)?</string>
    <string name="pref_sendemail_buttonok">Bien-Sûr</string>
    <string name="pref_sendemail_buttoncancel">Pas question</string>
    
@@ -47,15 +47,15 @@
    <string name="pref_additional_title">Réglages Additionnels</string>
    <string name="pref_additional_summary">Configuration Additionnelle de SMS Popup</string>
 
-   <string name="pref_timeout_title">Temps d'expiration de l'écran</string>
-   <string name="pref_timeout_summary">L'écran ira en veille après ce temps</string>
+   <string name="pref_timeout_title">Temps d\'expiration de l\'écran</string>
+   <string name="pref_timeout_summary">L\'écran ira en veille après ce temps</string>
    
    <string name="pref_dimscreen_title">Pop-Up sombre</string>
    <string name="pref_dimscreen_summaryon">La fenêtre de dialogue sera sombre (économie de batterie)</string>
    <string name="pref_dimscreen_summaryoff">La fenêtre de dialogue sera lumineuse</string>  
      
    <string name="pref_privacy_title">Privacy Mode</string>
-   <string name="pref_privacy_summaryon">Le message ne sera affiché qu'après déblocage de l'écran</string>
+   <string name="pref_privacy_summaryon">Le message ne sera affiché qu\'après déblocage de l\'écran</string>
    <string name="pref_privacy_summaryoff">Le message sera affiché immédiatement </string>
    
    <string name="pref_markread_title">Marqué comme lu</string>
@@ -63,18 +63,18 @@
    <string name="pref_markread_summaryoff">Les messages ne seront pas marqués comme lus en appuyant sur \"Fermer\"</string>
 
    <string name="pref_onlyShowOnKeyguard_title">Restreindre la Pop-up</string>
-   <string name="pref_onlyShowOnKeyguard_summaryon">La Pop-up apparaît seulement si l'écran de blocage est engagé</string>
+   <string name="pref_onlyShowOnKeyguard_summaryon">La Pop-up apparaît seulement si l\'écran de blocage est engagé</string>
    <string name="pref_onlyShowOnKeyguard_summaryoff">La Pop-up sera toujours affichée</string>
 
    <!-- Not yet implemented -->
-   <string name="pref_require_unlock_title">Requiert le déblocage de l'écran</string>
-   <string name="pref_require_unlock_summaryon">Les boutons seront cachés tant que l'écran est débloqué</string>
+   <string name="pref_require_unlock_title">Requiert le déblocage de l\'écran</string>
+   <string name="pref_require_unlock_summaryon">Les boutons seront cachés tant que l\'écran est débloqué</string>
    <string name="pref_require_unlock_summaryoff">les boutons seront affichés immédiatement</string>
 
    <!-- Not yet implemented -->
-   <string name="pref_inbox_app_title">Choisir l'application de Boîte de réception</string>
-   <string name="pref_inbox_app_summary">Choisir l'application qui est lancée pour de multiples messages</string>
-   <string name="pref_inbox_app_info">Notez que le bouton "Répondre" de l'application de messagerie est réglé par le système</string>
+   <string name="pref_inbox_app_title">Choisir l\'application de Boîte de réception</string>
+   <string name="pref_inbox_app_summary">Choisir l\'application qui est lancée pour de multiples messages</string>
+   <string name="pref_inbox_app_info">Notez que le bouton "Répondre" de l\'application de messagerie est réglé par le système</string>
 
    <string name="pref_show_buttons_title">Afficher boutons</string>
    <string name="pref_show_buttons_summaryon">Les boutons de la pop-up sont visibles</string>
@@ -103,14 +103,14 @@
    <string name="pref_notif_enabled_title">Activer Notifications</string>
    <string name="pref_notif_enabled_summaryon">Les Notifications sont activées</string>
    <string name="pref_notif_enabled_summaryoff">Les Notifications sont désactivées</string>
-   <string name="pref_notif_enabled_warning">Pour éviter les conflits et les alertes multiples, désactivez SVP les notifications système de SMS et toute application qui pourrait notifier l'arriver d'un SMS.\n\n Pour désactiver la notification système des SMS, allez dans l'appli SMS, appuyez sur le bouton Menu -> réglages et décochez notifications.</string>
+   <string name="pref_notif_enabled_warning">Pour éviter les conflits et les alertes multiples, désactivez SVP les notifications système de SMS et toute application qui pourrait notifier l\'arriver d\'un SMS.\n\n Pour désactiver la notification système des SMS, allez dans l\'appli SMS, appuyez sur le bouton Menu -> réglages et décochez notifications.</string>
 
    <string name="pref_notif_test_title">Test de Notification</string>
    <string name="pref_notif_test_summary">Testez votre notification</string>
    <string name="pref_notif_test_message">Testez votre notification maintenant !</string>
    
    <string name="pref_notif_sound_title">Son de notification</string>
-   <string name="pref_notif_sound_summary">Ce son sera joué à l'arrivée d'un message</string>
+   <string name="pref_notif_sound_summary">Ce son sera joué à l\'arrivée d\'un message</string>
 
    <string name="pref_vibrate_title">Vibration</string>
    <string name="pref_vibrate_summaryon">La vibration est activée</string>
@@ -161,9 +161,9 @@
    <string name="pref_notif_repeat_times_summary">Le Nombre de notifications à jouer</string>
 
    <string name="pref_notif_repeat_screen_on_title">Ecran activé lors des rappels</string>
-   <string name="pref_notif_repeat_screen_on_summaryon">Les rappels vont allumer l'écran</string>
-   <string name="pref_notif_repeat_screen_on_summaryoff">Les rappels ne vont pas allumer l'écran</string>
-   <string name="pref_notif_repeat_screen_on_warning">Attention - Allumer l'écran pour les rappels peut affecter la durée de vie de la batterie significativement.</string>
+   <string name="pref_notif_repeat_screen_on_summaryon">Les rappels vont allumer l\'écran</string>
+   <string name="pref_notif_repeat_screen_on_summaryoff">Les rappels ne vont pas allumer l\'écran</string>
+   <string name="pref_notif_repeat_screen_on_warning">Attention - Allumer l\'écran pour les rappels peut affecter la durée de vie de la batterie significativement.</string>
    
 <!-- Arrays for drop-down prefs -->
    <string-array name="pref_timeout_entries">
