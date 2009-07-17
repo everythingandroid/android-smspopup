@@ -15,9 +15,9 @@ public class ExternalEventReceiver extends BroadcastReceiver {
     String action = intent.getAction();
 
     if (ACTION_SMSPOPUP_ENABLE.equals(action)) {
-      SMSPopupUtils_.enableSMSPopup(context, true);
+      SmsPopupUtils.enableSMSPopup(context, true);
     } else if (ACTION_SMSPOPUP_DISABLE.equals(action)) {
-      SMSPopupUtils_.enableSMSPopup(context, false);
+      SmsPopupUtils.enableSMSPopup(context, false);
     }
   }
 }

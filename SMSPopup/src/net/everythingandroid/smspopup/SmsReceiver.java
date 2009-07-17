@@ -4,12 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-public class SMSReceiver_ extends BroadcastReceiver {
+public class SmsReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     Log.v("SMSReceiver: onReceive()");
-    intent.setClass(context, SMSReceiverService_.class);
+    intent.setClass(context, SmsReceiverService.class);
     intent.putExtra("result", getResultCode());
-    SMSReceiverService_.beginStartingService(context, intent);
+    SmsReceiverService.beginStartingService(context, intent);
   }
 }

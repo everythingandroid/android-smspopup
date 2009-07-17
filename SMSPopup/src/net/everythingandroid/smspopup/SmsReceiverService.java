@@ -15,7 +15,7 @@ import android.os.Process;
 import android.preference.PreferenceManager;
 import android.telephony.gsm.SmsMessage;
 
-public class SMSReceiverService_ extends Service {
+public class SmsReceiverService extends Service {
   private static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
   private static final String ACTION_MMS_RECEIVED = "android.provider.Telephony.WAP_PUSH_RECEIVED";
   private static final String MMS_DATA_TYPE = "application/vnd.wap.mms-message";
@@ -92,7 +92,7 @@ public class SMSReceiverService_ extends Service {
 
       // NOTE: We MUST not call stopSelf() directly, since we need to
       // make sure the wake lock acquired by AlertReceiver is released.
-      finishStartingService(SMSReceiverService_.this, serviceId);
+      finishStartingService(SmsReceiverService.this, serviceId);
     }
   }
 
@@ -105,7 +105,7 @@ public class SMSReceiverService_ extends Service {
     Bundle bundle = intent.getExtras();
     if (bundle != null) {
 
-      SmsMessage[] messages = SMSPopupUtils_.getMessagesFromIntent(intent);
+      SmsMessage[] messages = SmsPopupUtils.getMessagesFromIntent(intent);
       if (messages != null) {
         SmsMessage sms = messages[0];
 
@@ -151,7 +151,7 @@ public class SMSReceiverService_ extends Service {
 
           while (count < MESSAGE_RETRY && !equalToIntent) {
             count++;
-            smsMessage = SMSPopupUtils_.getSmsDetails(context);
+            smsMessage = SmsPopupUtils.getSmsDetails(context);
             if (smsMessage != null) {
 
               equalToIntent = smsMessage.equals(address, timestamp, timestamp_provider, body);
@@ -179,7 +179,7 @@ public class SMSReceiverService_ extends Service {
            * recent read message instead.
            */
           if (!equalToIntent) {
-            smsMessage = SMSPopupUtils_.getSmsDetails(context, false);
+            smsMessage = SmsPopupUtils.getSmsDetails(context, false);
             if (smsMessage != null) {
               Log.v("Couldn't find unread message that matches intent");
               Log.v("Showing most recent read message instead");
@@ -205,7 +205,7 @@ public class SMSReceiverService_ extends Service {
     ManageKeyguard.initialize(context);
 
     if (ManageKeyguard.inKeyguardRestrictedInputMode() ||
-        (!onlyShowOnKeyguard && !SMSPopupUtils_.inMessagingApp(context))) {
+        (!onlyShowOnKeyguard && !SmsPopupUtils.inMessagingApp(context))) {
       Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
       Intent popup = smsMessage.getPopupIntent();
       ManageWakeLock.acquirePartial(context);
@@ -230,7 +230,7 @@ public class SMSReceiverService_ extends Service {
     // the MMS details in the database).  This should really be
     // a content listener that waits for a while then gives up...
     while (mmsMessage == null && count < MESSAGE_RETRY) {
-      mmsMessage = SMSPopupUtils_.getMmsDetails(context);
+      mmsMessage = SmsPopupUtils.getMmsDetails(context);
       if (mmsMessage != null) {
         Log.v("MMS found in content provider");
         SharedPreferences myPrefs =
