@@ -28,7 +28,7 @@ import android.telephony.gsm.SmsManager;
 import java.util.ArrayList;
 
 import net.everythingandroid.smspopup.Log;
-import net.everythingandroid.smspopup.SMSPopupUtils_;
+import net.everythingandroid.smspopup.SmsPopupUtils;
 
 public class SmsMessageSender {
 	private final Context mContext;
@@ -213,7 +213,7 @@ public class SmsMessageSender {
 		try {
 
 			cursor = mContext.getContentResolver().query(
-					SMSPopupUtils_.SMS_CONTENT_URI,
+					SmsPopupUtils.SMS_CONTENT_URI,
 					SERVICE_CENTER_PROJECTION,
 					"thread_id = " + threadId,
 					null,
