@@ -36,7 +36,7 @@ import android.widget.Toast;
 
 import com.google.tts.TTS;
 
-public class SMSPopupActivity extends Activity {
+public class SMSPopupActivity_ extends Activity {
   private SmsMmsMessage message;
 
   private boolean exitingKeyguardSecurely = false;
@@ -304,8 +304,8 @@ public class SMSPopupActivity extends Activity {
       // Start a service that will update the notification in the status bar
       Intent i = new Intent(
           getApplicationContext(),
-          SMSPopupUtilsService.class);
-      i.setAction(SMSPopupUtilsService.ACTION_UPDATE_NOTIFICATION);
+          SMSPopupUtilsService_.class);
+      i.setAction(SMSPopupUtilsService_.ACTION_UPDATE_NOTIFICATION);
 
       // Convert current message to bundle
       i.putExtras(message.toBundle());
@@ -318,8 +318,8 @@ public class SMSPopupActivity extends Activity {
       i.putExtra(SmsMmsMessage.EXTRAS_REPLYING, replying);
 
       // Start the service
-      SMSPopupUtilsService.beginStartingService(
-          SMSPopupActivity.this.getApplicationContext(), i);
+      SMSPopupUtilsService_.beginStartingService(
+          SMSPopupActivity_.this.getApplicationContext(), i);
     }
 
     // Cancel any reminder notifications
@@ -698,12 +698,12 @@ public class SMSPopupActivity extends Activity {
    */
   private void closeMessage() {
     if (messageViewed) {
-      Intent i = new Intent(SMSPopupActivity.this.getApplicationContext(),
-          SMSPopupUtilsService.class);
-      i.setAction(SMSPopupUtilsService.ACTION_MARK_MESSAGE_READ);
+      Intent i = new Intent(SMSPopupActivity_.this.getApplicationContext(),
+          SMSPopupUtilsService_.class);
+      i.setAction(SMSPopupUtilsService_.ACTION_MARK_MESSAGE_READ);
       i.putExtras(message.toBundle());
-      SMSPopupUtilsService.beginStartingService(
-          SMSPopupActivity.this.getApplicationContext(), i);
+      SMSPopupUtilsService_.beginStartingService(
+          SMSPopupActivity_.this.getApplicationContext(), i);
     }
     // Finish up this activity
     myFinish();
@@ -718,7 +718,7 @@ public class SMSPopupActivity extends Activity {
     ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
       public void LaunchOnKeyguardExitSuccess() {
         Intent reply = message.getReplyIntent();
-        SMSPopupActivity.this.getApplicationContext().startActivity(reply);
+        SMSPopupActivity_.this.getApplicationContext().startActivity(reply);
         replying = true;
         myFinish();
       }
@@ -752,8 +752,8 @@ public class SMSPopupActivity extends Activity {
     exitingKeyguardSecurely = true;
     ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
       public void LaunchOnKeyguardExitSuccess() {
-        Intent i = SMSPopupUtils.getSmsIntent();
-        SMSPopupActivity.this.getApplicationContext().startActivity(i);
+        Intent i = SMSPopupUtils_.getSmsIntent();
+        SMSPopupActivity_.this.getApplicationContext().startActivity(i);
         inbox = true;
         myFinish();
       }
@@ -765,12 +765,12 @@ public class SMSPopupActivity extends Activity {
    */
   private void deleteMessage() {
     Intent i = new Intent(
-        SMSPopupActivity.this.getApplicationContext(),
-        SMSPopupUtilsService.class);
-    i.setAction(SMSPopupUtilsService.ACTION_DELETE_MESSAGE);
+        SMSPopupActivity_.this.getApplicationContext(),
+        SMSPopupUtilsService_.class);
+    i.setAction(SMSPopupUtilsService_.ACTION_DELETE_MESSAGE);
     i.putExtras(message.toBundle());
-    SMSPopupUtilsService.beginStartingService(
-        SMSPopupActivity.this.getApplicationContext(), i);
+    SMSPopupUtilsService_.beginStartingService(
+        SMSPopupActivity_.this.getApplicationContext(), i);
     myFinish();
   }
 
@@ -781,14 +781,14 @@ public class SMSPopupActivity extends Activity {
     if (quickReplyMessage != null) {
       if (quickReplyMessage.length() > 0) {
         Intent i = new Intent(
-            SMSPopupActivity.this.getApplicationContext(),
-            SMSPopupUtilsService.class);
-        i.setAction(SMSPopupUtilsService.ACTION_QUICKREPLY);
+            SMSPopupActivity_.this.getApplicationContext(),
+            SMSPopupUtilsService_.class);
+        i.setAction(SMSPopupUtilsService_.ACTION_QUICKREPLY);
         i.putExtras(quickreplyMessage.toBundle());
         i.putExtra(SmsMmsMessage.EXTRAS_QUICKREPLY, quickReplyMessage);
         Log.v("Sending message to " + quickreplyMessage.getContactName());
-        SMSPopupUtilsService.beginStartingService(
-            SMSPopupActivity.this.getApplicationContext(), i);
+        SMSPopupUtilsService_.beginStartingService(
+            SMSPopupActivity_.this.getApplicationContext(), i);
         Toast.makeText(this, "Sending message...", Toast.LENGTH_SHORT).show();
         myFinish();
       } else {
