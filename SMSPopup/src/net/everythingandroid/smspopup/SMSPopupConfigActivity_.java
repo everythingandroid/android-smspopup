@@ -12,7 +12,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
-public class SMSPopupConfigActivity extends PreferenceActivity {
+public class SMSPopupConfigActivity_ extends PreferenceActivity {
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class SMSPopupConfigActivity extends PreferenceActivity {
       //Get version number, not sure if there is a better way to do this
       version = " v" +
       pm.getPackageInfo(
-          SMSPopupConfigActivity.class.getPackage().getName(), 0).versionName;
+          SMSPopupConfigActivity_.class.getPackage().getName(), 0).versionName;
     } catch (NameNotFoundException e) {
       version = "";
     }
@@ -79,7 +79,7 @@ public class SMSPopupConfigActivity extends PreferenceActivity {
 
     // If enabled, send a broadcast to disable other SMS Popup apps
     if (enabled) {
-      SMSPopupUtils.disableOtherSMSPopup(this);
+      SMSPopupUtils_.disableOtherSMSPopup(this);
     }
   }
 }

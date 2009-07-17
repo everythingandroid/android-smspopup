@@ -29,7 +29,7 @@ import android.telephony.TelephonyManager;
 import android.telephony.gsm.SmsMessage;
 import android.text.TextUtils;
 
-public class SMSPopupUtils {
+public class SMSPopupUtils_ {
   //Content URIs for SMS app, these may change in future SDK
   public static final Uri MMS_SMS_CONTENT_URI = Uri.parse("content://mms-sms/");
   public static final Uri THREAD_ID_CONTENT_URI = Uri.withAppendedPath(MMS_SMS_CONTENT_URI, "threadID");
@@ -909,7 +909,7 @@ public class SMSPopupUtils {
    */
   public static void enableSMSPopup(Context context, boolean enable) {
     PackageManager pm = context.getPackageManager();
-    ComponentName cn = new ComponentName(context, SMSReceiver.class);
+    ComponentName cn = new ComponentName(context, SMSReceiver_.class);
 
     // Update preference so it reflects in the preference activity
     SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);

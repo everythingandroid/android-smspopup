@@ -11,7 +11,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.Process;
 
-public class SMSPopupUtilsService extends Service {
+public class SMSPopupUtilsService_ extends Service {
 	public static final String ACTION_MARK_THREAD_READ =
 		"net.everythingandroid.smspopup.ACTION_MARK_THREAD_READ";
 	
@@ -113,7 +113,7 @@ public class SMSPopupUtilsService extends Service {
 				
 				// Get the most recent message + total message counts
 				SmsMmsMessage recentMessage = 
-					SMSPopupUtils.getRecentMessage(context, message);
+					SMSPopupUtils_.getRecentMessage(context, message);
 				
 				// Update the notification in the status bar
 				ManageNotification.update(context, recentMessage);
@@ -121,7 +121,7 @@ public class SMSPopupUtilsService extends Service {
 			
 			// NOTE: We MUST not call stopSelf() directly, since we need to
 			// make sure the wake lock acquired by AlertReceiver is released.
-			finishStartingService(SMSPopupUtilsService.this, serviceId);
+			finishStartingService(SMSPopupUtilsService_.this, serviceId);
 		}
 	}
 
