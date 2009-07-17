@@ -6,27 +6,26 @@ import android.preference.CheckBoxPreference;
 import android.util.AttributeSet;
 
 public class AppEnabledCheckBoxPreference extends CheckBoxPreference {
-	private Context context;
-	
-	public AppEnabledCheckBoxPreference(Context c, AttributeSet attrs,
-			int defStyle) {
-		super(c, attrs, defStyle);
-		context = c;
-	}
+  private Context context;
 
-	public AppEnabledCheckBoxPreference(Context c, AttributeSet attrs) {
-		super(c, attrs);
-		context = c;
-	}
+  public AppEnabledCheckBoxPreference(Context c, AttributeSet attrs, int defStyle) {
+    super(c, attrs, defStyle);
+    context = c;
+  }
 
-	public AppEnabledCheckBoxPreference(Context c) {
-		super(c);
-		context = c;
-	}
+  public AppEnabledCheckBoxPreference(Context c, AttributeSet attrs) {
+    super(c, attrs);
+    context = c;
+  }
 
-	@Override
-	protected void onClick() {
-		super.onClick();		
-		SMSPopupUtils.enableSMSPopup(context, isChecked());
-	}
+  public AppEnabledCheckBoxPreference(Context c) {
+    super(c);
+    context = c;
+  }
+
+  @Override
+  protected void onClick() {
+    super.onClick();
+    SMSPopupUtils.enableSMSPopup(context, isChecked());
+  }
 }

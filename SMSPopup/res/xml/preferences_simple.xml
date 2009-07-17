@@ -50,9 +50,6 @@
 		<PreferenceScreen android:key="pref_notif_key"
 			android:title="@string/pref_notif_title" android:summary="@string/pref_notif_summary"
 			android:dependency="@string/pref_enabled_key">
-		<PreferenceCategory android:title="@string/pref_notif_title">
-		<PreferenceScreen android:key="pref_notif_default_key"
-			android:title="@string/pref_notif_default_title" android:summary="@string/pref_notif_default_summary">
 			<PreferenceCategory android:title="@string/pref_notif_category_title">
 				<net.everythingandroid.smspopup.preferences.DialogCheckBoxPreference
 					android:key="@string/pref_notif_enabled_key" android:title="@string/pref_notif_enabled_title"
@@ -112,7 +109,7 @@
 					android:title="@string/pref_notif_repeat_title" android:summaryOn="@string/pref_notif_repeat_summaryon"
 					android:summaryOff="@string/pref_notif_repeat_summaryoff"
 					android:defaultValue="@string/pref_notif_repeat_default"
-					/>
+					android:dependency="@string/pref_notif_enabled_key" />
 				<ListPreference android:key="@string/pref_notif_repeat_times_key"
 					android:title="@string/pref_notif_repeat_times_title"
 					android:summary="@string/pref_notif_repeat_times_summary"
@@ -135,25 +132,6 @@
 					android:defaultValue="@string/pref_notif_repeat_screen_on_default"
 					android:dependency="@string/pref_notif_repeat_key" />
 			</PreferenceCategory>
-		</PreferenceScreen>
-		<PreferenceScreen android:key="@string/contacts_key"
-			android:title="@string/pref_contacts_title"
-			android:summary="@string/pref_contacts_summary"
-			android:dependency="@string/pref_enabled_key">
-		</PreferenceScreen>
-		<net.everythingandroid.smspopup.preferences.DialogPreference android:key="@string/pref_notif_help_key"
-			android:title="@string/pref_notif_help_title"
-			android:summary="@string/pref_notif_help_summary"
-			android:dialogIcon="@android:drawable/ic_dialog_info"			
-			android:dialogTitle="@string/pref_notif_help_summary"			
-			android:dialogMessage="@string/pref_notif_help_message"
-			android:negativeButtonText="@null" />		
-		</PreferenceCategory>
-		</PreferenceScreen>
-		<PreferenceScreen android:key="@string/quickmessages_key"
-			android:title="Quick Messages"
-			android:summary="quick replies"
-			android:dependency="@string/pref_enabled_key">
 		</PreferenceScreen>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/pref_other_title">
