@@ -1,7 +1,7 @@
 package net.everythingandroid.smspopup.preferences;
 
 import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.SMSPopupUtils_;
+import net.everythingandroid.smspopup.SmsPopupUtils;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.preference.DialogPreference;
@@ -30,9 +30,9 @@ public class EmailDialogPreference extends DialogPreference {
     super.onClick(dialog, which);
 
     if (which == DialogInterface.BUTTON1) {
-      SMSPopupUtils_.launchEmailToIntent(c, c.getString(R.string.app_name) + version, true);
+      SmsPopupUtils.launchEmailToIntent(c, c.getString(R.string.app_name) + version, true);
     } else if (which == DialogInterface.BUTTON2) {
-      SMSPopupUtils_.launchEmailToIntent(c, c.getString(R.string.app_name) + version, false);
+      SmsPopupUtils.launchEmailToIntent(c, c.getString(R.string.app_name) + version, false);
     }
   }
 }

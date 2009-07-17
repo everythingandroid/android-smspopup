@@ -10,7 +10,7 @@
     android:label="@string/app_name"
     android:icon="@drawable/smspopup_icon">
     <activity
-      android:name=".SMSPopupConfigActivity"
+      android:name=".SmsPopupConfigActivity"
       android:label="@string/app_name"
       android:launchMode="singleTask"
       android:clearTaskOnLaunch="true">
@@ -43,12 +43,12 @@
       android:finishOnTaskLaunch="true">
     </activity>
     <activity
-      android:name=".SMSPopupActivity"
+      android:name=".SmsPopupActivity"
       android:theme="@android:style/Theme.Dialog"
       android:launchMode="singleInstance"
       android:taskAffinity="net.everythingandroid.smspopup.popup" />
     <receiver
-      android:name=".SMSReceiver">
+      android:name=".SmsReceiver">
       <intent-filter>
         <action android:name="android.provider.Telephony.SMS_RECEIVED" />
       </intent-filter>
@@ -68,8 +68,8 @@
     </receiver>
     <receiver android:name=".ClearAllReceiver" />
     <receiver android:name=".ReminderReceiver" />
-    <service android:name=".SMSPopupUtilsService" />
-    <service android:name=".SMSReceiverService" />
+    <service android:name=".SmsPopupUtilsService" />
+    <service android:name=".SmsReceiverService" />
     <service android:name=".ReminderReceiverService" />
     <service android:name=".SmsMonitorService" />
   </application>

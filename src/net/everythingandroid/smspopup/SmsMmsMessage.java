@@ -58,12 +58,12 @@ public class SmsMmsMessage {
     timestamp = _timestamp;
     messageType = _messageType;
 
-    contactId = SMSPopupUtils_.getPersonIdFromPhoneNumber(context, fromAddress);
-    contactName = SMSPopupUtils_.getPersonName(context, contactId, fromAddress);
-    contactPhoto = SMSPopupUtils_.getPersonPhoto(context, contactId);
+    contactId = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
+    contactName = SmsPopupUtils.getPersonName(context, contactId, fromAddress);
+    contactPhoto = SmsPopupUtils.getPersonPhoto(context, contactId);
 
-    unreadCount = SMSPopupUtils_.getUnreadMessagesCount(context, timestamp);
-    threadId = SMSPopupUtils_.getThreadIdFromAddress(context, fromAddress);
+    unreadCount = SmsPopupUtils.getUnreadMessagesCount(context, timestamp);
+    threadId = SmsPopupUtils.getThreadIdFromAddress(context, fromAddress);
 
     setMessageId();
 
@@ -86,10 +86,10 @@ public class SmsMmsMessage {
 
     // TODO: I think contactId can come the MMS table, this would save
     // this database lookup
-    contactId = SMSPopupUtils_.getPersonIdFromPhoneNumber(context, fromAddress);
+    contactId = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
 
-    contactName = SMSPopupUtils_.getPersonName(context, contactId, fromAddress);
-    contactPhoto = SMSPopupUtils_.getPersonPhoto(context, contactId);
+    contactName = SmsPopupUtils.getPersonName(context, contactId, fromAddress);
+    contactPhoto = SmsPopupUtils.getPersonPhoto(context, contactId);
 
     unreadCount = _unreadCount;
     threadId = _threadId;
@@ -118,8 +118,8 @@ public class SmsMmsMessage {
     if ("0".equals(contactId))
       contactId = null;
 
-    contactName = SMSPopupUtils_.getPersonName(context, contactId, fromAddress);
-    contactPhoto = SMSPopupUtils_.getPersonPhoto(context, contactId);
+    contactName = SmsPopupUtils.getPersonName(context, contactId, fromAddress);
+    contactPhoto = SmsPopupUtils.getPersonPhoto(context, contactId);
 
     unreadCount = _unreadCount;
     threadId = _threadId;
@@ -196,23 +196,23 @@ public class SmsMmsMessage {
   }
 
   public Intent getPopupIntent() {
-    Intent popup = new Intent(context, SMSPopupActivity_.class);
+    Intent popup = new Intent(context, SmsPopupActivity.class);
     popup.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
     popup.putExtras(toBundle());
     return popup;
   }
 
   public Intent getReplyIntent() {
-    return SMSPopupUtils_.getSmsToIntentFromThreadId(context, threadId);
+    return SmsPopupUtils.getSmsToIntentFromThreadId(context, threadId);
   }
 
   public void setThreadRead() {
-    SMSPopupUtils_.setThreadRead(context, threadId);
+    SmsPopupUtils.setThreadRead(context, threadId);
   }
 
   public void setMessageRead() {
     setMessageId();
-    SMSPopupUtils_.setMessageRead(context, messageId, messageType);
+    SmsPopupUtils.setMessageRead(context, messageId, messageType);
   }
 
   public int getUnreadCount() {
@@ -271,11 +271,11 @@ public class SmsMmsMessage {
   }
 
   public void delete() {
-    SMSPopupUtils_.deleteMessage(context, getMessageId(), threadId, messageType);
+    SmsPopupUtils.deleteMessage(context, getMessageId(), threadId, messageType);
   }
 
   public void setMessageId() {
-    messageId = SMSPopupUtils_.findMessageId(context, threadId, timestamp, messageType);
+    messageId = SmsPopupUtils.findMessageId(context, threadId, timestamp, messageType);
   }
 
   public long getMessageId() {

@@ -1,6 +1,6 @@
 package net.everythingandroid.smspopup.preferences;
 
-import net.everythingandroid.smspopup.SMSPopupUtils_;
+import net.everythingandroid.smspopup.SmsPopupUtils;
 import android.content.Context;
 import android.preference.CheckBoxPreference;
 import android.util.AttributeSet;
@@ -26,6 +26,6 @@ public class AppEnabledCheckBoxPreference extends CheckBoxPreference {
   @Override
   protected void onClick() {
     super.onClick();
-    SMSPopupUtils_.enableSMSPopup(context, isChecked());
+    SmsPopupUtils.enableSMSPopup(context, isChecked());
   }
 }

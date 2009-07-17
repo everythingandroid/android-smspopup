@@ -187,7 +187,7 @@ public class SmsPopupDbAdapter {
     if (c == null) {
       Log.v("SMSPopupDbAdapter: creating contact");
 
-      String contactName = SMSPopupUtils_.getPersonName(
+      String contactName = SmsPopupUtils.getPersonName(
           context, String.valueOf(contactId), null);
       if (contactName == null) return 0;
 
