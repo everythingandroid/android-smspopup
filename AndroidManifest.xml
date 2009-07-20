@@ -58,7 +58,7 @@
       </intent-filter>
     </receiver>
     <receiver
-      android:name=".ExternalEventReceiver">
+      android:name=".EnableDisableReceiver">
       <intent-filter>
         <action android:name="net.everythingandroid.smspopup.ENABLE" />
       </intent-filter>
@@ -73,14 +73,14 @@
     <service android:name=".ReminderReceiverService" />
     <service android:name=".SmsMonitorService" />
   </application>
-  <uses-permission android:name="android.permission.RECEIVE_SMS" />
   <uses-permission android:name="android.permission.READ_SMS" />
   <uses-permission android:name="android.permission.WRITE_SMS" />
+  <uses-permission android:name="android.permission.SEND_SMS" />
+  <uses-permission android:name="android.permission.RECEIVE_SMS" />
+  <uses-permission android:name="android.permission.RECEIVE_MMS" />  
   <uses-permission android:name="android.permission.READ_CONTACTS" />
   <uses-permission android:name="android.permission.WAKE_LOCK" />
   <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
   <uses-permission android:name="android.permission.VIBRATE" />
-  <uses-permission android:name="android.permission.RECEIVE_MMS" />
   <uses-permission android:name="android.permission.GET_TASKS" />
-  <uses-permission android:name="android.permission.SEND_SMS" />
 </manifest>
