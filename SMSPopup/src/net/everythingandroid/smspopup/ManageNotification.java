@@ -43,7 +43,7 @@ public class ManageNotification {
    * the vibrate/sound, just update the text).
    */
   public static void update(Context context, SmsMmsMessage message) {
-    // TODO: can we just use Notification.setLatestEventInfo() to update instead?
+    // TODO: can I just use Notification.setLatestEventInfo() to update instead?
 
     if (message != null) {
       if (message.getUnreadCount() > 0) {
@@ -61,11 +61,6 @@ public class ManageNotification {
    */
   private static void notify(Context context, SmsMmsMessage message,
       boolean onlyUpdate, int notif) {
-
-    // Make sure the PreferenceManager is created
-    //createPM(context);
-    //		SharedPreferences myPrefs_old =
-    //			PreferenceManager.getDefaultSharedPreferences(context);
 
     ManagePreferences mPrefs = new ManagePreferences(context, message.getContactId());
 
@@ -154,24 +149,16 @@ public class ManageNotification {
       if (onlyUpdate) {
         scrollText = null;
       } else {
+
         // If we're in privacy mode and the keyguard is on then just display
         // the name of the person, otherwise scroll the name and message
         if (privacyMode && ManageKeyguard.inKeyguardRestrictedInputMode()) {
-          //					scrollText =
-          //						String.format(
-          //							context.getString(R.string.notification_scroll_privacy),
-          //					      contactName);
-          scrollText =
-            context.getString(R.string.notification_scroll_privacy, contactName);
-
+          scrollText = context.getString(R.string.notification_scroll_privacy, contactName);
         } else {
-          //					scrollText = String.format(context.getString(R.string.notification_scroll),
-          //							contactName,
-          //							messageBody);
-          scrollText = context.getString(R.string.notification_scroll,
-              contactName, messageBody);
+          scrollText = context.getString(R.string.notification_scroll, contactName, messageBody);
         }
       }
+
       // If more than one message waiting ...
       if (unreadCount > 1) {
         contentTitle = context.getString(R.string.notification_multiple_title);
@@ -250,15 +237,16 @@ public class ManageNotification {
           notification.ledARGB = col;
         }
 
-        TelephonyManager TM =
-          (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        int callState = TM.getCallState();
-
-        /*
-         * Make sure we're not in a call
-         */
-        if (callState != TelephonyManager.CALL_STATE_OFFHOOK &&
-            callState != TelephonyManager.CALL_STATE_RINGING) {
+//        TelephonyManager TM =
+//          (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+//        int callState = TM.getCallState();
+//
+//        /*
+//         * Make sure we're not in a call
+//         */
+//        if (callState != TelephonyManager.CALL_STATE_OFFHOOK &&
+//            callState != TelephonyManager.CALL_STATE_RINGING) {
+          
           /*
            * Set up vibrate pattern
            */
@@ -283,7 +271,7 @@ public class ManageNotification {
 
           // Notification sound
           notification.sound = alarmSoundURI;
-        }
+        //}
       }
 
       // Set the PendingIntent if the status message is clicked
@@ -293,14 +281,12 @@ public class ManageNotification {
       notification.setLatestEventInfo(context, contentTitle,
           String.format(contentText, unreadCount), notifIntent);
 
-      // Set number of events that this notification signifies (unread
-      // messages)
+      // Set number of events that this notification signifies (unread messages)
       if (unreadCount > 1) {
         notification.number = unreadCount;
       }
 
-      // Set intent to execute if the "clear all" notifications button is
-      // pressed -
+      // Set intent to execute if the "clear all" notifications button is pressed -
       // basically stop any future reminders.
       Intent deleteIntent = new Intent(new Intent(context, ReminderReceiver.class));
       deleteIntent.setAction(Intent.ACTION_DELETE);

@@ -69,13 +69,17 @@ public class ReminderReceiverService extends Service {
       String action = intent.getAction();
       // String dataType = intent.getType();
 
-      Log.v("ReminderReceiverService: action = " + action);
+      // Log.v("ReminderReceiverService: action = " + action);
       if (ACTION_REMIND.equals(action)) {
         Log.v("ReminderReceiverService: processReminder()");
         processReminder(intent);
       } else if (Intent.ACTION_DELETE.equals(action)) {
+
+        //TODO: update message count pref
         Log.v("ReminderReceiverService: cancelReminder()");
         ReminderReceiver.cancelReminder(context);
+
+        SmsPopupUtils.updateUnreadCountPref(context);
       }
 
       // NOTE: We MUST not call stopSelf() directly, since we need to

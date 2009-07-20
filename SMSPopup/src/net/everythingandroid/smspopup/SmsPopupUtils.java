@@ -17,13 +17,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Contacts;
 import android.provider.Contacts.PeopleColumns;
-import android.provider.Contacts.PhotosColumns;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.SmsMessage;
@@ -32,8 +32,10 @@ import android.text.TextUtils;
 public class SmsPopupUtils {
   //Content URIs for SMS app, these may change in future SDK
   public static final Uri MMS_SMS_CONTENT_URI = Uri.parse("content://mms-sms/");
-  public static final Uri THREAD_ID_CONTENT_URI = Uri.withAppendedPath(MMS_SMS_CONTENT_URI, "threadID");
-  public static final Uri CONVERSATION_CONTENT_URI = Uri.withAppendedPath(MMS_SMS_CONTENT_URI, "conversations");
+  public static final Uri THREAD_ID_CONTENT_URI =
+    Uri.withAppendedPath(MMS_SMS_CONTENT_URI, "threadID");
+  public static final Uri CONVERSATION_CONTENT_URI =
+    Uri.withAppendedPath(MMS_SMS_CONTENT_URI, "conversations");
 
   public static final Uri SMS_CONTENT_URI = Uri.parse("content://sms");
   public static final Uri SMS_INBOX_CONTENT_URI = Uri.withAppendedPath(SMS_CONTENT_URI, "inbox");
@@ -48,6 +50,9 @@ public class SmsPopupUtils {
   public static final int MESSAGE_TYPE_SMS = 1;
   public static final int MESSAGE_TYPE_MMS = 2;
 
+  public static final int CONTACT_PHOTO_PLACEHOLDER = android.R.drawable.ic_dialog_info;
+  public static final String UNREAD_MESSAGE_COUNT_PREF = "unreadcount";
+
   private static final String AUTHOR_CONTACT_INFO = "Adam K <adam@everythingandroid.net>";
 
   /**
@@ -55,9 +60,10 @@ public class SmsPopupUtils {
    * (phone number) will be formatted and returned instead.
    */
   public static String getPersonName(Context context, String id, String address) {
+
+    // Check for id, if null return the formatting phone number as the name
     if (id == null) {
       if (address != null) {
-        //Log.v("Contact not found, formatting number");
         return PhoneNumberUtils.formatNumber(address);
       } else {
         return null;
@@ -81,7 +87,6 @@ public class SmsPopupUtils {
     }
 
     if (address != null) {
-      Log.v("Contact not found, formatting number");
       return PhoneNumberUtils.formatNumber(address);
     }
     return null;
@@ -98,6 +103,7 @@ public class SmsPopupUtils {
     Cursor cursor = context.getContentResolver().query(
         Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, address),
         new String[] { Contacts.Phones.PERSON_ID }, null, null, null);
+
     if (cursor != null) {
       try {
         if (cursor.getCount() > 0) {
@@ -114,45 +120,37 @@ public class SmsPopupUtils {
   }
 
   /**
-   * Looks up a contats photo by their contact id, returns a byte array
+   * 
+   * Looks up a contats photo by their contact id, returns a Bitmap array
    * that represents their photo (or null if not found)
+   * 
+   * @param context
+   * @param id contact id
+   * @return Bitmap of the contacts photo (null if none or an error)
    */
-  public static byte[] getPersonPhoto(Context context, String id) {
+  public static Bitmap getPersonPhoto(Context context, String id) {
     if (id == null)
       return null;
 
     if ("0".equals(id))
       return null;
 
-    byte photo[] = null;
-
-    //TODO: switch to API method:
-    //Contacts.People.loadContactPhoto(arg0, arg1, arg2, arg3)
-
-    Cursor cursor = context.getContentResolver().query(
-        Uri.withAppendedPath(Contacts.Photos.CONTENT_URI, id),
-        new String[] { PhotosColumns.DATA }, null, null, null);
-    if (cursor != null) {
-      try {
-        if (cursor.getCount() > 0) {
-          cursor.moveToFirst();
-          photo = cursor.getBlob(0);
-          if (photo != null) {
-            return photo;
-          }
-        }
-      } finally {
-        cursor.close();
-      }
-    }
-    return photo;
+    return Contacts.People.loadContactPhoto(context,
+        Uri.withAppendedPath(Contacts.People.CONTENT_URI, id),
+        SmsPopupUtils.CONTACT_PHOTO_PLACEHOLDER, null);
   }
 
+
   /**
-   * Tries to locate the message thread id given the address (phone or email) of the
-   * message sender
+   * 
+   * Tries to locate the message thread id given the address (phone or email)
+   * of the message sender.
+   * 
+   * @param context a context to use
+   * @param address phone number or email address of sender
+   * @return the thread id (or 0 if there was a problem)
    */
-  public static long getThreadIdFromAddress(Context context, String address) {
+  public static long findThreadIdFromAddress(Context context, String address) {
     if (address == null) return 0;
 
     String THREAD_RECIPIENT_QUERY = "recipient";
@@ -182,11 +180,11 @@ public class SmsPopupUtils {
    * Marks a specific message as read
    */
   public static void setMessageRead(Context context, long messageId, int messageType) {
+
     SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     boolean markRead = myPrefs.getBoolean(
         context.getString(R.string.pref_markread_key),
         Boolean.valueOf(context.getString(R.string.pref_markread_default)));
-
     if (!markRead) return;
 
     if (messageId > 0) {
@@ -203,16 +201,16 @@ public class SmsPopupUtils {
         return;
       }
 
-      Log.v("messageUri for marking message read: " + messageUri.toString());
+      // Log.v("messageUri for marking message read: " + messageUri.toString());
 
       ContentResolver cr = context.getContentResolver();
-      int result = 0;
+      int result;
       try {
         result = cr.update(messageUri, values, null, null);
       } catch (Exception e) {
-        Log.v("error marking message read");
+        result = 0;
       }
-      Log.v("message id " + messageId + " marked as read, result = " + result);
+      Log.v(String.format("message id = %s marked as read, result = %s", messageId, result ));
     }
   }
 
@@ -249,23 +247,34 @@ public class SmsPopupUtils {
    * Tries to locate the message id (from the system database), given the message
    * thread id, the timestamp of the message and the type of message (sms/mms)
    */
-  public static long findMessageId(Context context, long threadId, long _timestamp, int messageType) {
+  public static long findMessageId(Context context, long threadId, long timestamp,
+      String body, int messageType) {
+
     long id = 0;
-    long timestamp = _timestamp;
+    String where = String.format("body='%s' and ", body);
     if (threadId > 0) {
+
       Log.v("Trying to find message ID");
-      // It seems MMS timestamps are stored in a seconds, whereas SMS
-      // timestamps are in millis
       if (SmsMmsMessage.MESSAGE_TYPE_MMS == messageType) {
-        timestamp = _timestamp / 1000;
-        //				Log.v("adjusted timestmap for MMS (" + _timestamp + " -> " + timestamp + ")");
+        // It seems MMS timestamps are stored in a seconds, whereas SMS timestamps are in millis
+        where = "date=" + timestamp / 1000;
+      } else {
+        // As of Android OS >1.5 (>Cupcake) the system messaging process uses its own timestamp
+        // rather than the carrier timestamp on the SMS, therefore we can't match up directly
+        // against the timestamp as it's likely there is a difference by several millisecs.
+        // Instead we use a hacky method to find the message by using a buffer period.
+        where = String.format("date between %s and %s",
+            timestamp - SmsMmsMessage.MESSAGE_COMPARE_TIME_BUFFER,
+            timestamp + SmsMmsMessage.MESSAGE_COMPARE_TIME_BUFFER);
       }
+
+      // Log.v("Where is: " + where);
+      // Log.v("ThreadId is: " + threadId);
 
       Cursor cursor = context.getContentResolver().query(
           ContentUris.withAppendedId(CONVERSATION_CONTENT_URI, threadId),
           new String[] { "_id", "date", "thread_id" },
-          //"thread_id=" + threadId + " and " + "date=" + timestamp,
-          "date=" + timestamp,
+          where,
           null, "date desc");
 
       if (cursor != null) {
@@ -273,6 +282,7 @@ public class SmsPopupUtils {
           if (cursor.moveToFirst()) {
             id = cursor.getLong(0);
             Log.v("Message id found = " + id);
+            //Log.v("Timestamp = " + cursor.getLong(1));
           }
         } finally {
           cursor.close();
@@ -453,40 +463,28 @@ public class SmsPopupUtils {
     context.startActivity(Intent.createChooser(msg, "Send E-mail"));
   }
 
-  public static int getUnreadMessagesCount(Context context, long timestamp) {
-    int unreadSms = getUnreadSmsCount(context, timestamp);
+  //  public static int getUnreadMessagesCount(Context context, long timestamp) {
+  //    int unreadSms = getUnreadSmsCount(context, timestamp);
+  //    int unreadMms = getUnreadMmsCount(context);
+  //    return (unreadSms + unreadMms);
+  //  }
+
+  //  public static int getUnreadMessagesCount(Context context) {
+  //    return getUnreadMessagesCount(context, 0);
+  //    //		int unreadSms = getUnreadSmsCount(context);
+  //    //		int unreadMms = getUnreadMmsCount(context);
+  //    //		return (unreadSms + unreadMms);
+  //  }
+
+  public static int getUnreadMessagesCount(Context context) {
+    int unreadSms = getUnreadSmsCount(context);
     int unreadMms = getUnreadMmsCount(context);
     return (unreadSms + unreadMms);
   }
 
-  public static int getUnreadMessagesCount(Context context) {
-    return getUnreadMessagesCount(context, 0);
-    //		int unreadSms = getUnreadSmsCount(context);
-    //		int unreadMms = getUnreadMmsCount(context);
-    //		return (unreadSms + unreadMms);
-  }
 
   public static int getUnreadSmsCount(Context context) {
     return getUnreadSmsCount(context, 0);
-    //		String SMS_READ_COLUMN = "read";
-    //		String UNREAD_CONDITION = SMS_READ_COLUMN + "=0";
-    //
-    //		int count = 0;
-    //
-    //		Cursor cursor = context.getContentResolver().query(
-    //				SMS_INBOX_CONTENT_URI,
-    //				new String[] { SMS_ID },
-    //		      UNREAD_CONDITION, null, null);
-    //
-    //		if (cursor != null) {
-    //			try {
-    //				count = cursor.getCount();
-    //			} finally {
-    //				cursor.close();
-    //			}
-    //		}
-    //		Log.v("sms unread count = " + count);
-    //		return count;
   }
 
   public static int getUnreadSmsCount(Context context, long timestamp) {
@@ -632,7 +630,6 @@ public class SmsPopupUtils {
     int count = 0;
 
     if (ignoreThreadId > 0) {
-      //			Log.v("Ignoring mms threadId = " + ignoreThreadId);
       UNREAD_CONDITION += " AND thread_id != " + ignoreThreadId;
     }
 
@@ -936,8 +933,21 @@ public class SmsPopupUtils {
 
   public static void disableOtherSMSPopup(Context context) {
     // Send a broadcast to disable SMS Popup Pro
-    Intent i = new Intent(ExternalEventReceiver.ACTION_SMSPOPUP_DISABLE);
+    Intent i = new Intent(EnableDisableReceiver.ACTION_SMSPOPUP_DISABLE);
     i.setClassName("net.everythingandroid.smspopuppro", "net.everythingandroid.smspopuppro.ExternalEventReceiver");
     context.sendBroadcast(i);
+  }
+
+  public static void updateUnreadCountPref(Context context, int unreadCount) {
+    // Update our preference
+    SharedPreferences.Editor myPrefsEditor =
+      PreferenceManager.getDefaultSharedPreferences(context).edit();
+
+    myPrefsEditor.putInt(UNREAD_MESSAGE_COUNT_PREF, unreadCount);
+    myPrefsEditor.commit();
+  }
+
+  public static void updateUnreadCountPref(Context context) {
+    updateUnreadCountPref(context, getUnreadMessagesCount(context));
   }
 }

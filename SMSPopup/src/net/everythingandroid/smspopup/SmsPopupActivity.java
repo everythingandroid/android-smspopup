@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.telephony.gsm.SmsMessage;
@@ -51,6 +53,8 @@ public class SmsPopupActivity extends Activity {
   //private LinearLayout privacyLayout = null;
   //private LinearLayout mmsLinearLayout = null;
   private ScrollView messageScrollView = null;
+  private ImageView photoImageView = null;
+  private Drawable contactPhotoPlaceholderDrawable = null;
 
   private ViewStub unreadCountViewStub;
   private View unreadCountView = null;
@@ -122,7 +126,6 @@ public class SmsPopupActivity extends Activity {
     LinearLayout mainLL = (LinearLayout) findViewById(R.id.MainLinearLayout);
     Display d = getWindowManager().getDefaultDisplay();
     int width = (int)(d.getWidth() * WIDTH);
-    Log.v("setting width to: " + width);
     mainLL.setMinimumWidth(width);
 
     //Find the main textviews
@@ -130,6 +133,11 @@ public class SmsPopupActivity extends Activity {
     messageTV = (TextView) findViewById(R.id.MessageTextView);
     messageReceivedTV = (TextView) findViewById(R.id.HeaderTextView);
     messageScrollView = (ScrollView) findViewById(R.id.MessageScrollView);
+
+    // Find the ImageView that will show the contact photo
+    photoImageView = (ImageView) findViewById(R.id.FromImageView);
+    contactPhotoPlaceholderDrawable = getResources().getDrawable(SmsPopupUtils.CONTACT_PHOTO_PLACEHOLDER);
+
     //viewButtonLayout = (LinearLayout) findViewById(R.id.ViewButtonLinearLayout);
     //mmsLinearLayout = (LinearLayout) findViewById(R.id.MmsLinearLayout);
 
@@ -371,17 +379,18 @@ public class SmsPopupActivity extends Activity {
       refreshPrivacy();
     }
 
-    // Find the ImageView that will show the contact photo
-    ImageView iv = (ImageView) findViewById(R.id.FromImageView);
+    // Fetch contact photo in background
+    photoImageView.setImageDrawable(contactPhotoPlaceholderDrawable);
+    new FetchContactPhotoTask().execute(message.getContactId());
 
     // See if we have a contact photo, if so set it to the IV, if not, show a
     // generic dialog info icon
-    Bitmap contactPhoto = message.getContactPhoto();
-    if (contactPhoto != null) {
-      iv.setImageBitmap(contactPhoto);
-    } else {
-      iv.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_dialog_info));
-    }
+    //    Bitmap contactPhoto = message.getContactPhoto();
+    //    if (contactPhoto != null) {
+    //      photoImageView.setImageBitmap(contactPhoto);
+    //    } else {
+    //      photoImageView.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_dialog_info));
+    //    }
 
     if (message.getUnreadCount() <= 1) {
       if (unreadCountView != null) {
@@ -705,9 +714,9 @@ public class SmsPopupActivity extends Activity {
       SmsPopupUtilsService.beginStartingService(
           SmsPopupActivity.this.getApplicationContext(), i);
     }
+
     // Finish up this activity
     myFinish();
-
   }
 
   /*
@@ -809,6 +818,33 @@ public class SmsPopupActivity extends Activity {
       textView.setText(messageLength[2] + " remaining, " + messageLength[0] + " messages");
     } else {
       textView.setText(messageLength[2] + " remaining");
+    }
+  }
+
+  /**
+   * 
+   * AsyncTask to fetch contact photo in background
+   * 
+   */
+  private class FetchContactPhotoTask extends AsyncTask<String, Integer, Bitmap> {
+    @Override
+    protected Bitmap doInBackground(String... params) {
+      Log.v("Loading contact photo in background...");
+      //      try {
+      //        Thread.sleep(2000);
+      //      } catch (InterruptedException e) {
+      //        // TODO Auto-generated catch block
+      //        e.printStackTrace();
+      //      }
+      return SmsPopupUtils.getPersonPhoto(SmsPopupActivity.this.getApplicationContext(), params[0]);
+    }
+
+    @Override
+    protected void onPostExecute(Bitmap result) {
+      Log.v("Done loading contact photo");
+      if (result != null) {
+        photoImageView.setImageBitmap(result);
+      }
     }
   }
 }
