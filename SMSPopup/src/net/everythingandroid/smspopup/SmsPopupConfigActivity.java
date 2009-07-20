@@ -59,7 +59,8 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     mDbAdapter.open(true); // Open database read-only
     mDbAdapter.close();
 
-    SmsMonitorService.beginStartingService(this);
+    // TODO: create service to monitor unread counts for notifications
+    //SmsMonitorService.beginStartingService(this);
   }
 
   @Override

@@ -135,8 +135,10 @@ public class SmsReceiverService extends Service {
            * will be a slight difference in the times.
            */
           long timestamp = System.currentTimeMillis();
-          long timestamp_provider = messages[0].getTimestampMillis();
+          // long timestamp_provider = messages[0].getTimestampMillis();
 
+          notifySmsReceived(
+              new SmsMmsMessage(context, address, body, timestamp, SmsMmsMessage.MESSAGE_TYPE_SMS));
           /*
            * This loop is quite hacky.  We're basically going to try a few times to find
            * the newly received message in the system database.  The reason we have to do this
@@ -145,47 +147,47 @@ public class SmsReceiverService extends Service {
            * has already run and we will find the message immediately - in the worst case
            * we will have to sleep and try again until we do find it :(
            */
-          SmsMmsMessage smsMessage = null;
-          boolean equalToIntent = false;
-          int count = 0;
-
-          while (count < MESSAGE_RETRY && !equalToIntent) {
-            count++;
-            smsMessage = SmsPopupUtils.getSmsDetails(context);
-            if (smsMessage != null) {
-
-              equalToIntent = smsMessage.equals(address, timestamp, timestamp_provider, body);
-
-              if (equalToIntent || count == MESSAGE_RETRY) {
-                Log.v("SMS in DB matches Intent");
-                notifySmsReceived(smsMessage);
-              }
-            }
-
-            if (!equalToIntent && count < MESSAGE_RETRY) {
-
-              Log.v("SMS not found, sleeping (count is " + count + ")");
-
-              try {
-                Thread.sleep(MESSAGE_RETRY_PAUSE);
-              } catch (InterruptedException e) {
-                //e.printStackTrace();
-              }
-            }
-          }
-
-          /*
-           * We couldn't find an unread message from the correct person - let's use the most
-           * recent read message instead.
-           */
-          if (!equalToIntent) {
-            smsMessage = SmsPopupUtils.getSmsDetails(context, false);
-            if (smsMessage != null) {
-              Log.v("Couldn't find unread message that matches intent");
-              Log.v("Showing most recent read message instead");
-              notifySmsReceived(smsMessage);
-            }
-          }
+          //          SmsMmsMessage smsMessage = null;
+          //          boolean equalToIntent = false;
+          //          int count = 0;
+          //
+          //          while (count < MESSAGE_RETRY && !equalToIntent) {
+          //            count++;
+          //            smsMessage = SmsPopupUtils.getSmsDetails(context);
+          //            if (smsMessage != null) {
+          //
+          //              equalToIntent = smsMessage.equals(address, timestamp, timestamp_provider, body);
+          //
+          //              if (equalToIntent || count == MESSAGE_RETRY) {
+          //                Log.v("SMS in DB matches Intent");
+          //                notifySmsReceived(smsMessage);
+          //              }
+          //            }
+          //
+          //            if (!equalToIntent && count < MESSAGE_RETRY) {
+          //
+          //              Log.v("SMS not found, sleeping (count is " + count + ")");
+          //
+          //              try {
+          //                Thread.sleep(MESSAGE_RETRY_PAUSE);
+          //              } catch (InterruptedException e) {
+          //                //e.printStackTrace();
+          //              }
+          //            }
+          //          }
+          //
+          //          /*
+          //           * We couldn't find an unread message from the correct person - let's use the most
+          //           * recent read message instead.
+          //           */
+          //          if (!equalToIntent) {
+          //            smsMessage = SmsPopupUtils.getSmsDetails(context, false);
+          //            if (smsMessage != null) {
+          //              Log.v("Couldn't find unread message that matches intent");
+          //              Log.v("Showing most recent read message instead");
+          //              notifySmsReceived(smsMessage);
+          //            }
+          //          }
         }
       }
     }
@@ -201,6 +203,11 @@ public class SmsReceiverService extends Service {
     boolean onlyShowOnKeyguard = myPrefs.getBoolean(
         context.getString(R.string.pref_onlyShowOnKeyguard_key),
         Boolean.valueOf(context.getString(R.string.pref_onlyShowOnKeyguard_default)));
+
+    int unreadCount = myPrefs.getInt(SmsPopupUtils.UNREAD_MESSAGE_COUNT_PREF, 0) + 1;
+    SmsPopupUtils.updateUnreadCountPref(context, unreadCount);
+
+    smsMessage.setUnreadCount(unreadCount);
 
     ManageKeyguard.initialize(context);
 
@@ -278,8 +285,7 @@ public class SmsReceiverService extends Service {
       Log.v("SMSReceiverService: beginStartingService()");
       if (mStartingService == null) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-            Log.LOGTAG);
+        mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG);
         mStartingService.setReferenceCounted(false);
       }
       mStartingService.acquire();
