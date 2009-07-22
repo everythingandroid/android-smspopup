@@ -42,23 +42,25 @@ public class TestNotificationDialogPreference extends DialogPreference {
   @Override
   protected View onCreateDialogView() {
 
-    // Create a fake SmsMmsMessage
+    // Create a test SmsMmsMessage
     String testPhone = "123-456-7890";
+    SmsPopupDbAdapter mDbAdapter = new SmsPopupDbAdapter(context);
 
     try {
-      SmsPopupDbAdapter mDbAdapter = new SmsPopupDbAdapter(context);
       mDbAdapter.open(true); // Open database read-only
       Cursor contactCursor = mDbAdapter.fetchContact(Long.valueOf(contactId));
       if (contactCursor != null) {
         testPhone = contactCursor.getString(SmsPopupDbAdapter.KEY_CONTACT_NAME_NUM);
+        contactCursor.close();
       }
+      mDbAdapter.close();
     } catch (Exception e) {
-
+      // testPhone = "123-456-7890";
     }
 
     SmsMmsMessage message =
-      new SmsMmsMessage(context, testPhone, context.getString(R.string.pref_notif_test_title), 0,
-          contactId, testPhone, 1, 0, SmsMmsMessage.MESSAGE_TYPE_SMS);
+      new SmsMmsMessage(context, testPhone, context.getString(R.string.pref_notif_test_title),
+          0, contactId, testPhone, 1, 0, SmsMmsMessage.MESSAGE_TYPE_SMS);
 
     // Show notification
     ManageNotification.show(context, message, ManageNotification.NOTIFICATION_TEST);

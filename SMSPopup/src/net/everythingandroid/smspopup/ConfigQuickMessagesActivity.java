@@ -46,7 +46,9 @@ public class ConfigQuickMessagesActivity extends ListActivity {
     registerForContextMenu(mListView);
 
     TextView tv = new TextView(getApplicationContext());
-    tv.setText("Add New");
+
+    // TODO: make this look better
+    tv.setText(getString(R.string.quickmessages_add));
     tv.setTextSize(25);
     tv.setPadding(10, 10, 10, 10);
 
@@ -63,27 +65,23 @@ public class ConfigQuickMessagesActivity extends ListActivity {
   @Override
   protected void onResume() {
     super.onResume();
-    Log.v("SMSPopupConfigContactsActivity: onResume()");
     fillData();
   }
 
   @Override
   protected void onPause() {
     super.onPause();
-    Log.v("SMSPopupConfigContactsActivity: onPause()");
   }
 
   @Override
   protected void onStop() {
     super.onStop();
-    Log.v("SMSPopupConfigContactsActivity: onStop()");
   }
 
   @Override
   protected void onDestroy() {
-    super.onDestroy();
-    Log.v("SMSPopupConfigContactsActivity: onDestroy()");
     mDbAdapter.close();
+    super.onDestroy();
   }
 
   @Override
@@ -128,9 +126,13 @@ public class ConfigQuickMessagesActivity extends ListActivity {
   public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
     super.onCreateContextMenu(menu, v, menuInfo);
     Log.v("onCreateContextMenu()");
-    menu.add(0, CONTEXT_MENU_EDIT_ID, 0, getString(R.string.contact_customization_edit));
-    menu.add(0, CONTEXT_MENU_DELETE_ID, 0, getString(R.string.contact_customization_remove));
-    menu.add(0, CONTEXT_MENU_REORDER_ID, 0, "Move to top");
+
+    // Create menu if top item is not selected
+    if (((AdapterContextMenuInfo)menuInfo).id != -1) {
+      menu.add(0, CONTEXT_MENU_EDIT_ID, 0, getString(R.string.contact_customization_edit));
+      menu.add(0, CONTEXT_MENU_DELETE_ID, 0, getString(R.string.contact_customization_remove));
+      menu.add(0, CONTEXT_MENU_REORDER_ID, 0, "Move to top");
+    }
   }
 
   /*
@@ -140,23 +142,26 @@ public class ConfigQuickMessagesActivity extends ListActivity {
   public boolean onContextItemSelected(MenuItem item) {
     AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
     Log.v("onContextItemSelected()");
-    switch (item.getItemId()) {
-      case CONTEXT_MENU_EDIT_ID:
-        Log.v("Editing quick message " + info.id);
-        editId = info.id;
-        showDialog(EDIT_DIALOG);
-        return true;
-      case CONTEXT_MENU_DELETE_ID:
-        Log.v("Deleting quickmessage " + info.id);
-        deleteQuickMessage(info.id);
-        return true;
-      case CONTEXT_MENU_REORDER_ID:
-        Log.v("Reordering quickmessage " + info.id);
-        reorderQuickMessage(info.id);
-        return true;
-      default:
-        return super.onContextItemSelected(item);
+    if (info.id != -1) {
+      switch (item.getItemId()) {
+        case CONTEXT_MENU_EDIT_ID:
+          Log.v("Editing quick message " + info.id);
+          editId = info.id;
+          showDialog(EDIT_DIALOG);
+          return true;
+        case CONTEXT_MENU_DELETE_ID:
+          Log.v("Deleting quickmessage " + info.id);
+          deleteQuickMessage(info.id);
+          return true;
+        case CONTEXT_MENU_REORDER_ID:
+          Log.v("Reordering quickmessage " + info.id);
+          reorderQuickMessage(info.id);
+          return true;
+        default:
+          return super.onContextItemSelected(item);
+      }
     }
+    return false;
   }
 
   /*
