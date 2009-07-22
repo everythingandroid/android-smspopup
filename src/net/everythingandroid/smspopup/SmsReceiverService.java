@@ -109,13 +109,16 @@ public class SmsReceiverService extends Service {
       if (messages != null) {
         SmsMessage sms = messages[0];
 
+        // TODO: should display a notification for CLASS 0 and Replace messages (sometimes
+        // telecomm announcements and things like voicemail
+
         // Make sure SMS is not Class 0 or a replacement SMS
         if (sms.getMessageClass() != SmsMessage.MessageClass.CLASS_0 && !sms.isReplace()) {
 
           /*
            * Fetch message details from raw SMS data received from telecom provider
            */
-          String body = "";
+          String body;
           if (messages.length == 1) {
             body = messages[0].getDisplayMessageBody();
           } else {
@@ -128,66 +131,8 @@ public class SmsReceiverService extends Service {
 
           String address = messages[0].getDisplayOriginatingAddress();
 
-          /*
-           * Changed to use system time, same as the system app (see Mms.git)
-           * The only issue with this is we can no longer do a direct match
-           * with the database to find this message based on timestamp as there
-           * will be a slight difference in the times.
-           */
-          long timestamp = System.currentTimeMillis();
-          // long timestamp_provider = messages[0].getTimestampMillis();
-
-          notifySmsReceived(
-              new SmsMmsMessage(context, address, body, timestamp, SmsMmsMessage.MESSAGE_TYPE_SMS));
-          /*
-           * This loop is quite hacky.  We're basically going to try a few times to find
-           * the newly received message in the system database.  The reason we have to do this
-           * is that the receive message broadcast is unordered and we can't tell if our
-           * code runs before or after the system code.  In the best case, the system app
-           * has already run and we will find the message immediately - in the worst case
-           * we will have to sleep and try again until we do find it :(
-           */
-          //          SmsMmsMessage smsMessage = null;
-          //          boolean equalToIntent = false;
-          //          int count = 0;
-          //
-          //          while (count < MESSAGE_RETRY && !equalToIntent) {
-          //            count++;
-          //            smsMessage = SmsPopupUtils.getSmsDetails(context);
-          //            if (smsMessage != null) {
-          //
-          //              equalToIntent = smsMessage.equals(address, timestamp, timestamp_provider, body);
-          //
-          //              if (equalToIntent || count == MESSAGE_RETRY) {
-          //                Log.v("SMS in DB matches Intent");
-          //                notifySmsReceived(smsMessage);
-          //              }
-          //            }
-          //
-          //            if (!equalToIntent && count < MESSAGE_RETRY) {
-          //
-          //              Log.v("SMS not found, sleeping (count is " + count + ")");
-          //
-          //              try {
-          //                Thread.sleep(MESSAGE_RETRY_PAUSE);
-          //              } catch (InterruptedException e) {
-          //                //e.printStackTrace();
-          //              }
-          //            }
-          //          }
-          //
-          //          /*
-          //           * We couldn't find an unread message from the correct person - let's use the most
-          //           * recent read message instead.
-          //           */
-          //          if (!equalToIntent) {
-          //            smsMessage = SmsPopupUtils.getSmsDetails(context, false);
-          //            if (smsMessage != null) {
-          //              Log.v("Couldn't find unread message that matches intent");
-          //              Log.v("Showing most recent read message instead");
-          //              notifySmsReceived(smsMessage);
-          //            }
-          //          }
+          notifySmsReceived(new SmsMmsMessage(
+              context, address, body, System.currentTimeMillis(), SmsMmsMessage.MESSAGE_TYPE_SMS));
         }
       }
     }
@@ -197,30 +142,44 @@ public class SmsReceiverService extends Service {
    * Notify the user of the SMS - either via notification bar or popup
    */
   private void notifySmsReceived(SmsMmsMessage smsMessage) {
-    SharedPreferences myPrefs =
-      PreferenceManager.getDefaultSharedPreferences(context);
 
-    boolean onlyShowOnKeyguard = myPrefs.getBoolean(
-        context.getString(R.string.pref_onlyShowOnKeyguard_key),
-        Boolean.valueOf(context.getString(R.string.pref_onlyShowOnKeyguard_default)));
+    ManagePreferences mPrefs =
+      new ManagePreferences(context, smsMessage.getContactId());
 
-    int unreadCount = myPrefs.getInt(SmsPopupUtils.UNREAD_MESSAGE_COUNT_PREF, 0) + 1;
+    boolean onlyShowOnKeyguard = mPrefs.getBoolean(
+        R.string.pref_onlyShowOnKeyguard_key,
+        R.string.pref_onlyShowOnKeyguard_default);
+
+    boolean showPopup = mPrefs.getBoolean(
+        R.string.pref_popup_enabled_key,
+        R.string.pref_popup_enabled_default,
+        SmsPopupDbAdapter.KEY_POPUP_ENABLED_NUM);
+
+    boolean notifEnabled = mPrefs.getBoolean(
+        R.string.pref_notif_enabled_key,
+        R.string.pref_notif_enabled_default,
+        SmsPopupDbAdapter.KEY_ENABLED_NUM);
+
+    int unreadCount = mPrefs.getInt(SmsPopupUtils.UNREAD_MESSAGE_COUNT_PREF, 0) + 1;
     SmsPopupUtils.updateUnreadCountPref(context, unreadCount);
 
     smsMessage.setUnreadCount(unreadCount);
 
     ManageKeyguard.initialize(context);
 
-    if (ManageKeyguard.inKeyguardRestrictedInputMode() ||
-        (!onlyShowOnKeyguard && !SmsPopupUtils.inMessagingApp(context))) {
-      Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
-      Intent popup = smsMessage.getPopupIntent();
-      ManageWakeLock.acquirePartial(context);
-      context.startActivity(popup);
-    } else {
-      Log.v("^^^^^^Not in keyguard, only using notification");
-      ManageNotification.show(context, smsMessage);
-      ReminderReceiver.scheduleReminder(context, smsMessage);
+    if (notifEnabled) {
+      if (showPopup &&
+          (ManageKeyguard.inKeyguardRestrictedInputMode() ||
+              (!onlyShowOnKeyguard && !SmsPopupUtils.inMessagingApp(context)))) {
+        Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
+        Intent popup = smsMessage.getPopupIntent();
+        ManageWakeLock.acquirePartial(context);
+        context.startActivity(popup);
+      } else {
+        Log.v("^^^^^^Not in keyguard, only using notification");
+        ManageNotification.show(context, smsMessage);
+        ReminderReceiver.scheduleReminder(context, smsMessage);
+      }
     }
   }
 
