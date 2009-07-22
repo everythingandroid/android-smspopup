@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="c_pref_notif_enabled_key">c_notification</string>
+    <string name="c_pref_popup_enabled_key">c_popup</string>
 	<string name="c_pref_notif_test_key">c_notiftest</string>
 	<string name="c_pref_notif_sound_key">c_notifsound</string>
 	<string name="c_pref_vibrate_key">c_vibrate</string>
@@ -21,6 +22,8 @@
 	<string name="contact_customization_remove">Remove</string>
 	<string name="contact_customization_save">Save</string>
 	<string name="contact_customization_removed_toast">Contact customization removed</string>
+  
+    <string name="quickmessages_add">Add</string>
 	
 	<string name="pref_notif_default_title">Default Notifications</string>
 	<string name="pref_notif_default_summary">Notifications for all contacts without an individual customization</string>

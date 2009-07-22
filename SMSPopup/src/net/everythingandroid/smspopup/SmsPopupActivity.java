@@ -55,6 +55,7 @@ public class SmsPopupActivity extends Activity {
   private ScrollView messageScrollView = null;
   private ImageView photoImageView = null;
   private Drawable contactPhotoPlaceholderDrawable = null;
+  private static Bitmap contactPhoto = null;
 
   private ViewStub unreadCountViewStub;
   private View unreadCountView = null;
@@ -205,12 +206,13 @@ public class SmsPopupActivity extends Activity {
     }
 
     if (bundle == null) {
+      recycleContactPhoto();
       populateViews(getIntent().getExtras());
     } else {
       populateViews(bundle);
     }
 
-    mDbAdapter = new SmsPopupDbAdapter(this);
+    mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
 
     wakeApp();
   }
@@ -224,6 +226,8 @@ public class SmsPopupActivity extends Activity {
     ManageWakeLock.acquirePartial(getApplicationContext());
 
     setIntent(intent);
+
+    recycleContactPhoto();
 
     //Re-populate views with new intent data (ie. new sms data)
     populateViews(intent.getExtras());
@@ -273,6 +277,12 @@ public class SmsPopupActivity extends Activity {
     //Cancel the receiver that will clear our locks
     ClearAllReceiver.removeCancel(getApplicationContext());
     ClearAllReceiver.clearAll(!exitingKeyguardSecurely);
+  }
+
+  @Override
+  protected void onDestroy() {
+    recycleContactPhoto();
+    super.onDestroy();
   }
 
   @Override
@@ -380,8 +390,12 @@ public class SmsPopupActivity extends Activity {
     }
 
     // Fetch contact photo in background
-    photoImageView.setImageDrawable(contactPhotoPlaceholderDrawable);
-    new FetchContactPhotoTask().execute(message.getContactId());
+    if (contactPhoto == null) {
+      photoImageView.setImageDrawable(contactPhotoPlaceholderDrawable);
+      new FetchContactPhotoTask().execute(message.getContactId());
+    } else {
+      photoImageView.setImageBitmap(contactPhoto);
+    }
 
     // See if we have a contact photo, if so set it to the IV, if not, show a
     // generic dialog info icon
@@ -798,9 +812,11 @@ public class SmsPopupActivity extends Activity {
         Log.v("Sending message to " + quickreplyMessage.getContactName());
         SmsPopupUtilsService.beginStartingService(
             SmsPopupActivity.this.getApplicationContext(), i);
+        // TODO: move strings to res file
         Toast.makeText(this, "Sending message...", Toast.LENGTH_SHORT).show();
         myFinish();
       } else {
+        // TODO: move strings to res file
         Toast.makeText(this, "No message entered", Toast.LENGTH_SHORT).show();
       }
     }
@@ -830,21 +846,30 @@ public class SmsPopupActivity extends Activity {
     @Override
     protected Bitmap doInBackground(String... params) {
       Log.v("Loading contact photo in background...");
-      //      try {
-      //        Thread.sleep(2000);
-      //      } catch (InterruptedException e) {
-      //        // TODO Auto-generated catch block
-      //        e.printStackTrace();
-      //      }
+//      try {
+//        Thread.sleep(2000);
+//      } catch (InterruptedException e) {
+//        // TODO Auto-generated catch block
+//        e.printStackTrace();
+//      }
       return SmsPopupUtils.getPersonPhoto(SmsPopupActivity.this.getApplicationContext(), params[0]);
     }
 
     @Override
     protected void onPostExecute(Bitmap result) {
       Log.v("Done loading contact photo");
+      contactPhoto = result;
       if (result != null) {
-        photoImageView.setImageBitmap(result);
+        photoImageView.setImageBitmap(contactPhoto);
+        //photoImageView.setImageBitmap(result);
       }
     }
+  }
+
+  private void recycleContactPhoto() {
+    if (contactPhoto != null) {
+      contactPhoto.recycle();
+    }
+    contactPhoto = null;
   }
 }

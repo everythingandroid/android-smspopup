@@ -13,7 +13,6 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.telephony.TelephonyManager;
 
 /*
  * This class handles the Notifications (sounds/vibrate/LED)
@@ -237,40 +236,40 @@ public class ManageNotification {
           notification.ledARGB = col;
         }
 
-//        TelephonyManager TM =
-//          (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-//        int callState = TM.getCallState();
-//
-//        /*
-//         * Make sure we're not in a call
-//         */
-//        if (callState != TelephonyManager.CALL_STATE_OFFHOOK &&
-//            callState != TelephonyManager.CALL_STATE_RINGING) {
-          
-          /*
-           * Set up vibrate pattern
-           */
-          AudioManager AM =
-            (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        //        TelephonyManager TM =
+        //          (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        //        int callState = TM.getCallState();
+        //
+        //        /*
+        //         * Make sure we're not in a call
+        //         */
+        //        if (callState != TelephonyManager.CALL_STATE_OFFHOOK &&
+        //            callState != TelephonyManager.CALL_STATE_RINGING) {
 
-          // If vibrate is ON, or if phone is set to vibrate
-          if (vibrate || AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode()) {
-            long[] vibrate_pattern = null;
-            if (context.getString(R.string.pref_custom_val).equals(
-                vibrate_pattern_raw)) {
-              vibrate_pattern = parseVibratePattern(vibrate_pattern_custom_raw);
-            } else {
-              vibrate_pattern = parseVibratePattern(vibrate_pattern_raw);
-            }
-            if (vibrate_pattern != null) {
-              notification.vibrate = vibrate_pattern;
-            } else {
-              notification.defaults = Notification.DEFAULT_VIBRATE;
-            }
+        /*
+         * Set up vibrate pattern
+         */
+        AudioManager AM =
+          (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
+        // If vibrate is ON, or if phone is set to vibrate
+        if (vibrate || AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode()) {
+          long[] vibrate_pattern = null;
+          if (context.getString(R.string.pref_custom_val).equals(
+              vibrate_pattern_raw)) {
+            vibrate_pattern = parseVibratePattern(vibrate_pattern_custom_raw);
+          } else {
+            vibrate_pattern = parseVibratePattern(vibrate_pattern_raw);
           }
+          if (vibrate_pattern != null) {
+            notification.vibrate = vibrate_pattern;
+          } else {
+            notification.defaults = Notification.DEFAULT_VIBRATE;
+          }
+        }
 
-          // Notification sound
-          notification.sound = alarmSoundURI;
+        // Notification sound
+        notification.sound = alarmSoundURI;
         //}
       }
 

@@ -108,6 +108,11 @@
    <string name="pref_notif_enabled_summaryoff">Notifications are disabled</string>
    <string name="pref_notif_enabled_warning">To avoid conflicts and multiple alerts, please disable the system SMS notifications and any other apps that provide a notification when a SMS is received.\n\nTo turn off the system notification, go to the messaging app, hit menu -> settings and un-check notifications.</string>
 
+   <string name="pref_popup_enabled_title">Show a Popup</string>
+   <string name="pref_popup_enabled_summaryon">Message will open in a popup</string>
+   <string name="pref_popup_enabled_summaryoff">Message will only show in notification area</string>
+   <string name="pref_popup_enabled_default">true</string>
+
    <string name="pref_notif_test_title">Test Notification</string>
    <string name="pref_notif_test_summary">Test out your notification</string>
    <string name="pref_notif_test_message">Testing your notification now!</string>

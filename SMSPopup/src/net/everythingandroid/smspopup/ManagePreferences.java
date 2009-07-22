@@ -11,7 +11,7 @@ public class ManagePreferences {
   private Context context;
   private Cursor contactCursor;
   private boolean useDatabase;
-  private SharedPreferences myPrefs;
+  private SharedPreferences mPrefs;
   private static final String one = "1";
   private SmsPopupDbAdapter mDbAdapter;
 
@@ -46,40 +46,40 @@ public class ManagePreferences {
       Log.v("Contact NOT found - using prefs");
     }
 
-    myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
   }
 
   public boolean getBoolean(int resPrefId, int resDefaultId, int dbColumnNum) {
     if (useDatabase) {
       return one.equals(contactCursor.getString(dbColumnNum));
     } else {
-      return myPrefs.getBoolean(context.getString(resPrefId), Boolean.parseBoolean(context
-          .getString(resDefaultId)));
+      return mPrefs.getBoolean(context.getString(resPrefId),
+          Boolean.parseBoolean(context.getString(resDefaultId)));
     }
   }
 
   public boolean getBoolean(int resPrefId, int resDefaultId) {
-    return myPrefs.getBoolean(context.getString(resPrefId), Boolean.parseBoolean(context
-        .getString(resDefaultId)));
+    return mPrefs.getBoolean(context.getString(resPrefId),
+        Boolean.parseBoolean(context.getString(resDefaultId)));
   }
 
   public String getString(int resPrefId, int resDefaultId, int dbColumnNum) {
     if (useDatabase) {
       return contactCursor.getString(dbColumnNum);
     } else {
-      return myPrefs.getString(context.getString(resPrefId), context.getString(resDefaultId));
+      return mPrefs.getString(context.getString(resPrefId), context.getString(resDefaultId));
     }
   }
 
   public String getString(int resPrefId, int resDefaultId) {
-    return myPrefs.getString(context.getString(resPrefId), context.getString(resDefaultId));
+    return mPrefs.getString(context.getString(resPrefId), context.getString(resDefaultId));
   }
 
   public String getString(int resPrefId, String defaultVal, int dbColumnNum) {
     if (useDatabase) {
       return contactCursor.getString(dbColumnNum);
     } else {
-      return myPrefs.getString(context.getString(resPrefId), defaultVal);
+      return mPrefs.getString(context.getString(resPrefId), defaultVal);
     }
   }
 
@@ -89,10 +89,14 @@ public class ManagePreferences {
       mDbAdapter.updateContact(Long.valueOf(contactId), dbColumnNum, newVal);
       mDbAdapter.close();
     } else {
-      SharedPreferences.Editor settings = myPrefs.edit();
+      SharedPreferences.Editor settings = mPrefs.edit();
       settings.putString(context.getString(resPrefId), newVal);
       settings.commit();
     }
+  }
+
+  public int getInt(String pref, int defaultVal) {
+    return mPrefs.getInt(pref, defaultVal);
   }
 
   @Override

@@ -19,26 +19,28 @@ public class SmsPopupDbAdapter {
   public static final int KEY_CONTACT_NAME_NUM           = 1;
   public static final String KEY_ENABLED                 = "enabled";
   public static final int KEY_ENABLED_NUM                = 2;
+  public static final String KEY_POPUP_ENABLED           = "popup_enabled";
+  public static final int KEY_POPUP_ENABLED_NUM          = 3;
   public static final String KEY_RINGTONE                = "ringtone";
-  public static final int KEY_RINGTONE_NUM               = 3;
+  public static final int KEY_RINGTONE_NUM               = 4;
   public static final String KEY_VIBRATE_ENABLED         = "vibrate_enabled";
-  public static final int KEY_VIBRATE_ENABLED_NUM        = 4;
+  public static final int KEY_VIBRATE_ENABLED_NUM        = 5;
   public static final String KEY_VIBRATE_PATTERN         = "vibrate_pattern";
-  public static final int KEY_VIBRATE_PATTERN_NUM        = 5;
+  public static final int KEY_VIBRATE_PATTERN_NUM        = 6;
   public static final String KEY_VIBRATE_PATTERN_CUSTOM  = "vibrate_pattern_custom";
-  public static final int KEY_VIBRATE_PATTERN_CUSTOM_NUM = 6;
+  public static final int KEY_VIBRATE_PATTERN_CUSTOM_NUM = 7;
   public static final String KEY_LED_ENABLED             = "led_enabled";
-  public static final int KEY_LED_ENABLED_NUM            = 7;
+  public static final int KEY_LED_ENABLED_NUM            = 8;
   public static final String KEY_LED_PATTERN             = "led_pattern";
-  public static final int KEY_LED_PATTERN_NUM            = 8;
+  public static final int KEY_LED_PATTERN_NUM            = 9;
   public static final String KEY_LED_PATTERN_CUSTOM      = "led_pattern_custom";
-  public static final int KEY_LED_PATTERN_NUM_CUSTOM     = 9;
+  public static final int KEY_LED_PATTERN_NUM_CUSTOM     = 10;
   public static final String KEY_LED_COLOR               = "led_color";
-  public static final int KEY_LED_COLOR_NUM              = 10;
+  public static final int KEY_LED_COLOR_NUM              = 11;
   public static final String KEY_LED_COLOR_CUSTOM        = "led_color_custom";
-  public static final int   KEY_LED_COLOR_NUM_CUSTOM     = 11;
+  public static final int   KEY_LED_COLOR_NUM_CUSTOM     = 12;
   public static final String KEY_SUMMARY                 = "summary";
-  public static final int   KEY_SUMMARY_NUM              = 12;
+  public static final int   KEY_SUMMARY_NUM              = 13;
 
   private static final String QUICKMESSAGES_DB_TABLE = "quickmessages";
 
@@ -72,6 +74,7 @@ public class SmsPopupDbAdapter {
     KEY_CONTACT_ID             + " integer primary key, " +
     KEY_CONTACT_NAME           + " text default 'Unknown', " +
     KEY_ENABLED                + " integer default 1, " +
+    KEY_POPUP_ENABLED          + " integer default 1, " +
     KEY_RINGTONE               + " text default '" +
     //+ Settings.System.DEFAULT_NOTIFICATION_URI.toString() + "', " +
     "content://settings/system/notification_sound" + "', " +
@@ -207,9 +210,13 @@ public class SmsPopupDbAdapter {
 
   public boolean deleteContact(long contactId, boolean showToast) {
     if (mDb.delete(CONTACTS_DB_TABLE, KEY_CONTACT_ID + "=" + String.valueOf(contactId), null) > 0) {
-      Toast.makeText(context,
-          context.getString(R.string.contact_customization_removed_toast),
-          Toast.LENGTH_SHORT).show();
+
+      if (showToast) {
+        Toast.makeText(
+            context,
+            context.getString(R.string.contact_customization_removed_toast),
+            Toast.LENGTH_SHORT).show();
+      }
       return true;
     }
     return false;
@@ -219,7 +226,7 @@ public class SmsPopupDbAdapter {
     boolean found = false;
     Cursor mCursor =
       mDb.query(true, CONTACTS_DB_TABLE,
-          new String[] {KEY_CONTACT_ID, KEY_CONTACT_NAME, KEY_RINGTONE},
+          new String[] { KEY_CONTACT_ID, KEY_CONTACT_NAME, KEY_RINGTONE },
           KEY_CONTACT_ID + "=" + contactId, null,
           null, null, null, null);
     if (mCursor != null) {
