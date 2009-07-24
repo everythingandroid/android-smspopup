@@ -27,7 +27,7 @@ public class ReminderReceiverService extends Service {
 
   @Override
   public void onCreate() {
-    Log.v("ReminderReceiverService: onCreate()");
+    if (Log.DEBUG) Log.v("ReminderReceiverService: onCreate()");
     HandlerThread thread = new HandlerThread(Log.LOGTAG, Process.THREAD_PRIORITY_BACKGROUND);
     thread.start();
     context = getApplicationContext();
@@ -37,7 +37,7 @@ public class ReminderReceiverService extends Service {
 
   @Override
   public void onStart(Intent intent, int startId) {
-    Log.v("ReminderReceiverService: onStart()");
+    if (Log.DEBUG) Log.v("ReminderReceiverService: onStart()");
     Message msg = mServiceHandler.obtainMessage();
     msg.arg1 = startId;
     msg.obj = intent;
@@ -46,7 +46,7 @@ public class ReminderReceiverService extends Service {
 
   @Override
   public void onDestroy() {
-    Log.v("ReminderReceiverService: onDestroy()");
+    if (Log.DEBUG) Log.v("ReminderReceiverService: onDestroy()");
     mServiceLooper.quit();
   }
 
@@ -62,7 +62,7 @@ public class ReminderReceiverService extends Service {
 
     @Override
     public void handleMessage(Message msg) {
-      Log.v("ReminderReceiverService: handleMessage()");
+      if (Log.DEBUG) Log.v("ReminderReceiverService: handleMessage()");
 
       int serviceId = msg.arg1;
       Intent intent = (Intent) msg.obj;
@@ -71,15 +71,13 @@ public class ReminderReceiverService extends Service {
 
       // Log.v("ReminderReceiverService: action = " + action);
       if (ACTION_REMIND.equals(action)) {
-        Log.v("ReminderReceiverService: processReminder()");
+        if (Log.DEBUG) Log.v("ReminderReceiverService: processReminder()");
         processReminder(intent);
       } else if (Intent.ACTION_DELETE.equals(action)) {
 
         //TODO: update message count pref
-        Log.v("ReminderReceiverService: cancelReminder()");
+        if (Log.DEBUG) Log.v("ReminderReceiverService: cancelReminder()");
         ReminderReceiver.cancelReminder(context);
-
-        SmsPopupUtils.updateUnreadCountPref(context);
       }
 
       // NOTE: We MUST not call stopSelf() directly, since we need to
@@ -122,7 +120,7 @@ public class ReminderReceiverService extends Service {
    */
   public static void beginStartingService(Context context, Intent intent) {
     synchronized (mStartingServiceSync) {
-      Log.v("ReminderReceiverService: beginStartingService()");
+      if (Log.DEBUG) Log.v("ReminderReceiverService: beginStartingService()");
       if (mStartingService == null) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG);
@@ -139,7 +137,7 @@ public class ReminderReceiverService extends Service {
    */
   public static void finishStartingService(Service service, int startId) {
     synchronized (mStartingServiceSync) {
-      Log.v("ReminderReceiverService: finishStartingService()");
+      if (Log.DEBUG) Log.v("ReminderReceiverService: finishStartingService()");
       if (mStartingService != null) {
         if (service.stopSelfResult(startId)) {
           mStartingService.release();

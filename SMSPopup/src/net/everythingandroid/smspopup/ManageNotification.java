@@ -129,7 +129,7 @@ public class ManageNotification {
               defaultRingtone,
               SmsPopupDbAdapter.KEY_RINGTONE_NUM));
 
-      Log.v("Sounds URI = " + alarmSoundURI.toString());
+      if (Log.DEBUG) Log.v("Sounds URI = " + alarmSoundURI.toString());
 
       // The notification title, sub-text and text that will scroll
       String contentTitle;
@@ -301,7 +301,7 @@ public class ManageNotification {
       mPrefs.close();
 
       // Finally: run the notification!
-      Log.v("*** Notify running ***");
+      if (Log.DEBUG) Log.v("*** Notify running ***");
       myNM.notify(notif, notification);
     }
   }

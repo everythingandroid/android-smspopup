@@ -109,7 +109,7 @@ public class SmsPopupDbAdapter {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-      Log.v("SMSPopupDbAdapter: Creating Database");
+      if (Log.DEBUG) Log.v("SMSPopupDbAdapter: Creating Database");
       db.execSQL(CONTACTS_DB_CREATE);
       db.execSQL(QUICKMESSAGES_DB_CREATE);
     }
@@ -118,7 +118,7 @@ public class SmsPopupDbAdapter {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
       //           Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
       //                   + newVersion + ", which will destroy all old data");
-      Log.v("SMSPopupDbAdapter: Upgrading Database");
+      if (Log.DEBUG) Log.v("SMSPopupDbAdapter: Upgrading Database");
       db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_DB_TABLE);
       db.execSQL("DROP TABLE IF EXISTS " + QUICKMESSAGES_DB_CREATE);
       onCreate(db);
@@ -162,7 +162,7 @@ public class SmsPopupDbAdapter {
    */
   public SmsPopupDbAdapter open(boolean readOnly) throws SQLException {
     if (mDbHelper == null) {
-      Log.v("Opened database");
+      if (Log.DEBUG) Log.v("Opened database");
       mDbHelper = new DatabaseHelper(context);
       if (readOnly) {
         mDb = mDbHelper.getReadableDatabase();
@@ -178,7 +178,7 @@ public class SmsPopupDbAdapter {
    */
   public void close() {
     if (mDbHelper != null) {
-      Log.v("Closed database");
+      if (Log.DEBUG) Log.v("Closed database");
       mDbHelper.close();
       mDbHelper = null;
     }
@@ -188,7 +188,7 @@ public class SmsPopupDbAdapter {
     Cursor c = fetchContact(contactId);
 
     if (c == null) {
-      Log.v("SMSPopupDbAdapter: creating contact");
+      if (Log.DEBUG) Log.v("SMSPopupDbAdapter: creating contact");
 
       String contactName = SmsPopupUtils.getPersonName(
           context, String.valueOf(contactId), null);
@@ -200,7 +200,7 @@ public class SmsPopupDbAdapter {
       return mDb.insert(CONTACTS_DB_TABLE, null, vals);
     }
     c.close();
-    Log.v("SMSPopupDbAdapter: contact exists");
+    if (Log.DEBUG) Log.v("SMSPopupDbAdapter: contact exists");
     return 0;
   }
 
@@ -283,16 +283,16 @@ public class SmsPopupDbAdapter {
     ContentValues vals = new ContentValues();
 
     if (data.getClass().equals(Boolean.class)) {
-      Log.v("boolean! " + data);
+      if (Log.DEBUG) Log.v("boolean! " + data);
       vals.put(columnName, ((Boolean) data));
     } else if (data.getClass().equals(String.class)) {
-      Log.v("string! " + data);
+      if (Log.DEBUG) Log.v("string! " + data);
       vals.put(columnName, (String) data);
     } else {
       return false;
     }
 
-    Log.v("updateContact - " + columnName + ", " + data.getClass());
+    if (Log.DEBUG) Log.v("updateContact - " + columnName + ", " + data.getClass());
 
     return mDb.update(CONTACTS_DB_TABLE, vals, KEY_CONTACT_ID + "=" + contactId, null) > 0;
   }
@@ -325,7 +325,7 @@ public class SmsPopupDbAdapter {
       }
     }
     contact.close();
-    Log.v("updateContactSummary()");
+    if (Log.DEBUG) Log.v("updateContactSummary()");
     return updateContact(contactId, KEY_SUMMARY, summary.toString());
   }
 
@@ -338,7 +338,7 @@ public class SmsPopupDbAdapter {
     String trimmedMessage = message.trim();
     if (TextUtils.isEmpty(trimmedMessage)) return -1;
 
-    Log.v("QuickMessagesDbAdapter: creating row");
+    if (Log.DEBUG) Log.v("QuickMessagesDbAdapter: creating row");
 
     ContentValues vals = new ContentValues();
     vals.put(KEY_QUICKMESSAGE, trimmedMessage);
@@ -358,7 +358,7 @@ public class SmsPopupDbAdapter {
    * @return true if success, false otherwise
    */
   public boolean deleteQuickMessage(long id) {
-    Log.v("id to delete is " + id);
+    if (Log.DEBUG) Log.v("id to delete is " + id);
     if (mDb.delete(QUICKMESSAGES_DB_TABLE, KEY_ROWID + "=" + String.valueOf(id), null) > 0) {
       return true;
     }
@@ -448,7 +448,7 @@ public class SmsPopupDbAdapter {
     if (c.moveToFirst()) {
       int result = c.getInt(0);
       c.close();
-      Log.v("Min ordering = " + result);
+      if (Log.DEBUG) Log.v("Min ordering = " + result);
       return result;
     }
     return -1;
@@ -466,7 +466,7 @@ public class SmsPopupDbAdapter {
       }
       int result = c.getInt(0);
       c.close();
-      Log.v("Max ordering = " + result);
+      if (Log.DEBUG) Log.v("Max ordering = " + result);
       return result;
     }
     return -1;

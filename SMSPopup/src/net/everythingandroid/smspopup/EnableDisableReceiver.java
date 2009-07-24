@@ -10,7 +10,7 @@ public class EnableDisableReceiver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    Log.v("ExternalEventReceiver: onReceive()");
+    if (Log.DEBUG) Log.v("ExternalEventReceiver: onReceive()");
 
     String action = intent.getAction();
 

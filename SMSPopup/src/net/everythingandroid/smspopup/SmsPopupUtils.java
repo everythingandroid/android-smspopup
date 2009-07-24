@@ -51,7 +51,6 @@ public class SmsPopupUtils {
   public static final int MESSAGE_TYPE_MMS = 2;
 
   public static final int CONTACT_PHOTO_PLACEHOLDER = android.R.drawable.ic_dialog_info;
-  public static final String UNREAD_MESSAGE_COUNT_PREF = "unreadcount";
 
   private static final String AUTHOR_CONTACT_INFO = "Adam K <adam@everythingandroid.net>";
 
@@ -78,7 +77,7 @@ public class SmsPopupUtils {
         if (cursor.getCount() > 0) {
           cursor.moveToFirst();
           String name = cursor.getString(0);
-          Log.v("Contact Display Name: " + name);
+          if (Log.DEBUG) Log.v("Contact Display Name: " + name);
           return name;
         }
       } finally {
@@ -109,7 +108,7 @@ public class SmsPopupUtils {
         if (cursor.getCount() > 0) {
           cursor.moveToFirst();
           Long id = Long.valueOf(cursor.getLong(0));
-          Log.v("Found person: " + id);
+          if (Log.DEBUG) Log.v("Found person: " + id);
           return (String.valueOf(id));
         }
       } finally {
@@ -210,7 +209,7 @@ public class SmsPopupUtils {
       } catch (Exception e) {
         result = 0;
       }
-      Log.v(String.format("message id = %s marked as read, result = %s", messageId, result ));
+      if (Log.DEBUG) Log.v(String.format("message id = %s marked as read, result = %s", messageId, result ));
     }
   }
 
@@ -237,9 +236,9 @@ public class SmsPopupUtils {
             ContentUris.withAppendedId(CONVERSATION_CONTENT_URI, threadId),
             values, null, null);
       } catch (Exception e) {
-        Log.v("error marking thread read");
+        if (Log.DEBUG) Log.v("error marking thread read");
       }
-      Log.v("thread id " + threadId + " marked as read, result = " + result);
+      if (Log.DEBUG) Log.v("thread id " + threadId + " marked as read, result = " + result);
     }
   }
 
@@ -254,7 +253,7 @@ public class SmsPopupUtils {
     String where = String.format("body='%s' and ", body);
     if (threadId > 0) {
 
-      Log.v("Trying to find message ID");
+      if (Log.DEBUG) Log.v("Trying to find message ID");
       if (SmsMmsMessage.MESSAGE_TYPE_MMS == messageType) {
         // It seems MMS timestamps are stored in a seconds, whereas SMS timestamps are in millis
         where = "date=" + timestamp / 1000;
@@ -281,7 +280,7 @@ public class SmsPopupUtils {
         try {
           if (cursor.moveToFirst()) {
             id = cursor.getLong(0);
-            Log.v("Message id found = " + id);
+            if (Log.DEBUG) Log.v("Message id found = " + id);
             //Log.v("Timestamp = " + cursor.getLong(1));
           }
         } finally {
@@ -299,7 +298,7 @@ public class SmsPopupUtils {
   public static void deleteMessage(Context context, long messageId, long threadId, int messageType) {
 
     if (messageId > 0) {
-      Log.v("id of message to delete is " + messageId);
+      if (Log.DEBUG) Log.v("id of message to delete is " + messageId);
       Uri deleteUri;
 
       if (SmsMmsMessage.MESSAGE_TYPE_MMS == messageType) {
@@ -310,7 +309,7 @@ public class SmsPopupUtils {
         return;
       }
       int count = context.getContentResolver().delete(deleteUri, null, null);
-      Log.v("Messages deleted: " + count);
+      if (Log.DEBUG) Log.v("Messages deleted: " + count);
       if (count == 1) {
         //TODO: should only set the thread read if there are no more unread
         // messages
@@ -463,37 +462,53 @@ public class SmsPopupUtils {
     context.startActivity(Intent.createChooser(msg, "Send E-mail"));
   }
 
-  //  public static int getUnreadMessagesCount(Context context, long timestamp) {
-  //    int unreadSms = getUnreadSmsCount(context, timestamp);
-  //    int unreadMms = getUnreadMmsCount(context);
-  //    return (unreadSms + unreadMms);
-  //  }
-
-  //  public static int getUnreadMessagesCount(Context context) {
-  //    return getUnreadMessagesCount(context, 0);
-  //    //		int unreadSms = getUnreadSmsCount(context);
-  //    //		int unreadMms = getUnreadMmsCount(context);
-  //    //		return (unreadSms + unreadMms);
-  //  }
-
+  /**
+   * Return current unread message count from system db (sms and mms)
+   * 
+   * @param context
+   * @return unread sms+mms message count
+   */
   public static int getUnreadMessagesCount(Context context) {
-    int unreadSms = getUnreadSmsCount(context);
-    int unreadMms = getUnreadMmsCount(context);
-    return (unreadSms + unreadMms);
+    return getUnreadMessagesCount(context, 0);
   }
 
+  /**
+   * Return current unread message count from system db (sms and mms)
+   * 
+   * @param context
+   * @param timestamp only messages before this timestamp will be counted
+   * @return unread sms+mms message count
+   */
+  public static int getUnreadMessagesCount(Context context, long timestamp) {
+    return getUnreadSmsCount(context, timestamp) + getUnreadMmsCount(context);
+  }
 
+  /**
+   * Return current unread message count from system db (sms only)
+   * 
+   * @param context
+   * @return unread sms message count
+   */
   public static int getUnreadSmsCount(Context context) {
     return getUnreadSmsCount(context, 0);
   }
 
+  /**
+   * Return current unread message count from system db (sms only)
+   * 
+   * @param context
+   * @param timestamp only messages before this timestamp will be counted
+   * @return unread sms message count
+   */
   public static int getUnreadSmsCount(Context context, long timestamp) {
-    String SMS_READ_COLUMN = "read";
-    String UNREAD_CONDITION = SMS_READ_COLUMN + "=0";
+    //    String SMS_READ_COLUMN = "read";
+    //    String UNREAD_CONDITION = SMS_READ_COLUMN + "=0";
+    String UNREAD_CONDITION = "read=0";
 
     if (timestamp > 0) {
-      Log.v("getUnreadSmsCount(), timestamp = " + timestamp);
-      UNREAD_CONDITION += " and date<" + String.valueOf(timestamp);
+      if (Log.DEBUG) Log.v("getUnreadSmsCount(), timestamp = " + timestamp);
+      UNREAD_CONDITION += " and date<"
+        + String.valueOf(timestamp-SmsMmsMessage.MESSAGE_COMPARE_TIME_BUFFER);
     }
 
     int count = 0;
@@ -513,14 +528,20 @@ public class SmsPopupUtils {
 
     // We ignored the latest incoming message so add one to the total count
     if (timestamp > 0) {
-      Log.v("adding 1 to unread, previous count was " + count);
+      if (Log.DEBUG) Log.v("adding 1 to unread, previous count was " + count);
       count += 1;
     }
 
-    Log.v("sms unread count = " + count);
+    if (Log.DEBUG) Log.v("sms unread count = " + count);
     return count;
   }
 
+  /**
+   * Return current unread message count from system db (mms only)
+   * 
+   * @param context
+   * @return unread mms message count
+   */
   public static int getUnreadMmsCount(Context context) {
 
     String MMS_READ_COLUMN = "read";
@@ -540,7 +561,7 @@ public class SmsPopupUtils {
         cursor.close();
       }
     }
-    Log.v("mms unread count = " + count);
+    if (Log.DEBUG) Log.v("mms unread count = " + count);
     return count;
   }
 
@@ -855,7 +876,7 @@ public class SmsPopupUtils {
 
         if (PACKAGE_NAME.equals(runningTaskComponent.getPackageName()) &&
             CONVO_CLASS_NAME.equals(runningTaskComponent.getClassName())) {
-          Log.v("User in messaging app - from running task");
+          if (Log.DEBUG) Log.v("User in messaging app - from running task");
           return true;
         }
       }
@@ -876,7 +897,7 @@ public class SmsPopupUtils {
 					if (PACKAGE_NAME.equals(recentTaskComponentName.getPackageName()) &&
 							(COMPOSE_CLASS_NAME.equals(recentTaskClassName) ||
 							 CONVO_CLASS_NAME.equals(recentTaskClassName))) {
-						Log.v("User in messaging app");
+						if (Log.DEBUG) Log.v("User in messaging app");
 						return true;
 					}
 				}
@@ -915,7 +936,7 @@ public class SmsPopupUtils {
     settings.commit();
 
     if (enable) {
-      Log.v("SMSPopup receiver is enabled");
+      if (Log.DEBUG) Log.v("SMSPopup receiver is enabled");
       pm.setComponentEnabledSetting(cn,
           PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
           PackageManager.DONT_KILL_APP);
@@ -924,7 +945,7 @@ public class SmsPopupUtils {
       disableOtherSMSPopup(context);
 
     } else {
-      Log.v("SMSPopup receiver is disabled");
+      if (Log.DEBUG) Log.v("SMSPopup receiver is disabled");
       pm.setComponentEnabledSetting(cn,
           PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
           PackageManager.DONT_KILL_APP);
@@ -938,16 +959,4 @@ public class SmsPopupUtils {
     context.sendBroadcast(i);
   }
 
-  public static void updateUnreadCountPref(Context context, int unreadCount) {
-    // Update our preference
-    SharedPreferences.Editor myPrefsEditor =
-      PreferenceManager.getDefaultSharedPreferences(context).edit();
-
-    myPrefsEditor.putInt(UNREAD_MESSAGE_COUNT_PREF, unreadCount);
-    myPrefsEditor.commit();
-  }
-
-  public static void updateUnreadCountPref(Context context) {
-    updateUnreadCountPref(context, getUnreadMessagesCount(context));
-  }
 }

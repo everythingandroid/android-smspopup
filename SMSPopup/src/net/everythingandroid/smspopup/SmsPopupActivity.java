@@ -98,7 +98,7 @@ public class SmsPopupActivity extends Activity {
   @Override
   protected void onCreate(Bundle bundle) {
     super.onCreate(bundle);
-    Log.v("SMSPopupActivity: onCreate()");
+    if (Log.DEBUG) Log.v("SMSPopupActivity: onCreate()");
 
     //First things first, acquire wakelock, otherwise the phone may sleep
     ManageWakeLock.acquirePartial(getApplicationContext());
@@ -220,7 +220,7 @@ public class SmsPopupActivity extends Activity {
   @Override
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
-    Log.v("SMSPopupActivity: onNewIntent()");
+    if (Log.DEBUG) Log.v("SMSPopupActivity: onNewIntent()");
 
     //First things first, acquire wakelock, otherwise the phone may sleep
     ManageWakeLock.acquirePartial(getApplicationContext());
@@ -238,14 +238,14 @@ public class SmsPopupActivity extends Activity {
   @Override
   protected void onStart() {
     super.onStart();
-    Log.v("SMSPopupActivity: onStart()");
+    if (Log.DEBUG) Log.v("SMSPopupActivity: onStart()");
     ManageWakeLock.acquirePartial(getApplicationContext());
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    Log.v("SMSPopupActivity: onResume()");
+    if (Log.DEBUG) Log.v("SMSPopupActivity: onResume()");
     wasVisible = false;
     //Reset exitingKeyguardSecurely bool to false
     exitingKeyguardSecurely = false;
@@ -254,7 +254,7 @@ public class SmsPopupActivity extends Activity {
   @Override
   protected void onPause() {
     super.onPause();
-    Log.v("SMSPopupActivity: onPause()");
+    if (Log.DEBUG) Log.v("SMSPopupActivity: onPause()");
 
     if (myTts != null) {
       myTts.shutdown();
@@ -272,7 +272,7 @@ public class SmsPopupActivity extends Activity {
   @Override
   protected void onStop() {
     super.onStop();
-    Log.v("SMSPopupActivity: onStop()");
+    if (Log.DEBUG) Log.v("SMSPopupActivity: onStop()");
 
     //Cancel the receiver that will clear our locks
     ClearAllReceiver.removeCancel(getApplicationContext());
@@ -302,7 +302,7 @@ public class SmsPopupActivity extends Activity {
   @Override
   public void  onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    Log.v("SMSPopupActivity: onSaveInstanceState()");
+    if (Log.DEBUG) Log.v("SMSPopupActivity: onSaveInstanceState()");
 
     // Save values from most recent bundle (ie. most recent message)
     outState.putAll(bundle);
@@ -313,7 +313,7 @@ public class SmsPopupActivity extends Activity {
    * any scheduled reminders (as the user has interrupted the app.
    */
   private void myFinish() {
-    Log.v("myFinish()");
+    if (Log.DEBUG) Log.v("myFinish()");
 
     if (inbox) {
       ManageNotification.clearAll(getApplicationContext());
@@ -460,7 +460,7 @@ public class SmsPopupActivity extends Activity {
    * of the app and the current state of the phone (keyguard on or off)
    */
   final private void refreshPrivacy() {
-    Log.v("refreshPrivacy()");
+    if (Log.DEBUG) Log.v("refreshPrivacy()");
     messageViewed = true;
     if (privacyMode) {
       //We need to init the keyguard class so we can check if the keyguard is on
@@ -543,7 +543,7 @@ public class SmsPopupActivity extends Activity {
         .create();
       case QUICKREPLY_DIALOG:
         LayoutInflater factory = LayoutInflater.from(this);
-        final View qrLayout = factory.inflate(R.layout.quickreply, null);
+        final View qrLayout = factory.inflate(R.layout.quick_reply, null);
         final EditText qrEditText = (EditText) qrLayout.findViewById(R.id.QuickReplyEditText);
         final TextView qrCounterTextView = (TextView) qrLayout.findViewById(R.id.QuickReplyCounterTextView);
 
@@ -596,7 +596,7 @@ public class SmsPopupActivity extends Activity {
         .setSingleChoiceItems(mCursor, -1, SmsPopupDbAdapter.KEY_QUICKMESSAGE, new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int item) {
             //Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
-            Log.v("Item clicked = " + item);
+            if (Log.DEBUG) Log.v("Item clicked = " + item);
             quickMessageSelected = item;
           }
         })
@@ -605,7 +605,7 @@ public class SmsPopupActivity extends Activity {
           public void onClick(DialogInterface dialog, int whichButton) {
             if (quickMessageSelected != -1) {
               mCursor.moveToPosition(quickMessageSelected);
-              Log.v("contactsCursor = " + mCursor.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM));
+              if (Log.DEBUG) Log.v("contactsCursor = " + mCursor.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM));
               quickReply(mCursor.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM));
             }
           }
@@ -630,7 +630,7 @@ public class SmsPopupActivity extends Activity {
         updateQuickReplyView();
         break;
       case QUICKREPLY_MSG_DIALOG:
-        Log.v("onPrepareDialog for QUICK REPLY");
+        if (Log.DEBUG) Log.v("onPrepareDialog for QUICK REPLY");
         //			mDbAdapter.open(true);
         //			mCursor = mDbAdapter.fetchAllQuickMessages();
         //			startManagingCursor(mCursor);
@@ -809,7 +809,7 @@ public class SmsPopupActivity extends Activity {
         i.setAction(SmsPopupUtilsService.ACTION_QUICKREPLY);
         i.putExtras(quickreplyMessage.toBundle());
         i.putExtra(SmsMmsMessage.EXTRAS_QUICKREPLY, quickReplyMessage);
-        Log.v("Sending message to " + quickreplyMessage.getContactName());
+        if (Log.DEBUG) Log.v("Sending message to " + quickreplyMessage.getContactName());
         SmsPopupUtilsService.beginStartingService(
             SmsPopupActivity.this.getApplicationContext(), i);
         // TODO: move strings to res file
@@ -845,19 +845,19 @@ public class SmsPopupActivity extends Activity {
   private class FetchContactPhotoTask extends AsyncTask<String, Integer, Bitmap> {
     @Override
     protected Bitmap doInBackground(String... params) {
-      Log.v("Loading contact photo in background...");
-//      try {
-//        Thread.sleep(2000);
-//      } catch (InterruptedException e) {
-//        // TODO Auto-generated catch block
-//        e.printStackTrace();
-//      }
+      if (Log.DEBUG) Log.v("Loading contact photo in background...");
+      //      try {
+      //        Thread.sleep(2000);
+      //      } catch (InterruptedException e) {
+      //        // TODO Auto-generated catch block
+      //        e.printStackTrace();
+      //      }
       return SmsPopupUtils.getPersonPhoto(SmsPopupActivity.this.getApplicationContext(), params[0]);
     }
 
     @Override
     protected void onPostExecute(Bitmap result) {
-      Log.v("Done loading contact photo");
+      if (Log.DEBUG) Log.v("Done loading contact photo");
       contactPhoto = result;
       if (result != null) {
         photoImageView.setImageBitmap(contactPhoto);
