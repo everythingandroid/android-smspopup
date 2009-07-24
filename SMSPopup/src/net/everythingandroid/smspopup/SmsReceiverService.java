@@ -38,7 +38,7 @@ public class SmsReceiverService extends Service {
 
   @Override
   public void onCreate() {
-    Log.v("SMSReceiverService: onCreate()");
+    if (Log.DEBUG) Log.v("SMSReceiverService: onCreate()");
     HandlerThread thread = new HandlerThread(Log.LOGTAG, Process.THREAD_PRIORITY_BACKGROUND);
     thread.start();
     context = getApplicationContext();
@@ -48,7 +48,7 @@ public class SmsReceiverService extends Service {
 
   @Override
   public void onStart(Intent intent, int startId) {
-    Log.v("SMSReceiverService: onStart()");
+    if (Log.DEBUG) Log.v("SMSReceiverService: onStart()");
 
     //mResultCode = intent.getIntExtra("result", 0);
     Message msg = mServiceHandler.obtainMessage();
@@ -59,7 +59,7 @@ public class SmsReceiverService extends Service {
 
   @Override
   public void onDestroy() {
-    Log.v("SMSReceiverService: onDestroy()");
+    if (Log.DEBUG) Log.v("SMSReceiverService: onDestroy()");
     mServiceLooper.quit();
   }
 
@@ -75,7 +75,7 @@ public class SmsReceiverService extends Service {
 
     @Override
     public void handleMessage(Message msg) {
-      Log.v("SMSReceiverService: handleMessage()");
+      if (Log.DEBUG) Log.v("SMSReceiverService: handleMessage()");
 
       int serviceId = msg.arg1;
       Intent intent = (Intent) msg.obj;
@@ -100,7 +100,7 @@ public class SmsReceiverService extends Service {
    * Handle receiving a SMS message
    */
   private void handleSmsReceived(Intent intent) {
-    Log.v("SMSReceiver: Intercept SMS");
+    if (Log.DEBUG) Log.v("SMSReceiver: Intercept SMS");
 
     Bundle bundle = intent.getExtras();
     if (bundle != null) {
@@ -143,8 +143,7 @@ public class SmsReceiverService extends Service {
    */
   private void notifySmsReceived(SmsMmsMessage smsMessage) {
 
-    ManagePreferences mPrefs =
-      new ManagePreferences(context, smsMessage.getContactId());
+    ManagePreferences mPrefs = new ManagePreferences(context, smsMessage.getContactId());
 
     boolean onlyShowOnKeyguard = mPrefs.getBoolean(
         R.string.pref_onlyShowOnKeyguard_key,
@@ -160,10 +159,9 @@ public class SmsReceiverService extends Service {
         R.string.pref_notif_enabled_default,
         SmsPopupDbAdapter.KEY_ENABLED_NUM);
 
-    int unreadCount = mPrefs.getInt(SmsPopupUtils.UNREAD_MESSAGE_COUNT_PREF, 0) + 1;
-    SmsPopupUtils.updateUnreadCountPref(context, unreadCount);
-
-    smsMessage.setUnreadCount(unreadCount);
+    //    int unreadCount = mPrefs.getInt(SmsPopupUtils.UNREAD_MESSAGE_COUNT_PREF, 0) + 1;
+    //    SmsPopupUtils.updateUnreadCountPref(context, unreadCount);
+    //    smsMessage.setUnreadCount(unreadCount);
 
     ManageKeyguard.initialize(context);
 
@@ -171,12 +169,12 @@ public class SmsReceiverService extends Service {
       if (showPopup &&
           (ManageKeyguard.inKeyguardRestrictedInputMode() ||
               (!onlyShowOnKeyguard && !SmsPopupUtils.inMessagingApp(context)))) {
-        Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
+        if (Log.DEBUG) Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
         Intent popup = smsMessage.getPopupIntent();
         ManageWakeLock.acquirePartial(context);
         context.startActivity(popup);
       } else {
-        Log.v("^^^^^^Not in keyguard, only using notification");
+        if (Log.DEBUG) Log.v("^^^^^^Not in keyguard, only using notification");
         ManageNotification.show(context, smsMessage);
         ReminderReceiver.scheduleReminder(context, smsMessage);
       }
@@ -187,7 +185,7 @@ public class SmsReceiverService extends Service {
    * Handle receiving a MMS message
    */
   private void handleMmsReceived(Intent intent) {
-    Log.v("MMS received!");
+    if (Log.DEBUG) Log.v("MMS received!");
     SmsMmsMessage mmsMessage = null;
     int count = 0;
 
@@ -198,7 +196,7 @@ public class SmsReceiverService extends Service {
     while (mmsMessage == null && count < MESSAGE_RETRY) {
       mmsMessage = SmsPopupUtils.getMmsDetails(context);
       if (mmsMessage != null) {
-        Log.v("MMS found in content provider");
+        if (Log.DEBUG) Log.v("MMS found in content provider");
         SharedPreferences myPrefs =
           PreferenceManager.getDefaultSharedPreferences(context);
         boolean onlyShowOnKeyguard = myPrefs.getBoolean(
@@ -207,17 +205,17 @@ public class SmsReceiverService extends Service {
                 context.getString(R.string.pref_onlyShowOnKeyguard_default)));
 
         if (ManageKeyguard.inKeyguardRestrictedInputMode() || !onlyShowOnKeyguard) {
-          Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
+          if (Log.DEBUG) Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
           Intent popup = mmsMessage.getPopupIntent();
           ManageWakeLock.acquirePartial(context);
           context.startActivity(popup);
         } else {
-          Log.v("^^^^^^Not in keyguard, only using notification");
+          if (Log.DEBUG) Log.v("^^^^^^Not in keyguard, only using notification");
           ManageNotification.show(context, mmsMessage);
           ReminderReceiver.scheduleReminder(context, mmsMessage);
         }
       } else {
-        Log.v("MMS not found, sleeping (count is " + count + ")");
+        if (Log.DEBUG) Log.v("MMS not found, sleeping (count is " + count + ")");
         count++;
         try {
           Thread.sleep(MESSAGE_RETRY_PAUSE);
@@ -241,7 +239,7 @@ public class SmsReceiverService extends Service {
    */
   public static void beginStartingService(Context context, Intent intent) {
     synchronized (mStartingServiceSync) {
-      Log.v("SMSReceiverService: beginStartingService()");
+      if (Log.DEBUG) Log.v("SMSReceiverService: beginStartingService()");
       if (mStartingService == null) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG);
@@ -258,7 +256,7 @@ public class SmsReceiverService extends Service {
    */
   public static void finishStartingService(Service service, int startId) {
     synchronized (mStartingServiceSync) {
-      Log.v("SMSReceiverService: finishStartingService()");
+      if (Log.DEBUG) Log.v("SMSReceiverService: finishStartingService()");
       if (mStartingService != null) {
         if (service.stopSelfResult(startId)) {
           mStartingService.release();

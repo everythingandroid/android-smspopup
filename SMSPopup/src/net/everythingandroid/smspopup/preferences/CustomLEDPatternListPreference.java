@@ -19,8 +19,7 @@ import android.widget.Toast;
 public class CustomLEDPatternListPreference extends ListPreference {
   private Context context;
   private static boolean dialogShowing;
-  // private SharedPreferences myPrefs = null;
-  private ManagePreferences myPrefs = null;
+  private ManagePreferences mPrefs = null;
   private String contactId = null;
   private String flashLedPattern;
   private String flashLedPatternCustom;
@@ -53,15 +52,14 @@ public class CustomLEDPatternListPreference extends ListPreference {
   }
 
   private void getPrefs() {
-    if (myPrefs == null) {
-      // myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-      myPrefs = new ManagePreferences(context, contactId);
+    if (mPrefs == null) {
+      mPrefs = new ManagePreferences(context, contactId);
     }
     flashLedPattern =
-      myPrefs.getString(R.string.c_pref_flashled_pattern_key,
+      mPrefs.getString(R.string.c_pref_flashled_pattern_key,
           R.string.pref_flashled_pattern_default);
     flashLedPatternCustom =
-      myPrefs.getString(R.string.c_pref_flashled_pattern_custom_key,
+      mPrefs.getString(R.string.c_pref_flashled_pattern_custom_key,
           R.string.pref_flashled_pattern_default);
 
     led_pattern = null;
@@ -74,7 +72,7 @@ public class CustomLEDPatternListPreference extends ListPreference {
 
     if (led_pattern == null) {
       led_pattern =
-        ManageNotification.parseLEDPattern(myPrefs.getString(
+        ManageNotification.parseLEDPattern(mPrefs.getString(
             R.string.c_pref_flashled_pattern_key, R.string.pref_flashled_pattern_default));
     }
   }
@@ -103,24 +101,21 @@ public class CustomLEDPatternListPreference extends ListPreference {
               }
             }).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int whichButton) {
-                // SharedPreferences.Editor settings = myPrefs.edit();
-                // String new_pattern = et.getText().toString();
                 dialogShowing = false;
                 String stringPattern = onEditText.getText() + "," + offEditText.getText();
                 if (ManageNotification.parseLEDPattern(stringPattern) != null) {
-                  myPrefs.putString(R.string.c_pref_flashled_pattern_custom_key, stringPattern,
+                  mPrefs.putString(R.string.c_pref_flashled_pattern_custom_key, stringPattern,
                       SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
                   Toast.makeText(context, context.getString(R.string.pref_flashled_pattern_ok),
                       Toast.LENGTH_LONG).show();
                 } else {
-                  myPrefs.putString(R.string.c_pref_flashled_pattern_custom_key, context
+                  mPrefs.putString(R.string.c_pref_flashled_pattern_custom_key, context
                       .getString(R.string.pref_flashled_pattern_default),
                       SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
 
                   Toast.makeText(context, context.getString(R.string.pref_flashled_pattern_bad),
                       Toast.LENGTH_LONG).show();
                 }
-                // settings.commit();
               }
             }).show();
     dialogShowing = true;

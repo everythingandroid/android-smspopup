@@ -54,10 +54,11 @@ public class ConfigQuickMessagesActivity extends ListActivity {
 
     mListView.addHeaderView(tv, null, true);
     mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
+    mDbAdapter.open(true);
 
     LayoutInflater factory = LayoutInflater.from(this);
-    addQuickMessageLayout = factory.inflate(R.layout.quickmessage, null);
-    editQuickMessageLayout = factory.inflate(R.layout.quickmessage, null);
+    addQuickMessageLayout = factory.inflate(R.layout.quick_message, null);
+    editQuickMessageLayout = factory.inflate(R.layout.quick_message, null);
     qmEditText = (EditText) editQuickMessageLayout.findViewById(R.id.QuickReplyEditText);
     addEditText = (EditText) addQuickMessageLayout.findViewById(R.id.QuickReplyEditText);
   }
@@ -125,7 +126,7 @@ public class ConfigQuickMessagesActivity extends ListActivity {
   @Override
   public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
     super.onCreateContextMenu(menu, v, menuInfo);
-    Log.v("onCreateContextMenu()");
+    if (Log.DEBUG) Log.v("onCreateContextMenu()");
 
     // Create menu if top item is not selected
     if (((AdapterContextMenuInfo)menuInfo).id != -1) {
@@ -141,20 +142,20 @@ public class ConfigQuickMessagesActivity extends ListActivity {
   @Override
   public boolean onContextItemSelected(MenuItem item) {
     AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-    Log.v("onContextItemSelected()");
+    if (Log.DEBUG) Log.v("onContextItemSelected()");
     if (info.id != -1) {
       switch (item.getItemId()) {
         case CONTEXT_MENU_EDIT_ID:
-          Log.v("Editing quick message " + info.id);
+          if (Log.DEBUG) Log.v("Editing quick message " + info.id);
           editId = info.id;
           showDialog(EDIT_DIALOG);
           return true;
         case CONTEXT_MENU_DELETE_ID:
-          Log.v("Deleting quickmessage " + info.id);
+          if (Log.DEBUG) Log.v("Deleting quickmessage " + info.id);
           deleteQuickMessage(info.id);
           return true;
         case CONTEXT_MENU_REORDER_ID:
-          Log.v("Reordering quickmessage " + info.id);
+          if (Log.DEBUG) Log.v("Reordering quickmessage " + info.id);
           reorderQuickMessage(info.id);
           return true;
         default:
@@ -171,27 +172,36 @@ public class ConfigQuickMessagesActivity extends ListActivity {
   protected Dialog onCreateDialog(int id) {
     switch (id) {
       case ADD_DIALOG:
-        return new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_email).setTitle(
-        "Add Quick Message").setView(addQuickMessageLayout).setPositiveButton("Create",
-            new DialogInterface.OnClickListener() {
+        return new AlertDialog.Builder(this)
+        .setIcon(android.R.drawable.ic_dialog_email)
+        .setTitle("Add Quick Message")
+        .setView(addQuickMessageLayout)
+        .setPositiveButton("Create", new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int whichButton) {
             createQuickMessage(addEditText.getText().toString());
           }
-        }).setNegativeButton(android.R.string.cancel, null).create();
+        })
+        .setNegativeButton(android.R.string.cancel, null)
+        .create();
 
       case EDIT_DIALOG:
-        return new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_email).setTitle(
-        "Edit Quick Message").setView(editQuickMessageLayout).setPositiveButton("Save",
-            new DialogInterface.OnClickListener() {
+        return new AlertDialog.Builder(this)
+        .setIcon(android.R.drawable.ic_dialog_email)
+        .setTitle("Edit Quick Message")
+        .setView(editQuickMessageLayout)
+        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int whichButton) {
             updateQuickMessage(editId, qmEditText.getText().toString());
           }
-        }).setNeutralButton(getString(R.string.contact_customization_remove),
+        })
+        .setNeutralButton(getString(R.string.contact_customization_remove),
             new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int whichButton) {
             deleteQuickMessage(editId);
           }
-        }).setNegativeButton(android.R.string.cancel, null).create();
+        })
+        .setNegativeButton(android.R.string.cancel, null)
+        .create();
     }
     return null;
   }
@@ -211,7 +221,6 @@ public class ConfigQuickMessagesActivity extends ListActivity {
 
   private void fillData() {
     // Get all of the notes from the database and create the item list
-    mDbAdapter.open(true);
     Cursor c = mDbAdapter.fetchAllQuickMessages();
     startManagingCursor(c);
     if (c != null) {

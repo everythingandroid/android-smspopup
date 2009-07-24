@@ -23,7 +23,7 @@ public class ManageKeyguard {
     if (myKM.inKeyguardRestrictedInputMode()) {
       myKL = myKM.newKeyguardLock(Log.LOGTAG);
       myKL.disableKeyguard();
-      Log.v("--Keyguard disabled");
+      if (Log.DEBUG) Log.v("--Keyguard disabled");
     } else {
       myKL = null;
     }
@@ -31,7 +31,7 @@ public class ManageKeyguard {
 
   public static synchronized boolean inKeyguardRestrictedInputMode() {
     if (myKM != null) {
-      Log.v("--inKeyguardRestrictedInputMode = " + myKM.inKeyguardRestrictedInputMode());
+      if (Log.DEBUG) Log.v("--inKeyguardRestrictedInputMode = " + myKM.inKeyguardRestrictedInputMode());
       return myKM.inKeyguardRestrictedInputMode();
     }
     return false;
@@ -42,22 +42,22 @@ public class ManageKeyguard {
       if (myKL != null) {
         myKL.reenableKeyguard();
         myKL = null;
-        Log.v("--Keyguard reenabled");
+        if (Log.DEBUG) Log.v("--Keyguard reenabled");
       }
     }
   }
 
   public static synchronized void exitKeyguardSecurely(final LaunchOnKeyguardExit callback) {
     if (inKeyguardRestrictedInputMode()) {
-      Log.v("--Trying to exit keyguard securely");
+      if (Log.DEBUG) Log.v("--Trying to exit keyguard securely");
       myKM.exitKeyguardSecurely(new OnKeyguardExitResult() {
         public void onKeyguardExitResult(boolean success) {
           reenableKeyguard();
           if (success) {
-            Log.v("--Keyguard exited securely");
+            if (Log.DEBUG) Log.v("--Keyguard exited securely");
             callback.LaunchOnKeyguardExitSuccess();
           } else {
-            Log.v("--Keyguard exit failed");
+            if (Log.DEBUG) Log.v("--Keyguard exit failed");
           }
         }
       });

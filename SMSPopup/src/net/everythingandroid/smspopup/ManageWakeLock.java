@@ -23,7 +23,7 @@ public class ManageWakeLock {
 
     if (myWakeLock != null) {
       // myWakeLock.release();
-      Log.v("**Wakelock already held");
+      if (Log.DEBUG) Log.v("**Wakelock already held");
       return;
     }
 
@@ -44,7 +44,7 @@ public class ManageWakeLock {
     // PowerManager.ON_AFTER_RELEASE;
 
     myWakeLock = myPM.newWakeLock(flags, Log.LOGTAG);
-    Log.v("**Wakelock acquired");
+    if (Log.DEBUG) Log.v("**Wakelock acquired");
     myWakeLock.setReferenceCounted(false);
     myWakeLock.acquire();
 
@@ -66,14 +66,14 @@ public class ManageWakeLock {
     }
 
     myPartialWakeLock = myPM.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG + ": partial");
-    Log.v("**Wakelock (partial) acquired");
+    if (Log.DEBUG) Log.v("**Wakelock (partial) acquired");
     myPartialWakeLock.setReferenceCounted(false);
     myPartialWakeLock.acquire();
   }
 
   public static synchronized void releaseFull() {
     if (myWakeLock != null) {
-      Log.v("**Wakelock released");
+      if (Log.DEBUG) Log.v("**Wakelock released");
       myWakeLock.release();
       myWakeLock = null;
     }
@@ -81,7 +81,7 @@ public class ManageWakeLock {
 
   public static synchronized void releasePartial() {
     if (myPartialWakeLock != null) {
-      Log.v("**Wakelock (partial) released");
+      if (Log.DEBUG) Log.v("**Wakelock (partial) released");
       myPartialWakeLock.release();
       myPartialWakeLock = null;
     }

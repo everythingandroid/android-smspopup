@@ -56,7 +56,7 @@ public class ReminderReceiver extends BroadcastReceiver {
         PendingIntent.getBroadcast(context, 0, reminderIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
       long triggerTime = System.currentTimeMillis() + (reminder_interval * 1000);
-      Log.v("ReminderReceiver: scheduled reminder notification in " + reminder_interval
+      if (Log.DEBUG) Log.v("ReminderReceiver: scheduled reminder notification in " + reminder_interval
           + " seconds, count is " + message.getReminderCount());
       myAM.set(AlarmManager.RTC_WAKEUP, triggerTime, reminderPendingIntent);
     }
@@ -72,7 +72,7 @@ public class ReminderReceiver extends BroadcastReceiver {
       myAM.cancel(reminderPendingIntent);
       reminderPendingIntent.cancel();
       reminderPendingIntent = null;
-      Log.v("ReminderReceiver: cancelReminder()");
+      if (Log.DEBUG) Log.v("ReminderReceiver: cancelReminder()");
     }
   }
 }

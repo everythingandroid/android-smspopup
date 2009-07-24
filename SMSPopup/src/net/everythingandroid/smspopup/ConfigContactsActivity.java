@@ -1,12 +1,11 @@
 package net.everythingandroid.smspopup;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
-import android.content.DialogInterface.OnCancelListener;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -15,15 +14,22 @@ import android.os.Bundle;
 import android.provider.Contacts;
 import android.provider.Contacts.PeopleColumns;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.CursorAdapter;
+import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class ConfigContactsActivity extends ListActivity {
   private SmsPopupDbAdapter mDbAdapter;
@@ -31,34 +37,52 @@ public class ConfigContactsActivity extends ListActivity {
   private static final int DIALOG_MENU_ADD_ID = Menu.FIRST;
   private static final int CONTEXT_MENU_DELETE_ID = Menu.FIRST;
   private static final int CONTEXT_MENU_EDIT_ID = Menu.FIRST + 1;
-  private static final int DIALOG_PROGRESS = 1;
 
-  /*
-   * Eek, 4 static vars, not ideal but only way I could get the ProgressDialog sync'ing nicely
-   * with the AsyncTask on orientation changes (whole activity will get destroyed and created
-   * again)
-   */
+  private static final int DIALOG_ADD = 1;
+
   private static ListView mListView;
-  private static ProgressDialog mProgressDialog;
+  /*
+   * Eek, 2 static vars, not ideal but only way I could get the ProgressDialog
+   * sync'ing nicely with the AsyncTask on orientation changes (whole activity
+   * will get destroyed and created again)
+   */
   private static int totalCount;
   private static SynchronizeContactNames mSyncContactNames = null;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    requestWindowFeature(Window.FEATURE_PROGRESS);
-
     super.onCreate(savedInstanceState);
+    requestWindowFeature(Window.FEATURE_PROGRESS);
+    setContentView(R.layout.config_contacts_activity);
+
+    ContentResolver content = getContentResolver();
+    Cursor cursor =
+      content.query(Contacts.People.CONTENT_URI, PEOPLE_PROJECTION, null, null,
+          Contacts.People.DEFAULT_SORT_ORDER);
+    ContactListAdapter adapter = new ContactListAdapter(this, cursor);
+
+    final AutoCompleteTextView contactsAutoComplete =
+      (AutoCompleteTextView) findViewById(R.id.ContactsAutoCompleteTextView);
+    contactsAutoComplete.setAdapter(adapter);
+
+    contactsAutoComplete.setOnItemClickListener(new OnItemClickListener() {
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        startActivity(getConfigPerContactIntent(id));
+        contactsAutoComplete.setText("");
+      }
+    });
 
     mListView = getListView();
     registerForContextMenu(mListView);
 
-    // TODO: make this look better!
-    TextView tv = new TextView(getApplicationContext());
-    tv.setText(getString(R.string.contact_customization_add));
-    tv.setTextSize(25);
-    tv.setPadding(10, 10, 10, 10);
+    //    TextView tv = new TextView(getApplicationContext());
+    //    tv.setText(getString(R.string.contact_customization_add));
+    //    tv.setTextSize(25);
+    //    tv.setPadding(10, 10, 10, 10);
 
-    mListView.addHeaderView(tv, null, true);
+    // mListView.addHeaderView(contactsAutoComplete, null, true);
+    // mListView.addHeaderView(tv, null, true);
+
     mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
 
     if (mSyncContactNames == null) {
@@ -154,10 +178,10 @@ public class ConfigContactsActivity extends ListActivity {
   @Override
   public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
     super.onCreateContextMenu(menu, v, menuInfo);
-    Log.v("onCreateContextMenu()");
+    if (Log.DEBUG) Log.v("onCreateContextMenu()");
 
     // Create menu if top item is not selected
-    if (((AdapterContextMenuInfo)menuInfo).id != -1) {
+    if (((AdapterContextMenuInfo) menuInfo).id != -1) {
       menu.add(0, CONTEXT_MENU_EDIT_ID, 0, getString(R.string.contact_customization_edit));
       menu.add(0, CONTEXT_MENU_DELETE_ID, 0, getString(R.string.contact_customization_remove));
     }
@@ -167,16 +191,16 @@ public class ConfigContactsActivity extends ListActivity {
   public boolean onContextItemSelected(MenuItem item) {
     AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 
-    Log.v("onContextItemSelected()");
+    if (Log.DEBUG) Log.v("onContextItemSelected()");
 
     if (info.id != -1) {
       switch (item.getItemId()) {
         case CONTEXT_MENU_EDIT_ID:
-          Log.v("Editing contact " + info.id);
+          if (Log.DEBUG) Log.v("Editing contact " + info.id);
           startActivity(getConfigPerContactIntent(info.id));
           return true;
         case CONTEXT_MENU_DELETE_ID:
-          Log.v("Deleting contact " + info.id);
+          if (Log.DEBUG) Log.v("Deleting contact " + info.id);
           mDbAdapter.deleteContact(info.id);
           fillData();
           return true;
@@ -190,37 +214,30 @@ public class ConfigContactsActivity extends ListActivity {
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
     super.onListItemClick(l, v, position, id);
-    if (position == 0) { // Top item = Add
-      startActivity(getConfigPerContactIntent());
-    } else {
-      startActivity(getConfigPerContactIntent(id));
-    }
+    //    if (position == 0) { // Top item = Add
+    //      //startActivity(getConfigPerContactIntent());
+    //      showDialog(DIALOG_ADD);
+    //    } else {
+    startActivity(getConfigPerContactIntent(id));
+    //    }
   }
 
   @Override
   protected Dialog onCreateDialog(int id) {
     switch (id) {
-      case DIALOG_PROGRESS:
-        mProgressDialog = new ProgressDialog(ConfigContactsActivity.this);
-        // TODO: move strings to res
-        mProgressDialog.setTitle("Loading contacts...");
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        mProgressDialog.setMax(totalCount);
-        mProgressDialog.setCancelable(true);
-        mProgressDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mProgressDialog.setOnCancelListener(new OnCancelListener() {
-          public void onCancel(DialogInterface dialog) {
-            mSyncContactNames.cancel(true);
-          }
-        });
-        return mProgressDialog;
+      case DIALOG_ADD:
+        return new AlertDialog.Builder(this)
+        .setIcon(android.R.drawable.ic_dialog_info)
+        .setTitle("Add")
+        .create();
     }
     return null;
   }
 
   /**
    * 
-   * AsyncTask to sync contact names from our database with those from the system database
+   * AsyncTask to sync contact names from our database with those from the
+   * system database
    * 
    */
   private class SynchronizeContactNames extends AsyncTask<Object, Integer, Object> {
@@ -242,30 +259,32 @@ public class ConfigContactsActivity extends ListActivity {
 
           contactName = mCursor.getString(SmsPopupDbAdapter.KEY_CONTACT_NAME_NUM);
           contactId = mCursor.getLong(SmsPopupDbAdapter.KEY_CONTACT_ID_NUM);
-          //Log.v("Name("+count+"): " + contactName);
+          // Log.v("Name("+count+"): " + contactName);
 
           // fetch the system db contact name
-          sysContactCursor = mContentResolver.query(
-              Uri.withAppendedPath(Contacts.People.CONTENT_URI, String.valueOf(contactId)),
-              new String[] { PeopleColumns.DISPLAY_NAME },
-              null, null, null);
+          sysContactCursor =
+            mContentResolver
+            .query(Uri.withAppendedPath(Contacts.People.CONTENT_URI, String
+                .valueOf(contactId)), new String[] {PeopleColumns.DISPLAY_NAME}, null, null,
+                null);
 
           if (sysContactCursor != null) {
             if (sysContactCursor.moveToFirst()) {
               sysContactName = sysContactCursor.getString(0);
               if (!contactName.equals(sysContactName)) {
                 // if different, update the local db
-                mDbAdapter.updateContact(
-                    contactId, SmsPopupDbAdapter.KEY_CONTACT_NAME, sysContactName);
+                mDbAdapter.updateContact(contactId, SmsPopupDbAdapter.KEY_CONTACT_NAME,
+                    sysContactName);
               }
             } else {
-              // if this contact has been removed from the system db then delete from the local db
+              // if this contact has been removed from the system db then delete
+              // from the local db
               mDbAdapter.deleteContact(contactId, false);
             }
             sysContactCursor.close();
           }
 
-          //try { Thread.sleep(1000); } catch (InterruptedException e) {}
+          // try { Thread.sleep(3000); } catch (InterruptedException e) {}
 
           // update progress dialog
           publishProgress(count);
@@ -292,23 +311,20 @@ public class ConfigContactsActivity extends ListActivity {
       } else {
         totalCount = mCursor.getCount();
         mContentResolver = ConfigContactsActivity.this.getContentResolver();
-        showDialog(DIALOG_PROGRESS);
       }
     }
 
     @Override
     protected void onProgressUpdate(Integer... values) {
-      mProgressDialog.setProgress(values[0]);
+      getWindow().setFeatureInt(Window.FEATURE_PROGRESS,
+          Window.PROGRESS_END * values[0] / totalCount);
     }
 
     @Override
     protected void onPostExecute(Object result) {
+      getWindow().setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_END);
       if (mCursor != null) mCursor.close();
       if (mDbAdapter != null) mDbAdapter.close();
-
-      mProgressDialog.setProgress(totalCount);
-      mProgressDialog.dismiss();
-      //dismissDialog(DIALOG_PROGRESS);
     }
 
     @Override
@@ -317,5 +333,61 @@ public class ConfigContactsActivity extends ListActivity {
       if (mDbAdapter != null) mDbAdapter.close();
     }
   }
+
+  // XXX compiler bug in javac 1.5.0_07-164, we need to implement Filterable
+  // to make compilation work
+  public static class ContactListAdapter extends CursorAdapter implements Filterable {
+    public ContactListAdapter(Context context, Cursor c) {
+      super(context, c);
+      mContent = context.getContentResolver();
+    }
+
+    @Override
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+      final LayoutInflater inflater = LayoutInflater.from(context);
+      final TextView view =
+        (TextView) inflater.inflate(android.R.layout.simple_dropdown_item_1line, parent, false);
+      view.setText(cursor.getString(5));
+      return view;
+    }
+
+    @Override
+    public void bindView(View view, Context context, Cursor cursor) {
+      ((TextView) view).setText(cursor.getString(5));
+    }
+
+    @Override
+    public String convertToString(Cursor cursor) {
+      return cursor.getString(5);
+    }
+
+    @Override
+    public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
+      if (getFilterQueryProvider() != null) {
+        return getFilterQueryProvider().runQuery(constraint);
+      }
+
+      StringBuilder buffer = null;
+      String[] args = null;
+      if (constraint != null) {
+        buffer = new StringBuilder();
+        buffer.append("UPPER(");
+        buffer.append(Contacts.ContactMethods.NAME);
+        buffer.append(") GLOB ?");
+        args = new String[] {"*" + constraint.toString().toUpperCase() + "*"};
+      }
+
+      return mContent.query(Contacts.People.CONTENT_URI, PEOPLE_PROJECTION, buffer == null ? null
+          : buffer.toString(), args, Contacts.People.DEFAULT_SORT_ORDER);
+    }
+
+    private ContentResolver mContent;
+
+  }
+
+  private static final String[] PEOPLE_PROJECTION =
+    new String[] {Contacts.People._ID, Contacts.People.PRIMARY_PHONE_ID, Contacts.People.TYPE,
+    Contacts.People.NUMBER, Contacts.People.LABEL, Contacts.People.NAME,};
+
 
 }
