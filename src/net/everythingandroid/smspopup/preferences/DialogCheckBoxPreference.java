@@ -5,7 +5,6 @@ import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.ReminderReceiver;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.preference.CheckBoxPreference;
 import android.util.AttributeSet;
 
@@ -31,14 +30,12 @@ public class DialogCheckBoxPreference extends CheckBoxPreference {
   protected void onClick() {
     super.onClick();
     if (isChecked()) {
-      new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert).setTitle(
-          context.getString(R.string.pref_notif_title)).setMessage(
-              context.getString(R.string.pref_notif_enabled_warning)).setPositiveButton(
-                  android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                      // Nothing to do here
-                    }
-                  }).show();
+      new AlertDialog.Builder(context)
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setTitle(context.getString(R.string.pref_notif_title))
+        .setMessage(context.getString(R.string.pref_notif_enabled_warning))
+        .setPositiveButton(android.R.string.ok, null)
+        .show();
     } else {
       ManageNotification.clearAll(context);
       ReminderReceiver.cancelReminder(context);

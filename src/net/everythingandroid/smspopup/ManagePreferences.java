@@ -20,7 +20,7 @@ public class ManagePreferences {
     context = _context;
     useDatabase = false;
 
-    Log.v("contactId = " + contactId);
+    if (Log.DEBUG) Log.v("contactId = " + contactId);
     long contactIdLong;
     try {
       contactIdLong = Long.parseLong(contactId);
@@ -34,16 +34,16 @@ public class ManagePreferences {
         mDbAdapter.open(true); // Open database read-only
         contactCursor = mDbAdapter.fetchContactSettings(contactIdLong);
         if (contactCursor != null) {
-          Log.v("Contact found - using database");
+          if (Log.DEBUG) Log.v("Contact found - using database");
           useDatabase = true;
         }
         mDbAdapter.close();
       } catch (SQLException e) {
-        Log.v("Error opening or creating database");
+        if (Log.DEBUG) Log.v("Error opening or creating database");
         useDatabase = false;
       }
     } else {
-      Log.v("Contact NOT found - using prefs");
+      if (Log.DEBUG) Log.v("Contact NOT found - using prefs");
     }
 
     mPrefs = PreferenceManager.getDefaultSharedPreferences(context);

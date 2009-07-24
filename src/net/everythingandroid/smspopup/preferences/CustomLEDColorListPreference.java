@@ -22,8 +22,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 public class CustomLEDColorListPreference extends ListPreference implements OnSeekBarChangeListener {
   private Context context;
   private static boolean dialogShowing;
-  // private SharedPreferences myPrefs = null;
-  private ManagePreferences myPrefs = null;
+  private ManagePreferences mPrefs = null;
   private String contactId = null;
   private String led_color;
   private String led_color_custom;
@@ -63,16 +62,15 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
   }
 
   private void getPrefs() {
-    if (myPrefs == null) {
-      // myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-      myPrefs = new ManagePreferences(context, contactId);
+    if (mPrefs == null) {
+      mPrefs = new ManagePreferences(context, contactId);
     }
 
     led_color =
-      myPrefs.getString(R.string.c_pref_flashled_color_key, R.string.pref_flashled_default);
+      mPrefs.getString(R.string.c_pref_flashled_color_key, R.string.pref_flashled_default);
 
     led_color_custom =
-      myPrefs.getString(R.string.c_pref_flashled_color_custom_key,
+      mPrefs.getString(R.string.c_pref_flashled_color_custom_key,
           R.string.c_pref_flashled_color_key);
   }
 
@@ -116,31 +114,35 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
 
     updateColorImageView();
 
-    new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_info).setTitle(
-        R.string.pref_flashled_color_title).setView(v).setOnCancelListener(new OnCancelListener() {
-          public void onCancel(DialogInterface dialog) {
-            dialogShowing = false;
-          }
-        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int whichButton) {
-            dialogShowing = false;
-          }
-        }).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int whichButton) {
-            // SharedPreferences.Editor settings = myPrefs.edit();
-            int red = redSeekBar.getProgress();
-            int green = greenSeekBar.getProgress();
-            int blue = blueSeekBar.getProgress();
-            int color = Color.rgb(red, green, blue);
-
-            dialogShowing = false;
-            myPrefs.putString(R.string.c_pref_flashled_color_custom_key, "#"
-                + Integer.toHexString(color), SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM);
-
-            Toast.makeText(context, R.string.pref_flashled_color_custom_set, Toast.LENGTH_LONG).show();
-            // settings.commit();
-          }
-        }).show();
+    new AlertDialog.Builder(context)
+      .setIcon(android.R.drawable.ic_dialog_info)
+      .setTitle(R.string.pref_flashled_color_title)
+      .setView(v)
+      .setOnCancelListener(new OnCancelListener() {
+        public void onCancel(DialogInterface dialog) {
+          dialogShowing = false;
+        }
+      })
+      .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int whichButton) {
+          dialogShowing = false;
+        }
+      })
+      .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int whichButton) {
+          int red = redSeekBar.getProgress();
+          int green = greenSeekBar.getProgress();
+          int blue = blueSeekBar.getProgress();
+          int color = Color.rgb(red, green, blue);
+  
+          dialogShowing = false;
+          mPrefs.putString(R.string.c_pref_flashled_color_custom_key, "#"
+              + Integer.toHexString(color), SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM);
+  
+          Toast.makeText(context, R.string.pref_flashled_color_custom_set, Toast.LENGTH_LONG).show();
+        }
+      })
+      .show();
     dialogShowing = true;
   }
 

@@ -7,6 +7,7 @@ import android.telephony.PhoneNumberUtils;
 import android.text.format.DateUtils;
 
 public class SmsMmsMessage {
+  // Private EXTRAS strings
   private static final String PREFIX = "net.everythingandroid.smspopup.";
   private static final String EXTRAS_FROM_ADDRESS = PREFIX + "EXTRAS_FROM_ADDRESS";
   private static final String EXTRAS_MESSAGE_BODY = PREFIX + "EXTRAS_MESSAGE_BODY";
@@ -15,22 +16,24 @@ public class SmsMmsMessage {
   private static final String EXTRAS_THREAD_ID    = PREFIX + "EXTRAS_THREAD_ID";
   private static final String EXTRAS_CONTACT_ID   = PREFIX + "EXTRAS_CONTACT_ID";
   private static final String EXTRAS_CONTACT_NAME = PREFIX + "EXTRAS_CONTACT_NAME";
-  //private static final String EXTRAS_CONTACT_PHOTO = PREFIX + "EXTRAS_CONTACT_PHOTO";
   private static final String EXTRAS_MESSAGE_TYPE = PREFIX + "EXTRAS_MESSAGE_TYPE";
   private static final String EXTRAS_MESSAGE_ID   = PREFIX + "EXTRAS_MESSAGE_ID";
 
-  public static final String EXTRAS_NOTIFY = PREFIX + "EXTRAS_NOTIFY";
+  // Public EXTRAS strings
+  public static final String EXTRAS_NOTIFY         = PREFIX + "EXTRAS_NOTIFY";
   public static final String EXTRAS_REMINDER_COUNT = PREFIX + "EXTRAS_REMINDER_COUNT";
-  public static final String EXTRAS_REPLYING = PREFIX + "EXTRAS_REPLYING";
-  public static final String EXTRAS_QUICKREPLY = PREFIX + "EXTRAS_QUICKREPLY";
+  public static final String EXTRAS_REPLYING       = PREFIX + "EXTRAS_REPLYING";
+  public static final String EXTRAS_QUICKREPLY     = PREFIX + "EXTRAS_QUICKREPLY";
 
+  // Message types
   public static final int MESSAGE_TYPE_SMS = 0;
   public static final int MESSAGE_TYPE_MMS = 1;
 
+  // Timestamp compare buffer for incoming messages
   public static final int MESSAGE_COMPARE_TIME_BUFFER = 3000; // 3 seconds
 
+  // Main message object private vars
   private Context context;
-
   private String fromAddress = null;
   private String messageBody = null;
   private long timestamp = 0;
@@ -38,7 +41,6 @@ public class SmsMmsMessage {
   private long threadId = 0;
   private String contactId = null;
   private String contactName = null;
-  //private byte[] contactPhoto = null;
   private int messageType = 0;
   private boolean notify = true;
   private int reminderCount = 0;
@@ -59,14 +61,7 @@ public class SmsMmsMessage {
 
     contactId = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
     contactName = SmsPopupUtils.getPersonName(context, contactId, fromAddress);
-    //    contactPhoto = SmsPopupUtils.getPersonPhoto(context, contactId);
-    //
-    //    unreadCount = SmsPopupUtils.getUnreadMessagesCount(context, timestamp);
-    unreadCount = 1;
-
-    //    threadId = SmsPopupUtils.getThreadIdFromAddress(context, fromAddress);
-
-    // locateMessageId();
+    unreadCount = SmsPopupUtils.getUnreadMessagesCount(context, timestamp);
 
     if (contactName == null) {
       contactName = context.getString(android.R.string.unknownName);
@@ -88,10 +83,7 @@ public class SmsMmsMessage {
     // TODO: I think contactId can come the MMS table, this would save
     // this database lookup
     contactId = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
-
     contactName = SmsPopupUtils.getPersonName(context, contactId, fromAddress);
-    //contactPhoto = SmsPopupUtils.getPersonPhoto(context, contactId);
-
     unreadCount = _unreadCount;
     threadId = _threadId;
 
@@ -362,9 +354,9 @@ public class SmsMmsMessage {
     //			PRE_CUPCAKE = true;
     //		}
 
-    Log.v("DB timestamp = " + timestamp);
-    Log.v("Provider timestamp = " + providerTimestamp);
-    Log.v("System timestamp = " + compareTimestamp);
+    if (Log.DEBUG) Log.v("DB timestamp = " + timestamp);
+    if (Log.DEBUG) Log.v("Provider timestamp = " + providerTimestamp);
+    if (Log.DEBUG) Log.v("System timestamp = " + compareTimestamp);
 
     /*
      * If pre-cupcake we can just do a direct comparison as the Mms app stores the
@@ -375,7 +367,7 @@ public class SmsMmsMessage {
     //			Log.v("DB timestamp = " + timestamp);
     //			Log.v("Intent timestamp = " + providerTimestamp);
     if (timestamp == providerTimestamp) {
-      Log.v("SMS Compare: compareTimestamp() - intent timestamp = provider timestamp");
+      if (Log.DEBUG) Log.v("SMS Compare: compareTimestamp() - intent timestamp = provider timestamp");
       return true;
     } //else {
     //				return false;
@@ -394,10 +386,10 @@ public class SmsMmsMessage {
 
     if (timestamp < (compareTimestamp + MESSAGE_COMPARE_TIME_BUFFER)
         && timestamp > (compareTimestamp - MESSAGE_COMPARE_TIME_BUFFER)) {
-      Log.v("SMS Compare: compareTimestamp() - timestamp is approx. the same");
+      if (Log.DEBUG) Log.v("SMS Compare: compareTimestamp() - timestamp is approx. the same");
       return true;
     }
-    Log.v("SMS Compare: compareTimestamp() - return false");
+    if (Log.DEBUG) Log.v("SMS Compare: compareTimestamp() - return false");
     return false;
   }
 
@@ -407,16 +399,16 @@ public class SmsMmsMessage {
   private boolean compareBody(String compareBody) {
     if (compareBody != null) {
       if (messageBody.length() != compareBody.length()) {
-        Log.v("SMS Compare: compareBody() - length is different");
+        if (Log.DEBUG) Log.v("SMS Compare: compareBody() - length is different");
         return false;
       }
 
       if (messageBody.equals(compareBody)) {
-        Log.v("SMS Compare: compareBody() - messageBody is the same");
+        if (Log.DEBUG) Log.v("SMS Compare: compareBody() - messageBody is the same");
         return true;
       }
     }
-    Log.v("SMS Compare: compareBody() - return false");
+    if (Log.DEBUG) Log.v("SMS Compare: compareBody() - return false");
     return false;
   }
 

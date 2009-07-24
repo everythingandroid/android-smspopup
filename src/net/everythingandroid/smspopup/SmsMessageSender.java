@@ -146,7 +146,7 @@ public class SmsMessageSender {
     for (int i = 0; i < mNumberOfDests; i++) {
       ArrayList<String> messages = smsManager.divideMessage(mMessageText);
       int messageCount = messages.size();
-      Log.v("messageCount = " + messageCount);
+      if (Log.DEBUG) Log.v("messageCount = " + messageCount);
       ArrayList<PendingIntent> deliveryIntents =
         new ArrayList<PendingIntent>(messageCount);
       ArrayList<PendingIntent> sentIntents =

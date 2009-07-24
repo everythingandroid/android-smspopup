@@ -21,7 +21,7 @@ public class SmsMonitorService extends Service {
 
   public static void beginStartingService(Context context) {
     //synchronized (mStartingServiceSync) {
-    Log.v("SmsMonitorService: beginStartingService()");
+    if (Log.DEBUG) Log.v("SmsMonitorService: beginStartingService()");
     //      if (mStartingService == null) {
     //        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
     //        mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
@@ -36,7 +36,7 @@ public class SmsMonitorService extends Service {
   @Override
   public void onStart(Intent intent, int startId) {
     super.onStart(intent, startId);
-    Log.v("SmsMonitorService starting");
+    if (Log.DEBUG) Log.v("SmsMonitorService starting");
   }
 
   @Override
@@ -66,7 +66,7 @@ public class SmsMonitorService extends Service {
       crSMS = getContentResolver();
       crSMS.registerContentObserver(uriSMS, true, observerSMS);
       //crSMS.notifyChange(uriSMS, observerSMS);
-      Log.v("SMS Observer registered.");
+      if (Log.DEBUG) Log.v("SMS Observer registered.");
     }
   }
 
@@ -80,7 +80,7 @@ public class SmsMonitorService extends Service {
     if (observerSMS != null) {
       observerSMS = null;
     }
-    Log.v("Unregistered SMS Observer");
+    if (Log.DEBUG) Log.v("Unregistered SMS Observer");
   }
 
   public class SmsContentObserver extends ContentObserver {
@@ -91,10 +91,10 @@ public class SmsMonitorService extends Service {
     @Override
     public void onChange(boolean selfChange) {
       super.onChange(selfChange);
-      Log.v("!!! SmsContentObserver - content changed!");
+      if (Log.DEBUG) Log.v("!!! SmsContentObserver - content changed!");
       Cursor c = context.getContentResolver().query(SMS_CONTENT_URI, null, "read = 0", null, null);
-      Log.v("!!! SMS count unread " + c.getCount());
-      Log.v("!!! selfChange = " + selfChange);
+      if (Log.DEBUG) Log.v("!!! SMS count unread " + c.getCount());
+      if (Log.DEBUG) Log.v("!!! selfChange = " + selfChange);
     }
   }
 

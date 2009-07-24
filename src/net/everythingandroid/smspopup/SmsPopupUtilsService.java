@@ -68,31 +68,31 @@ public class SmsPopupUtilsService extends Service {
 
     @Override
     public void handleMessage(Message msg) {
-      Log.v("SMSPopupUtilsService: handleMessage()");
+      if (Log.DEBUG) Log.v("SMSPopupUtilsService: handleMessage()");
       int serviceId = msg.arg1;
       Intent intent = (Intent) msg.obj;
 
       String action = intent.getAction();
 
       if (ACTION_MARK_THREAD_READ.equals(action)) {
-        Log.v("SMSPopupUtilsService: Marking thread read");
+        if (Log.DEBUG) Log.v("SMSPopupUtilsService: Marking thread read");
         SmsMmsMessage message = new SmsMmsMessage(context, intent.getExtras());
         message.setThreadRead();
       } else if (ACTION_MARK_MESSAGE_READ.equals(action)) {
-        Log.v("SMSPopupUtilsService: Marking message read");
+        if (Log.DEBUG) Log.v("SMSPopupUtilsService: Marking message read");
         SmsMmsMessage message = new SmsMmsMessage(context, intent.getExtras());
         message.setMessageRead();
       } else if (ACTION_DELETE_MESSAGE.equals(action)) {
-        Log.v("SMSPopupUtilsService: Deleting message");
+        if (Log.DEBUG) Log.v("SMSPopupUtilsService: Deleting message");
         SmsMmsMessage message = new SmsMmsMessage(context, intent.getExtras());
         message.delete();
       } else if (ACTION_QUICKREPLY.equals(action)) {
-        Log.v("SMSPopupUtilsService: Quick Reply to message");
+        if (Log.DEBUG) Log.v("SMSPopupUtilsService: Quick Reply to message");
         SmsMmsMessage message = new SmsMmsMessage(context, intent.getExtras());
         message.setThreadRead();
         message.replyToMessage(intent.getStringExtra(SmsMmsMessage.EXTRAS_QUICKREPLY));
       } else if (ACTION_UPDATE_NOTIFICATION.equals(action)) {
-        Log.v("SMSPopupUtilsService: Updating notification");
+        if (Log.DEBUG) Log.v("SMSPopupUtilsService: Updating notification");
         updateNotification(intent);
       }
 
@@ -121,10 +121,6 @@ public class SmsPopupUtilsService extends Service {
     // Get the most recent message + total message counts
     SmsMmsMessage recentMessage = SmsPopupUtils.getRecentMessage(context, message);
 
-    // Update our preference
-    SmsPopupUtils.updateUnreadCountPref(
-        context, recentMessage == null ? 0 : recentMessage.getUnreadCount());
-
     // Update the notification in the status bar
     ManageNotification.update(context, recentMessage);
 
@@ -136,7 +132,7 @@ public class SmsPopupUtilsService extends Service {
    */
   public static void beginStartingService(Context context, Intent intent) {
     synchronized (mStartingServiceSync) {
-      Log.v("SMSPopupUtilsService: beginStartingService()");
+      if (Log.DEBUG) Log.v("SMSPopupUtilsService: beginStartingService()");
       if (mStartingService == null) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mStartingService =
@@ -154,7 +150,7 @@ public class SmsPopupUtilsService extends Service {
    */
   public static void finishStartingService(Service service, int startId) {
     synchronized (mStartingServiceSync) {
-      Log.v("SMSPopupUtilsService: finishStartingService()");
+      if (Log.DEBUG) Log.v("SMSPopupUtilsService: finishStartingService()");
       if (mStartingService != null) {
         if (service.stopSelfResult(startId)) {
           mStartingService.release();

@@ -41,12 +41,10 @@ public class ConfigPerContactActivity extends PreferenceActivity {
     "com.android.contacts.action.LIST_CONTACTS_WITH_PHONES";
   public static final String PHONE = "phone";
 
-
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Log.v("SMSPopupConfigPerContactActivity: onCreate()");
+    if (Log.DEBUG) Log.v("SMSPopupConfigPerContactActivity: onCreate()");
 
     /*
      * Create database object
@@ -96,15 +94,13 @@ public class ConfigPerContactActivity extends PreferenceActivity {
 
     //final Uri CONTENT_URI = Uri.parse("content://contacts/people_with_phones");
 
-    Intent i = new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI);
+    //    Intent i = new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI);
+    //
+    //    //i.putExtra(PHONE, "mobile");
+    //    startActivityForResult(i, REQ_CODE_CHOOSE_CONTACT);
 
-    //i.putExtra(PHONE, "mobile");
-    startActivityForResult(i, REQ_CODE_CHOOSE_CONTACT);
-
-
-    //    startActivityForResult(
-    //        new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI), REQ_CODE_CHOOSE_CONTACT);
-
+    startActivityForResult(
+        new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI), REQ_CODE_CHOOSE_CONTACT);
   }
 
   @Override
@@ -116,13 +112,16 @@ public class ConfigPerContactActivity extends PreferenceActivity {
         if (resultCode == -1) { // Success, contact chosen
           contactUri = data.getData();
           List<String> list = contactUri.getPathSegments();
-          Log.v("onActivityResult() - " + data.getDataString() + ", " + list.get(list.size() - 1));
+          if (Log.DEBUG) Log.v("onActivityResult() - " + data.getDataString() + ", " + list.get(list.size() - 1));
           contactId = Long.parseLong(list.get(list.size() - 1));
-          getIntent().putExtra(EXTRA_CONTACT_ID, contactId);
-          mDbAdapter.open();
-          mDbAdapter.createContact(contactId);
-          mDbAdapter.updateContactSummary(contactId);
-          mDbAdapter.close();
+
+          createContact(contactId);
+
+          //          getIntent().putExtra(EXTRA_CONTACT_ID, contactId);
+          //          mDbAdapter.open();
+          //          mDbAdapter.createContact(contactId);
+          //          mDbAdapter.updateContactSummary(contactId);
+          //          mDbAdapter.close();
         } else { // Failed, contact not chosen
           finish();
         }
@@ -143,7 +142,7 @@ public class ConfigPerContactActivity extends PreferenceActivity {
        */
       selectContact();
     } else {
-      Log.v("contactId = " + contactId);
+      if (Log.DEBUG) Log.v("contactId = " + contactId);
       contactIdString = String.valueOf(contactId);
 
       /*
@@ -157,8 +156,16 @@ public class ConfigPerContactActivity extends PreferenceActivity {
        * If for some reason the contact is not found, get out
        */
       if (contact == null) {
-        Log.v("Contact not found???");
-        finish();
+        //        Log.v("Contact not found???");
+        //        finish();
+        createContact(contactId);
+        mDbAdapter.open(true);
+        contact = mDbAdapter.fetchContactSettings(contactId);
+        mDbAdapter.close();
+        if (contact == null) {
+          if (Log.DEBUG) Log.v("Contact not found???");
+          finish();
+        }
       }
 
       /*
@@ -247,7 +254,7 @@ public class ConfigPerContactActivity extends PreferenceActivity {
   private OnPreferenceChangeListener onPrefChangeListener = new OnPreferenceChangeListener() {
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-      Log.v("onPreferenceChange - " + newValue);
+      if (Log.DEBUG) Log.v("onPreferenceChange - " + newValue);
       return storePreferences(preference, newValue);
     }
   };
@@ -256,7 +263,7 @@ public class ConfigPerContactActivity extends PreferenceActivity {
    * Store a single preference back to the database
    */
   private boolean storePreferences(Preference preference, Object newValue) {
-    Log.v("storePrefs()");
+    if (Log.DEBUG) Log.v("storePrefs()");
     String key = preference.getKey();
     String column = null;
 
@@ -299,11 +306,11 @@ public class ConfigPerContactActivity extends PreferenceActivity {
    */
   private void retrievePreferences(Cursor c) {
     String one = "1";
-    Log.v("retrievePrefs()");
+    if (Log.DEBUG) Log.v("retrievePrefs()");
     SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-    Log.v("ringtone = " + c.getString(SmsPopupDbAdapter.KEY_RINGTONE_NUM));
-    Log.v("enabled = " + c.getString(SmsPopupDbAdapter.KEY_ENABLED_NUM));
-    Log.v("popup = " + c.getString(SmsPopupDbAdapter.KEY_POPUP_ENABLED_NUM));
+    //    if (Log.DEBUG) Log.v("ringtone = " + c.getString(SmsPopupDbAdapter.KEY_RINGTONE_NUM));
+    //    if (Log.DEBUG) Log.v("enabled = " + c.getString(SmsPopupDbAdapter.KEY_ENABLED_NUM));
+    //    if (Log.DEBUG) Log.v("popup = " + c.getString(SmsPopupDbAdapter.KEY_POPUP_ENABLED_NUM));
     SharedPreferences.Editor editor = myPrefs.edit();
     // editor.putBoolean(getString(R.string.c_pref_notif_enabled_key),
     // Boolean.parseBoolean(c.getString(ContactsDbAdapter.KEY_ENABLED_NUM)));
@@ -384,6 +391,14 @@ public class ConfigPerContactActivity extends PreferenceActivity {
         return true;
     }
     return false;
+  }
+
+  private void createContact(long contactId) {
+    getIntent().putExtra(EXTRA_CONTACT_ID, contactId);
+    mDbAdapter.open();
+    mDbAdapter.createContact(contactId);
+    mDbAdapter.updateContactSummary(contactId);
+    mDbAdapter.close();
   }
 
 }
