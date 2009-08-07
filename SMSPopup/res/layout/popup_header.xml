@@ -21,28 +21,22 @@
     android:layout_height="fill_parent"
     android:layout_width="fill_parent">
     <TextView
-      android:text="Text here"
       android:id="@+id/FromTextView"
-      android:paddingLeft="8sp"
       android:layout_width="fill_parent"
       android:gravity="center_vertical"
-      android:scrollHorizontally="true"
-      android:scrollbarAlwaysDrawHorizontalTrack="true"
-      android:ellipsize="end"
       android:autoLink="phone"
-      android:textColor="@android:color/white"
-      android:lines="1"
-      android:layout_height="fill_parent"
-      android:textSize="22sp"
-      android:layout_weight="1" />
+      android:textAppearance="?android:attr/textAppearanceLarge"
+      android:layout_weight="1"
+      android:ellipsize="end"
+      android:text="Text Here" android:layout_height="fill_parent" android:maxLines="1" android:paddingLeft="5sp" android:paddingRight="5sp"/>
     <TextView
-      android:textAppearance="@style/HeaderStyle"
       android:id="@+id/HeaderTextView"
+      android:textAppearance="?android:attr/textAppearanceSmall"
+      android:textColor="?android:attr/textColorPrimaryDisableOnly"
       android:text="@string/new_text_at"
       android:layout_width="fill_parent"
       android:gravity="bottom|left"
-      android:paddingLeft="8sp"
       android:layout_height="wrap_content"
-      android:paddingBottom="4sp" />
+      android:paddingBottom="4sp" android:paddingRight="5sp" android:paddingLeft="5sp"/>
   </LinearLayout>
 </LinearLayout>

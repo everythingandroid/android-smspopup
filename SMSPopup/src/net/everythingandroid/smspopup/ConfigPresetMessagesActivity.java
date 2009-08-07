@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
-public class ConfigQuickMessagesActivity extends ListActivity {
+public class ConfigPresetMessagesActivity extends ListActivity {
   private SmsPopupDbAdapter mDbAdapter;
 
   private static final int ADD_DIALOG = Menu.FIRST;
@@ -33,10 +33,12 @@ public class ConfigQuickMessagesActivity extends ListActivity {
   private static ListView mListView;
 
   private static long editId;
-  private EditText qmEditText;
-  private EditText addEditText;
-  private View editQuickMessageLayout;
-  private View addQuickMessageLayout;
+  private EditText addQMEditText;
+  private EditText editQMEditText;
+  private View addQMLayout;
+  private View editQMLayout;
+  private TextView addQMTextView;
+  private TextView editQMTextView;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -48,8 +50,8 @@ public class ConfigQuickMessagesActivity extends ListActivity {
     TextView tv = new TextView(getApplicationContext());
 
     // TODO: make this look better
-    tv.setText(getString(R.string.quickmessages_add));
-    tv.setTextSize(25);
+    tv.setText(R.string.message_presets_add);
+    tv.setTextSize(22);
     tv.setPadding(10, 10, 10, 10);
 
     mListView.addHeaderView(tv, null, true);
@@ -57,10 +59,18 @@ public class ConfigQuickMessagesActivity extends ListActivity {
     mDbAdapter.open(true);
 
     LayoutInflater factory = LayoutInflater.from(this);
-    addQuickMessageLayout = factory.inflate(R.layout.quick_message, null);
-    editQuickMessageLayout = factory.inflate(R.layout.quick_message, null);
-    qmEditText = (EditText) editQuickMessageLayout.findViewById(R.id.QuickReplyEditText);
-    addEditText = (EditText) addQuickMessageLayout.findViewById(R.id.QuickReplyEditText);
+
+    addQMLayout = factory.inflate(R.layout.message_presets_configure, null);
+    editQMLayout = factory.inflate(R.layout.message_presets_configure, null);
+
+    addQMEditText = (EditText) addQMLayout.findViewById(R.id.QuickReplyEditText);
+    editQMEditText = (EditText) editQMLayout.findViewById(R.id.QuickReplyEditText);
+
+    addQMTextView = (TextView) addQMLayout.findViewById(R.id.QuickReplyCounterTextView);
+    editQMTextView = (TextView) editQMLayout.findViewById(R.id.QuickReplyCounterTextView);
+
+    addQMEditText.addTextChangedListener(new QMTextWatcher(this, addQMTextView));
+    editQMEditText.addTextChangedListener(new QMTextWatcher(this, editQMTextView));
   }
 
   @Override
@@ -88,7 +98,6 @@ public class ConfigQuickMessagesActivity extends ListActivity {
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
     super.onListItemClick(l, v, position, id);
-    // TODO: move top position to constant
     if (position == 0) { // Top item = Add
       showDialog(ADD_DIALOG);
     } else {
@@ -102,7 +111,7 @@ public class ConfigQuickMessagesActivity extends ListActivity {
    */
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    MenuItem m = menu.add(Menu.NONE, DIALOG_MENU_ADD_ID, Menu.NONE, "Add");
+    MenuItem m = menu.add(Menu.NONE, DIALOG_MENU_ADD_ID, Menu.NONE, R.string.message_presets_add);
     m.setIcon(android.R.drawable.ic_menu_add);
     return super.onCreateOptionsMenu(menu);
   }
@@ -130,9 +139,9 @@ public class ConfigQuickMessagesActivity extends ListActivity {
 
     // Create menu if top item is not selected
     if (((AdapterContextMenuInfo)menuInfo).id != -1) {
-      menu.add(0, CONTEXT_MENU_EDIT_ID, 0, getString(R.string.contact_customization_edit));
-      menu.add(0, CONTEXT_MENU_DELETE_ID, 0, getString(R.string.contact_customization_remove));
-      menu.add(0, CONTEXT_MENU_REORDER_ID, 0, "Move to top");
+      menu.add(0, CONTEXT_MENU_EDIT_ID, 0, R.string.message_presets_edit_text);
+      menu.add(0, CONTEXT_MENU_DELETE_ID, 0, R.string.message_presets_delete_text);
+      menu.add(0, CONTEXT_MENU_REORDER_ID, 0, R.string.message_presets_reorder_text);
     }
   }
 
@@ -174,11 +183,12 @@ public class ConfigQuickMessagesActivity extends ListActivity {
       case ADD_DIALOG:
         return new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_email)
-        .setTitle("Add Quick Message")
-        .setView(addQuickMessageLayout)
-        .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+        .setTitle(R.string.message_presets_add)
+        .setView(addQMLayout)
+        .setPositiveButton(R.string.message_presets_add_text,
+            new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int whichButton) {
-            createQuickMessage(addEditText.getText().toString());
+            createQuickMessage(addQMEditText.getText().toString());
           }
         })
         .setNegativeButton(android.R.string.cancel, null)
@@ -187,11 +197,12 @@ public class ConfigQuickMessagesActivity extends ListActivity {
       case EDIT_DIALOG:
         return new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_email)
-        .setTitle("Edit Quick Message")
-        .setView(editQuickMessageLayout)
-        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+        .setTitle(R.string.message_presets_edit)
+        .setView(editQMLayout)
+        .setPositiveButton(R.string.message_presets_save_text,
+            new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int whichButton) {
-            updateQuickMessage(editId, qmEditText.getText().toString());
+            updateQuickMessage(editId, editQMEditText.getText().toString());
           }
         })
         .setNeutralButton(getString(R.string.contact_customization_remove),
@@ -211,7 +222,7 @@ public class ConfigQuickMessagesActivity extends ListActivity {
     super.onPrepareDialog(id, dialog);
     switch (id) {
       case ADD_DIALOG:
-        addEditText.setText("");
+        addQMEditText.setText("");
         break;
       case EDIT_DIALOG:
         updateEditText(editId);
@@ -220,21 +231,22 @@ public class ConfigQuickMessagesActivity extends ListActivity {
   }
 
   private void fillData() {
-    // Get all of the notes from the database and create the item list
     Cursor c = mDbAdapter.fetchAllQuickMessages();
     startManagingCursor(c);
     if (c != null) {
-      // if (c.getCount() > 0) {
       String[] from =
         new String[] {SmsPopupDbAdapter.KEY_QUICKMESSAGE, SmsPopupDbAdapter.KEY_ROWID};
-      // int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
       int[] to = new int[] {android.R.id.text1};
+      // int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
+
 
       // Now create an array adapter and set it to display using our row
-      SimpleCursorAdapter quickmessages =
-        new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, c, from, to);
-      setListAdapter(quickmessages);
-      // }
+      SimpleCursorAdapter mCursorAdapter =
+        new SimpleCursorAdapter(this, R.layout.list_view, c, from, to);
+      //new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, c, from, to);
+      //android.R.layout.simple_list_item_1
+
+      setListAdapter(mCursorAdapter);
     }
   }
 
@@ -242,21 +254,23 @@ public class ConfigQuickMessagesActivity extends ListActivity {
     Cursor c = mDbAdapter.fetchQuickMessage(id);
     if (c != null) {
       CharSequence message = c.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM);
-      qmEditText.setText(message);
-      qmEditText.setSelection(message.length());
+      editQMEditText.setText(message);
+      editQMEditText.setSelection(message.length());
       c.close();
     } else {
-      qmEditText.setText("");
+      editQMEditText.setText("");
     }
   }
 
   private boolean updateQuickMessage(long id, String message) {
+    if (message.trim().length() == 0) return false;
+
     boolean result = mDbAdapter.updateQuickMessage(id, message);
     fillData();
     if (result) {
-      myToast("Updated");
+      myToast(R.string.message_presets_save_toast);
     } else {
-      myToast("Error");
+      myToast(R.string.message_presets_error_toast);
     }
     return result;
   }
@@ -265,20 +279,22 @@ public class ConfigQuickMessagesActivity extends ListActivity {
     boolean result = mDbAdapter.deleteQuickMessage(id);
     fillData();
     if (result) {
-      myToast("Removed");
+      myToast(R.string.message_presets_delete_toast);
     } else {
-      myToast("Error");
+      myToast(R.string.message_presets_error_toast);
     }
     return result;
   }
 
   private long createQuickMessage(String message) {
+    if (message.trim().length() == 0) return -1;
+
     long result = mDbAdapter.createQuickMessage(message);
     fillData();
     if (result == -1) {
-      myToast("Error");
+      myToast(R.string.message_presets_error_toast);
     } else {
-      myToast("Created");
+      myToast(R.string.message_presets_add_toast);
     }
     return result;
   }
@@ -287,14 +303,15 @@ public class ConfigQuickMessagesActivity extends ListActivity {
     boolean result = mDbAdapter.reorderQuickMessage(id);
     fillData();
     if (result) {
-      myToast("Reordered");
+      myToast(R.string.message_presets_reorder_toast);
     } else {
-      myToast("Error");
+      myToast(R.string.message_presets_error_toast);
     }
     return result;
   }
 
-  private void myToast(CharSequence toast) {
-    Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
+  private void myToast(int resId) {
+    Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
   }
+
 }

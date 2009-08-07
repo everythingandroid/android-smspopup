@@ -11,15 +11,13 @@
   <TextView
     android:autoLink="all"
     android:layout_width="fill_parent"
-    android:textColor="#FFFFFF"
-    android:textSize="16sp"
-    android:shadowColor="@android:color/white"
     android:paddingRight="5sp"
     android:paddingLeft="5sp"
     android:gravity="center"
     android:id="@+id/MmsSubjectTextView"
     android:layout_height="wrap_content"
     android:paddingBottom="12sp"
+    android:textAppearance="?android:attr/textAppearanceMedium"
     android:text="@string/mms_subject" />
   <Button
     android:layout_width="wrap_content"

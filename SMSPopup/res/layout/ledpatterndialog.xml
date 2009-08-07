@@ -12,7 +12,7 @@
     android:id="@+id/LEDPatternTextView"
     android:text="@string/pref_flashled_pattern_help"
     android:paddingBottom="8sp"
-    android:layout_width="fill_parent"></TextView>
+    android:layout_width="fill_parent" />
   <LinearLayout
     android:orientation="horizontal"
     android:id="@+id/LEDPatternLinearLayout2"
@@ -31,7 +31,7 @@
         android:paddingRight="10sp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
-        android:gravity="center"></TextView>
+        android:gravity="center" />
       <TextView
         android:layout_width="wrap_content"
         android:text="@string/pref_flashled_pattern_help_off"
@@ -39,7 +39,7 @@
         android:paddingRight="10sp"
         android:layout_weight="1"
         android:layout_height="fill_parent"
-        android:gravity="center"></TextView>
+        android:gravity="center" />
     </LinearLayout>
     <LinearLayout
       android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
         android:numeric="integer"
         android:maxLength="5"
         android:layout_height="wrap_content"
-        android:layout_margin="1sp"></EditText>
+        android:layout_margin="1sp" />
       <EditText
         android:singleLine="true"
         android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
         android:maxLength="5"
         android:numeric="integer"
         android:selectAllOnFocus="true"
-        android:layout_margin="1sp"></EditText>
+        android:layout_margin="1sp" />
     </LinearLayout>
   </LinearLayout>
 </LinearLayout>

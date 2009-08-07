@@ -7,16 +7,14 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnCancelListener;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.telephony.gsm.SmsMessage;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -56,6 +54,7 @@ public class SmsPopupActivity extends Activity {
   private ImageView photoImageView = null;
   private Drawable contactPhotoPlaceholderDrawable = null;
   private static Bitmap contactPhoto = null;
+  private EditText qrEditText = null;
 
   private ViewStub unreadCountViewStub;
   private View unreadCountView = null;
@@ -73,9 +72,9 @@ public class SmsPopupActivity extends Activity {
   private boolean messageViewed = true;
 
   private static final double WIDTH = 0.8;
-  private static final int DELETE_DIALOG     = Menu.FIRST;
-  private static final int QUICKREPLY_DIALOG = Menu.FIRST + 1;
-  private static final int QUICKREPLY_MSG_DIALOG = Menu.FIRST + 2;
+  private static final int DIALOG_DELETE         = Menu.FIRST;
+  private static final int DIALOG_QUICKREPLY     = Menu.FIRST + 1;
+  private static final int DIALOG_PRESET_MSG     = Menu.FIRST + 2;
 
   private static final int CONTEXT_TTS_ID        = Menu.FIRST;
   private static final int CONTEXT_CLOSE_ID      = Menu.FIRST + 1;
@@ -84,11 +83,12 @@ public class SmsPopupActivity extends Activity {
   private static final int CONTEXT_QUICKREPLY_ID = Menu.FIRST + 4;
 
   private TextView quickreplyTextView;
-  private SmsMmsMessage quickreplyMessage;
+  private static SmsMmsMessage quickReplySmsMessage;
 
   private SmsPopupDbAdapter mDbAdapter;
   private Cursor mCursor = null;
-  private int quickMessageSelected = -1;
+  // private int quickMessageSelected = -1;
+  private String quickReplyText = "";
 
   //	private static final int CONTEXT_VIEW_CONTACT_ID = Menu.FIRST + 1;
   //	private static final int CONTEXT_ADD_CONTACT_ID = Menu.FIRST + 2;
@@ -197,7 +197,7 @@ public class SmsPopupActivity extends Activity {
         //deleteButton.setVisibility(View.VISIBLE);
         deleteButton.setOnClickListener(new OnClickListener() {
           public void onClick(View v) {
-            showDialog(DELETE_DIALOG);
+            showDialog(DIALOG_DELETE);
           }
         });
       } else {
@@ -529,7 +529,7 @@ public class SmsPopupActivity extends Activity {
   @Override
   protected Dialog onCreateDialog(int id) {
     switch (id) {
-      case DELETE_DIALOG:
+      case DIALOG_DELETE:
         return new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_alert)
         .setTitle(getString(R.string.pref_show_delete_button_dialog_title))
@@ -541,80 +541,63 @@ public class SmsPopupActivity extends Activity {
         })
         .setNegativeButton(android.R.string.cancel, null)
         .create();
-      case QUICKREPLY_DIALOG:
+      case DIALOG_QUICKREPLY:
         LayoutInflater factory = LayoutInflater.from(this);
-        final View qrLayout = factory.inflate(R.layout.quick_reply, null);
-        final EditText qrEditText = (EditText) qrLayout.findViewById(R.id.QuickReplyEditText);
+        final View qrLayout = factory.inflate(R.layout.message_quick_reply, null);
+        qrEditText = (EditText) qrLayout.findViewById(R.id.QuickReplyEditText);
         final TextView qrCounterTextView = (TextView) qrLayout.findViewById(R.id.QuickReplyCounterTextView);
 
-        qrEditText.addTextChangedListener(new TextWatcher() {
-
-          public void afterTextChanged(Editable s) {
-            updateQuickReplyCounter(qrCounterTextView, s.toString());
-          }
-
-          public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-          }
-
-          public void onTextChanged(CharSequence s, int start, int before, int count) {
-          }
-        });
+        qrEditText.addTextChangedListener(new QMTextWatcher(this, qrCounterTextView));
 
         quickreplyTextView = (TextView) qrLayout.findViewById(R.id.QuickReplyTextView);
         //quickreplyTextView.setText("Message to " + message.getContactName());
 
-        updateQuickReplyView();
-        updateQuickReplyCounter(qrCounterTextView, qrEditText.getText().toString());
+        //updateQuickReplyView();
+        qrCounterTextView.setText(
+            QMTextWatcher.getQuickReplyCounterText(qrEditText.getText().toString()));
 
         return new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_email)
-        .setTitle("Quick Reply")
+        .setTitle(R.string.quickreply_title)
         //.setMessage("QR description here")
         //.setView((new EditText(this)).setId(5))
         .setView(qrLayout)
-        .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+        .setPositiveButton(R.string.quickreply_send_button, new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int whichButton) {
             quickReply(qrEditText.getText().toString());
           }
         })
         .setNegativeButton(android.R.string.cancel, null)
-        .setNeutralButton("Select", new DialogInterface.OnClickListener() {
+        .setNeutralButton(R.string.quickreply_preset_button, new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int whichButton) {
-            showDialog(QUICKREPLY_MSG_DIALOG);
+            showDialog(DIALOG_PRESET_MSG);
           }
         })
         .create();
 
-      case QUICKREPLY_MSG_DIALOG:
+      case DIALOG_PRESET_MSG:
         mDbAdapter.open(true);
         mCursor = mDbAdapter.fetchAllQuickMessages();
         startManagingCursor(mCursor);
 
         return new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_email)
-        .setTitle("Quick Reply")
-        .setSingleChoiceItems(mCursor, -1, SmsPopupDbAdapter.KEY_QUICKMESSAGE, new DialogInterface.OnClickListener() {
+        .setTitle(R.string.pref_message_presets_title)
+        .setCursor(mCursor, new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int item) {
-            //Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
             if (Log.DEBUG) Log.v("Item clicked = " + item);
-            quickMessageSelected = item;
+            mCursor.moveToPosition(item);
+            if (Log.DEBUG) Log.v("Item text = " + mCursor.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM));
+            quickReplyText = mCursor.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM);
+            updateQuickReplyView();
+            showDialog(DIALOG_QUICKREPLY);
           }
-        })
-        //.setMessage(getString(R.string.pref_show_delete_button_dialog_text))
-        .setPositiveButton("Send", new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int whichButton) {
-            if (quickMessageSelected != -1) {
-              mCursor.moveToPosition(quickMessageSelected);
-              if (Log.DEBUG) Log.v("contactsCursor = " + mCursor.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM));
-              quickReply(mCursor.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM));
-            }
+        }, SmsPopupDbAdapter.KEY_QUICKMESSAGE)
+        .setOnCancelListener(new OnCancelListener() {
+          public void onCancel(DialogInterface dialog) {
+            showDialog(DIALOG_QUICKREPLY);
           }
-        })
-        .setNegativeButton(android.R.string.cancel, null)
-        .setNeutralButton("Write", new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int whichButton) {
-            showDialog(QUICKREPLY_DIALOG);
-          }
+
         })
         .create();
     }
@@ -625,11 +608,16 @@ public class SmsPopupActivity extends Activity {
   @Override
   protected void onPrepareDialog(int id, Dialog dialog) {
     super.onPrepareDialog(id, dialog);
+
+    // User interacted with phone, remove any held locks
+    ClearAllReceiver.removeCancel(getApplicationContext());
+    ClearAllReceiver.clearAll(false);
+
     switch (id) {
-      case QUICKREPLY_DIALOG:
+      case DIALOG_QUICKREPLY:
         updateQuickReplyView();
         break;
-      case QUICKREPLY_MSG_DIALOG:
+      case DIALOG_PRESET_MSG:
         if (Log.DEBUG) Log.v("onPrepareDialog for QUICK REPLY");
         //			mDbAdapter.open(true);
         //			mCursor = mDbAdapter.fetchAllQuickMessages();
@@ -684,11 +672,10 @@ public class SmsPopupActivity extends Activity {
         replyToMessage();
         break;
       case CONTEXT_DELETE_ID:
-        //showDialog(DELETE_DIALOG);
         deleteMessage();
         break;
       case CONTEXT_QUICKREPLY_ID:
-        showDialog(QUICKREPLY_DIALOG);
+        startQuickReply();
         break;
     }
     return super.onContextItemSelected(item);
@@ -708,6 +695,7 @@ public class SmsPopupActivity extends Activity {
    */
   private void speakMessage() {
     ClearAllReceiver.removeCancel(getApplicationContext());
+    ClearAllReceiver.clearAll(false);
 
     // We'll use update notification to stop the sound playing
     ManageNotification.update(getApplicationContext(), message);
@@ -807,33 +795,40 @@ public class SmsPopupActivity extends Activity {
             SmsPopupActivity.this.getApplicationContext(),
             SmsPopupUtilsService.class);
         i.setAction(SmsPopupUtilsService.ACTION_QUICKREPLY);
-        i.putExtras(quickreplyMessage.toBundle());
+        i.putExtras(quickReplySmsMessage.toBundle());
         i.putExtra(SmsMmsMessage.EXTRAS_QUICKREPLY, quickReplyMessage);
-        if (Log.DEBUG) Log.v("Sending message to " + quickreplyMessage.getContactName());
+        if (Log.DEBUG) Log.v("Sending message to " + quickReplySmsMessage.getContactName());
         SmsPopupUtilsService.beginStartingService(
             SmsPopupActivity.this.getApplicationContext(), i);
-        // TODO: move strings to res file
-        Toast.makeText(this, "Sending message...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.quickreply_sending_toast, Toast.LENGTH_LONG).show();
         myFinish();
       } else {
-        // TODO: move strings to res file
-        Toast.makeText(this, "No message entered", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.quickreply_nomessage_toast, Toast.LENGTH_LONG).show();
       }
     }
   }
 
-  private void updateQuickReplyView() {
-    quickreplyMessage = message;
-    quickreplyTextView.setText("Message to " + quickreplyMessage.getContactName());
+  private void startQuickReply() {
+    quickReplySmsMessage = message;
+    quickReplyText = "";
+    updateQuickReplyView();
+    showDialog(DIALOG_QUICKREPLY);
   }
 
-  private void updateQuickReplyCounter(TextView textView, String message) {
-    int[] messageLength = SmsMessage.calculateLength(message, true);
+  private void updateQuickReplyView() {
+    updateQuickReplyView(quickReplyText);
+  }
 
-    if (messageLength[0] > 1) {
-      textView.setText(messageLength[2] + " remaining, " + messageLength[0] + " messages");
-    } else {
-      textView.setText(messageLength[2] + " remaining");
+  private void updateQuickReplyView(String editText) {
+    if (Log.DEBUG) Log.v("updateQuickReplyView - " + editText);
+    if (qrEditText != null) {
+      qrEditText.setText(editText);
+      qrEditText.setSelection(editText.length());
+    }
+    if (quickreplyTextView != null) {
+      quickreplyTextView.setText(
+          String.format(
+              getString(R.string.quickreply_from_text), quickReplySmsMessage.getContactName()));
     }
   }
 
@@ -861,7 +856,6 @@ public class SmsPopupActivity extends Activity {
       contactPhoto = result;
       if (result != null) {
         photoImageView.setImageBitmap(contactPhoto);
-        //photoImageView.setImageBitmap(result);
       }
     }
   }

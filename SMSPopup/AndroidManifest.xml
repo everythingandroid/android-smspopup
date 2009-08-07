@@ -36,8 +36,8 @@
       android:finishOnTaskLaunch="true">
     </activity>
     <activity
-      android:name=".ConfigQuickMessagesActivity"
-      android:label="@string/pref_quickmessage_title"
+      android:name=".ConfigPresetMessagesActivity"
+      android:label="@string/pref_message_presets_title"
       android:launchMode="singleTop"
       android:excludeFromRecents="true"
       android:finishOnTaskLaunch="true">

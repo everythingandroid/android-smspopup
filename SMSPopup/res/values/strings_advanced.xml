@@ -21,9 +21,38 @@
 	<string name="contact_customization_edit">Edit</string>
 	<string name="contact_customization_remove">Remove</string>
 	<string name="contact_customization_save">Save</string>
+    <string name="contact_customization_title">Notifications for %s</string>
+    <string name="contact_customization_enabled">Notifications are enabled for %s</string>
+    <string name="contact_customization_disabled">Notifications are disabled for %s</string>
 	<string name="contact_customization_removed_toast">Contact customization removed</string>
+    <string name="contact_customization_add_hint">Add/Edit contact notifications...</string>
   
-    <string name="quickmessages_add">Add</string>
+
+    <string name="message_presets_add">Add Preset Message</string>
+    <string name="message_presets_edit">Edit Preset Message</string>
+    
+    <string name="message_presets_add_text">Create</string>
+    <string name="message_presets_save_text">Save</string>
+    <string name="message_presets_delete_text">Remove</string>
+    <string name="message_presets_edit_text">Edit</string>
+    <string name="message_presets_reorder_text">Move to top</string>
+
+    <string name="message_presets_add_toast">Preset message added</string>    
+    <string name="message_presets_save_toast">Preset message updated</string>
+    <string name="message_presets_delete_toast">Preset message deleted</string>
+    <string name="message_presets_reorder_toast">Preset message moved to top</string>
+    <string name="message_presets_error_toast">Error - please try again</string>
+    
+    <string name="message_counter">%d chars remaining</string>
+    <string name="message_counter_multiple">%d chars remaining, %d messages</string>
+    
+    <string name="quickreply_title">Quick Reply</string>
+    <string name="quickreply_from_text">Message to %s</string>    
+    <string name="quickreply_preset_button">Presets</string>
+    <string name="quickreply_send_button">Send</string>
+    <string name="quickreply_sending_toast">Sending message...</string>
+    <string name="quickreply_nomessage_toast">Send</string>
+    
 	
 	<string name="pref_notif_default_title">Default Notifications</string>
 	<string name="pref_notif_default_summary">Notifications for all contacts without an individual customization</string>
@@ -31,7 +60,8 @@
 	<string name="pref_contacts_title">Contacts Notifications</string>
 	<string name="pref_contacts_summary">Individual contact customization</string>
 	
-	<string name="pref_quickmessage_title">Quick Messages</string>
+	<string name="pref_message_presets_title">Preset Messages</string>
+    <string name="pref_message_presets_summary">Configure preset messages for quick replies</string>
 	
 	<string name="pref_notif_help_key">notif_help</string>
 	<string name="pref_notif_help_title">Help - I'm confused!</string>

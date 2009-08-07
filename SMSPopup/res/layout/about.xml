@@ -7,11 +7,11 @@
   <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/AboutTextView"
-    android:textSize="14sp"
-    android:textColor="@android:color/white"
+    android:textColor="?android:attr/textColorPrimaryDisableOnly"
+    android:textAppearance="?android:attr/textAppearanceSmall"
     android:autoLink="all"
     android:padding="11sp"
-    android:text="@string/pref_about_text"></TextView>
+    android:text="@string/pref_about_text"
+ />
 </ScrollView>

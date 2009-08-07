@@ -121,6 +121,8 @@ public class SmsReceiverService extends Service {
           String body;
           if (messages.length == 1) {
             body = messages[0].getDisplayMessageBody();
+            Log.v("!!!! body = " + body);
+            Log.v("!!!! and body = " + messages[0].getMessageBody());
           } else {
             StringBuilder bodyText = new StringBuilder();
             for (int i = 0; i < messages.length; i++) {
