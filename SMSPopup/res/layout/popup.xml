@@ -24,17 +24,15 @@
     android:id="@+id/MessageScrollView"
     android:visibility="gone"
     android:layout_weight="1"
-    android:paddingTop="12sp"
+    android:paddingTop="8sp"
     android:paddingBottom="12sp">
     <TextView
       android:text="Text here"
       android:id="@+id/MessageTextView"
       android:autoLink="all"
+      android:textAppearance="?android:attr/textAppearanceMedium"
       android:layout_height="fill_parent"
       android:layout_width="fill_parent"
-      android:textColor="#FFFFFF"
-      android:textSize="16sp"
-      android:shadowColor="@android:color/white"
       android:paddingRight="5sp"
       android:paddingLeft="5sp"
       android:gravity="center" />

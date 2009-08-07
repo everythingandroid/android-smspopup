@@ -21,7 +21,7 @@
         android:id="@+id/CustomVibrateTextView"
         android:text="@string/pref_vibrate_pattern_help"
         android:paddingBottom="4sp"
-        android:layout_height="fill_parent"></TextView>
+        android:layout_height="fill_parent" />
       <EditText
         android:layout_width="fill_parent"
         android:id="@+id/CustomVibrateEditText"
@@ -29,7 +29,7 @@
         android:singleLine="true"
         android:layout_height="wrap_content"
         android:layout_marginRight="10sp"
-        android:selectAllOnFocus="true"></EditText>
+        android:selectAllOnFocus="true" />
     </LinearLayout>
   </ScrollView>
 </LinearLayout>

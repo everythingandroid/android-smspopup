@@ -6,7 +6,7 @@
   android:orientation="vertical">
   <AutoCompleteTextView
     android:text=""
-    android:hint="Add/Edit contact notifications..."
+    android:hint="@string/contact_customization_add_hint"
     android:id="@+id/ContactsAutoCompleteTextView"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -14,7 +14,8 @@
     android:inputType="textPersonName"
     android:singleLine="true"
     android:layout_marginLeft="5sp"
-    android:layout_marginRight="5sp" android:imeOptions="actionDone"/>
+    android:layout_marginRight="5sp"
+    android:imeOptions="actionDone" />
   <ListView
     android:id="@android:id/list"
     android:layout_width="fill_parent"
