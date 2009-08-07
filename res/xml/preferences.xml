@@ -209,8 +209,8 @@
     </PreferenceScreen>
     <PreferenceScreen
       android:key="@string/quickmessages_key"
-      android:title="Quick Messages"
-      android:summary="quick replies"
+      android:title="@string/pref_message_presets_title"
+      android:summary="@string/pref_message_presets_summary"
       android:dependency="@string/pref_enabled_key">
     </PreferenceScreen>
   </PreferenceCategory>

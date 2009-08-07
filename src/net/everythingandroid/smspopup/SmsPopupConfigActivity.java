@@ -51,7 +51,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     PreferenceScreen quickMessagePS =
       (PreferenceScreen) findPreference(getString(R.string.quickmessages_key));
     quickMessagePS.setIntent(
-        new Intent(this, net.everythingandroid.smspopup.ConfigQuickMessagesActivity.class));
+        new Intent(this, net.everythingandroid.smspopup.ConfigPresetMessagesActivity.class));
 
     // Opening and closing the database will trigger the update or create
     // TODO: this should be done on a separate thread to prevent "not responding" messages

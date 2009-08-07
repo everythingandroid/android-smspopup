@@ -5,45 +5,32 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 
 public class SmsMonitorService extends Service {
-  Uri uriSMS = Uri.parse("content://mms-sms/conversations/");
-  public static final Uri SMS_CONTENT_URI = Uri.parse("content://sms");
-  public static final Uri SMS_INBOX_CONTENT_URI = Uri.withAppendedPath(SMS_CONTENT_URI, "inbox");
+  private static Uri uriSMS = Uri.parse("content://mms-sms/conversations/");
+  //  private static final Uri SMS_CONTENT_URI = Uri.parse("content://sms");
+  //  private static final Uri SMS_INBOX_CONTENT_URI = Uri.withAppendedPath(SMS_CONTENT_URI, "inbox");
 
-  ContentResolver crSMS;
-  SmsContentObserver observerSMS = null;
-  Context context;
+  private ContentResolver crSMS;
+  private SmsContentObserver observerSMS = null;
+  private Context context;
 
-  public static void beginStartingService(Context context) {
-    //synchronized (mStartingServiceSync) {
-    if (Log.DEBUG) Log.v("SmsMonitorService: beginStartingService()");
-    //      if (mStartingService == null) {
-    //        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-    //        mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-    //            Log.LOGTAG);
-    //        mStartingService.setReferenceCounted(false);
-    //      }
-    //      mStartingService.acquire();
-    context.startService(new Intent(context, SmsMonitorService.class));
-    //}
-  }
-
-  @Override
-  public void onStart(Intent intent, int startId) {
-    super.onStart(intent, startId);
-    if (Log.DEBUG) Log.v("SmsMonitorService starting");
-  }
+  // private static PowerManager.WakeLock mStartingService;
 
   @Override
   public void onCreate() {
     super.onCreate();
     context = this.getApplicationContext();
     registerSMSObserver();
+  }
+
+  @Override
+  public void onStart(Intent intent, int startId) {
+    super.onStart(intent, startId);
+    if (Log.DEBUG) Log.v("SmsMonitorService starting");
   }
 
   @Override
@@ -65,7 +52,6 @@ public class SmsMonitorService extends Service {
       observerSMS = new SmsContentObserver(new Handler());
       crSMS = getContentResolver();
       crSMS.registerContentObserver(uriSMS, true, observerSMS);
-      //crSMS.notifyChange(uriSMS, observerSMS);
       if (Log.DEBUG) Log.v("SMS Observer registered.");
     }
   }
@@ -83,7 +69,7 @@ public class SmsMonitorService extends Service {
     if (Log.DEBUG) Log.v("Unregistered SMS Observer");
   }
 
-  public class SmsContentObserver extends ContentObserver {
+  private class SmsContentObserver extends ContentObserver {
     public SmsContentObserver(Handler handler) {
       super(handler);
     }
@@ -91,11 +77,43 @@ public class SmsMonitorService extends Service {
     @Override
     public void onChange(boolean selfChange) {
       super.onChange(selfChange);
-      if (Log.DEBUG) Log.v("!!! SmsContentObserver - content changed!");
-      Cursor c = context.getContentResolver().query(SMS_CONTENT_URI, null, "read = 0", null, null);
-      if (Log.DEBUG) Log.v("!!! SMS count unread " + c.getCount());
-      if (Log.DEBUG) Log.v("!!! selfChange = " + selfChange);
+      //Cursor c = context.getContentResolver().query(SMS_CONTENT_URI, null, "read = 0", null, null);
+      int count = SmsPopupUtils.getUnreadMessagesCount(context);
+      if (Log.DEBUG) Log.v("getUnreadCount = " + count);
+      if (count == 0) {
+        ManageNotification.clearAll(context);
+        finishStartingService(SmsMonitorService.this);
+      } else {
+        // TODO: do something with count>0, maybe refresh the notification
+      }
     }
+  }
+
+  /**
+   * Start the service to process that will run the content observer
+   */
+  public static void beginStartingService(Context context) {
+    if (Log.DEBUG) Log.v("SmsMonitorService: beginStartingService()");
+    //    if (mStartingService == null) {
+    //      PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+    //      mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG);
+    //      mStartingService.setReferenceCounted(false);
+    //    }
+    //    mStartingService.acquire();
+    context.startService(new Intent(context, SmsMonitorService.class));
+  }
+
+  /**
+   * Called back by the service when it has finished processing notifications,
+   * releasing the wake lock if the service is now stopping.
+   */
+  public static void finishStartingService(Service service) {
+    if (Log.DEBUG) Log.v("SmsMonitorService: finishStartingService()");
+    //    if (mStartingService != null) {
+    service.stopSelf();
+    //      mStartingService.release();
+    //      mStartingService = null;
+    //}
   }
 
 }

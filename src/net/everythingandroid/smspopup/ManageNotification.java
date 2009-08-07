@@ -327,8 +327,7 @@ public class ManageNotification {
 
     if (reply || myPrefs.getBoolean(
         context.getString(R.string.pref_markread_key),
-        Boolean.parseBoolean(
-            context.getString(R.string.pref_markread_default)))) {
+        Boolean.parseBoolean(context.getString(R.string.pref_markread_default)))) {
       NotificationManager myNM =
         (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
       myNM.cancelAll();

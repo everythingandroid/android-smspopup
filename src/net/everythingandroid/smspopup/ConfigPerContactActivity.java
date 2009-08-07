@@ -50,17 +50,29 @@ public class ConfigPerContactActivity extends PreferenceActivity {
      * Create database object
      */
     mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
+    mDbAdapter.open();
+
+    /*
+     * Create and setup preferences
+     */
+    createPreferences();
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    createPreferences();
   }
 
   @Override
   protected void onPause() {
     super.onPause();
+
+    /*
+     * Finish up activity, we always want to call onCreate() to setup all the prefs.
+     * It would be more efficient to split things between onCreate and onResume but
+     * this code won't be run that often to bother :)
+     */
+    finish();
   }
 
   @Override
@@ -148,22 +160,18 @@ public class ConfigPerContactActivity extends PreferenceActivity {
       /*
        * Fetch the current user settings from the database
        */
-      mDbAdapter.open(true);
       Cursor contact = mDbAdapter.fetchContactSettings(contactId);
-      mDbAdapter.close();
 
       /*
-       * If for some reason the contact is not found, get out
+       * If for some reason the contact is not found, try creating
        */
       if (contact == null) {
         //        Log.v("Contact not found???");
         //        finish();
         createContact(contactId);
-        mDbAdapter.open(true);
         contact = mDbAdapter.fetchContactSettings(contactId);
-        mDbAdapter.close();
         if (contact == null) {
-          if (Log.DEBUG) Log.v("Contact not found???");
+          if (Log.DEBUG) Log.v("Contact not found??");
           finish();
         }
       }
@@ -181,16 +189,15 @@ public class ConfigPerContactActivity extends PreferenceActivity {
       /*
        * Customize Activity title + main notif enabled preference summaries
        */
-      // TODO: move and parameterize strings to resource file
       String contactName = contact.getString(SmsPopupDbAdapter.KEY_CONTACT_NAME_NUM);
-      setTitle("Notifications for " + contactName);
+      setTitle(String.format(getString(R.string.contact_customization_title), contactName));
 
       CheckBoxPreference enabledPref =
         (CheckBoxPreference) findPreference(getString(R.string.c_pref_notif_enabled_key));
       enabledPref.setSummaryOn(
-          getString(R.string.pref_notif_enabled_summaryon) + " for " + contactName);
+          String.format(getString(R.string.contact_customization_enabled), contactName));
       enabledPref.setSummaryOff(
-          getString(R.string.pref_notif_enabled_summaryoff) + " for " + contactName);
+          String.format(getString(R.string.contact_customization_disabled), contactName));
       enabledPref.setOnPreferenceChangeListener(onPrefChangeListener);
 
       /*
@@ -252,7 +259,6 @@ public class ConfigPerContactActivity extends PreferenceActivity {
    * All preferences will trigger this when changed
    */
   private OnPreferenceChangeListener onPrefChangeListener = new OnPreferenceChangeListener() {
-
     public boolean onPreferenceChange(Preference preference, Object newValue) {
       if (Log.DEBUG) Log.v("onPreferenceChange - " + newValue);
       return storePreferences(preference, newValue);
@@ -293,10 +299,8 @@ public class ConfigPerContactActivity extends PreferenceActivity {
       return false;
     }
 
-    mDbAdapter.open();
     boolean success = mDbAdapter.updateContact(contactId, column, newValue);
     mDbAdapter.updateContactSummary(contactId);
-    mDbAdapter.close();
 
     return success;
   }
@@ -353,11 +357,6 @@ public class ConfigPerContactActivity extends PreferenceActivity {
     editor.commit();
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-   */
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -372,11 +371,6 @@ public class ConfigPerContactActivity extends PreferenceActivity {
     return true;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-   */
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
@@ -384,9 +378,7 @@ public class ConfigPerContactActivity extends PreferenceActivity {
         finish();
         return true;
       case MENU_DELETE_ID:
-        mDbAdapter.open();
         mDbAdapter.deleteContact(contactId);
-        mDbAdapter.close();
         finish();
         return true;
     }
@@ -395,10 +387,8 @@ public class ConfigPerContactActivity extends PreferenceActivity {
 
   private void createContact(long contactId) {
     getIntent().putExtra(EXTRA_CONTACT_ID, contactId);
-    mDbAdapter.open();
     mDbAdapter.createContact(contactId);
     mDbAdapter.updateContactSummary(contactId);
-    mDbAdapter.close();
   }
 
 }

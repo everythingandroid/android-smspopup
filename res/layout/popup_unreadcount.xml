@@ -12,10 +12,11 @@
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true" />
   <TextView
+    android:id="@+id/UnreadCountTextView"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:textAppearance="@style/HeaderStyle"
-    android:id="@+id/UnreadCountTextView"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:textColor="?android:attr/textColorPrimaryDisableOnly"
     android:paddingBottom="2sp"
     android:paddingTop="2sp"
     android:paddingLeft="5sp"
