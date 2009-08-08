@@ -213,9 +213,7 @@ public class SmsPopupDbAdapter {
 
       if (showToast) {
         Toast.makeText(
-            context,
-            context.getString(R.string.contact_customization_removed_toast),
-            Toast.LENGTH_SHORT).show();
+            context, R.string.contact_customization_removed_toast, Toast.LENGTH_SHORT).show();
       }
       return true;
     }

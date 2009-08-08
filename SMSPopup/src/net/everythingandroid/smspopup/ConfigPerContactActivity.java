@@ -1,12 +1,9 @@
 package net.everythingandroid.smspopup;
 
-import java.util.List;
-
 import net.everythingandroid.smspopup.preferences.CustomLEDColorListPreference;
 import net.everythingandroid.smspopup.preferences.CustomLEDPatternListPreference;
 import net.everythingandroid.smspopup.preferences.CustomVibrateListPreference;
 import net.everythingandroid.smspopup.preferences.TestNotificationDialogPreference;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.Ringtone;
@@ -19,27 +16,19 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.provider.Contacts;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class ConfigPerContactActivity extends PreferenceActivity {
-  private Uri contactUri = null;
   private long contactId = 0;
   private String contactIdString = null;
   private SmsPopupDbAdapter mDbAdapter;
-  private static final int REQ_CODE_CHOOSE_CONTACT = 0;
   private static final int MENU_SAVE_ID = Menu.FIRST;
   private static final int MENU_DELETE_ID = Menu.FIRST + 1;
   public static final String EXTRA_CONTACT_ID =
     "net.everythingandroid.smspopuppro.EXTRA_CONTACT_ID";
 
-  /**
-   * The action for the contacts with phone numbers list tab.
-   */
-  public static final String LIST_CONTACTS_WITH_PHONES_ACTION =
-    "com.android.contacts.action.LIST_CONTACTS_WITH_PHONES";
-  public static final String PHONE = "phone";
+  private RingtonePreference ringtonePref;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +50,14 @@ public class ConfigPerContactActivity extends PreferenceActivity {
   @Override
   protected void onResume() {
     super.onResume();
+
+    SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+    Uri ringtoneUri = Uri.parse(
+        myPrefs.getString(
+            getString(R.string.c_pref_notif_sound_key), ManageNotification.defaultRingtone));
+    Ringtone mRingtone = RingtoneManager.getRingtone(this, ringtoneUri);
+    ringtonePref.setSummary(mRingtone.getTitle(this));
+
   }
 
   @Override
@@ -72,7 +69,7 @@ public class ConfigPerContactActivity extends PreferenceActivity {
      * It would be more efficient to split things between onCreate and onResume but
      * this code won't be run that often to bother :)
      */
-    finish();
+    //finish();
   }
 
   @Override
@@ -86,61 +83,6 @@ public class ConfigPerContactActivity extends PreferenceActivity {
     super.onDestroy();
   }
 
-  private void selectContact() {
-    // Intent i = new Intent(Intent.ACTION_PICK,
-    // Uri.parse("content://contacts/people/with_phones_filter/*"));
-    // Intent i = new Intent(Intent.ACTION_PICK,
-    // Contacts.People.CONTENT_URI.buildUpon().appendEncodedPath("with_phones_filter").build());
-    // Contacts.Groups.
-    // new Intent(Intent.ACTION_PICK, Contacts.Phones.CONTENT_URI)
-    // new Intent(Intent.ACTION_PICK,
-    // Uri.withAppendedPath(Contacts.People.CONTENT_URI,"with_phones_filter"))
-    // new Intent(Intent.ACTION_PICK,
-    // Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, "m"))
-    // .setType("vnd.android.cursor.dir/phone")
-    // .setType("vnd.android.cursor.dir/person")
-
-    // TODO: So ideally we just want to show contacts with phone numbers here
-    // but I couldn't
-    // work out a way to filter the results using an ACTION_PICK intent
-
-    //final Uri CONTENT_URI = Uri.parse("content://contacts/people_with_phones");
-
-    //    Intent i = new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI);
-    //
-    //    //i.putExtra(PHONE, "mobile");
-    //    startActivityForResult(i, REQ_CODE_CHOOSE_CONTACT);
-
-    startActivityForResult(
-        new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI), REQ_CODE_CHOOSE_CONTACT);
-  }
-
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-
-    switch (requestCode) {
-      case REQ_CODE_CHOOSE_CONTACT:
-        if (resultCode == -1) { // Success, contact chosen
-          contactUri = data.getData();
-          List<String> list = contactUri.getPathSegments();
-          if (Log.DEBUG) Log.v("onActivityResult() - " + data.getDataString() + ", " + list.get(list.size() - 1));
-          contactId = Long.parseLong(list.get(list.size() - 1));
-
-          createContact(contactId);
-
-          //          getIntent().putExtra(EXTRA_CONTACT_ID, contactId);
-          //          mDbAdapter.open();
-          //          mDbAdapter.createContact(contactId);
-          //          mDbAdapter.updateContactSummary(contactId);
-          //          mDbAdapter.close();
-        } else { // Failed, contact not chosen
-          finish();
-        }
-        break;
-    }
-  }
-
   private void createPreferences() {
     /*
      * Ensure contactId was passed, if not, fire up an intent to choose a
@@ -149,10 +91,8 @@ public class ConfigPerContactActivity extends PreferenceActivity {
     contactId = getIntent().getLongExtra(EXTRA_CONTACT_ID, 0);
 
     if (contactId == 0) {
-      /*
-       * This will start the "pick contact" intent
-       */
-      selectContact();
+      if (Log.DEBUG) Log.v("Contact bad");
+      finish();
     } else {
       if (Log.DEBUG) Log.v("contactId = " + contactId);
       contactIdString = String.valueOf(contactId);
@@ -163,15 +103,13 @@ public class ConfigPerContactActivity extends PreferenceActivity {
       Cursor contact = mDbAdapter.fetchContactSettings(contactId);
 
       /*
-       * If for some reason the contact is not found, try creating
+       * If the contact is not yet in our db ...
        */
       if (contact == null) {
-        //        Log.v("Contact not found???");
-        //        finish();
         createContact(contactId);
         contact = mDbAdapter.fetchContactSettings(contactId);
         if (contact == null) {
-          if (Log.DEBUG) Log.v("Contact not found??");
+          if (Log.DEBUG) Log.v("Error creating or fetching contact");
           finish();
         }
       }
@@ -203,17 +141,16 @@ public class ConfigPerContactActivity extends PreferenceActivity {
       /*
        * Main Prefs
        */
-
       CheckBoxPreference enablePopupPref =
         (CheckBoxPreference) findPreference(getString(R.string.c_pref_popup_enabled_key));
       enablePopupPref.setOnPreferenceChangeListener(onPrefChangeListener);
 
-      RingtonePreference ringtonePref =
+      ringtonePref =
         (RingtonePreference) findPreference(getString(R.string.c_pref_notif_sound_key));
       ringtonePref.setOnPreferenceChangeListener(onPrefChangeListener);
-      Uri ringtoneUri = Uri.parse(contact.getString(SmsPopupDbAdapter.KEY_RINGTONE_NUM));
-      Ringtone mRingtone = RingtoneManager.getRingtone(this, ringtoneUri);
-      ringtonePref.setSummary(mRingtone.getTitle(this));
+//      Uri ringtoneUri = Uri.parse(contact.getString(SmsPopupDbAdapter.KEY_RINGTONE_NUM));
+//      Ringtone mRingtone = RingtoneManager.getRingtone(this, ringtoneUri);
+//      ringtonePref.setSummary(mRingtone.getTitle(this));
 
       TestNotificationDialogPreference testPref =
         (TestNotificationDialogPreference) findPreference(getString(R.string.c_pref_notif_test_key));
@@ -312,12 +249,7 @@ public class ConfigPerContactActivity extends PreferenceActivity {
     String one = "1";
     if (Log.DEBUG) Log.v("retrievePrefs()");
     SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-    //    if (Log.DEBUG) Log.v("ringtone = " + c.getString(SmsPopupDbAdapter.KEY_RINGTONE_NUM));
-    //    if (Log.DEBUG) Log.v("enabled = " + c.getString(SmsPopupDbAdapter.KEY_ENABLED_NUM));
-    //    if (Log.DEBUG) Log.v("popup = " + c.getString(SmsPopupDbAdapter.KEY_POPUP_ENABLED_NUM));
     SharedPreferences.Editor editor = myPrefs.edit();
-    // editor.putBoolean(getString(R.string.c_pref_notif_enabled_key),
-    // Boolean.parseBoolean(c.getString(ContactsDbAdapter.KEY_ENABLED_NUM)));
 
     /*
      * Fetch Main Prefs
@@ -360,10 +292,10 @@ public class ConfigPerContactActivity extends PreferenceActivity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
 
-    MenuItem saveItem =
-      menu.add(Menu.NONE, MENU_SAVE_ID, Menu.NONE, getString(R.string.contact_customization_save));
+    MenuItem saveItem = menu.add(
+        Menu.NONE, MENU_SAVE_ID, Menu.NONE, R.string.contact_customization_save);
     MenuItem deleteItem = menu.add(
-        Menu.NONE, MENU_DELETE_ID, Menu.NONE, getString(R.string.contact_customization_remove));
+        Menu.NONE, MENU_DELETE_ID, Menu.NONE, R.string.contact_customization_remove);
 
     saveItem.setIcon(android.R.drawable.ic_menu_save);
     deleteItem.setIcon(android.R.drawable.ic_menu_delete);
