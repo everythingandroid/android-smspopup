@@ -100,7 +100,7 @@
    <string name="pref_inbox_app_info">Note that the "Reply" messaging application is set by the system</string>
 
    <string name="pref_show_buttons_key">showbuttons</string>
-   <string name="pref_show_buttons_title">Show Buttons</string>
+   <string name="pref_show_buttons_title">Show Buttons On Popup</string>
    <string name="pref_show_buttons_summaryon">Buttons on popup are visible</string>
    <string name="pref_show_buttons_summaryoff">Buttons are hidden in long press menu</string>
    <string name="pref_show_buttons_default">true</string>

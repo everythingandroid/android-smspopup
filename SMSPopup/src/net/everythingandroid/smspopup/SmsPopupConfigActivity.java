@@ -1,6 +1,7 @@
 package net.everythingandroid.smspopup;
 
 import net.everythingandroid.smspopup.preferences.AppEnabledCheckBoxPreference;
+import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.preferences.DialogPreference;
 import net.everythingandroid.smspopup.preferences.EmailDialogPreference;
 import android.content.Intent;
@@ -53,14 +54,26 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     quickMessagePS.setIntent(
         new Intent(this, net.everythingandroid.smspopup.ConfigPresetMessagesActivity.class));
 
+    ButtonListPreference button1 =
+      (ButtonListPreference) findPreference(getString(R.string.pref_button1_key));
+    button1.prefId = getString(R.string.pref_button1_key);
+    button1.refreshSummary();
+
+    ButtonListPreference button2 =
+      (ButtonListPreference) findPreference(getString(R.string.pref_button2_key));
+    button2.prefId = getString(R.string.pref_button2_key);
+    button2.refreshSummary();
+
+    ButtonListPreference button3 =
+      (ButtonListPreference) findPreference(getString(R.string.pref_button3_key));
+    button3.prefId = getString(R.string.pref_button3_key);
+    button3.refreshSummary();
+
     // Opening and closing the database will trigger the update or create
     // TODO: this should be done on a separate thread to prevent "not responding" messages
     SmsPopupDbAdapter mDbAdapter = new SmsPopupDbAdapter(this);
     mDbAdapter.open(true); // Open database read-only
     mDbAdapter.close();
-
-    // TODO: create service to monitor unread counts for notifications
-    //SmsMonitorService.beginStartingService(this);
   }
 
   @Override
@@ -83,4 +96,6 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
       SmsPopupUtils.disableOtherSMSPopup(this);
     }
   }
+
+
 }

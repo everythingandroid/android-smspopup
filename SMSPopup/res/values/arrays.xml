@@ -87,4 +87,25 @@
       <item>10</item>
       <item>-1</item>
    </string-array>
+   <string-array name="pref_buttons_entries">
+      <item>Close</item>
+      <item>Delete</item>
+      <item>Delete (no confirmation)</item>
+      <item>Reply</item>
+      <item>Quick Reply</item>
+      <item>Inbox</item>
+      <item>Text-to-Speech</item>
+      <item>Disabled</item>      
+   </string-array>
+   <string-array name="pref_buttons_values">
+      <item>0</item>
+      <item>1</item>
+      <item>2</item>
+      <item>3</item>
+      <item>4</item>
+      <item>5</item>
+      <item>6</item>
+      <item>7</item>
+      <item>8</item>
+   </string-array>
 </resources>
