@@ -17,14 +17,14 @@
 	<string name="contacts_key">contacts_key</string>
 	<string name="quickmessages_key">quickmessages_key</string>
 	
-	<string name="contact_customization_add">Add Contact</string>
-	<string name="contact_customization_edit">Edit</string>
-	<string name="contact_customization_remove">Remove</string>
+	<string name="contact_customization_add">Add Custom Notifications</string>
+	<string name="contact_customization_edit">Edit Custom Notification</string>
+	<string name="contact_customization_remove">Remove Custom Notification</string>
+    <string name="contact_customization_removed_toast">Custom Notification Removed</string>  
 	<string name="contact_customization_save">Save</string>
     <string name="contact_customization_title">Notifications for %s</string>
     <string name="contact_customization_enabled">Notifications are enabled for %s</string>
     <string name="contact_customization_disabled">Notifications are disabled for %s</string>
-	<string name="contact_customization_removed_toast">Contact customization removed</string>
     <string name="contact_customization_add_hint">Add/Edit contact notifications...</string>
   
 
@@ -53,7 +53,6 @@
     <string name="quickreply_sending_toast">Sending message...</string>
     <string name="quickreply_nomessage_toast">Send</string>
     
-	
 	<string name="pref_notif_default_title">Default Notifications</string>
 	<string name="pref_notif_default_summary">Notifications for all contacts without an individual customization</string>
 
@@ -67,5 +66,19 @@
 	<string name="pref_notif_help_title">Help - I'm confused!</string>
 	<string name="pref_notif_help_summary">Notifications Help</string>
 	<string name="pref_notif_help_message">Help goes here</string>
-	
+  
+    <string name="pref_button1_key">button1</string>
+    <string name="pref_button1_title">Button 1</string>
+    <string name="pref_button1_summary">NA</string>
+    <string name="pref_button1_default">0</string>
+
+    <string name="pref_button2_key">button2</string>
+    <string name="pref_button2_title">Button 2</string>
+    <string name="pref_button2_summary">NA</string>
+    <string name="pref_button2_default">1</string>
+
+    <string name="pref_button3_key">button3</string>
+    <string name="pref_button3_title">Button 3</string>
+    <string name="pref_button3_summary">NA</string>
+    <string name="pref_button3_default">3</string>    
 </resources>

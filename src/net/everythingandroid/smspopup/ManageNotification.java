@@ -20,6 +20,7 @@ import android.provider.Settings;
 public class ManageNotification {
   public static final int NOTIFICATION_ALERT = 1337;
   public static final int NOTIFICATION_TEST = 888;
+  public static final String defaultRingtone = Settings.System.DEFAULT_NOTIFICATION_URI.toString();
 
   /*
    * Show/play the notification given a SmsMmsMessage and a notification ID
@@ -120,7 +121,7 @@ public class ManageNotification {
 
       // The default system ringtone
       // ("content://settings/system/notification_sound")
-      String defaultRingtone = Settings.System.DEFAULT_NOTIFICATION_URI.toString();
+      // String defaultRingtone = Settings.System.DEFAULT_NOTIFICATION_URI.toString();
 
       // Try and parse the user ringtone, use the default if it fails
       Uri alarmSoundURI = Uri.parse(

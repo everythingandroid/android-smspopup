@@ -1,5 +1,7 @@
 package net.everythingandroid.smspopup;
 
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -37,6 +39,8 @@ public class ConfigContactsActivity extends ListActivity {
   private static final int DIALOG_MENU_ADD_ID = Menu.FIRST;
   private static final int CONTEXT_MENU_DELETE_ID = Menu.FIRST;
   private static final int CONTEXT_MENU_EDIT_ID = Menu.FIRST + 1;
+
+  private static final int REQ_CODE_CHOOSE_CONTACT = 0;
 
   private static final int DIALOG_ADD = 1;
 
@@ -132,10 +136,54 @@ public class ConfigContactsActivity extends ListActivity {
   }
 
   @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    switch (requestCode) {
+      case REQ_CODE_CHOOSE_CONTACT:
+        if (resultCode == -1) { // Success, contact chosen
+          Uri contactUri = data.getData();
+          List<String> list = contactUri.getPathSegments();
+          if (Log.DEBUG) Log.v("onActivityResult() - " + data.getDataString() + ", " + list.get(list.size() - 1));
+          long contactId = Long.parseLong(list.get(list.size() - 1));
+          startActivity(getConfigPerContactIntent(contactId));
+        }
+        break;
+    }
+  }
+
+  private void selectContact() {
+    // Intent i = new Intent(Intent.ACTION_PICK,
+    // Uri.parse("content://contacts/people/with_phones_filter/*"));
+    // Intent i = new Intent(Intent.ACTION_PICK,
+    // Contacts.People.CONTENT_URI.buildUpon().appendEncodedPath("with_phones_filter").build());
+    // Contacts.Groups.
+    // new Intent(Intent.ACTION_PICK, Contacts.Phones.CONTENT_URI)
+    // new Intent(Intent.ACTION_PICK,
+    // Uri.withAppendedPath(Contacts.People.CONTENT_URI,"with_phones_filter"))
+    // new Intent(Intent.ACTION_PICK,
+    // Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, "m"))
+    // .setType("vnd.android.cursor.dir/phone")
+    // .setType("vnd.android.cursor.dir/person")
+
+    // TODO: So ideally we just want to show contacts with phone numbers here
+    // but I couldn't
+    // work out a way to filter the results using an ACTION_PICK intent
+
+    //final Uri CONTENT_URI = Uri.parse("content://contacts/people_with_phones");
+
+    //    Intent i = new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI);
+    //
+    //    //i.putExtra(PHONE, "mobile");
+    //    startActivityForResult(i, REQ_CODE_CHOOSE_CONTACT);
+
+    startActivityForResult(
+        new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI), REQ_CODE_CHOOSE_CONTACT);
+  }
+
+  @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuItem m =
-      menu.add(Menu.NONE, DIALOG_MENU_ADD_ID, Menu.NONE,
-          getString(R.string.contact_customization_add));
+      menu.add(Menu.NONE, DIALOG_MENU_ADD_ID, Menu.NONE, R.string.contact_customization_add);
     m.setIcon(android.R.drawable.ic_menu_add);
     return super.onCreateOptionsMenu(menu);
   }
@@ -144,7 +192,8 @@ public class ConfigContactsActivity extends ListActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case DIALOG_MENU_ADD_ID:
-        startActivity(getConfigPerContactIntent());
+        //startActivity(getConfigPerContactIntent());
+        selectContact();
         break;
     }
     return super.onOptionsItemSelected(item);
@@ -182,8 +231,8 @@ public class ConfigContactsActivity extends ListActivity {
 
     // Create menu if top item is not selected
     if (((AdapterContextMenuInfo) menuInfo).id != -1) {
-      menu.add(0, CONTEXT_MENU_EDIT_ID, 0, getString(R.string.contact_customization_edit));
-      menu.add(0, CONTEXT_MENU_DELETE_ID, 0, getString(R.string.contact_customization_remove));
+      menu.add(0, CONTEXT_MENU_EDIT_ID, 0, R.string.contact_customization_edit);
+      menu.add(0, CONTEXT_MENU_DELETE_ID, 0, R.string.contact_customization_remove);
     }
   }
 

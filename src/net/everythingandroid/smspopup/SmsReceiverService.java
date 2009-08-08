@@ -121,8 +121,6 @@ public class SmsReceiverService extends Service {
           String body;
           if (messages.length == 1) {
             body = messages[0].getDisplayMessageBody();
-            Log.v("!!!! body = " + body);
-            Log.v("!!!! and body = " + messages[0].getMessageBody());
           } else {
             StringBuilder bodyText = new StringBuilder();
             for (int i = 0; i < messages.length; i++) {
@@ -134,7 +132,9 @@ public class SmsReceiverService extends Service {
           String address = messages[0].getDisplayOriginatingAddress();
 
           notifySmsReceived(new SmsMmsMessage(
-              context, address, body, System.currentTimeMillis(), SmsMmsMessage.MESSAGE_TYPE_SMS));
+              context, address, body,
+              System.currentTimeMillis(),
+              SmsMmsMessage.MESSAGE_TYPE_SMS));
         }
       }
     }
