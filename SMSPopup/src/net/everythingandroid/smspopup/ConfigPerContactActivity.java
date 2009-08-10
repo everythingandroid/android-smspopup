@@ -128,14 +128,14 @@ public class ConfigPerContactActivity extends PreferenceActivity {
        * Customize Activity title + main notif enabled preference summaries
        */
       String contactName = contact.getString(SmsPopupDbAdapter.KEY_CONTACT_NAME_NUM);
-      setTitle(String.format(getString(R.string.contact_customization_title), contactName));
+      setTitle(getString(R.string.contact_customization_title, contactName));
 
       CheckBoxPreference enabledPref =
         (CheckBoxPreference) findPreference(getString(R.string.c_pref_notif_enabled_key));
       enabledPref.setSummaryOn(
-          String.format(getString(R.string.contact_customization_enabled), contactName));
+          getString(R.string.contact_customization_enabled, contactName));
       enabledPref.setSummaryOff(
-          String.format(getString(R.string.contact_customization_disabled), contactName));
+          getString(R.string.contact_customization_disabled, contactName));
       enabledPref.setOnPreferenceChangeListener(onPrefChangeListener);
 
       /*
@@ -148,9 +148,9 @@ public class ConfigPerContactActivity extends PreferenceActivity {
       ringtonePref =
         (RingtonePreference) findPreference(getString(R.string.c_pref_notif_sound_key));
       ringtonePref.setOnPreferenceChangeListener(onPrefChangeListener);
-//      Uri ringtoneUri = Uri.parse(contact.getString(SmsPopupDbAdapter.KEY_RINGTONE_NUM));
-//      Ringtone mRingtone = RingtoneManager.getRingtone(this, ringtoneUri);
-//      ringtonePref.setSummary(mRingtone.getTitle(this));
+      //      Uri ringtoneUri = Uri.parse(contact.getString(SmsPopupDbAdapter.KEY_RINGTONE_NUM));
+      //      Ringtone mRingtone = RingtoneManager.getRingtone(this, ringtoneUri);
+      //      ringtonePref.setSummary(mRingtone.getTitle(this));
 
       TestNotificationDialogPreference testPref =
         (TestNotificationDialogPreference) findPreference(getString(R.string.c_pref_notif_test_key));

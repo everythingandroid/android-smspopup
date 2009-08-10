@@ -300,6 +300,10 @@ public class SmsMmsMessage {
     return contactId;
   }
 
+  public String getAddress() {
+    return fromAddress;
+  }
+
   //	public boolean equals(SmsMmsMessage compareMessage) {
   //		boolean equals = false;
   //		if (PhoneNumberUtils.compare(this.fromAddress, compareMessage.fromAddress) &&

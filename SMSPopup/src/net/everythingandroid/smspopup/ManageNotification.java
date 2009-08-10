@@ -9,10 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 
 /*
  * This class handles the Notifications (sounds/vibrate/LED)
@@ -135,7 +139,7 @@ public class ManageNotification {
       // The notification title, sub-text and text that will scroll
       String contentTitle;
       String contentText;
-      String scrollText;
+      SpannableString scrollText;
 
       // The default intent when the notification is clicked (Inbox)
       Intent smsIntent = SmsPopupUtils.getSmsIntent();
@@ -153,9 +157,15 @@ public class ManageNotification {
         // If we're in privacy mode and the keyguard is on then just display
         // the name of the person, otherwise scroll the name and message
         if (privacyMode && ManageKeyguard.inKeyguardRestrictedInputMode()) {
-          scrollText = context.getString(R.string.notification_scroll_privacy, contactName);
+          scrollText = new SpannableString(
+              context.getString(R.string.notification_scroll_privacy, contactName));
         } else {
-          scrollText = context.getString(R.string.notification_scroll, contactName, messageBody);
+          scrollText = new SpannableString(
+              context.getString(R.string.notification_scroll, contactName, messageBody));
+
+          // Set contact name as bold
+          scrollText.setSpan(new StyleSpan(Typeface.BOLD),
+              0, contactName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
       }
 
@@ -207,11 +217,10 @@ public class ManageNotification {
             led_pattern = parseLEDPattern(flashLedPattern);
           }
 
+          // Set to default if there was a problem
           if (led_pattern == null) {
-            led_pattern = parseLEDPattern(
-                mPrefs.getString(
-                    R.string.pref_flashled_pattern_key,
-                    R.string.pref_flashled_pattern_default));
+            led_pattern =
+              parseLEDPattern(context.getString(R.string.pref_flashled_pattern_default));
           }
 
           notification.ledOnMS = led_pattern[0];
@@ -229,35 +238,26 @@ public class ManageNotification {
           int col = Color.parseColor(context.getString(R.string.pref_flashled_color_default));
 
           // Try and parse the color
-          try {
-            col = Color.parseColor(flashLedCol);
-          } catch (IllegalArgumentException e) {
-            // No need to do anything here
+          if (flashLedCol != null) {
+            try {
+              col = Color.parseColor(flashLedCol);
+            } catch (IllegalArgumentException e) {
+              // No need to do anything here
+            }
           }
+
           notification.ledARGB = col;
         }
-
-        //        TelephonyManager TM =
-        //          (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        //        int callState = TM.getCallState();
-        //
-        //        /*
-        //         * Make sure we're not in a call
-        //         */
-        //        if (callState != TelephonyManager.CALL_STATE_OFFHOOK &&
-        //            callState != TelephonyManager.CALL_STATE_RINGING) {
 
         /*
          * Set up vibrate pattern
          */
-        AudioManager AM =
-          (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        AudioManager AM = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
         // If vibrate is ON, or if phone is set to vibrate
         if (vibrate || AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode()) {
           long[] vibrate_pattern = null;
-          if (context.getString(R.string.pref_custom_val).equals(
-              vibrate_pattern_raw)) {
+          if (context.getString(R.string.pref_custom_val).equals(vibrate_pattern_raw)) {
             vibrate_pattern = parseVibratePattern(vibrate_pattern_custom_raw);
           } else {
             vibrate_pattern = parseVibratePattern(vibrate_pattern_raw);
@@ -271,7 +271,6 @@ public class ManageNotification {
 
         // Notification sound
         notification.sound = alarmSoundURI;
-        //}
       }
 
       // Set the PendingIntent if the status message is clicked
@@ -353,6 +352,9 @@ public class ManageNotification {
   public static long[] parseVibratePattern(String stringPattern) {
     ArrayList<Long> arrayListPattern = new ArrayList<Long>();
     Long l;
+
+    if (stringPattern == null) return null;
+
     String[] splitPattern = stringPattern.split(",");
     int VIBRATE_PATTERN_MAX_SECONDS = 60000;
     int VIBRATE_PATTERN_MAX_PATTERN = 100;
@@ -385,11 +387,12 @@ public class ManageNotification {
   public static int[] parseLEDPattern(String stringPattern) {
     int[] arrayPattern = new int[2];
     int on, off;
+
+    if (stringPattern == null) return null;
+
     String[] splitPattern = stringPattern.split(",");
 
-    if (splitPattern.length != 2) {
-      return null;
-    }
+    if (splitPattern.length != 2) return null;
 
     int LED_PATTERN_MIN_SECONDS = 0;
     int LED_PATTERN_MAX_SECONDS = 60000;

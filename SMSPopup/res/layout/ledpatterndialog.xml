@@ -47,23 +47,20 @@
       android:layout_height="fill_parent"
       android:id="@+id/LEDPatternEditTextLinearLayout">
       <EditText
-        android:singleLine="true"
         android:id="@+id/LEDOnEditText"
         android:layout_width="wrap_content"
         android:selectAllOnFocus="true"
-        android:numeric="integer"
         android:maxLength="5"
         android:layout_height="wrap_content"
-        android:layout_margin="1sp" />
+        android:layout_margin="1sp" android:inputType="number" android:numeric="integer" android:imeOptions="actionDone" android:lines="1" android:minWidth="80sp"/>
       <EditText
-        android:singleLine="true"
         android:layout_height="wrap_content"
         android:id="@+id/LEDOffEditText"
         android:layout_width="wrap_content"
         android:maxLength="5"
         android:numeric="integer"
         android:selectAllOnFocus="true"
-        android:layout_margin="1sp" />
+        android:layout_margin="1sp" android:minWidth="80sp" android:lines="1" android:imeOptions="actionDone" android:inputType="number"/>
     </LinearLayout>
   </LinearLayout>
 </LinearLayout>

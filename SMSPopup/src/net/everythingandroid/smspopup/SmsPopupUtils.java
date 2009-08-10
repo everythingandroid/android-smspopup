@@ -695,10 +695,8 @@ public class SmsPopupUtils {
 
   public static String getMmsFrom(Context context, long message_id) {
 
-    String message_id_string = String.valueOf(message_id);
-
     Uri.Builder builder = MMS_CONTENT_URI.buildUpon();
-    builder.appendPath(message_id_string).appendPath("addr");
+    builder.appendPath(String.valueOf(message_id)).appendPath("addr");
 
     Cursor cursor = context.getContentResolver().query(builder.build(),
         // new String[] { "contact_id", "address", "charset", "type" },
