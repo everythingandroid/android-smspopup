@@ -24,6 +24,11 @@
    <string name="button_unlock">Unlock</string>
    <string name="button_tts">Text-to-speech</string>
    
+   <string name="button_speak">Speak</string>
+   <string name="button_delete_noconfirm">Delete (no confirmation)</string>
+   <string name="button_quickreply">Quick Reply</string>
+   <string name="button_disabled">Disabled</string>
+   
 <!-- Main Preferences -->
    <string name="pref_config_title">SMS Popup Configuration</string>
    <string name="pref_other_title">Other</string>

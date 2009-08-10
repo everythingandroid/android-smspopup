@@ -27,7 +27,6 @@
     <string name="contact_customization_disabled">Notifications are disabled for %s</string>
     <string name="contact_customization_add_hint">Add/Edit contact notifications...</string>
   
-
     <string name="message_presets_add">Add Preset Message</string>
     <string name="message_presets_edit">Edit Preset Message</string>
     
@@ -36,22 +35,25 @@
     <string name="message_presets_delete_text">Remove</string>
     <string name="message_presets_edit_text">Edit</string>
     <string name="message_presets_reorder_text">Move to top</string>
+    <string name="message_presets_empty_text">No presets defined</string>
 
-    <string name="message_presets_add_toast">Preset message added</string>    
-    <string name="message_presets_save_toast">Preset message updated</string>
-    <string name="message_presets_delete_toast">Preset message deleted</string>
-    <string name="message_presets_reorder_toast">Preset message moved to top</string>
+    <string name="message_presets_add_toast">Message preset added</string>    
+    <string name="message_presets_save_toast">Message preset updated</string>
+    <string name="message_presets_delete_toast">Message preset deleted</string>
+    <string name="message_presets_reorder_toast">Message preset moved to top</string>
     <string name="message_presets_error_toast">Error - please try again</string>
     
     <string name="message_counter">%d chars remaining</string>
     <string name="message_counter_multiple">%d chars remaining, %d messages</string>
     
     <string name="quickreply_title">Quick Reply</string>
-    <string name="quickreply_from_text">Message to %s</string>    
+    <string name="quickreply_from_text">To: %s</string>    
     <string name="quickreply_preset_button">Presets</string>
     <string name="quickreply_send_button">Send</string>
     <string name="quickreply_sending_toast">Sending message...</string>
     <string name="quickreply_nomessage_toast">Send</string>
+    
+    <string name="loading_message">Loading...</string>
     
 	<string name="pref_notif_default_title">Default Notifications</string>
 	<string name="pref_notif_default_summary">Notifications for all contacts without an individual customization</string>
@@ -68,17 +70,14 @@
 	<string name="pref_notif_help_message">Help goes here</string>
   
     <string name="pref_button1_key">button1</string>
-    <string name="pref_button1_title">Button 1</string>
-    <string name="pref_button1_summary">NA</string>
-    <string name="pref_button1_default">0</string>
+    <string name="pref_button1_title">Button 1 Configuration</string>
+    <string name="pref_button1_default">1</string>
 
     <string name="pref_button2_key">button2</string>
-    <string name="pref_button2_title">Button 2</string>
-    <string name="pref_button2_summary">NA</string>
-    <string name="pref_button2_default">1</string>
+    <string name="pref_button2_title">Button 2 Configuration</string>
+    <string name="pref_button2_default">2</string>
 
     <string name="pref_button3_key">button3</string>
-    <string name="pref_button3_title">Button 3</string>
-    <string name="pref_button3_summary">NA</string>
-    <string name="pref_button3_default">3</string>    
+    <string name="pref_button3_title">Button 3 Configuration</string>
+    <string name="pref_button3_default">4</string>    
 </resources>

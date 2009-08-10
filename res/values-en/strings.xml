@@ -20,6 +20,12 @@
    <string name="button_delete">Delete</string>
    <string name="button_tts">Text-to-speech</string>
    
+   <!-- New -->
+   <string name="button_speak">Speak</string>
+   <string name="button_delete_noconfirm">Delete (no confirmation)</string>
+   <string name="button_quickreply">Quick Reply</string>
+   <string name="button_disabled">Disabled</string>   
+   
    <!-- Not yet implemented -->
    <string name="button_next">Next</string>
    <string name="button_previous">Previous</string>

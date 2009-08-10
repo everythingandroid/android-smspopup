@@ -8,19 +8,19 @@
   android:gravity="center"
   android:padding="2sp">
   <Button
-    android:id="@+id/closeButton"
+    android:id="@+id/button1"
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:text="@string/button_close"
     android:layout_width="fill_parent" />
   <Button
-    android:id="@+id/deleteButton"
+    android:id="@+id/button2"
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:text="@string/button_delete"
     android:layout_width="fill_parent" />
   <Button
-    android:id="@+id/replyButton"
+    android:id="@+id/button3"
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:text="@string/button_reply"

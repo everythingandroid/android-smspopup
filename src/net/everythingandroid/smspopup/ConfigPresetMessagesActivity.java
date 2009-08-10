@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup;
 
+import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -69,8 +70,8 @@ public class ConfigPresetMessagesActivity extends ListActivity {
     addQMTextView = (TextView) addQMLayout.findViewById(R.id.QuickReplyCounterTextView);
     editQMTextView = (TextView) editQMLayout.findViewById(R.id.QuickReplyCounterTextView);
 
-    addQMEditText.addTextChangedListener(new QMTextWatcher(this, addQMTextView));
-    editQMEditText.addTextChangedListener(new QMTextWatcher(this, editQMTextView));
+    addQMEditText.addTextChangedListener(new QmTextWatcher(this, addQMTextView));
+    editQMEditText.addTextChangedListener(new QmTextWatcher(this, editQMTextView));
   }
 
   @Override
@@ -205,7 +206,7 @@ public class ConfigPresetMessagesActivity extends ListActivity {
             updateQuickMessage(editId, editQMEditText.getText().toString());
           }
         })
-        .setNeutralButton(getString(R.string.contact_customization_remove),
+        .setNeutralButton(getString(R.string.message_presets_delete_text),
             new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int whichButton) {
             deleteQuickMessage(editId);
