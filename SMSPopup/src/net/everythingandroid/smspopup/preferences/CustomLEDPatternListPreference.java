@@ -55,12 +55,22 @@ public class CustomLEDPatternListPreference extends ListPreference {
     if (mPrefs == null) {
       mPrefs = new ManagePreferences(context, contactId);
     }
-    flashLedPattern =
-      mPrefs.getString(R.string.c_pref_flashled_pattern_key,
+
+    if (contactId == null) { // Default notifications
+      flashLedPattern = mPrefs.getString(
+          R.string.pref_flashled_pattern_key,
           R.string.pref_flashled_pattern_default);
-    flashLedPatternCustom =
-      mPrefs.getString(R.string.c_pref_flashled_pattern_custom_key,
+      flashLedPatternCustom = mPrefs.getString(
+          R.string.pref_flashled_pattern_custom_key,
           R.string.pref_flashled_pattern_default);
+    } else { // Contact specific notifications
+      flashLedPattern = mPrefs.getString(
+          R.string.c_pref_flashled_pattern_key,
+          R.string.pref_flashled_pattern_default);
+      flashLedPatternCustom = mPrefs.getString(
+          R.string.c_pref_flashled_pattern_custom_key,
+          R.string.pref_flashled_pattern_default);
+    }
 
     led_pattern = null;
 
@@ -71,9 +81,10 @@ public class CustomLEDPatternListPreference extends ListPreference {
     }
 
     if (led_pattern == null) {
-      led_pattern =
-        ManageNotification.parseLEDPattern(mPrefs.getString(
-            R.string.c_pref_flashled_pattern_key, R.string.pref_flashled_pattern_default));
+      led_pattern = ManageNotification.parseLEDPattern(
+          mPrefs.getString(
+              R.string.c_pref_flashled_pattern_key,
+              R.string.pref_flashled_pattern_default));
     }
   }
 
@@ -103,15 +114,38 @@ public class CustomLEDPatternListPreference extends ListPreference {
               public void onClick(DialogInterface dialog, int whichButton) {
                 dialogShowing = false;
                 String stringPattern = onEditText.getText() + "," + offEditText.getText();
+
                 if (ManageNotification.parseLEDPattern(stringPattern) != null) {
-                  mPrefs.putString(R.string.c_pref_flashled_pattern_custom_key, stringPattern,
-                      SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
+
+                  if (contactId == null) { // Default notifications
+                    mPrefs.putString(
+                        R.string.pref_flashled_pattern_custom_key,
+                        stringPattern,
+                        SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
+
+                  } else { // Contact specific notifications
+                    mPrefs.putString(
+                        R.string.c_pref_flashled_pattern_custom_key,
+                        stringPattern,
+                        SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
+                  }
+
                   Toast.makeText(context, context.getString(R.string.pref_flashled_pattern_ok),
                       Toast.LENGTH_LONG).show();
+
                 } else {
-                  mPrefs.putString(R.string.c_pref_flashled_pattern_custom_key, context
-                      .getString(R.string.pref_flashled_pattern_default),
-                      SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
+
+                  if (contactId == null) { // Default notifications
+                    mPrefs.putString(
+                        R.string.pref_flashled_pattern_custom_key,
+                        context.getString(R.string.pref_flashled_pattern_default),
+                        SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
+                  } else { // Contact specific notifications
+                    mPrefs.putString(
+                        R.string.c_pref_flashled_pattern_custom_key,
+                        context.getString(R.string.pref_flashled_pattern_default),
+                        SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
+                  }
 
                   Toast.makeText(context, context.getString(R.string.pref_flashled_pattern_bad),
                       Toast.LENGTH_LONG).show();

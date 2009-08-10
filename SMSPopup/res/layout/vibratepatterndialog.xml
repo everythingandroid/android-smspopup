@@ -26,10 +26,8 @@
         android:layout_width="fill_parent"
         android:id="@+id/CustomVibrateEditText"
         android:text="@string/pref_vibrate_pattern_default"
-        android:singleLine="true"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10sp"
-        android:selectAllOnFocus="true" />
+        android:selectAllOnFocus="true" android:imeOptions="actionDone" android:maxLines="1" android:layout_marginLeft="3sp" android:layout_marginRight="3sp"/>
     </LinearLayout>
   </ScrollView>
 </LinearLayout>

@@ -437,6 +437,4 @@ public class ConfigContactsActivity extends ListActivity {
   private static final String[] PEOPLE_PROJECTION =
     new String[] {Contacts.People._ID, Contacts.People.PRIMARY_PHONE_ID, Contacts.People.TYPE,
     Contacts.People.NUMBER, Contacts.People.LABEL, Contacts.People.NAME,};
-
-
 }

@@ -295,13 +295,27 @@ public class SmsPopupDbAdapter {
     return mDb.update(CONTACTS_DB_TABLE, vals, KEY_CONTACT_ID + "=" + contactId, null) > 0;
   }
 
+  /*
+   * This updates a summary column in the database that contains a brief summary of the
+   * notification settings for the contact.
+   */
   public boolean updateContactSummary(long contactId) {
+    // TODO: this needs to be tidied up and converted to resource
+    // strings so it can handle other languages
     Cursor contact = fetchContactSettings(contactId);
     if (contact == null) {
       return false;
     }
 
-    StringBuilder summary = new StringBuilder("Notifications ");
+    StringBuilder summary = new StringBuilder("Popup ");
+
+    if (one.equals(contact.getString(KEY_POPUP_ENABLED_NUM))) {
+      summary.append("enabled");
+    } else {
+      summary.append("disabled");
+    }
+
+    summary.append(", Notifications ");
     if (!one.equals(contact.getString(KEY_ENABLED_NUM))) {
       summary.append("disabled");
     } else {
@@ -314,8 +328,9 @@ public class SmsPopupDbAdapter {
         // TODO: super hacky, on the G1 the yellow LED color looks like orange so these are flipped
         // in the led color selection, this corrects the summary but will probably be incorrect
         // for future devices.
-        if ("yellow".equals(ledColor)) {
-          ledColor = "orange";
+        Log.v("ledColor = " + ledColor);
+        if ("Yellow".equals(ledColor)) {
+          ledColor = "Orange";
         } else if ("custom".equals(ledColor)) {
           ledColor = "Custom";
         }

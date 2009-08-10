@@ -54,12 +54,23 @@ public class CustomVibrateListPreference extends ListPreference {
     if (mPrefs == null) {
       mPrefs = new ManagePreferences(context, contactId);
     }
-    vibrate_pattern =
-      mPrefs.getString(R.string.c_pref_vibrate_pattern_key,
+
+    if (contactId == null) { // Default notifications
+      vibrate_pattern = mPrefs.getString(
+          R.string.pref_vibrate_pattern_key,
           R.string.pref_vibrate_pattern_default);
-    vibrate_pattern_custom =
-      mPrefs.getString(R.string.pref_vibrate_pattern_custom_key,
+      vibrate_pattern_custom = mPrefs.getString(
+          R.string.pref_vibrate_pattern_custom_key,
           R.string.pref_vibrate_pattern_default);
+
+    } else { // Contact specific notifications
+      vibrate_pattern = mPrefs.getString(
+          R.string.c_pref_vibrate_pattern_key,
+          R.string.pref_vibrate_pattern_default);
+      vibrate_pattern_custom = mPrefs.getString(
+          R.string.c_pref_vibrate_pattern_custom_key,
+          R.string.pref_vibrate_pattern_default);
+    }
   }
 
   private void showDialog() {
@@ -73,39 +84,60 @@ public class CustomVibrateListPreference extends ListPreference {
     et.setText(vibrate_pattern_custom);
 
     new AlertDialog.Builder(context)
-      .setIcon(android.R.drawable.ic_dialog_info)
-      .setTitle(R.string.pref_vibrate_pattern_title)
-      .setView(v)
-      .setOnCancelListener(new OnCancelListener() {
-        public void onCancel(DialogInterface dialog) {
-          dialogShowing = false;
-        }
-      })
-      .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-        public void onClick(DialogInterface dialog, int whichButton) {
-          dialogShowing = false;
-        }
-      })
-      .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-        public void onClick(DialogInterface dialog, int whichButton) {
-          String new_pattern = et.getText().toString();
-          dialogShowing = false;
-          if (ManageNotification.parseVibratePattern(et.getText().toString()) != null) {
-            mPrefs.putString(R.string.pref_vibrate_pattern_custom_key, new_pattern,
+    .setIcon(android.R.drawable.ic_dialog_info)
+    .setTitle(R.string.pref_vibrate_pattern_title)
+    .setView(v)
+    .setOnCancelListener(new OnCancelListener() {
+      public void onCancel(DialogInterface dialog) {
+        dialogShowing = false;
+      }
+    })
+    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int whichButton) {
+        dialogShowing = false;
+      }
+    })
+    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int whichButton) {
+        String new_pattern = et.getText().toString();
+        dialogShowing = false;
+        if (ManageNotification.parseVibratePattern(et.getText().toString()) != null) {
+
+          if (contactId == null) { // Default notifications
+            mPrefs.putString(
+                R.string.pref_vibrate_pattern_custom_key,
+                new_pattern,
                 SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM);
-  
-            Toast.makeText(context, context.getString(R.string.pref_vibrate_pattern_ok),
-                Toast.LENGTH_LONG).show();
-          } else {
-            mPrefs.putString(R.string.pref_vibrate_pattern_custom_key,
+          } else { // Contact specific notifications
+            mPrefs.putString(
+                R.string.c_pref_vibrate_pattern_custom_key,
+                new_pattern,
+                SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM);
+          }
+
+          Toast.makeText(context, context.getString(R.string.pref_vibrate_pattern_ok),
+              Toast.LENGTH_LONG).show();
+
+        } else {
+
+          if (contactId == null) { // Default notifications
+            mPrefs.putString(
+                R.string.pref_vibrate_pattern_custom_key,
                 context.getString(R.string.pref_vibrate_pattern_default),
                 SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM);
-            Toast.makeText(context, context.getString(R.string.pref_vibrate_pattern_bad),
-                Toast.LENGTH_LONG).show();
+          } else { // Contact specific notifications
+            mPrefs.putString(
+                R.string.c_pref_vibrate_pattern_custom_key,
+                context.getString(R.string.pref_vibrate_pattern_default),
+                SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM);
           }
+
+          Toast.makeText(context, context.getString(R.string.pref_vibrate_pattern_bad),
+              Toast.LENGTH_LONG).show();
         }
-      })
-      .show();
+      }
+    })
+    .show();
     dialogShowing = true;
   }
 

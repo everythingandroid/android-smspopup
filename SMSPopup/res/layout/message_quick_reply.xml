@@ -7,23 +7,27 @@
   android:layout_height="fill_parent">
   <TextView
     android:layout_height="wrap_content"
-    android:layout_marginLeft="5sp"
-    android:layout_marginRight="5sp"
     android:layout_marginTop="5sp"
     android:id="@+id/QuickReplyTextView"
     android:textAppearance="?android:attr/textAppearanceMedium"
     android:layout_width="fill_parent"
-    android:text="@string/quickreply_from_text" />
+    android:text="@string/quickreply_from_text"
+    android:lines="1"
+    android:layout_marginRight="15sp"
+    android:layout_marginLeft="10sp"
+    android:singleLine="true"
+    android:ellipsize="marquee" />
   <TextView
     android:layout_height="wrap_content"
-    android:layout_marginLeft="5sp"
-    android:layout_marginRight="5sp"
     android:layout_marginTop="5sp"
     android:id="@+id/QuickReplyCounterTextView"
     android:gravity="right"
     android:textAppearance="?android:attr/textAppearanceSmall"
     android:layout_width="fill_parent"
-    android:text="@string/message_counter" />
+    android:text="@string/message_counter"
+    android:lines="1"
+    android:layout_marginRight="10sp"
+    android:layout_marginLeft="10sp" />
   <EditText
     android:layout_width="fill_parent"
     android:layout_marginLeft="5sp"
@@ -32,6 +36,6 @@
     android:layout_marginBottom="5sp"
     android:id="@+id/QuickReplyEditText"
     android:layout_height="wrap_content"
-    android:maxLines="4"
-    android:imeOptions="actionDone" />
+    android:imeOptions="actionDone"
+    android:maxLines="3" />
 </LinearLayout>

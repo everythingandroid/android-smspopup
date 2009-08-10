@@ -10,19 +10,20 @@
     android:layout_marginTop="5sp"
     android:id="@+id/QuickReplyCounterTextView"
     android:gravity="right"
+    android:textAppearance="?android:attr/textAppearanceSmall"
     android:layout_width="fill_parent"
     android:text="@string/message_counter"
-    android:textAppearance="?android:attr/textAppearanceSmall"
-    android:layout_marginLeft="5sp"
-    android:layout_marginRight="5sp" />
+    android:lines="1"
+    android:layout_marginRight="10sp"
+    android:layout_marginLeft="10sp" />
   <EditText
     android:layout_width="fill_parent"
+    android:layout_marginLeft="5sp"
+    android:layout_marginRight="5sp"
+    android:layout_marginTop="5sp"
     android:layout_marginBottom="5sp"
     android:id="@+id/QuickReplyEditText"
     android:layout_height="wrap_content"
-    android:maxLines="4"
     android:imeOptions="actionDone"
-    android:layout_marginLeft="5sp"
-    android:layout_marginRight="5sp"
-    android:layout_marginTop="5sp" />
+    android:maxLines="3" />
 </LinearLayout>

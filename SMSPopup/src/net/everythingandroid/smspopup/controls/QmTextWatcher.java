@@ -1,17 +1,18 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.controls;
 
+import net.everythingandroid.smspopup.R;
 import android.content.Context;
 import android.telephony.gsm.SmsMessage;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.TextView;
 
-public class QMTextWatcher implements TextWatcher {
+public class QmTextWatcher implements TextWatcher {
   private TextView mTextView;
   private static String formatString1 = null;
   private static String formatString2 = null;
 
-  public QMTextWatcher(Context context, TextView mUpdateTextView) {
+  public QmTextWatcher(Context context, TextView mUpdateTextView) {
     mTextView = mUpdateTextView;
     formatString1 = context.getString(R.string.message_counter);
     formatString2 = context.getString(R.string.message_counter_multiple);

@@ -86,8 +86,6 @@ public class SmsReceiverService extends Service {
         handleSmsReceived(intent);
       } else if (ACTION_MMS_RECEIVED.equals(action) && MMS_DATA_TYPE.equals(dataType)) {
         handleMmsReceived(intent);
-        //			} else if (ACTION_MESSAGE_SENT.equals(action)) {
-        //				handleMessageSent(intent);
       }
 
       // NOTE: We MUST not call stopSelf() directly, since we need to
