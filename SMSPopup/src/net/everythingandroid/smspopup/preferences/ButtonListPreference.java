@@ -1,18 +1,22 @@
 package net.everythingandroid.smspopup.preferences;
 
+import net.everythingandroid.smspopup.R;
 import android.content.Context;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
 
 public class ButtonListPreference extends ListPreference {
   public String prefId;
+  private Context mContext;
 
   public ButtonListPreference(Context context) {
     super(context);
+    mContext = context;
   }
 
   public ButtonListPreference(Context context, AttributeSet attrs) {
     super(context, attrs);
+    mContext = context;
   }
 
   @Override
@@ -24,6 +28,6 @@ public class ButtonListPreference extends ListPreference {
   }
 
   public void refreshSummary() {
-    setSummary(getEntry());
+    setSummary(mContext.getString(R.string.pref_button_summary, getEntry()));
   }
 }
