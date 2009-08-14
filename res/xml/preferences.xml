@@ -17,11 +17,11 @@
       <PreferenceCategory
         android:title="@string/pref_additional_summary">
         <PreferenceScreen
-          android:title="Button Configuration"
+          android:title="@string/pref_button_config_title"
           android:key="pref_button_config_key"
-          android:summary="Button config">
+          android:summary="@string/pref_button_config_summary">
           <PreferenceCategory
-            android:title="Button Configuration">
+            android:title="@string/pref_button_config_title">
             <CheckBoxPreference
               android:key="@string/pref_show_buttons_key"
               android:title="@string/pref_show_buttons_title"
