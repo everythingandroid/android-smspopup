@@ -28,14 +28,23 @@
     android:lines="1"
     android:layout_marginRight="10sp"
     android:layout_marginLeft="10sp" />
-  <EditText
-    android:layout_width="fill_parent"
-    android:layout_marginLeft="5sp"
-    android:layout_marginRight="5sp"
-    android:layout_marginTop="5sp"
-    android:layout_marginBottom="5sp"
-    android:id="@+id/QuickReplyEditText"
+  <RelativeLayout
+    android:id="@+id/RelativeLayout01"
     android:layout_height="wrap_content"
-    android:imeOptions="actionDone"
-    android:maxLines="3" />
+    android:layout_width="fill_parent"
+    android:gravity="center" android:paddingLeft="4sp" android:paddingRight="4sp" android:paddingTop="2sp" android:paddingBottom="2sp">
+    <EditText
+      android:layout_width="fill_parent"
+      android:id="@+id/QuickReplyEditText"
+      android:layout_height="wrap_content"
+      android:imeOptions="actionDone"
+      android:maxLines="3"
+      android:layout_weight="1"
+      android:paddingRight="30sp"/>
+    <ImageButton
+      android:id="@+id/SpeakButton"
+      android:background="@android:drawable/ic_btn_speak_now"
+      android:layout_width="wrap_content"
+      android:layout_alignRight="@+id/QuickReplyEditText" android:layout_marginRight="4sp" android:adjustViewBounds="true" android:layout_height="wrap_content" android:layout_marginBottom="4sp" android:layout_marginTop="4sp"/>
+  </RelativeLayout>
 </LinearLayout>

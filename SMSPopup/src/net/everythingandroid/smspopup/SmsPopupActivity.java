@@ -1,5 +1,8 @@
 package net.everythingandroid.smspopup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.everythingandroid.smspopup.ManageKeyguard.LaunchOnKeyguardExit;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import android.app.Activity;
@@ -11,6 +14,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.database.MatrixCursor;
@@ -21,6 +26,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Contacts;
+import android.speech.RecognizerIntent;
 import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.Display;
@@ -35,6 +41,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -92,6 +99,8 @@ public class SmsPopupActivity extends Activity {
   private static final int CONTEXT_INBOX_ID       = Menu.FIRST + 4;
   private static final int CONTEXT_TTS_ID         = Menu.FIRST + 5;
   private static final int CONTEXT_VIEWCONTACT_ID = Menu.FIRST + 6;
+  
+  private static final int VOICE_RECOGNITION_REQUEST_CODE = 8888;
 
   private TextView quickreplyTextView;
   private static SmsMmsMessage quickReplySmsMessage;
@@ -574,6 +583,28 @@ public class SmsPopupActivity extends Activity {
         qrEditText = (EditText) qrLayout.findViewById(R.id.QuickReplyEditText);
         final TextView qrCounterTextView = (TextView) qrLayout.findViewById(R.id.QuickReplyCounterTextView);
 
+        final ImageButton voiceRecognitionButton = (ImageButton) qrLayout.findViewById(R.id.SpeakButton);
+        
+        voiceRecognitionButton.setOnClickListener(new OnClickListener() {
+
+         public void onClick(View view) {
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech recognition");
+            
+            // Check if the device has the ability to do speech recognition
+            final PackageManager packageManager = SmsPopupActivity.this.getPackageManager();
+            List<ResolveInfo> list = packageManager.queryIntentActivities(intent, 0);
+            
+            if (list.size() > 0) {            
+               startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
+            } else {
+               Toast.makeText(SmsPopupActivity.this, "Not available", Toast.LENGTH_LONG).show();
+            }
+         }
+        });
+        
         qrEditText.addTextChangedListener(new QmTextWatcher(this, qrCounterTextView));
         quickreplyTextView = (TextView) qrLayout.findViewById(R.id.QuickReplyTextView);
 
@@ -717,6 +748,20 @@ public class SmsPopupActivity extends Activity {
     return super.onContextItemSelected(item);
   }
 
+  /*
+   * Handle the results from the recognition activity.
+   */
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+      if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
+          ArrayList<String> matches = data.getStringArrayListExtra(
+                  RecognizerIntent.EXTRA_RESULTS);          
+          quickReply(matches.get(0));
+      }
+
+      super.onActivityResult(requestCode, resultCode, data);
+  }
+  
   /*
    * Text-to-speech InitListener
    */
