@@ -3,32 +3,36 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/FromLinearLayout"
   android:layout_width="fill_parent"
-  android:layout_height="wrap_content"
   android:padding="1sp"
-  android:gravity="center_vertical|center"
-  android:minHeight="65sp">
+  android:layout_height="wrap_content"
+  android:layout_gravity="left">
   <ImageView
     android:src="@android:drawable/ic_dialog_info"
     android:id="@+id/FromImageView"
-    android:layout_height="wrap_content"
     android:layout_width="wrap_content"
     android:paddingLeft="5sp"
-    android:paddingBottom="4sp"
-    android:paddingTop="4sp" />
+    android:paddingRight="5sp"
+    android:layout_gravity="center"
+    android:scaleType="center"
+    android:layout_height="wrap_content"
+    android:paddingBottom="2sp"
+    android:paddingTop="2sp" />
   <LinearLayout
-    android:id="@+id/LinearLayout01"
     android:orientation="vertical"
-    android:layout_height="fill_parent"
-    android:layout_width="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:id="@+id/FromTextLinearLayout">
     <TextView
       android:id="@+id/FromTextView"
       android:layout_width="fill_parent"
       android:gravity="center_vertical"
       android:autoLink="phone"
       android:textAppearance="?android:attr/textAppearanceLarge"
-      android:layout_weight="1"
-      android:ellipsize="end"
-      android:text="Text Here" android:layout_height="fill_parent" android:maxLines="1" android:paddingLeft="5sp" android:paddingRight="5sp"/>
+      android:maxLines="2"
+      android:layout_height="wrap_content"
+      android:text="Text Here"
+      android:ellipsize="end" android:padding="4sp"/>
     <TextView
       android:id="@+id/HeaderTextView"
       android:textAppearance="?android:attr/textAppearanceSmall"
@@ -36,7 +40,6 @@
       android:text="@string/new_text_at"
       android:layout_width="fill_parent"
       android:gravity="bottom|left"
-      android:layout_height="wrap_content"
-      android:paddingBottom="4sp" android:paddingRight="5sp" android:paddingLeft="5sp"/>
+      android:layout_height="wrap_content" android:padding="4sp"/>
   </LinearLayout>
 </LinearLayout>
