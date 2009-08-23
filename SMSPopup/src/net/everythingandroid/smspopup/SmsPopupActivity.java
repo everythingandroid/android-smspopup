@@ -99,7 +99,7 @@ public class SmsPopupActivity extends Activity {
   private static final int CONTEXT_INBOX_ID       = Menu.FIRST + 4;
   private static final int CONTEXT_TTS_ID         = Menu.FIRST + 5;
   private static final int CONTEXT_VIEWCONTACT_ID = Menu.FIRST + 6;
-  
+
   private static final int VOICE_RECOGNITION_REQUEST_CODE = 8888;
 
   private TextView quickreplyTextView;
@@ -202,7 +202,7 @@ public class SmsPopupActivity extends Activity {
     }
 
     if (bundle == null) {
-      recycleContactPhoto();
+      contactPhoto = null;
       populateViews(getIntent().getExtras());
     } else { // this activity was recreated after being destroyed (ie. on orientation change)
       populateViews(bundle);
@@ -268,7 +268,8 @@ public class SmsPopupActivity extends Activity {
 
     setIntent(intent);
 
-    recycleContactPhoto();
+    // Force a reload of the contact photo
+    contactPhoto = null;
 
     //Re-populate views with new intent data (ie. new sms data)
     populateViews(intent.getExtras());
@@ -328,7 +329,6 @@ public class SmsPopupActivity extends Activity {
 
   @Override
   protected void onDestroy() {
-    recycleContactPhoto();
     super.onDestroy();
   }
 
@@ -347,7 +347,7 @@ public class SmsPopupActivity extends Activity {
   }
 
   @Override
-  public void  onSaveInstanceState(Bundle outState) {
+  public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     if (Log.DEBUG) Log.v("SMSPopupActivity: onSaveInstanceState()");
 
@@ -581,30 +581,42 @@ public class SmsPopupActivity extends Activity {
         LayoutInflater factory = LayoutInflater.from(this);
         final View qrLayout = factory.inflate(R.layout.message_quick_reply, null);
         qrEditText = (EditText) qrLayout.findViewById(R.id.QuickReplyEditText);
-        final TextView qrCounterTextView = (TextView) qrLayout.findViewById(R.id.QuickReplyCounterTextView);
+        final TextView qrCounterTextView =
+          (TextView) qrLayout.findViewById(R.id.QuickReplyCounterTextView);
 
-        final ImageButton voiceRecognitionButton = (ImageButton) qrLayout.findViewById(R.id.SpeakButton);
-        
+        final ImageButton voiceRecognitionButton =
+          (ImageButton) qrLayout.findViewById(R.id.SpeechRecogButton);
+
         voiceRecognitionButton.setOnClickListener(new OnClickListener() {
 
-         public void onClick(View view) {
-            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech recognition");
-            
+          public void onClick(View view) {
+            final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+
             // Check if the device has the ability to do speech recognition
             final PackageManager packageManager = SmsPopupActivity.this.getPackageManager();
             List<ResolveInfo> list = packageManager.queryIntentActivities(intent, 0);
-            
-            if (list.size() > 0) {            
-               startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
+
+            if (list.size() > 0) {
+
+              // TODO: really I should allow voice input here without unlocking first (I allow
+              // quick replies without unlock anyway)
+              exitingKeyguardSecurely = true;
+              ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
+                public void LaunchOnKeyguardExitSuccess() {
+                  SmsPopupActivity.this.startActivityForResult(
+                      intent, VOICE_RECOGNITION_REQUEST_CODE);
+                }
+              });
             } else {
-               Toast.makeText(SmsPopupActivity.this, "Not available", Toast.LENGTH_LONG).show();
+              Toast.makeText(SmsPopupActivity.this, "Not available", Toast.LENGTH_LONG).show();
+              view.setEnabled(false);
             }
-         }
+          }
         });
-        
+
         qrEditText.addTextChangedListener(new QmTextWatcher(this, qrCounterTextView));
         quickreplyTextView = (TextView) qrLayout.findViewById(R.id.QuickReplyTextView);
 
@@ -753,15 +765,16 @@ public class SmsPopupActivity extends Activity {
    */
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-      if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
-          ArrayList<String> matches = data.getStringArrayListExtra(
-                  RecognizerIntent.EXTRA_RESULTS);          
-          quickReply(matches.get(0));
-      }
-
-      super.onActivityResult(requestCode, resultCode, data);
+    super.onActivityResult(requestCode, resultCode, data);
+    if (Log.DEBUG) Log.v("onActivityResult");
+    if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
+      ArrayList<String> matches = data.getStringArrayListExtra(
+          RecognizerIntent.EXTRA_RESULTS);
+      if (Log.DEBUG) Log.v("Voice recog text: " + matches.get(0));
+      quickReply(matches.get(0));
+    }
   }
-  
+
   /*
    * Text-to-speech InitListener
    */
@@ -996,10 +1009,4 @@ public class SmsPopupActivity extends Activity {
     }
   }
 
-  private void recycleContactPhoto() {
-    if (contactPhoto != null) {
-      contactPhoto.recycle();
-    }
-    contactPhoto = null;
-  }
 }

@@ -28,23 +28,19 @@
     android:lines="1"
     android:layout_marginRight="10sp"
     android:layout_marginLeft="10sp" />
-  <RelativeLayout
-    android:id="@+id/RelativeLayout01"
-    android:layout_height="wrap_content"
-    android:layout_width="fill_parent"
-    android:gravity="center" android:paddingLeft="4sp" android:paddingRight="4sp" android:paddingTop="2sp" android:paddingBottom="2sp">
+  
+  <LinearLayout
+    android:layout_width="fill_parent" android:gravity="center" android:layout_height="wrap_content" android:layout_marginLeft="4sp" android:layout_marginRight="4sp" android:layout_marginTop="3sp" android:layout_marginBottom="3sp" android:id="@+id/QuickReplyEntryLinearLayout">
     <EditText
       android:layout_width="fill_parent"
       android:id="@+id/QuickReplyEditText"
       android:layout_height="wrap_content"
       android:imeOptions="actionDone"
       android:maxLines="3"
-      android:layout_weight="1"
-      android:paddingRight="30sp"/>
+      android:layout_toLeftOf="@+id/SpeakButton"
+      android:layout_weight="1"/>
     <ImageButton
-      android:id="@+id/SpeakButton"
-      android:background="@android:drawable/ic_btn_speak_now"
       android:layout_width="wrap_content"
-      android:layout_alignRight="@+id/QuickReplyEditText" android:layout_marginRight="4sp" android:adjustViewBounds="true" android:layout_height="wrap_content" android:layout_marginBottom="4sp" android:layout_marginTop="4sp"/>
-  </RelativeLayout>
+      android:src="@android:drawable/ic_btn_speak_now" android:id="@+id/SpeechRecogButton" android:scaleType="center" android:layout_height="wrap_content" android:layout_gravity="center_vertical"/>
+  </LinearLayout>
 </LinearLayout>
