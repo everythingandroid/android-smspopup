@@ -3,7 +3,6 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_height="fill_parent"
   android:orientation="vertical"
-  android:gravity="center"
   android:layout_width="fill_parent"
   android:minWidth="310dp"
   android:id="@+id/MainLinearLayout">
@@ -14,8 +13,7 @@
     android:layout_height="43sp" />
   <include
     layout="@layout/popup_header"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" />
+    android:layout_width="fill_parent" android:layout_height="wrap_content"/>
   <include
     layout="@layout/popup_divider" />
   <ScrollView
@@ -24,8 +22,7 @@
     android:id="@+id/MessageScrollView"
     android:visibility="gone"
     android:layout_weight="1"
-    android:paddingTop="8sp"
-    android:paddingBottom="12sp">
+    android:paddingBottom="10sp" android:paddingTop="6sp">
     <TextView
       android:text="Text here"
       android:id="@+id/MessageTextView"
@@ -33,9 +30,7 @@
       android:textAppearance="?android:attr/textAppearanceMedium"
       android:layout_height="fill_parent"
       android:layout_width="fill_parent"
-      android:paddingRight="5sp"
-      android:paddingLeft="5sp"
-      android:gravity="center" />
+      android:gravity="center" android:paddingRight="10sp" android:paddingLeft="10sp"/>
   </ScrollView>
   <ViewStub
     android:id="@+id/MmsViewStub"
@@ -51,5 +46,5 @@
     android:id="@+id/ButtonsViewStub"
     android:layout="@layout/popup_buttons"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" />    
+    android:layout_height="wrap_content" />
 </LinearLayout>

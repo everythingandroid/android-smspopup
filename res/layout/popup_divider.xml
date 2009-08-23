@@ -7,5 +7,5 @@
   android:scaleType="fitXY"  
   android:paddingLeft="5sp"
   android:paddingRight="5sp"
-  android:paddingBottom="3sp"
-  android:paddingTop="3sp" />
+  android:paddingBottom="2sp"
+  android:paddingTop="2sp" />
