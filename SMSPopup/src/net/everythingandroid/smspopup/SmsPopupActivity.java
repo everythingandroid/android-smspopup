@@ -611,7 +611,9 @@ public class SmsPopupActivity extends Activity {
                 }
               });
             } else {
-              Toast.makeText(SmsPopupActivity.this, "Not available", Toast.LENGTH_LONG).show();
+              // TODO: move string to resource file
+              Toast.makeText(SmsPopupActivity.this,
+                  "Voice recognition not available on this device", Toast.LENGTH_LONG).show();
               view.setEnabled(false);
             }
           }

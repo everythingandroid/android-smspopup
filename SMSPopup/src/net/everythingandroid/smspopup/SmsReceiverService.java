@@ -165,19 +165,17 @@ public class SmsReceiverService extends Service {
 
     ManageKeyguard.initialize(context);
 
-    if (notifEnabled) {
-      if (showPopup &&
-          (ManageKeyguard.inKeyguardRestrictedInputMode() ||
-              (!onlyShowOnKeyguard && !SmsPopupUtils.inMessagingApp(context)))) {
-        if (Log.DEBUG) Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
-        Intent popup = smsMessage.getPopupIntent();
-        ManageWakeLock.acquirePartial(context);
-        context.startActivity(popup);
-      } else {
-        if (Log.DEBUG) Log.v("^^^^^^Not in keyguard, only using notification");
-        ManageNotification.show(context, smsMessage);
-        ReminderReceiver.scheduleReminder(context, smsMessage);
-      }
+    if (showPopup &&
+        (ManageKeyguard.inKeyguardRestrictedInputMode() ||
+            (!onlyShowOnKeyguard && !SmsPopupUtils.inMessagingApp(context)))) {
+      if (Log.DEBUG) Log.v("^^^^^^Showing SMS Popup");
+      Intent popup = smsMessage.getPopupIntent();
+      ManageWakeLock.acquirePartial(context);
+      context.startActivity(popup);
+    } else if (notifEnabled) {
+      if (Log.DEBUG) Log.v("^^^^^^Not showing SMS Popup, using notifications");
+      ManageNotification.show(context, smsMessage);
+      ReminderReceiver.scheduleReminder(context, smsMessage);
     }
   }
 
