@@ -106,19 +106,18 @@
           android:summary="@string/pref_notif_default_summary">
           <PreferenceCategory
             android:title="@string/pref_notif_category_title">
+            <CheckBoxPreference
+              android:key="@string/pref_popup_enabled_key"
+              android:title="@string/pref_popup_enabled_title"
+              android:summaryOn="@string/pref_popup_enabled_summaryon"
+              android:summaryOff="@string/pref_popup_enabled_summaryoff"
+              android:defaultValue="true" />            
             <net.everythingandroid.smspopup.preferences.DialogCheckBoxPreference
               android:key="@string/pref_notif_enabled_key"
               android:title="@string/pref_notif_enabled_title"
               android:summaryOn="@string/pref_notif_enabled_summaryon"
               android:summaryOff="@string/pref_notif_enabled_summaryoff"
               android:defaultValue="false" />
-            <CheckBoxPreference
-              android:key="@string/pref_popup_enabled_key"
-              android:title="@string/pref_popup_enabled_title"
-              android:summaryOn="@string/pref_popup_enabled_summaryon"
-              android:summaryOff="@string/pref_popup_enabled_summaryoff"
-              android:dependency="@string/pref_notif_enabled_key"
-              android:defaultValue="true" />
             <RingtonePreference
               android:key="@string/pref_notif_sound_key"
               android:title="@string/pref_notif_sound_title"

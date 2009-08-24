@@ -9,8 +9,7 @@
   <ViewStub
     android:id="@+id/UnreadCountViewStub"
     android:layout="@layout/popup_unreadcount"
-    android:layout_width="fill_parent"
-    android:layout_height="43sp" />
+    android:layout_width="fill_parent" android:layout_height="41sp"/>
   <include
     layout="@layout/popup_header"
     android:layout_width="fill_parent" android:layout_height="wrap_content"/>
