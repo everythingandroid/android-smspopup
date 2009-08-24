@@ -3,26 +3,21 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/FromLinearLayout"
   android:layout_width="fill_parent"
-  android:padding="1sp"
   android:layout_height="wrap_content"
   android:layout_gravity="left">
   <ImageView
     android:src="@android:drawable/ic_dialog_info"
     android:id="@+id/FromImageView"
     android:layout_width="wrap_content"
-    android:paddingLeft="5sp"
-    android:paddingRight="5sp"
     android:layout_gravity="center"
     android:scaleType="center"
-    android:layout_height="wrap_content"
-    android:paddingBottom="2sp"
-    android:paddingTop="2sp" />
+    android:layout_height="wrap_content" android:padding="5sp"/>
   <LinearLayout
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
-    android:id="@+id/FromTextLinearLayout">
+    android:id="@+id/FromTextLinearLayout" android:padding="5sp">
     <TextView
       android:id="@+id/FromTextView"
       android:layout_width="fill_parent"
@@ -32,14 +27,13 @@
       android:maxLines="2"
       android:layout_height="wrap_content"
       android:text="Text Here"
-      android:ellipsize="end" android:padding="4sp"/>
+      android:ellipsize="end" android:paddingBottom="2sp"/>
     <TextView
       android:id="@+id/HeaderTextView"
       android:textAppearance="?android:attr/textAppearanceSmall"
       android:textColor="?android:attr/textColorPrimaryDisableOnly"
       android:text="@string/new_text_at"
       android:layout_width="fill_parent"
-      android:gravity="bottom|left"
-      android:layout_height="wrap_content" android:padding="4sp"/>
+      android:layout_height="wrap_content" android:paddingTop="2sp"/>
   </LinearLayout>
 </LinearLayout>
