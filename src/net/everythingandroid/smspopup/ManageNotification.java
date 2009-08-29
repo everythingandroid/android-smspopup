@@ -172,7 +172,7 @@ public class ManageNotification {
       // If more than one message waiting ...
       if (unreadCount > 1) {
         contentTitle = context.getString(R.string.notification_multiple_title);
-        contentText = context.getString(R.string.notification_multiple_text);
+        contentText = context.getString(R.string.notification_multiple_text, unreadCount);
         // smsIntent = SMSPopupUtils.getSmsIntent();
       } else { // Else 1 message, set text and intent accordingly
         contentTitle = contactName;
@@ -277,8 +277,7 @@ public class ManageNotification {
       PendingIntent notifIntent = PendingIntent.getActivity(context, 0, smsIntent, 0);
 
       // Set the messages that show when the status bar is pulled down
-      notification.setLatestEventInfo(context, contentTitle,
-          String.format(contentText, unreadCount), notifIntent);
+      notification.setLatestEventInfo(context, contentTitle, contentText, notifIntent);
 
       // Set number of events that this notification signifies (unread messages)
       if (unreadCount > 1) {
