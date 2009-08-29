@@ -3,9 +3,8 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_height="fill_parent"
   android:orientation="vertical"
-  android:layout_width="fill_parent"
   android:minWidth="310dp"
-  android:id="@+id/MainLinearLayout">
+  android:id="@+id/MainLinearLayout" android:layout_width="fill_parent">
   <ViewStub
     android:id="@+id/UnreadCountViewStub"
     android:layout="@layout/popup_unreadcount"

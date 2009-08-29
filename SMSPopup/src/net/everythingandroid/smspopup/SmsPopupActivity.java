@@ -39,6 +39,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -131,20 +132,21 @@ public class SmsPopupActivity extends Activity {
           WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
     }
 
-    //Fetch privacy mode
+    // Fetch privacy mode
     privacyMode = myPrefs.getBoolean(
         getString(R.string.pref_privacy_key),
         Boolean.valueOf(getString(R.string.pref_privacy_default)));
 
-    //This sets the minimum width of the activity to 75% of the screen size
-    //only needed because the theme of this activity is "dialog" so it looks
-    //like it's floating and doesn't seem to fill_parent like a regular activity
+    // This sets the minimum width of the activity to a minimum of 80% of the screen
+    // size only needed because the theme of this activity is "dialog" so it looks
+    // like it's floating and doesn't seem to fill_parent like a regular activity
+    // TODO: not need anymore?
     LinearLayout mainLL = (LinearLayout) findViewById(R.id.MainLinearLayout);
     Display d = getWindowManager().getDefaultDisplay();
     int width = (int)(d.getWidth() * WIDTH);
     mainLL.setMinimumWidth(width);
 
-    //Find the main textviews
+    // Find the main textviews
     fromTV = (TextView) findViewById(R.id.FromTextView);
     messageTV = (TextView) findViewById(R.id.MessageTextView);
     messageReceivedTV = (TextView) findViewById(R.id.HeaderTextView);
@@ -709,6 +711,12 @@ public class SmsPopupActivity extends Activity {
     switch (id) {
       case DIALOG_QUICKREPLY:
         updateQuickReplyView(null);
+
+        // Set width of dialog to fill_parent
+        LayoutParams mLP = dialog.getWindow().getAttributes();
+        mLP.width = LayoutParams.FILL_PARENT;
+        dialog.getWindow().setAttributes(mLP);
+
         break;
       case DIALOG_PRESET_MSG:
         break;
