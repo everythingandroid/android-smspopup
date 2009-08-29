@@ -1,5 +1,9 @@
 package net.everythingandroid.smspopup;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,14 +22,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Contacts;
 import android.provider.Contacts.PeopleColumns;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.TelephonyManager;
 import android.telephony.gsm.SmsMessage;
 import android.text.TextUtils;
 
@@ -360,24 +362,28 @@ public class SmsPopupUtils {
    */
   public static void launchEmailToIntent(Context context, String subject, boolean includeDebug) {
     Intent msg = new Intent(Intent.ACTION_SEND);
-    String[] recipients={AUTHOR_CONTACT_INFO};
+    final String[] recipients = { AUTHOR_CONTACT_INFO };
 
-    String body = "";
+    StringBuilder body = new StringBuilder();
 
     if (includeDebug) {
-      body = "\n\n----------\nSysinfo - " + Build.FINGERPRINT + "\n"
-      + "Model: " + Build.MODEL + "\n\n";
+      body.append(String.format("\n\n----------\nSysinfo - %s\nModel: %s\n\n",
+          Build.FINGERPRINT, Build.MODEL));
 
       // Array of preference keys to include in email
-      String[] pref_keys = {
+      final String[] pref_keys = {
           context.getString(R.string.pref_enabled_key),
           context.getString(R.string.pref_timeout_key),
           context.getString(R.string.pref_privacy_key),
           context.getString(R.string.pref_dimscreen_key),
           context.getString(R.string.pref_markread_key),
           context.getString(R.string.pref_onlyShowOnKeyguard_key),
-          context.getString(R.string.pref_show_delete_button_key),
+          context.getString(R.string.pref_show_buttons_key),
+          context.getString(R.string.pref_button1_key),
+          context.getString(R.string.pref_button2_key),
+          context.getString(R.string.pref_button3_key),
           context.getString(R.string.pref_blur_key),
+          context.getString(R.string.pref_popup_enabled_key),
           context.getString(R.string.pref_notif_enabled_key),
           context.getString(R.string.pref_notif_sound_key),
           context.getString(R.string.pref_vibrate_key),
@@ -393,73 +399,73 @@ public class SmsPopupUtils {
       SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
       Map<String, ?> m = myPrefs.getAll();
 
-      body += subject + " config -\n";
+      body.append(String.format("%s config -\n", subject));
       for (int i=0; i<pref_keys.length; i++) {
         try {
-          body += pref_keys[i] + ": " + String.valueOf(m.get(pref_keys[i])) + "\n";
+          body.append(String.format("%s: %s\n", pref_keys[i], m.get(pref_keys[i])));
         } catch (NullPointerException e) {
           // Nothing to do here
         }
       }
 
       // Add locale info
-      body += "locale: "
-        + context.getResources().getConfiguration().locale.getDisplayName()
-        + "\n";
+      body.append(String.format("locale: %s\n",
+          context.getResources().getConfiguration().locale.getDisplayName()));
 
-      // Add audio info
-      AudioManager AM =
-        (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-
-      String audioMode = "audio_mode: ";
-      switch (AM.getMode()) {
-        case AudioManager.MODE_NORMAL:
-          audioMode += "MODE_NORMAL"; break;
-        case AudioManager.MODE_IN_CALL:
-          audioMode += "MODE_IN_CALL"; break;
-        case AudioManager.MODE_RINGTONE:
-          audioMode += "MODE_RINGTONE"; break;
-        default:
-          audioMode += "MODE is UNKNOWN"; break;
-      }
-      body += audioMode + "\n";
-
-      String audioRouting = "audio_routing: ";
-      switch (AM.getRouting(AudioManager.MODE_NORMAL)) {
-        case AudioManager.ROUTE_SPEAKER:
-          audioRouting += "ROUTE_SPEAKER"; break;
-        case AudioManager.ROUTE_BLUETOOTH:
-          audioRouting += "ROUTE_BLUETOOTH"; break;
-        case AudioManager.ROUTE_HEADSET:
-          audioRouting += "ROUTE_HEADSET"; break;
-        default:
-          audioRouting += "ROUTE is UNKNOWN"; break;
-      }
-      body += audioRouting + "\n";
-
-      TelephonyManager TM =
-        (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-      String callState = "call state: ";
-      switch (TM.getCallState()) {
-        case TelephonyManager.CALL_STATE_IDLE:
-          callState += "CALL_STATE_IDLE"; break;
-        case TelephonyManager.CALL_STATE_OFFHOOK:
-          callState += "CALL_STATE_OFFHOOK"; break;
-        case TelephonyManager.CALL_STATE_RINGING:
-          callState += "CALL_STATE_RINGING"; break;
-        default:
-          callState += "CALL_STATE is UNKNOWN"; break;
-      }
-      body += callState + "\n";
-
+      // TODO: fix this up so users can attach system logs to the email
+      // this almost works but for some reason the attachment never sends (while it still
+      // appears in the draft email that is created) :(
+      // Attach the log file if it exists
+      //      Uri log = collectLogs(context);
+      //      if (log != null) {
+      //        msg.putExtra(Intent.EXTRA_STREAM, log);
+      //      }
     }
 
     msg.putExtra(Intent.EXTRA_EMAIL, recipients);
     msg.putExtra(Intent.EXTRA_SUBJECT, subject);
-    msg.putExtra(Intent.EXTRA_TEXT, body);
+    msg.putExtra(Intent.EXTRA_TEXT, body.toString());
 
     msg.setType("message/rfc822");
-    context.startActivity(Intent.createChooser(msg, "Send E-mail"));
+    context.startActivity(Intent.createChooser(
+        msg, context.getString(R.string.pref_sendemail_title)));
+  }
+
+  /**
+   * Fetch output from logcat, dump it in a file and return the URI to the file
+   */
+  public static Uri collectLogs(Context context) {
+    final String logfile = "log.txt";
+
+    try {
+      ArrayList<String> commandLine = new ArrayList<String>();
+      commandLine.add("logcat");
+      commandLine.add("-d");
+      commandLine.add("AndroidRuntime:E");
+      commandLine.add(Log.LOGTAG + ":V");
+      commandLine.add("*:S");
+
+      BufferedInputStream fin = new BufferedInputStream(
+          Runtime.getRuntime().exec(commandLine.toArray(new String[0])).getInputStream());
+      BufferedOutputStream fout = new BufferedOutputStream(
+          context.openFileOutput(logfile, Context.MODE_WORLD_READABLE));
+
+      // Copy output to a log file
+      int i;
+      do {
+        i = fin.read();
+        if (i != -1)
+          fout.write(i);
+      } while (i != -1);
+      fin.close();
+      fout.close();
+    } catch (IOException e) {
+      return null;
+    } catch (SecurityException e) {
+      return null;
+    }
+
+    return Uri.fromFile(context.getFileStreamPath(logfile));
   }
 
   /**
