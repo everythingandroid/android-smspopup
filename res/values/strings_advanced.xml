@@ -55,6 +55,13 @@
     
     <string name="loading_message">Loading...</string>
     
+    <string name="pref_donate_key">donate</string>
+    <string name="pref_donate_title">Donate to SMS Popup</string>    
+    <string name="pref_donate_text">SMS Popup is a free application that I work on in my spare time.  If you find it useful, and can spare a few bucks, a donation would be much appreciated.\n\nThanks!</string>
+    <string name="pref_donate_market_button">Donate via Android Market</string>
+    <string name="pref_donate_paypal_button">Donate via PayPal</string>
+    <string name="pref_donated_key">donated</string>    
+    
 	<string name="pref_notif_default_title">Default Notifications</string>
 	<string name="pref_notif_default_summary">Notifications for all contacts without an individual customization</string>
 
@@ -67,7 +74,7 @@
 	<string name="pref_notif_help_key">notif_help</string>
 	<string name="pref_notif_help_title">Help - I'm confused!</string>
 	<string name="pref_notif_help_summary">Notifications Help</string>
-	<string name="pref_notif_help_message">Help goes here</string>
+	<string name="pref_notif_help_message">SMS Popup now offers the ability to customize notifications on a per contact basis.  When a new message comes in, SMS Popup will first check if the contact has a customized notification.  If so, those settings are used, otherwise the default notifications are used.\n\nUsing this functionality, you could set things up so only a few contacts show a popup while the rest get a regular notification.  You could also ignore certain users by setting their notification to silent.</string>
   
     <string name="pref_button_config_title">Button Configuration</string>
     <string name="pref_button_config_summary">Popup button configuration</string>
@@ -83,5 +90,5 @@
 
     <string name="pref_button3_key">button3</string>
     <string name="pref_button3_title">Button 3 Configuration</string>
-    <string name="pref_button3_default">4</string>    
+    <string name="pref_button3_default">5</string>    
 </resources>
