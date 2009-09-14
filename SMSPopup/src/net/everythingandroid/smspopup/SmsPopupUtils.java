@@ -54,7 +54,13 @@ public class SmsPopupUtils {
 
   public static final int CONTACT_PHOTO_PLACEHOLDER = android.R.drawable.ic_dialog_info;
 
-  private static final String AUTHOR_CONTACT_INFO = "Adam K <adam@everythingandroid.net>";
+  private static final String[] AUTHOR_CONTACT_INFO = { "Adam K <smspopup@everythingandroid.net>" };
+  private static final String[] AUTHOR_CONTACT_INFO_DONATE = { "Adam K <adam@everythingandroid.net>" };
+
+  public static final Uri DONATE_PAYPAL_URI =
+    Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8189585");
+  public static final Uri DONATE_MARKET_URI =
+    Uri.parse("market://search?q=pname:net.everythingandroid.smspopupdonate");
 
   /**
    * Looks up a contacts display name by contact id - if not found, the address
@@ -362,7 +368,9 @@ public class SmsPopupUtils {
    */
   public static void launchEmailToIntent(Context context, String subject, boolean includeDebug) {
     Intent msg = new Intent(Intent.ACTION_SEND);
-    final String[] recipients = { AUTHOR_CONTACT_INFO };
+
+    SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    boolean donated = myPrefs.getBoolean(context.getString(R.string.pref_donated_key), false);
 
     StringBuilder body = new StringBuilder();
 
@@ -396,7 +404,6 @@ public class SmsPopupUtils {
           context.getString(R.string.pref_notif_repeat_interval_key),
       };
 
-      SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
       Map<String, ?> m = myPrefs.getAll();
 
       body.append(String.format("%s config -\n", subject));
@@ -422,7 +429,7 @@ public class SmsPopupUtils {
       //      }
     }
 
-    msg.putExtra(Intent.EXTRA_EMAIL, recipients);
+    msg.putExtra(Intent.EXTRA_EMAIL, donated ? AUTHOR_CONTACT_INFO_DONATE : AUTHOR_CONTACT_INFO);
     msg.putExtra(Intent.EXTRA_SUBJECT, subject);
     msg.putExtra(Intent.EXTRA_TEXT, body.toString());
 
@@ -958,7 +965,7 @@ public class SmsPopupUtils {
 
   public static void disableOtherSMSPopup(Context context) {
     // Send a broadcast to disable SMS Popup Pro
-    Intent i = new Intent(EnableDisableReceiver.ACTION_SMSPOPUP_DISABLE);
+    Intent i = new Intent(ExternalEventReceiver.ACTION_SMSPOPUP_DISABLE);
     i.setClassName("net.everythingandroid.smspopuppro", "net.everythingandroid.smspopuppro.ExternalEventReceiver");
     context.sendBroadcast(i);
   }

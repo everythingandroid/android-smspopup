@@ -50,38 +50,64 @@
     <receiver
       android:name=".SmsReceiver">
       <intent-filter>
-        <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+        <action
+          android:name="android.provider.Telephony.SMS_RECEIVED" />
       </intent-filter>
       <intent-filter>
-        <action android:name="android.provider.Telephony.WAP_PUSH_RECEIVED" />
-        <data android:mimeType="application/vnd.wap.mms-message" />
+        <action
+          android:name="android.provider.Telephony.WAP_PUSH_RECEIVED" />
+        <data
+          android:mimeType="application/vnd.wap.mms-message" />
       </intent-filter>
     </receiver>
     <receiver
-      android:name=".EnableDisableReceiver">
+      android:name=".ExternalEventReceiver">
       <intent-filter>
-        <action android:name="net.everythingandroid.smspopup.ENABLE" />
+        <action
+          android:name="net.everythingandroid.smspopup.ENABLE" />
       </intent-filter>
       <intent-filter>
-        <action android:name="net.everythingandroid.smspopup.DISABLE" />
+        <action
+          android:name="net.everythingandroid.smspopup.DISABLE" />
       </intent-filter>
+      <intent-filter>
+        <action
+          android:name="net.everythingandroid.smspopup.DONATED" />
+      </intent-filter>      
     </receiver>
-    <receiver android:name=".ClearAllReceiver" />
-    <receiver android:name=".ReminderReceiver" />
-    <service android:name=".SmsPopupUtilsService" />
-    <service android:name=".SmsReceiverService" />
-    <service android:name=".ReminderReceiverService" />
-    <service android:name=".SmsMonitorService" />
+    <receiver
+      android:name=".ClearAllReceiver" />
+    <receiver
+      android:name=".ReminderReceiver" />
+    <service
+      android:name=".SmsPopupUtilsService" />
+    <service
+      android:name=".SmsReceiverService" />
+    <service
+      android:name=".ReminderReceiverService" />
+    <service
+      android:name=".SmsMonitorService" />
   </application>
-  <uses-permission android:name="android.permission.READ_SMS" />
-  <uses-permission android:name="android.permission.WRITE_SMS" />
-  <uses-permission android:name="android.permission.SEND_SMS" />
-  <uses-permission android:name="android.permission.RECEIVE_SMS" />
-  <uses-permission android:name="android.permission.RECEIVE_MMS" />  
-  <uses-permission android:name="android.permission.READ_CONTACTS" />
-  <uses-permission android:name="android.permission.WAKE_LOCK" />
-  <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-  <uses-permission android:name="android.permission.VIBRATE" />
-  <uses-permission android:name="android.permission.GET_TASKS" />
-  <uses-permission android:name="android.permission.READ_LOGS" />  
+  <uses-permission
+    android:name="android.permission.READ_SMS" />
+  <uses-permission
+    android:name="android.permission.WRITE_SMS" />
+  <uses-permission
+    android:name="android.permission.SEND_SMS" />
+  <uses-permission
+    android:name="android.permission.RECEIVE_SMS" />
+  <uses-permission
+    android:name="android.permission.RECEIVE_MMS" />
+  <uses-permission
+    android:name="android.permission.READ_CONTACTS" />
+  <uses-permission
+    android:name="android.permission.WAKE_LOCK" />
+  <uses-permission
+    android:name="android.permission.DISABLE_KEYGUARD" />
+  <uses-permission
+    android:name="android.permission.VIBRATE" />
+  <uses-permission
+    android:name="android.permission.GET_TASKS" />
+  <uses-permission
+    android:name="android.permission.READ_LOGS" />
 </manifest>
