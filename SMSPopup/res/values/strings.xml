@@ -30,6 +30,7 @@
    <string name="button_disabled">Disabled</string>
    
 <!-- Main Preferences -->
+   <string name="pref_other_key">other</string>
    <string name="pref_config_title">SMS Popup Configuration</string>
    <string name="pref_other_title">Other</string>
 
@@ -144,7 +145,7 @@
    <string name="pref_popup_enabled_key">popup</string>   
    <string name="pref_popup_enabled_title">Show a Popup</string>
    <string name="pref_popup_enabled_summaryon">Message will open in a popup</string>
-   <string name="pref_popup_enabled_summaryoff">Message will only show in notification area</string>
+   <string name="pref_popup_enabled_summaryoff">Message will only show in notification area (if enabled)</string>
    <string name="pref_popup_enabled_default">true</string>
 
    <string name="pref_notif_test_key">notiftest</string>   
