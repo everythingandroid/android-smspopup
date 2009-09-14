@@ -58,7 +58,7 @@ public class SmsPopupUtils {
   private static final String[] AUTHOR_CONTACT_INFO_DONATE = { "Adam K <adam@everythingandroid.net>" };
 
   public static final Uri DONATE_PAYPAL_URI =
-    Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8189585");
+    Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=3KV6C75PVDY86&lc=US&item_name=EverythingAndroid%2enet%20%2d%20SMS%20Popup&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted");
   public static final Uri DONATE_MARKET_URI =
     Uri.parse("market://search?q=pname:net.everythingandroid.smspopupdonate");
 
