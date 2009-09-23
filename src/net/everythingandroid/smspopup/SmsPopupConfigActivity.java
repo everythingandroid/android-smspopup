@@ -100,6 +100,16 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     SmsPopupDbAdapter mDbAdapter = new SmsPopupDbAdapter(this);
     mDbAdapter.open(true); // Open database read-only
     mDbAdapter.close();
+
+    // Testing large photo insertion
+    //    Bitmap photo = BitmapFactory.decodeResource(getResources(), R.drawable.img);
+    //
+    //    Uri uri = Uri.withAppendedPath(Contacts.People.CONTENT_URI, "4");
+    //    if (photo != null) {
+    //      ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    //      photo.compress(Bitmap.CompressFormat.JPEG, 75, stream);
+    //      People.setPhotoData(getContentResolver(), uri, stream.toByteArray());
+    //    }
   }
 
   @Override

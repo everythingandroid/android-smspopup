@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -30,6 +31,7 @@ import android.provider.Contacts.PeopleColumns;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.gsm.SmsMessage;
 import android.text.TextUtils;
+
 
 public class SmsPopupUtils {
   //Content URIs for SMS app, these may change in future SDK
@@ -54,11 +56,16 @@ public class SmsPopupUtils {
 
   public static final int CONTACT_PHOTO_PLACEHOLDER = android.R.drawable.ic_dialog_info;
 
+  // This is the current thumbnail size for contact photos, but hopefully the system will allow
+  // for larger sizes at some point
+  public static final int CONTACT_PHOTO_THUMBSIZE = 96;
+  public static final int CONTACT_PHOTO_MAXSIZE = 1024;
+
   private static final String[] AUTHOR_CONTACT_INFO = { "Adam K <smspopup@everythingandroid.net>" };
   private static final String[] AUTHOR_CONTACT_INFO_DONATE = { "Adam K <adam@everythingandroid.net>" };
 
   public static final Uri DONATE_PAYPAL_URI =
-    Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=3KV6C75PVDY86&lc=US&item_name=EverythingAndroid%2enet%20%2d%20SMS%20Popup&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted");
+    Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8246419");
   public static final Uri DONATE_MARKET_URI =
     Uri.parse("market://search?q=pname:net.everythingandroid.smspopupdonate");
 
@@ -129,24 +136,81 @@ public class SmsPopupUtils {
   /**
    * 
    * Looks up a contats photo by their contact id, returns a Bitmap array
-   * that represents their photo (or null if not found)
+   * that represents their photo (or null if not found or there was an error.
+   * 
+   * I do my own scaling and validation of sizes - Android OS supports any size
+   * for contact photos and some apps are adding huge photos to contacts.  Doing
+   * the scaling myself allows me more control over how things play out in those
+   * cases.
    * 
    * @param context
    * @param id contact id
    * @return Bitmap of the contacts photo (null if none or an error)
    */
   public static Bitmap getPersonPhoto(Context context, String id) {
-    if (id == null)
-      return null;
 
-    if ("0".equals(id))
-      return null;
+    if (id == null) return null;
+    if ("0".equals(id)) return null;
 
-    return Contacts.People.loadContactPhoto(context,
-        Uri.withAppendedPath(Contacts.People.CONTENT_URI, id),
-        SmsPopupUtils.CONTACT_PHOTO_PLACEHOLDER, null);
+    // First let's just check the dimensions of the contact photo
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inJustDecodeBounds = true;
+
+    // The height and width are stored in 'options' but the photo itself is not loaded
+    Contacts.People.loadContactPhoto(
+        context, Uri.withAppendedPath(Contacts.People.CONTENT_URI, id), 0, options);
+
+    // Raw height and width of contact photo
+    int height = options.outHeight;
+    int width = options.outWidth;
+
+    if (Log.DEBUG) Log.v("Contact photo size = " + height + "x" + width);
+
+    // If photo is too large or not found get out
+    if (height > CONTACT_PHOTO_MAXSIZE || width > CONTACT_PHOTO_MAXSIZE  ||
+        width == 0 || height == 0) return null;
+
+    // This time we're going to do it for real
+    options.inJustDecodeBounds = false;
+
+    // If we have an abnormal photo size then sample it down
+    if (height > CONTACT_PHOTO_THUMBSIZE || width > CONTACT_PHOTO_THUMBSIZE) {
+      if (height < width) {
+        options.inSampleSize = Math.round(height / CONTACT_PHOTO_THUMBSIZE);
+        // if (Log.DEBUG) Log.v("Contact photo inSampleSize = " + Math.round(height / CONTACT_PHOTO_THUMBSIZE));
+      } else {
+        options.inSampleSize = Math.round(width / CONTACT_PHOTO_THUMBSIZE);
+        // if (Log.DEBUG) Log.v("Contact photo inSampleSize = " + Math.round(height / CONTACT_PHOTO_THUMBSIZE));
+      }
+    }
+
+    // Fetch the real contact photo (sampled down if needed)
+    Bitmap contactBitmap = null;
+    try {
+      contactBitmap = Contacts.People.loadContactPhoto(
+          context, Uri.withAppendedPath(Contacts.People.CONTENT_URI, id), 0, options);
+    } catch (OutOfMemoryError e) {
+      Log.e("Out of memory when loading contact photo");
+    }
+
+    // Not found or error, get out
+    if (contactBitmap == null) return null;
+
+    // Now let's resize the photo so it has a max height or width of CONTACT_PHOTO_THUMBSIZE
+    int newHeight = CONTACT_PHOTO_THUMBSIZE;
+    int newWidth = CONTACT_PHOTO_THUMBSIZE;
+
+    if (height != CONTACT_PHOTO_THUMBSIZE || width != CONTACT_PHOTO_THUMBSIZE) {
+      if (height > width) {
+        newWidth = Math.round(CONTACT_PHOTO_THUMBSIZE * width / height);
+      } else if (height < width) {
+        newHeight = Math.round(CONTACT_PHOTO_THUMBSIZE * height / width);
+      }
+    }
+
+    // Return bitmap scaled to new height and width
+    return Bitmap.createScaledBitmap(contactBitmap, newWidth, newHeight, true);
   }
-
 
   /**
    * 
@@ -679,18 +743,28 @@ public class SmsPopupUtils {
         count = cursor.getCount();
         if (count > 0) {
           cursor.moveToFirst();
-          // String[] columns = cursor.getColumnNames();
-          // for (int i=0; i<columns.length; i++) {
-          // Log.v("columns " + i + ": " + columns[i] + ": "
-          // + cursor.getString(i));
-          // }
-          String address = getMmsFrom(context, cursor.getLong(0));
+          //          String[] columns = cursor.getColumnNames();
+          //          for (int i=0; i<columns.length; i++) {
+          //            Log.v("columns " + i + ": " + columns[i] + ": "
+          //                + cursor.getString(i));
+          //          }
+          long messageId = cursor.getLong(0);
+          String[] result = getMmsFrom(context, messageId);
+
+          //          result[0] = address;
+          //          result[1] = String.valueOf(contactId);
+          //          result[2] = contactName;
+          String address = result[0];
+          String contactId = result[1];
+          String contactName = result[2];
+
           long threadId = cursor.getLong(1);
           long timestamp = cursor.getLong(2) * 1000;
           String subject = cursor.getString(3);
 
-          SmsMmsMessage mmsMessage = new SmsMmsMessage(context, address, subject, timestamp,
-              threadId, count, SmsMmsMessage.MESSAGE_TYPE_MMS);
+          SmsMmsMessage mmsMessage = new SmsMmsMessage(
+              context, contactId, contactName, address, subject, timestamp,
+              messageId, threadId, count, SmsMmsMessage.MESSAGE_TYPE_MMS);
 
           return mmsMessage;
 
@@ -706,7 +780,8 @@ public class SmsPopupUtils {
     return getMmsDetails(context, 0);
   }
 
-  public static String getMmsFrom(Context context, long message_id) {
+  public static String[] getMmsFrom(Context context, long message_id) {
+    final String[] result = new String[3];
 
     Uri.Builder builder = MMS_CONTENT_URI.buildUpon();
     builder.appendPath(String.valueOf(message_id)).appendPath("addr");
@@ -723,13 +798,26 @@ public class SmsPopupUtils {
       try {
         if (cursor.moveToFirst()) {
 
-          // String[] columns = cursor.getColumnNames();
-          // for (int i = 0; i < columns.length; i++) {
-          // Log.v("columns " + i + ": " + columns[i] + ": "
-          // + cursor.getString(i));
-          // }
+          //          String[] columns = cursor.getColumnNames();
+          //          for (int i = 0; i < columns.length; i++) {
+          //            Log.v("columns " + i + ": " + columns[i] + ": "
+          //                + cursor.getString(i));
+          //          }
+
+          // TODO: apparently contactId in this table is always null/0 so will need to fetch it
+          // from somewhere else
+
           String address = cursor.getString(0);
-          return getDisplayName(context, address).trim();
+          long contactId = cursor.getLong(1);
+          String contactName = getDisplayName(context, address).trim();
+
+          //Log.v("!!!!!!!!!!!!!!! contactId = " + contactId);
+
+          result[0] = address;
+          result[1] = String.valueOf(contactId);
+          result[2] = contactName;
+
+          return result;
 
           // Needed for i18n strings??
           // if (!TextUtils.isEmpty(from)) {
@@ -742,7 +830,12 @@ public class SmsPopupUtils {
         cursor.close();
       }
     }
-    return context.getString(android.R.string.unknownName);
+
+    result[0] = "unknown";
+    result[1] = "0";
+    result[2] = context.getString(android.R.string.unknownName);
+
+    return result;
   }
 
   public static final Pattern NAME_ADDR_EMAIL_PATTERN = Pattern
