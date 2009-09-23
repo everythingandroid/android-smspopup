@@ -72,8 +72,9 @@ public class SmsMmsMessage {
    * Construct SmsMmsMessage for getMmsDetails() - info fetched from the MMS
    * database table
    */
-  public SmsMmsMessage(Context _context, String _fromAddress, String _messageBody,
-      long _timestamp, long _threadId, int _unreadCount, int _messageType) {
+  public SmsMmsMessage(Context _context, String _contactId, String _contactName, String _fromAddress, String _messageBody,
+      long _timestamp, long _messageId, long _threadId, int _unreadCount, int _messageType) {
+
     context = _context;
     fromAddress = _fromAddress;
     messageBody = _messageBody;
@@ -82,12 +83,11 @@ public class SmsMmsMessage {
 
     // TODO: I think contactId can come the MMS table, this would save
     // this database lookup
-    contactId = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
-    contactName = SmsPopupUtils.getPersonName(context, contactId, fromAddress);
+    contactId = _contactId;
+    contactName = _contactName;
     unreadCount = _unreadCount;
     threadId = _threadId;
-
-    locateMessageId();
+    messageId = _messageId;
 
     if (contactName == null) {
       contactName = context.getString(android.R.string.unknownName);
