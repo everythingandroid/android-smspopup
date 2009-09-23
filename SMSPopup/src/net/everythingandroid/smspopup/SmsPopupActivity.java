@@ -200,7 +200,6 @@ public class SmsPopupActivity extends Activity {
       button3.setOnClickListener(button3Vals);
       button3.setText(button3Vals.buttonText);
       button3.setVisibility(button3Vals.buttonVisibility);
-
     }
 
     if (bundle == null) {
@@ -443,8 +442,10 @@ public class SmsPopupActivity extends Activity {
     // Fetch contact photo in background
     if (contactPhoto == null) {
       photoImageView.setImageDrawable(contactPhotoPlaceholderDrawable);
+      photoImageView.setBackgroundResource(0);
       new FetchContactPhotoTask().execute(message.getContactId());
     } else {
+      photoImageView.setBackgroundResource(android.R.drawable.picture_frame);
       photoImageView.setImageBitmap(contactPhoto);
     }
 
@@ -1014,6 +1015,7 @@ public class SmsPopupActivity extends Activity {
       if (Log.DEBUG) Log.v("Done loading contact photo");
       contactPhoto = result;
       if (result != null) {
+        photoImageView.setBackgroundResource(android.R.drawable.picture_frame);
         photoImageView.setImageBitmap(contactPhoto);
       }
     }
