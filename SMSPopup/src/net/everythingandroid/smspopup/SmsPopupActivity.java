@@ -494,10 +494,9 @@ public class SmsPopupActivity extends Activity {
    */
   final private void refreshPrivacy() {
     if (Log.DEBUG) Log.v("refreshPrivacy()");
-    messageViewed = false;
+    messageViewed = true;
 
     if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_SMS) {
-      messageViewed = true;
       if (privacyMode) {
         //We need to init the keyguard class so we can check if the keyguard is on
         ManageKeyguard.initialize(getApplicationContext());
@@ -845,12 +844,10 @@ public class SmsPopupActivity extends Activity {
    */
   private void closeMessage() {
     if (messageViewed) {
-      Intent i = new Intent(SmsPopupActivity.this.getApplicationContext(),
-          SmsPopupUtilsService.class);
+      Intent i = new Intent(getApplicationContext(), SmsPopupUtilsService.class);
       i.setAction(SmsPopupUtilsService.ACTION_MARK_MESSAGE_READ);
       i.putExtras(message.toBundle());
-      SmsPopupUtilsService.beginStartingService(
-          SmsPopupActivity.this.getApplicationContext(), i);
+      SmsPopupUtilsService.beginStartingService(getApplicationContext(), i);
     }
 
     // Finish up this activity

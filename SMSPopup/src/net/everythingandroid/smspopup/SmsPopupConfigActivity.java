@@ -110,6 +110,10 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     //      photo.compress(Bitmap.CompressFormat.JPEG, 75, stream);
     //      People.setPhotoData(getContentResolver(), uri, stream.toByteArray());
     //    }
+
+    //    Intent i = new Intent(Intent.ACTION_VIEW);
+    //    i.setData(Uri.parse("content://contacts/people/1256"));
+    //    startActivity(i);
   }
 
   @Override
