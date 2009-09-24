@@ -32,7 +32,6 @@ import android.telephony.PhoneNumberUtils;
 import android.telephony.gsm.SmsMessage;
 import android.text.TextUtils;
 
-
 public class SmsPopupUtils {
   //Content URIs for SMS app, these may change in future SDK
   public static final Uri MMS_SMS_CONTENT_URI = Uri.parse("content://mms-sms/");
@@ -47,7 +46,7 @@ public class SmsPopupUtils {
   public static final Uri MMS_CONTENT_URI = Uri.parse("content://mms");
   public static final Uri MMS_INBOX_CONTENT_URI = Uri.withAppendedPath(MMS_CONTENT_URI, "inbox");
 
-  public static final String SMS_ID = "_id";
+  public static final String SMSMMS_ID = "_id";
   public static final String SMS_TO_URI = "smsto:/";
   public static final String SMS_MIME_TYPE = "vnd.android-dir/mms-sms";
   public static final int READ_THREAD = 1;
@@ -56,9 +55,10 @@ public class SmsPopupUtils {
 
   public static final int CONTACT_PHOTO_PLACEHOLDER = android.R.drawable.ic_dialog_info;
 
-  // This is the current thumbnail size for contact photos, but hopefully the system will allow
-  // for larger sizes at some point
+  // The size of the contact photo thumbnail on the popup
   public static final int CONTACT_PHOTO_THUMBSIZE = 96;
+
+  // The max size of either the width or height of the contact photo
   public static final int CONTACT_PHOTO_MAXSIZE = 1024;
 
   private static final String[] AUTHOR_CONTACT_INFO = { "Adam K <smspopup@everythingandroid.net>" };
@@ -124,6 +124,36 @@ public class SmsPopupUtils {
           cursor.moveToFirst();
           Long id = Long.valueOf(cursor.getLong(0));
           if (Log.DEBUG) Log.v("Found person: " + id);
+          return (String.valueOf(id));
+        }
+      } finally {
+        cursor.close();
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Looks up a contacts id, given their email address.
+   * Returns null if not found
+   */
+  public static String getPersonIdFromEmail(Context context, String address) {
+    if (address == null)
+      return null;
+
+    final Uri WITH_EMAIL_OR_IM_FILTER_URI =
+      Uri.parse("content://contacts/people/with_email_or_im_filter");
+
+    Cursor cursor = context.getContentResolver().query(
+        Uri.withAppendedPath(WITH_EMAIL_OR_IM_FILTER_URI, Uri.encode(address)),
+        new String[] { SMSMMS_ID }, null, null, null);
+
+    if (cursor != null) {
+      try {
+        if (cursor.getCount() > 0) {
+          cursor.moveToFirst();
+          Long id = Long.valueOf(cursor.getLong(0));
+          if (Log.DEBUG) Log.v("Found person (by email): " + id);
           return (String.valueOf(id));
         }
       } finally {
@@ -233,7 +263,7 @@ public class SmsPopupUtils {
 
     Cursor cursor = context.getContentResolver().query(
         uriBuilder.build(),
-        new String[] { SMS_ID },
+        new String[] { SMSMMS_ID },
         null, null, null);
     if (cursor != null) {
       try {
@@ -265,7 +295,9 @@ public class SmsPopupUtils {
       Uri messageUri;
 
       if (SmsMmsMessage.MESSAGE_TYPE_MMS == messageType) {
-        messageUri = Uri.withAppendedPath(MMS_CONTENT_URI, String.valueOf(messageId));
+        // Used to use URI of MMS_CONTENT_URI and it wasn't working, not sure why
+        // this is diff to SMS
+        messageUri = Uri.withAppendedPath(MMS_INBOX_CONTENT_URI, String.valueOf(messageId));
       } else if (SmsMmsMessage.MESSAGE_TYPE_SMS == messageType) {
         messageUri = Uri.withAppendedPath(SMS_CONTENT_URI, String.valueOf(messageId));
       } else {
@@ -592,7 +624,7 @@ public class SmsPopupUtils {
 
     Cursor cursor = context.getContentResolver().query(
         SMS_INBOX_CONTENT_URI,
-        new String[] { SMS_ID },
+        new String[] { SMSMMS_ID },
         UNREAD_CONDITION, null, null);
 
     if (cursor != null) {
@@ -628,7 +660,7 @@ public class SmsPopupUtils {
 
     Cursor cursor = context.getContentResolver().query(
         MMS_INBOX_CONTENT_URI,
-        new String[] { SMS_ID },
+        new String[] { SMSMMS_ID },
         UNREAD_CONDITION, null, null);
 
     if (cursor != null) {
@@ -749,14 +781,9 @@ public class SmsPopupUtils {
           //                + cursor.getString(i));
           //          }
           long messageId = cursor.getLong(0);
-          String[] result = getMmsFrom(context, messageId);
-
-          //          result[0] = address;
-          //          result[1] = String.valueOf(contactId);
-          //          result[2] = contactName;
-          String address = result[0];
-          String contactId = result[1];
-          String contactName = result[2];
+          String address = getMmsAddress(context, messageId);
+          String contactName = getDisplayName(context, address).trim();
+          String contactId = getPersonIdFromEmail(context, address);
 
           long threadId = cursor.getLong(1);
           long timestamp = cursor.getLong(2) * 1000;
@@ -780,79 +807,51 @@ public class SmsPopupUtils {
     return getMmsDetails(context, 0);
   }
 
-  public static String[] getMmsFrom(Context context, long message_id) {
-    final String[] result = new String[3];
+  public static String getMmsAddress(Context context, long message_id) {
 
     Uri.Builder builder = MMS_CONTENT_URI.buildUpon();
     builder.appendPath(String.valueOf(message_id)).appendPath("addr");
 
     Cursor cursor = context.getContentResolver().query(builder.build(),
-        // new String[] { "contact_id", "address", "charset", "type" },
         new String[] { "address", "contact_id", "charset", "type" },
         // "type="+ PduHeaders.FROM,
-        "type=137",
-        // null,
-        null, null);
+        "type=137", null, null);
 
     if (cursor != null) {
       try {
         if (cursor.moveToFirst()) {
+          // Apparently contact_id is always empty in this table so we can't get it from here
 
-          //          String[] columns = cursor.getColumnNames();
-          //          for (int i = 0; i < columns.length; i++) {
-          //            Log.v("columns " + i + ": " + columns[i] + ": "
-          //                + cursor.getString(i));
-          //          }
-
-          // TODO: apparently contactId in this table is always null/0 so will need to fetch it
-          // from somewhere else
-
-          String address = cursor.getString(0);
-          long contactId = cursor.getLong(1);
-          String contactName = getDisplayName(context, address).trim();
-
-          //Log.v("!!!!!!!!!!!!!!! contactId = " + contactId);
-
-          result[0] = address;
-          result[1] = String.valueOf(contactId);
-          result[2] = contactName;
-
-          return result;
-
-          // Needed for i18n strings??
-          // if (!TextUtils.isEmpty(from)) {
-          // byte[] bytes = PduPersister.getBytes(from);
-          // int charset = cursor.getInt(1);
-          // return new EncodedStringValue(charset, bytes).getString();
-          // }
+          // Just return the address
+          return cursor.getString(0);
         }
       } finally {
         cursor.close();
       }
     }
 
-    result[0] = "unknown";
-    result[1] = "0";
-    result[2] = context.getString(android.R.string.unknownName);
-
-    return result;
+    return context.getString(android.R.string.unknownName);
   }
 
-  public static final Pattern NAME_ADDR_EMAIL_PATTERN = Pattern
-  .compile("\\s*(\"[^\"]*\"|[^<>\"]+)\\s*<([^<>]+)>\\s*");
+  public static final Pattern NAME_ADDR_EMAIL_PATTERN =
+    Pattern.compile("\\s*(\"[^\"]*\"|[^<>\"]+)\\s*<([^<>]+)>\\s*");
 
-  public static final Pattern QUOTED_STRING_PATTERN = Pattern
-  .compile("\\s*\"([^\"]*)\"\\s*");
+  public static final Pattern QUOTED_STRING_PATTERN =
+    Pattern.compile("\\s*\"([^\"]*)\"\\s*");
 
   private static String getEmailDisplayName(String displayString) {
     Matcher match = QUOTED_STRING_PATTERN.matcher(displayString);
     if (match.matches()) {
       return match.group(1);
     }
-
     return displayString;
   }
 
+  /**
+   * Get the display name of an email address. If the address already contains
+   * the name, parse and return it. Otherwise, query the contact database. Cache
+   * query results for repeated queries.
+   */
   private static String getDisplayName(Context context, String email) {
     Matcher match = NAME_ADDR_EMAIL_PATTERN.matcher(email);
     if (match.matches()) {
@@ -868,8 +867,8 @@ public class SmsPopupUtils {
 
     if (cursor != null) {
       try {
-        int columnIndex = cursor
-        .getColumnIndexOrThrow(Contacts.ContactMethods.NAME);
+        int columnIndex =
+          cursor.getColumnIndexOrThrow(Contacts.ContactMethods.NAME);
         while (cursor.moveToNext()) {
           String name = cursor.getString(columnIndex);
           if (!TextUtils.isEmpty(name)) {
