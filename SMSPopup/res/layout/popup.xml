@@ -4,14 +4,17 @@
   android:layout_height="fill_parent"
   android:orientation="vertical"
   android:minWidth="310dp"
-  android:id="@+id/MainLinearLayout" android:layout_width="fill_parent">
+  android:id="@+id/MainLinearLayout"
+  android:layout_width="fill_parent">
   <ViewStub
     android:id="@+id/UnreadCountViewStub"
     android:layout="@layout/popup_unreadcount"
-    android:layout_width="fill_parent" android:layout_height="41sp"/>
+    android:layout_width="fill_parent"
+    android:layout_height="41sp" />
   <include
     layout="@layout/popup_header"
-    android:layout_width="fill_parent" android:layout_height="wrap_content"/>
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" />
   <include
     layout="@layout/popup_divider" />
   <ScrollView
@@ -20,15 +23,19 @@
     android:id="@+id/MessageScrollView"
     android:visibility="gone"
     android:layout_weight="1"
-    android:paddingBottom="10sp" android:paddingTop="6sp">
+    android:paddingBottom="10sp"
+    android:paddingTop="6sp">
     <TextView
       android:text="Text here"
       android:id="@+id/MessageTextView"
       android:autoLink="all"
       android:textAppearance="?android:attr/textAppearanceMedium"
+      android:textColor="?android:attr/textColorPrimaryDisableOnly"
       android:layout_height="fill_parent"
       android:layout_width="fill_parent"
-      android:gravity="center" android:paddingRight="10sp" android:paddingLeft="10sp"/>
+      android:gravity="center"
+      android:paddingRight="10sp"
+      android:paddingLeft="10sp" />
   </ScrollView>
   <ViewStub
     android:id="@+id/MmsViewStub"
