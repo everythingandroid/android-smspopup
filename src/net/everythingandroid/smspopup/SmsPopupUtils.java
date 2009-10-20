@@ -29,7 +29,7 @@ import android.preference.PreferenceManager;
 import android.provider.Contacts;
 import android.provider.Contacts.PeopleColumns;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.gsm.SmsMessage;
+import android.telephony.SmsMessage;
 import android.text.TextUtils;
 
 public class SmsPopupUtils {
