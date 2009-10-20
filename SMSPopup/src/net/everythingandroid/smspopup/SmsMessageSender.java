@@ -26,7 +26,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
-import android.telephony.gsm.SmsManager;
+import android.telephony.SmsManager;
 
 public class SmsMessageSender {
   private final Context mContext;
