@@ -25,7 +25,7 @@ import android.widget.Button;
 
 public class SmsPopupConfigActivity extends PreferenceActivity {
   private static final int DIALOG_DONATE = Menu.FIRST;
-  Preference donateDialogPref = null;
+  private Preference donateDialogPref = null;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -128,7 +128,8 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
 
     // Donate Dialog
     if (donateDialogPref != null) {
-      boolean donated = myPrefs.getBoolean(this.getString(R.string.pref_donated_key), false);
+      // boolean donated = myPrefs.getBoolean(this.getString(R.string.pref_donated_key), false);
+      boolean donated = true;
       if (donated) {
         PreferenceCategory otherPrefCategory =
           (PreferenceCategory) findPreference(getString(R.string.pref_other_key));
