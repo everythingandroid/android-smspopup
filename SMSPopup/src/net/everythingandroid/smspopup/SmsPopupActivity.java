@@ -16,7 +16,6 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.graphics.Bitmap;
@@ -27,9 +26,12 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Contacts;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +42,7 @@ import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -48,8 +51,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.tts.TTS;
+import android.widget.TextView.OnEditorActionListener;
 
 public class SmsPopupActivity extends Activity {
   private SmsMmsMessage message;
@@ -85,8 +87,6 @@ public class SmsPopupActivity extends Activity {
   private boolean privacyMode = false;
   private boolean messageViewed = true;
 
-  private static final String TTS_PACKAGE_NAME = "com.google.tts";
-
   private static final double WIDTH = 0.8;
   private static final int DIALOG_DELETE          = Menu.FIRST;
   private static final int DIALOG_QUICKREPLY      = Menu.FIRST + 1;
@@ -109,7 +109,7 @@ public class SmsPopupActivity extends Activity {
   private SmsPopupDbAdapter mDbAdapter;
   private Cursor mCursor = null;
 
-  private TTS myTts = null;
+  private TextToSpeech myTts = null;
 
   @Override
   protected void onCreate(Bundle bundle) {
@@ -590,7 +590,6 @@ public class SmsPopupActivity extends Activity {
           (ImageButton) qrLayout.findViewById(R.id.SpeechRecogButton);
 
         voiceRecognitionButton.setOnClickListener(new OnClickListener() {
-
           public void onClick(View view) {
             final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(
@@ -602,7 +601,6 @@ public class SmsPopupActivity extends Activity {
             List<ResolveInfo> list = packageManager.queryIntentActivities(intent, 0);
 
             if (list.size() > 0) {
-
               // TODO: really I should allow voice input here without unlocking first (I allow
               // quick replies without unlock anyway)
               exitingKeyguardSecurely = true;
@@ -613,15 +611,31 @@ public class SmsPopupActivity extends Activity {
                 }
               });
             } else {
-              // TODO: move string to resource file
               Toast.makeText(SmsPopupActivity.this,
-                  "Voice recognition not available on this device", Toast.LENGTH_LONG).show();
+                  R.string.error_no_voice_recognition, Toast.LENGTH_LONG).show();
               view.setEnabled(false);
             }
           }
         });
 
         qrEditText.addTextChangedListener(new QmTextWatcher(this, qrCounterTextView));
+        qrEditText.setOnEditorActionListener(new OnEditorActionListener() {
+          public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+              sendQuickReply(v.getText().toString());
+              /*
+                Hide the IME - not needed as we finish the activity after sending which hides
+                the IME anyway
+               */
+              // InputMethodManager inputManager = (InputMethodManager)
+              // SmsPopupActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+              // inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+              return true;
+            }
+            return false;
+          }
+        });
+
         quickreplyTextView = (TextView) qrLayout.findViewById(R.id.QuickReplyTextView);
 
         qrCounterTextView.setText(
@@ -788,10 +802,16 @@ public class SmsPopupActivity extends Activity {
   /*
    * Text-to-speech InitListener
    */
-  private final TTS.InitListener ttsInitListener = new TTS.InitListener() {
-    public void onInit(int version) {
-      mProgressDialog.dismiss();
-      speakMessage();
+  private final TextToSpeech.OnInitListener ttsInitListener = new OnInitListener() {
+    public void onInit(int status) {
+      if (mProgressDialog != null) {
+        mProgressDialog.dismiss();
+      }
+      if (status == TextToSpeech.SUCCESS) {
+        speakMessage();
+      } else {
+        Toast.makeText(SmsPopupActivity.this, R.string.error_message, Toast.LENGTH_SHORT);
+      }
     }
   };
 
@@ -800,7 +820,6 @@ public class SmsPopupActivity extends Activity {
    */
   private void speakMessage() {
     // TODO: we should really require the keyguard be unlocked here if we are in privacy mode
-
     //    exitingKeyguardSecurely = true;
     //    ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
     //      public void LaunchOnKeyguardExitSuccess() {
@@ -810,13 +829,7 @@ public class SmsPopupActivity extends Activity {
     //          public void run() {
     if (myTts == null) {
 
-      // If TTS package is installed then show a loading dialog while the library fires up
-      try {
-        getPackageManager().getPackageInfo(TTS_PACKAGE_NAME, 0);
-        showDialog(DIALOG_LOADING);
-      } catch (NameNotFoundException e) {
-        // No need to do anything here, failing is fine
-      }
+      showDialog(DIALOG_LOADING);
 
       // User interacted so remove all locks
       ClearAllReceiver.removeCancel(getApplicationContext());
@@ -826,13 +839,13 @@ public class SmsPopupActivity extends Activity {
       ManageNotification.update(getApplicationContext(), message);
 
       // Init the TTS library
-      myTts = new TTS(SmsPopupActivity.this.getApplicationContext(), ttsInitListener, true);
+      myTts = new TextToSpeech(SmsPopupActivity.this, ttsInitListener);
 
     } else {
       // Speak the message!
       myTts.speak(message.getMessageBody(), 0, null);
     }
-    //  }
+    //          }
     //        });
     //      }
     //
