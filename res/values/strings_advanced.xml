@@ -64,7 +64,7 @@
     <string name="pref_donate_paypal_button">Donate via PayPal</string>
     <string name="pref_donated_key">donated</string>    
     
-	<string name="pref_notif_default_title">Notifications</string>
+	<string name="pref_notif_default_title">Default Notifications</string>
 	<string name="pref_notif_default_summary">Notifications for all contacts without an individual customization</string>
 
 	<string name="pref_contacts_title">Contacts Notifications</string>
