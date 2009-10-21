@@ -13,7 +13,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.Process;
 import android.preference.PreferenceManager;
-import android.telephony.SmsMessage;
+import android.telephony.gsm.SmsMessage;
 
 public class SmsReceiverService extends Service {
   private static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";

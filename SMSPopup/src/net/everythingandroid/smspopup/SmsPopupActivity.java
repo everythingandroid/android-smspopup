@@ -26,8 +26,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Contacts;
 import android.speech.RecognizerIntent;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.OnInitListener;
 import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.Display;
@@ -52,6 +50,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
+
+import com.google.tts.TTS;
+import com.google.tts.TTS.InitListener;
 
 public class SmsPopupActivity extends Activity {
   private SmsMmsMessage message;
@@ -109,7 +110,8 @@ public class SmsPopupActivity extends Activity {
   private SmsPopupDbAdapter mDbAdapter;
   private Cursor mCursor = null;
 
-  private TextToSpeech myTts = null;
+  @SuppressWarnings("deprecation")
+  private TTS myTts = null;
 
   @Override
   protected void onCreate(Bundle bundle) {
@@ -802,22 +804,24 @@ public class SmsPopupActivity extends Activity {
   /*
    * Text-to-speech InitListener
    */
-  private final TextToSpeech.OnInitListener ttsInitListener = new OnInitListener() {
-    public void onInit(int status) {
+  @SuppressWarnings("deprecation")
+  private final TTS.InitListener ttsInitListener = new InitListener() {
+    public void onInit(int version) {
       if (mProgressDialog != null) {
         mProgressDialog.dismiss();
       }
-      if (status == TextToSpeech.SUCCESS) {
-        speakMessage();
-      } else {
-        Toast.makeText(SmsPopupActivity.this, R.string.error_message, Toast.LENGTH_SHORT);
-      }
+      //      if (status == TextToSpeech.SUCCESS) {
+      speakMessage();
+      //      } else {
+      //        Toast.makeText(SmsPopupActivity.this, R.string.error_message, Toast.LENGTH_SHORT);
+      //      }
     }
   };
 
   /*
    * Speak the message out loud using TTS library
    */
+  @SuppressWarnings("deprecation")
   private void speakMessage() {
     // TODO: we should really require the keyguard be unlocked here if we are in privacy mode
     //    exitingKeyguardSecurely = true;
@@ -839,7 +843,7 @@ public class SmsPopupActivity extends Activity {
       ManageNotification.update(getApplicationContext(), message);
 
       // Init the TTS library
-      myTts = new TextToSpeech(SmsPopupActivity.this, ttsInitListener);
+      myTts = new TTS(SmsPopupActivity.this, ttsInitListener, true);
 
     } else {
       // Speak the message!
