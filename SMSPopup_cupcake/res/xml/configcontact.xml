@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory
+    android:title="@string/pref_notif_category_title"
+    android:key="@string/c_pref_category">
+    <CheckBoxPreference
+      android:key="@string/c_pref_popup_enabled_key"
+      android:title="@string/pref_popup_enabled_title"
+      android:summaryOn="@string/pref_popup_enabled_summaryon"
+      android:summaryOff="@string/pref_popup_enabled_summaryoff"
+      android:defaultValue="true" />
+    <CheckBoxPreference
+      android:key="@string/c_pref_notif_enabled_key"
+      android:title="@string/pref_notif_enabled_title"
+      android:summaryOn="@string/pref_notif_enabled_summaryon"
+      android:summaryOff="@string/pref_notif_enabled_summaryoff"
+      android:defaultValue="true" />
+    <RingtonePreference
+      android:key="@string/c_pref_notif_sound_key"
+      android:title="@string/pref_notif_sound_title"
+      android:summary="@string/pref_notif_sound_summary"
+      android:ringtoneType="notification"
+      android:showDefault="true"
+      android:showSilent="true"
+      android:dependency="@string/c_pref_notif_enabled_key"
+      android:defaultValue="content://settings/system/notification_sound" />
+    <net.everythingandroid.smspopup.preferences.TestNotificationDialogPreference
+      android:key="@string/c_pref_notif_test_key"
+      android:dialogIcon="@drawable/android:ic_dialog_alert"
+      android:title="@string/pref_notif_test_title"
+      android:dialogTitle="@string/pref_notif_test_title"
+      android:dialogMessage="@string/pref_notif_test_message"
+      android:summary="@string/pref_notif_test_summary"
+      android:dependency="@string/c_pref_notif_enabled_key"
+      android:negativeButtonText="@null" />
+  </PreferenceCategory>
+  <PreferenceCategory
+    android:title="@string/pref_vibrate_category_title">
+    <CheckBoxPreference
+      android:key="@string/c_pref_vibrate_key"
+      android:title="@string/pref_vibrate_title"
+      android:summaryOn="@string/pref_vibrate_summaryon"
+      android:summaryOff="@string/pref_vibrate_summaryoff"
+      android:defaultValue="@string/pref_vibrate_default"
+      android:dependency="@string/c_pref_notif_enabled_key" />
+    <net.everythingandroid.smspopup.preferences.CustomVibrateListPreference
+      android:key="@string/c_pref_vibrate_pattern_key"
+      android:title="@string/pref_vibrate_pattern_title"
+      android:summary="@string/pref_vibrate_pattern_summary"
+      android:entries="@array/pref_vibrate_pattern_entries"
+      android:entryValues="@array/pref_vibrate_pattern_values"
+      android:defaultValue="@string/pref_vibrate_pattern_default"
+      android:dependency="@string/c_pref_vibrate_key" />
+  </PreferenceCategory>
+  <PreferenceCategory
+    android:title="@string/pref_flashled_category_title">
+    <CheckBoxPreference
+      android:key="@string/c_pref_flashled_key"
+      android:title="@string/pref_flashled_title"
+      android:summaryOn="@string/pref_flashled_summaryon"
+      android:summaryOff="@string/pref_flashled_summaryoff"
+      android:defaultValue="@string/pref_flashled_default"
+      android:dependency="@string/c_pref_notif_enabled_key" />
+    <net.everythingandroid.smspopup.preferences.CustomLEDColorListPreference
+      android:key="@string/c_pref_flashled_color_key"
+      android:title="@string/pref_flashled_color_title"
+      android:summary="@string/pref_flashled_color_summary"
+      android:entries="@array/pref_led_color_entries"
+      android:entryValues="@array/pref_led_color_values"
+      android:defaultValue="@string/pref_flashled_color_default"
+      android:dependency="@string/c_pref_flashled_key" />
+    <net.everythingandroid.smspopup.preferences.CustomLEDPatternListPreference
+      android:key="@string/c_pref_flashled_pattern_key"
+      android:title="@string/pref_flashled_pattern_title"
+      android:summary="@string/pref_flashled_pattern_summary"
+      android:entries="@array/pref_led_pattern_entries"
+      android:entryValues="@array/pref_led_pattern_values"
+      android:defaultValue="@string/pref_flashled_pattern_default"
+      android:dependency="@string/c_pref_flashled_key" />
+  </PreferenceCategory>
+</PreferenceScreen>
