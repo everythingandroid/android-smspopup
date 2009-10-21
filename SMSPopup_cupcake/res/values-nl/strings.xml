@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- App Strings -->
+   <string name="app_name">SMS Popup</string>   
+   <string name="new_text_at">Nieuw bericht ontvangen om %s</string>
+   <string name="unread_text_waiting">%d ongelezen bericht(en)</string>
+   <string name="mms_subject">Onderwerp:</string>
+
+<!-- Notification Strings -->
+   <string name="notification_multiple_title">Nieuwe berichten</string>
+   <string name="notification_multiple_text">%d ongelezen berichten.</string>
+   <string name="notification_scroll_privacy">Nieuw bericht van: %s</string>
+
+<!-- Button Strings -->   
+   <string name="button_close">Sluiten</string>
+   <string name="button_reply">Beantwoorden</string>
+   <string name="button_inbox">Inbox</string>
+   <string name="button_view">Bekijk</string>
+   <string name="button_view_mms">Bekijk MMS</string>
+   <string name="button_delete">Verwijderen</string>
+   
+   <!-- Not yet implemented -->
+   <string name="button_next">Volgende</string>
+   <string name="button_previous">Vorige</string>
+   <string name="button_unlock">Ontgrendelen</string>
+   
+<!-- Main Preferences -->
+   <string name="pref_config_title">SMS Popup Configuratie</string>
+   <string name="pref_other_title">Overige</string>
+
+   <string name="pref_enabled_title">Activeer SMS Popup</string>
+   <string name="pref_enabled_summaryon">SMS Popup is geactiveerd</string>
+   <string name="pref_enabled_summaryoff">SMS Popup is gedeactiveerd</string>
+
+   <string name="pref_about_title">Over</string>
+   <string name="pref_about_summary">Over SMS Popup</string>
+   <string name="pref_about_text">Gemaakt door: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nNederlandse vertaling door mellie@xs4all.nl\n\nSMS Popup is a eenvoudige applicatie die, net als op de iPhone, een popup toont als er een SMS bericht is ontvangen - Indien nodig wordt het scherm geactiveerd en ontgrendeld. Het nieuwste bericht met de afzender en eventueel zijn of haar foto wordt getoond.\n\nSuggesties, commentaar of meldingen van bugs kunnen gemaild worden.\n\nApplicatie icoon is gemaakt door Min Tran.\n(http://min.frexy.com)\n</string>
+   
+   <string name="pref_sendemail_title">E-mail de ontwikkelaar</string>
+   <string name="pref_sendemail_summary">E-mail commentaar of bugs naar de ontwikkelaar</string>
+   <string name="pref_sendemail_dialog">Mag er systeeminformatie meegestuurd worden in de email? Dit maakt het oplossen van bugs eenvoudiger!</string>
+   <string name="pref_sendemail_buttonok">Uiteraard</string>
+   <string name="pref_sendemail_buttoncancel">Echt niet</string>
+   
+<!-- Additional Preferences -->
+   <string name="pref_additional_title">Overige instellingen</string>
+   <string name="pref_additional_summary">Overige SMS Popup configuratie</string>
+
+   <string name="pref_timeout_title">Scherm timeout</string>
+   <string name="pref_timeout_summary">Het scherm wordt gedeactiveerd na dit aantal seconden</string>
+      
+   <string name="pref_dimscreen_title">Helderheid popup scherm</string>
+   <string name="pref_dimscreen_summaryon">Popup scherm is donker (bespaart batterij)</string>
+   <string name="pref_dimscreen_summaryoff">Popup screen is helder</string>   
+      
+   <string name="pref_privacy_title">Privacy modus</string>
+   <string name="pref_privacy_summaryon">De inhoud van de SMS wordt alleen getoond nadat het scherm ontgrendeld is</string>
+   <string name="pref_privacy_summaryoff">De inhoud van de SMS wordt direct getoond</string>
+   
+   <string name="pref_markread_title">Markeer als gelezen</string>
+   <string name="pref_markread_summaryon">Berichten worden als gelezen gemarkeerd bij het klikken op \"Sluiten\"</string>
+   <string name="pref_markread_summaryoff">Berichten worden niet als gelezen gemarkeerd bij het klikken op \"Sluiten\"</string>
+
+   <string name="pref_onlyShowOnKeyguard_title">Popup restricties</string>
+   <string name="pref_onlyShowOnKeyguard_summaryon">Popup wordt alleen getoond als het scherm is vergrendeld is</string> <!-- comment MSp: what exactly is meant by keyguard? Is this the screenlock? --> 
+   <string name="pref_onlyShowOnKeyguard_summaryoff">Popup wordt altijd getoond</string>
+
+   <!-- Not yet implemented -->
+   <string name="pref_require_unlock_title">Ontgrendelen scherm verplicht</string>
+   <string name="pref_require_unlock_summaryon">Knoppen zijn inactief totdat het scherm ontgrendeld wordt</string>
+   <string name="pref_require_unlock_summaryoff">Knoppen zijn altijd actief</string>
+
+   <!-- Not yet implemented -->
+   <string name="pref_inbox_app_title">Kies de SMS inbox applicatie</string>
+   <string name="pref_inbox_app_summary">Kies hier de applicatie die wordt gestart om meerdere SMS berichten te bekijken</string>
+   <string name="pref_inbox_app_info">De applicatie die wordt gestart bij "Beantwoorden" wordt door het systeem zelf bepaald.</string>
+
+   <string name="pref_show_delete_button_title">Toon verwijder knop</string>
+   <string name="pref_show_delete_button_summaryon">Verwijder knop is actief</string>
+   <string name="pref_show_delete_button_summaryoff">Verwijder knop is niet actief</string>
+   <string name="pref_show_delete_button_dialog_title">Verwijder bericht</string>
+   <string name="pref_show_delete_button_dialog_text">Weet je het zeker?</string>
+   
+   <string name="pref_blur_title">Achtergrond vaag?</string>
+   <string name="pref_blur_summaryon">De achtergrond vervagen (blur)</string>
+   <string name="pref_blur_summaryoff">De achtergrondniet vervagen (geen blur)</string>
+
+<!-- Notification Preferences -->
+   <string name="pref_notif_title">Notificaties</string>
+   <string name="pref_notif_summary">Notificatie configuratie</string>
+   
+   <!-- Category headings -->
+   <string name="pref_notif_category_title">Notificatie configuratie</string>
+   <string name="pref_vibrate_category_title">Vibratie</string>
+   <string name="pref_flashled_category_title">LED</string>
+   <string name="pref_reminder_category_title">Herinneringen</string>   
+   
+   <string name="pref_notif_enabled_title">Activeer notificaties</string>
+   <string name="pref_notif_enabled_summaryon">Notificaties zijn actief</string>
+   <string name="pref_notif_enabled_summaryoff">Notificaties zijn niet actief</string>
+   <string name="pref_notif_enabled_warning">Om conflicten te vermijden met meerdere notificaties bij het ontvangen van een SMS bericht is het raadzaam de standaard SMS notificatie uit te zetten.\n\nGa hiervoor naar de Messaging applicatie, kies Menu -> Settings en deselecteer Notifications\n</string>
+
+   <string name="pref_notif_test_title">Test notificatie</string>
+   <string name="pref_notif_test_summary">Test de notificatie</string>
+   <string name="pref_notif_test_message">De gekozen notificatie wordt nu getest!</string>
+   
+   <string name="pref_notif_sound_title">Notificatie geluid</string>
+   <string name="pref_notif_sound_summary">Kies het geluid dat wordt afgespeeld wanneer er een SMS bericht is ontvangen</string>
+
+   <string name="pref_vibrate_title">Vibratie</string>
+   <string name="pref_vibrate_summaryon">Vibratie is actief</string>
+   <string name="pref_vibrate_summaryoff">Vibratie is niet actief</string>
+
+   <string name="pref_vibrate_pattern_title">Vibratie patroon</string>
+   <string name="pref_vibrate_pattern_summary">Zet het vibratie patroon</string>
+   <string name="pref_vibrate_pattern_ok">Zelfgemaakt vibratie patroon</string>
+   <string name="pref_vibrate_pattern_bad">Zelfgemaakt vibratie patroon ongeldig, standaard patroon wordt gebruikt</string>
+   <string name="pref_vibrate_pattern_help">Voer hier een zelfgemaakt patroon in in het volgende formaat:\nmillisUit, millisAan, etc.\n\nBijvoorbeeld:\n0,1000\n0,500,200,500,200,500</string>
+
+   <string name="pref_flashled_title">Knipper LED</string>
+   <string name="pref_flashled_summaryon">Knipper LED als een SMS bericht is ontvangen</string>
+   <string name="pref_flashled_summaryoff">Geen LED activiteit als een SMS bericht is ontvangen</string>
+   
+   <string name="pref_flashled_color_title">Kleur LED</string>
+   <string name="pref_flashled_color_summary">De kleur van de LED</string>
+   <string name="pref_flashled_color_custom_dialog_red">Rood:</string>
+   <string name="pref_flashled_color_custom_dialog_green">Groen:</string>
+   <string name="pref_flashled_color_custom_dialog_blue">Blauw:</string>
+   <string name="pref_flashled_color_custom_dialog_preview">Voorbeeld:</string>
+   <string name="pref_flashled_color_custom_set">Aangepaste kleur LED</string>
+
+   <string name="pref_flashled_pattern_title">Knipper snelheid LED</string>
+   <string name="pref_flashled_pattern_summary">Zet de knipper snelheid van de LED</string>
+   <string name="pref_flashled_pattern_ok">Aangepaste knipper snelheid LED</string>
+   <string name="pref_flashled_pattern_bad">Aangepaste knipper snelheid LED is ongeldig, standaard snelheid wordt gebruikt</string>
+   <string name="pref_flashled_pattern_help">Geef de tijden in milliseconden waarmee de LED moet knipperen</string>
+   <string name="pref_flashled_pattern_help_on">Aan:</string>
+   <string name="pref_flashled_pattern_help_off">Uit:</string>
+
+   <string-array name="pref_led_pattern_entries">
+      <item>Snel</item>
+      <item>Normaal</item>
+      <item>Langzaam</item>
+      <item>Aangepast</item>
+   </string-array>         
+
+   <string name="pref_notif_repeat_title">Activeer herinneringen</string>
+   <string name="pref_notif_repeat_summaryon">Herinneringen voor ongelezen berichten zijn actief</string>
+   <string name="pref_notif_repeat_summaryoff">Herinneringen voor ongelezen berichten zijn niet actief</string>
+   
+   <string name="pref_notif_repeat_interval_title">Periode herinneringen</string>
+   <string name="pref_notif_repeat_interval_summary">De periode tussen herinneringen</string>
+   <string name="pref_notif_repeat_interval_dialogTitle">Periode (minuten)</string>
+   
+   <string name="pref_notif_repeat_times_title">Aantal herinneringen</string>
+   <string name="pref_notif_repeat_times_summary">Het aantal herinneringen dat afgespeeld moeten worden</string>
+
+   <string name="pref_notif_repeat_screen_on_title">Herinneringen scherm </string>
+   <string name="pref_notif_repeat_screen_on_summaryon">Herinneringen activeren het scherm</string>
+   <string name="pref_notif_repeat_screen_on_summaryoff">Herinneringen activeren het scherm niet</string>
+   <string name="pref_notif_repeat_screen_on_warning">Let op - het activeren van het scherm voor herinneringen kan leiden tot een hoger batterijverbruik</string>   
+
+<!-- Arrays for drop-down prefs -->
+   <string-array name="pref_timeout_entries">
+      <item>10 seconden</item>
+      <item>20 seconden</item>
+      <item>30 seconden</item>
+      <item>1 minuten</item>
+      <item>2 minuten</item>
+      <item>5 minuten</item>
+      <item>10 minuten</item>
+   </string-array>
+   
+   <string-array name="pref_vibrate_pattern_entries">
+      <item>Normaal</item>
+      <item>Long trillen</item>
+      <item>Meerdere korte</item>
+      <item>Meerdere lange</item>
+      <item>anders...</item>
+   </string-array>
+         
+   <string-array name="pref_led_color_entries">
+      <item>Blauw</item>
+      <item>Groen</item>
+      <item>Rood</item>
+      <item>Oranje</item>
+      <item>Paars</item>
+      <item>Turquoise</item>
+   </string-array>
+      
+   <string-array name="pref_notif_repeat_times_entries">
+      <item>1</item>
+      <item>2</item>
+      <item>3</item>
+      <item>4</item>
+      <item>5</item>
+      <item>10</item>
+      <item>Blijven herhalen</item>
+   </string-array>
+</resources>
