@@ -40,7 +40,6 @@ import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -54,6 +53,7 @@ import android.widget.TextView.OnEditorActionListener;
 import com.google.tts.TTS;
 import com.google.tts.TTS.InitListener;
 
+@SuppressWarnings("deprecation")
 public class SmsPopupActivity extends Activity {
   private SmsMmsMessage message;
 
@@ -110,7 +110,6 @@ public class SmsPopupActivity extends Activity {
   private SmsPopupDbAdapter mDbAdapter;
   private Cursor mCursor = null;
 
-  @SuppressWarnings("deprecation")
   private TTS myTts = null;
 
   @Override
@@ -623,25 +622,43 @@ public class SmsPopupActivity extends Activity {
         qrEditText.addTextChangedListener(new QmTextWatcher(this, qrCounterTextView));
         qrEditText.setOnEditorActionListener(new OnEditorActionListener() {
           public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
-              sendQuickReply(v.getText().toString());
-              /*
-                Hide the IME - not needed as we finish the activity after sending which hides
-                the IME anyway
-               */
-              // InputMethodManager inputManager = (InputMethodManager)
-              // SmsPopupActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-              // inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-              return true;
+
+            // event != null means enter key pressed
+            if (event != null) {
+              // if shift is not pressed then move focus to send button
+              if (!event.isShiftPressed()) {
+                v.focusSearch(View.FOCUS_DOWN).requestFocus();
+                return true;
+              }
+
+              // otherwise allow keypress through
+              return false;
             }
-            return false;
+
+            // else consume
+            return true;
+
+            // This was for the IME action, but is no longer needed as the built in IME type
+            // has its own special button now.
+            //            if (actionId == EditorInfo.IME_ACTION_SEND) {
+            //              sendQuickReply(v.getText().toString());
+            //              /*
+            //                Hide the IME - not needed as we finish the activity after sending which hides
+            //                the IME anyway
+            //               */
+            //              // InputMethodManager inputManager = (InputMethodManager)
+            //              // SmsPopupActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            //              // inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            //              return true;
+            //            }
+            //            return false;
           }
         });
 
         quickreplyTextView = (TextView) qrLayout.findViewById(R.id.QuickReplyTextView);
 
         qrCounterTextView.setText(
-            QmTextWatcher.getQuickReplyCounterText(qrEditText.getText().toString()));
+            QmTextWatcher.getQuickReplyCounterText(this, qrEditText.getText().toString()));
 
         return new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_email)
@@ -659,6 +676,7 @@ public class SmsPopupActivity extends Activity {
           }
         })
         .create();
+
 
       case DIALOG_PRESET_MSG:
         mDbAdapter.open(true);
@@ -727,6 +745,8 @@ public class SmsPopupActivity extends Activity {
     switch (id) {
       case DIALOG_QUICKREPLY:
         updateQuickReplyView(null);
+
+        qrEditText.requestFocus();
 
         // Set width of dialog to fill_parent
         LayoutParams mLP = dialog.getWindow().getAttributes();
@@ -804,7 +824,6 @@ public class SmsPopupActivity extends Activity {
   /*
    * Text-to-speech InitListener
    */
-  @SuppressWarnings("deprecation")
   private final TTS.InitListener ttsInitListener = new InitListener() {
     public void onInit(int version) {
       if (mProgressDialog != null) {
@@ -821,7 +840,6 @@ public class SmsPopupActivity extends Activity {
   /*
    * Speak the message out loud using TTS library
    */
-  @SuppressWarnings("deprecation")
   private void speakMessage() {
     // TODO: we should really require the keyguard be unlocked here if we are in privacy mode
     //    exitingKeyguardSecurely = true;
@@ -1034,5 +1052,4 @@ public class SmsPopupActivity extends Activity {
       }
     }
   }
-
 }

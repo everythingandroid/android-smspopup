@@ -9,28 +9,35 @@ import android.widget.TextView;
 
 public class QmTextWatcher implements TextWatcher {
   private TextView mTextView;
+  private Context mContext;
   private static String formatString1 = null;
   private static String formatString2 = null;
 
   public QmTextWatcher(Context context, TextView mUpdateTextView) {
     mTextView = mUpdateTextView;
-    formatString1 = context.getString(R.string.message_counter);
-    formatString2 = context.getString(R.string.message_counter_multiple);
+    mContext = context;
   }
 
   public void afterTextChanged(Editable s) {
-    mTextView.setText(getQuickReplyCounterText(s.toString()));
+    mTextView.setText(getQuickReplyCounterText(mContext, s.toString()));
   }
 
-  public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-  public void onTextChanged(CharSequence s, int start, int before, int count) {}
+  public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+  }
 
-  public static String getQuickReplyCounterText(String message) {
-    if (formatString1 != null && formatString2 != null) {
-      return getQuickReplyCounterText(message, formatString1, formatString2);
+  public void onTextChanged(CharSequence s, int start, int before, int count) {
+  }
+
+  public static String getQuickReplyCounterText(Context context, String message) {
+    if (formatString1 == null) {
+      formatString1 = context.getString(R.string.message_counter);
     }
-    return getQuickReplyCounterText(
-        message, "%d chars remaining", "%d chars remaining, %d messages");
+
+    if (formatString2 == null) {
+      formatString2 = context.getString(R.string.message_counter_multiple);
+    }
+
+    return getQuickReplyCounterText(message, formatString1, formatString2);
   }
 
   public static String getQuickReplyCounterText(String message, String format1, String format2) {
