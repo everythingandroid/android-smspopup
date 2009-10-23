@@ -24,6 +24,9 @@
     android:layout_marginBottom="5sp"
     android:id="@+id/QuickReplyEditText"
     android:layout_height="wrap_content"
-    android:imeOptions="actionDone"
-    android:maxLines="3" />
+    android:maxLength="1000"
+    android:maxLines="3"
+    android:nextFocusDown="@android:id/button1"
+    android:inputType="textCapSentences|textAutoCorrect|textMultiLine|textShortMessage"
+    android:imeOptions="actionDone|flagNoEnterAction" />
 </LinearLayout>

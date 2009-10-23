@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,8 +20,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.TextView.OnEditorActionListener;
 
-public class ConfigPresetMessagesActivity extends ListActivity {
+public class ConfigPresetMessagesActivity extends ListActivity implements OnEditorActionListener {
   private SmsPopupDbAdapter mDbAdapter;
 
   private static final int ADD_DIALOG = Menu.FIRST;
@@ -72,6 +74,9 @@ public class ConfigPresetMessagesActivity extends ListActivity {
 
     addQMEditText.addTextChangedListener(new QmTextWatcher(this, addQMTextView));
     editQMEditText.addTextChangedListener(new QmTextWatcher(this, editQMTextView));
+
+    addQMEditText.setOnEditorActionListener(this);
+    editQMEditText.setOnEditorActionListener(this);
   }
 
   @Override
@@ -224,9 +229,11 @@ public class ConfigPresetMessagesActivity extends ListActivity {
     switch (id) {
       case ADD_DIALOG:
         addQMEditText.setText("");
+        addQMEditText.requestFocus();
         break;
       case EDIT_DIALOG:
         updateEditText(editId);
+        editQMEditText.requestFocus();
         break;
     }
   }
@@ -313,6 +320,17 @@ public class ConfigPresetMessagesActivity extends ListActivity {
 
   private void myToast(int resId) {
     Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
+  }
+
+  public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+    if (event != null) {
+      if (!event.isShiftPressed()) {
+        v.focusSearch(View.FOCUS_DOWN).requestFocus();
+        return true;
+      }
+      return false;
+    }
+    return true;
   }
 
 }
