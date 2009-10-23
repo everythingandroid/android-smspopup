@@ -40,10 +40,14 @@
     <EditText
       android:id="@+id/QuickReplyEditText"
       android:layout_height="wrap_content"
-      android:maxLines="3"
       android:layout_toLeftOf="@+id/SpeakButton"
       android:layout_weight="1"
-      android:layout_width="fill_parent" android:imeOptions="actionSend"/>
+      android:layout_width="fill_parent"
+      android:maxLength="1000"
+      android:maxLines="3"
+      android:nextFocusDown="@android:id/button1"
+      android:inputType="textCapSentences|textAutoCorrect|textMultiLine|textShortMessage"
+      android:imeOptions="actionSend|flagNoEnterAction" />
     <ImageButton
       android:layout_width="wrap_content"
       android:src="@android:drawable/ic_btn_speak_now"
