@@ -19,7 +19,7 @@ public class SmsReceiverService extends Service {
   private static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
   private static final String ACTION_MMS_RECEIVED = "android.provider.Telephony.WAP_PUSH_RECEIVED";
   private static final String MMS_DATA_TYPE = "application/vnd.wap.mms-message";
-  //private static final String ACTION_MESSAGE_SENT = "com.android.mms.transaction.MESSAGE_SENT";
+  public static final String CLASS_ZERO_BODY_KEY = "CLASS_ZERO_BODY";
 
   /*
    * This is the number of retries and pause between retries that we will keep
@@ -31,7 +31,7 @@ public class SmsReceiverService extends Service {
   private Context context;
   private ServiceHandler mServiceHandler;
   private Looper mServiceLooper;
-  //  private int mResultCode;
+  // private int mResultCode;
 
   private static final Object mStartingServiceSync = new Object();
   private static PowerManager.WakeLock mStartingService;
@@ -50,7 +50,7 @@ public class SmsReceiverService extends Service {
   public void onStart(Intent intent, int startId) {
     if (Log.DEBUG) Log.v("SMSReceiverService: onStart()");
 
-    //mResultCode = intent.getIntExtra("result", 0);
+    // mResultCode = intent.getIntExtra("result", 0);
     Message msg = mServiceHandler.obtainMessage();
     msg.arg1 = startId;
     msg.obj = intent;
@@ -107,17 +107,16 @@ public class SmsReceiverService extends Service {
       if (messages != null) {
         SmsMessage sms = messages[0];
 
-        // TODO: should display a notification for CLASS 0 and Replace messages (sometimes
-        // telecomm announcements and things like voicemail
-
-        // Make sure SMS is not Class 0 or a replacement SMS
-        if (sms.getMessageClass() != SmsMessage.MessageClass.CLASS_0 && !sms.isReplace()) {
-
+        // Class 0 messages are for carrier announcements etc.
+        if (sms.getMessageClass() == SmsMessage.MessageClass.CLASS_0) {
+          displayClassZeroMessage(context, sms);
+        } else { // Otherwise regular sms message or sms replace message
           /*
-           * Fetch message details from raw SMS data received from telecom provider
+           * Fetch message details from raw SMS data received from telecom
+           * provider
            */
           String body;
-          if (messages.length == 1) {
+          if (messages.length == 1 || sms.isReplace()) {
             body = messages[0].getDisplayMessageBody();
           } else {
             StringBuilder bodyText = new StringBuilder();
@@ -129,9 +128,7 @@ public class SmsReceiverService extends Service {
 
           String address = messages[0].getDisplayOriginatingAddress();
 
-          notifySmsReceived(new SmsMmsMessage(
-              context, address, body,
-              System.currentTimeMillis(),
+          notifySmsReceived(new SmsMmsMessage(context, address, body, System.currentTimeMillis(),
               SmsMmsMessage.MESSAGE_TYPE_SMS));
         }
       }
@@ -145,29 +142,23 @@ public class SmsReceiverService extends Service {
 
     ManagePreferences mPrefs = new ManagePreferences(context, smsMessage.getContactId());
 
-    boolean onlyShowOnKeyguard = mPrefs.getBoolean(
-        R.string.pref_onlyShowOnKeyguard_key,
-        R.string.pref_onlyShowOnKeyguard_default);
+    boolean onlyShowOnKeyguard =
+      mPrefs.getBoolean(R.string.pref_onlyShowOnKeyguard_key,
+          R.string.pref_onlyShowOnKeyguard_default);
 
-    boolean showPopup = mPrefs.getBoolean(
-        R.string.pref_popup_enabled_key,
-        R.string.pref_popup_enabled_default,
-        SmsPopupDbAdapter.KEY_POPUP_ENABLED_NUM);
+    boolean showPopup =
+      mPrefs.getBoolean(R.string.pref_popup_enabled_key, R.string.pref_popup_enabled_default,
+          SmsPopupDbAdapter.KEY_POPUP_ENABLED_NUM);
 
-    boolean notifEnabled = mPrefs.getBoolean(
-        R.string.pref_notif_enabled_key,
-        R.string.pref_notif_enabled_default,
-        SmsPopupDbAdapter.KEY_ENABLED_NUM);
-
-    //    int unreadCount = mPrefs.getInt(SmsPopupUtils.UNREAD_MESSAGE_COUNT_PREF, 0) + 1;
-    //    SmsPopupUtils.updateUnreadCountPref(context, unreadCount);
-    //    smsMessage.setUnreadCount(unreadCount);
+    boolean notifEnabled =
+      mPrefs.getBoolean(R.string.pref_notif_enabled_key, R.string.pref_notif_enabled_default,
+          SmsPopupDbAdapter.KEY_ENABLED_NUM);
 
     ManageKeyguard.initialize(context);
 
-    if (showPopup &&
-        (ManageKeyguard.inKeyguardRestrictedInputMode() ||
-            (!onlyShowOnKeyguard && !SmsPopupUtils.inMessagingApp(context)))) {
+    if (showPopup
+        && (ManageKeyguard.inKeyguardRestrictedInputMode() || (!onlyShowOnKeyguard &&
+            !SmsPopupUtils.inMessagingApp(context)))) {
       if (Log.DEBUG) Log.v("^^^^^^Showing SMS Popup");
       Intent popup = smsMessage.getPopupIntent();
       ManageWakeLock.acquirePartial(context);
@@ -189,21 +180,20 @@ public class SmsReceiverService extends Service {
 
     // Ok this is super hacky, but fixes the case where this code
     // runs before the system MMS transaction service (that stores
-    // the MMS details in the database).  This should really be
+    // the MMS details in the database). This should really be
     // a content listener that waits for a while then gives up...
     while (mmsMessage == null && count < MESSAGE_RETRY) {
       mmsMessage = SmsPopupUtils.getMmsDetails(context);
       if (mmsMessage != null) {
         if (Log.DEBUG) Log.v("MMS found in content provider");
-        SharedPreferences myPrefs =
-          PreferenceManager.getDefaultSharedPreferences(context);
-        boolean onlyShowOnKeyguard = myPrefs.getBoolean(
-            context.getString(R.string.pref_onlyShowOnKeyguard_key),
-            Boolean.valueOf(
-                context.getString(R.string.pref_onlyShowOnKeyguard_default)));
+        SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean onlyShowOnKeyguard =
+          myPrefs.getBoolean(context.getString(R.string.pref_onlyShowOnKeyguard_key), Boolean
+              .valueOf(context.getString(R.string.pref_onlyShowOnKeyguard_default)));
 
         if (ManageKeyguard.inKeyguardRestrictedInputMode() || !onlyShowOnKeyguard) {
-          if (Log.DEBUG) Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
+          if (Log.DEBUG)
+            Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
           Intent popup = mmsMessage.getPopupIntent();
           ManageWakeLock.acquirePartial(context);
           context.startActivity(popup);
@@ -218,22 +208,30 @@ public class SmsReceiverService extends Service {
         try {
           Thread.sleep(MESSAGE_RETRY_PAUSE);
         } catch (InterruptedException e) {
-          //e.printStackTrace();
+          // e.printStackTrace();
         }
       }
     }
   }
 
-  //	Unfortunately the system Mms app does not broadcast messages being sent to
-  // all receivers.
-  //	private void handleMessageSent(Intent intent) {
-  //		if (mResultCode != Activity.RESULT_OK && mResultCode != SmsManager.RESULT_ERROR_RADIO_OFF) {
-  //		}
-  //	}
+  /**
+   * Displays a class-zero message immediately in a pop-up window with the
+   * number from where it received the Notification with the body of the message
+   * 
+   */
+  private void displayClassZeroMessage(Context context, SmsMessage sms) {
+    // Using NEW_TASK here is necessary because we're calling
+    // startActivity from outside an activity.
+    Intent smsDialogIntent =
+      new Intent(context, ClassZeroActivity.class)
+    .putExtra(CLASS_ZERO_BODY_KEY, sms.getMessageBody())
+    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+    context.startActivity(smsDialogIntent);
+  }
 
   /**
-   * Start the service to process the current event notifications, acquiring
-   * the wake lock before returning to ensure that the service will run.
+   * Start the service to process the current event notifications, acquiring the
+   * wake lock before returning to ensure that the service will run.
    */
   public static void beginStartingService(Context context, Intent intent) {
     synchronized (mStartingServiceSync) {
@@ -262,4 +260,5 @@ public class SmsReceiverService extends Service {
       }
     }
   }
+
 }
