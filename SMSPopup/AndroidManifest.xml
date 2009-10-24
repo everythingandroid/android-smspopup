@@ -46,7 +46,13 @@
       android:name=".SmsPopupActivity"
       android:theme="@android:style/Theme.Dialog"
       android:launchMode="singleTask"
-      android:taskAffinity="net.everythingandroid.smspopup.popup" />
+      android:taskAffinity="net.everythingandroid.smspopup.popup">
+    </activity>
+    <activity
+      android:name=".ClassZeroActivity"
+      android:label="Class 0 Message"
+      android:theme="@android:style/Theme.Dialog">
+    </activity>
     <receiver
       android:name=".SmsReceiver">
       <intent-filter>
