@@ -11,13 +11,12 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:completionThreshold="2"
-    android:inputType="textPersonName"
-    android:singleLine="true"
     android:layout_marginTop="3sp"
     android:layout_marginBottom="3sp"
     android:layout_marginLeft="5sp"
     android:layout_marginRight="5sp"
-    android:imeOptions="actionDone" />
+    android:imeOptions="actionDone"
+    android:inputType="textCapWords|textPersonName" />
   <ListView
     android:id="@android:id/list"
     android:layout_width="fill_parent"

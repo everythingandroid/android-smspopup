@@ -4,9 +4,8 @@
   android:id="@+id/ButtonLinearLayout"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
-  android:background="@drawable/light_grey_d"
   android:gravity="center"
-  android:padding="2sp">
+  android:padding="2sp" android:background="@android:color/darker_gray">
   <Button
     android:id="@+id/button1"
     android:layout_height="wrap_content"
