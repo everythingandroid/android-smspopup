@@ -617,7 +617,7 @@ public class SmsPopupUtils {
     if (timestamp > 0) {
       if (Log.DEBUG) Log.v("getUnreadSmsCount(), timestamp = " + timestamp);
       UNREAD_CONDITION += " and date<"
-        + String.valueOf(timestamp-SmsMmsMessage.MESSAGE_COMPARE_TIME_BUFFER);
+        + String.valueOf(timestamp - SmsMmsMessage.MESSAGE_COMPARE_TIME_BUFFER);
     }
 
     int count = 0;
