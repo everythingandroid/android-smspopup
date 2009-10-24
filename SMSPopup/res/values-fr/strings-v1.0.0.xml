@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<!-- Contact Notification Customization Strings -->
+  <string name="pref_notif_default_title">Notification par défaut</string>
+  <string name="pref_notif_default_summary">Notification pour tous les contacts sans personnalisation</string>
+
+  <string name="pref_contacts_title">Notifications par Contact</string> 
+  <string name="pref_contacts_summary">Une notification individuelle par contact</string>
+
+  <string name="pref_notif_help_title">A l\'aide ! - Je suis perdu !</string>
+  <string name="pref_notif_help_summary">Aide sur les notifications</string>
+  <string name="pref_notif_help_message">SMS Popup offre maintenant la possibilité de customiser les notifications par contact. Quand un nouveau message arrive, SMS Popup va d\'abord vérifier si le contact a une notification customisée. si c\'est le cas, ces réglages sont utilisés, sinon, c\'est les réglages de notification par défaut.\n\nUtiliser cette fonctionnalité, permet de régler les choses pour qu\'un minimum de contacts pop-up sur votre écran, tandis que pour le reste des messages, affichent la notification régulière. Vosu pouvez alors ignorer certains contacts en fixant leur notification à "silencieuse".</string>
+  
+  <string name="contact_customization_add">Ajout de notification personnalisée </string>
+  <string name="contact_customization_edit">Editer une notification personnalisée </string>
+  <string name="contact_customization_remove">Retirer une notification personnalisée</string>
+  <string name="contact_customization_removed_toast">Notification personnalisée Retirée</string>  
+  <string name="contact_customization_save">Sauver</string>
+  <string name="contact_customization_title">Notification pour %s</string>
+  <string name="contact_customization_enabled">Notifications activées pour %s</string>
+  <string name="contact_customization_disabled">Notifications désactivées for %s</string>
+  <string name="contact_customization_add_hint">Ajout/Edition de notification contact...</string>
+  
+<!-- Preset Quick Reply Message Strings --> 
+  <string name="pref_message_presets_title">Modèles de Messages</string>
+  <string name="pref_message_presets_summary">Configurer des Modèles de Messages pour la réponse-rapide</string>
+  
+  <string name="message_presets_add">Ajouter modèle de message</string>
+  <string name="message_presets_edit">Editer modèle de message</string>
+
+  <string name="message_presets_add_text">Céer</string>
+  <string name="message_presets_save_text">Sauver</string>
+  <string name="message_presets_delete_text">Retirer</string>
+  <string name="message_presets_edit_text">Editer</string>
+  <string name="message_presets_reorder_text">Bouger vers le haut</string>
+  <string name="message_presets_empty_text">Pas de modèle défini</string>
+
+  <string name="message_presets_add_toast">Modèle de Message ajouté</string>
+  <string name="message_presets_save_toast">Modèle de Message modifié</string>
+  <string name="message_presets_delete_toast">Modèle de Message effacé</string>
+  <string name="message_presets_reorder_toast">Modèle de Message ajouté placé en tête</string>
+  <string name="message_presets_error_toast">Erreur - veuillez ré-essayer</string>
+  
+<!-- Quick Reply Strings --> 
+  <string name="message_counter">%d caractères restant</string>
+  <string name="message_counter_multiple">%d caractères restant, %d messages</string>
+  
+  <string name="quickreply_title">Réponse-rapide</string>
+  <string name="quickreply_from_text">À: %s</string>
+  <string name="quickreply_preset_button">Modèles</string>
+  <string name="quickreply_send_button">Envoyer</string>
+  <string name="quickreply_sending_toast">Envoi du message...</string>
+  <string name="quickreply_nomessage_toast">Envoyer</string>
+  
+<!-- Text-To-Speech and Voice Transcription Strings --> 
+  <string name="loading_message">Chargement...</string>
+  <string name="error_message">Erreur</string>
+  <string name="error_no_voice_recognition">Reconnaissance vocale non disponible sur ce mobile</string>
+
+<!-- Popup Button Configuration --> 
+  <string name="pref_button_config_title">Configuration des boutons</string>
+  <string name="pref_button_config_summary">Configuration des boutons Popup</string>
+  <string name="pref_button_summary">Réglage actuel: %s</string>
+  
+  <string name="pref_button1_title">Configuration Bouton 1</string>
+  <string name="pref_button2_title">Configuration Bouton 2</string>
+  <string name="pref_button3_title">Configuration Bouton 3</string>
+
+  <string name="button_speak">Parler</string>
+  <string name="button_delete_noconfirm">Effacer(pas de confirmation)</string>
+  <string name="button_quickreply">Réponse rapide</string>
+  <string name="button_disabled">Désactivé</string>
+
+  <string name="pref_show_buttons_title">Montrer les boutons sur la Popup</string>
+  <string name="pref_show_buttons_summaryon">Les Boutons de la Popup sont visibles</string>
+  <string name="pref_show_buttons_summaryoff">Montrer les boutons avec un long press sur Menu</string>
+
+  <string name="pref_popup_enabled_title">Montrer la Popup</string>
+  <string name="pref_popup_enabled_summaryon">Le message s\'ouvrira dans la Popup</string>
+  <string name="pref_popup_enabled_summaryoff">Le message ne s\'ouvrira que dans la Notification Bar (si actif)</string>
+  
+<!-- Donate Strings (not used right now) -->
+  <string name="pref_donate_title">Don pour SMS Popup</string>
+  <string name="pref_donate_text">SMS Popup est une application gratuitesur laquelle je travaille pendant mon temps libre. si vous la trouvez utile, et que vous pouvez lui céder quelque Ecu sonnant et trébuchant, c\'est avec plaisir que j\'accepterai cette donation.\n\nThanks!</string>
+  <string name="pref_donate_market_button">Don via Android Market</string>
+  <string name="pref_donate_paypal_button">Don via PayPal</string>
+</resources>

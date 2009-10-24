@@ -76,10 +76,6 @@
    <string name="pref_inbox_app_summary">Choisir l\'application qui est lancée pour de multiples messages</string>
    <string name="pref_inbox_app_info">Notez que le bouton "Répondre" de l\'application de messagerie est réglé par le système</string>
 
-   <string name="pref_show_buttons_title">Afficher boutons</string>
-   <string name="pref_show_buttons_summaryon">Les boutons de la pop-up sont visibles</string>
-   <string name="pref_show_buttons_summaryoff">Les boutons sont cachés par une pression longue sur Menu.</string>
-
    <string name="pref_show_delete_button_title">Afficher le bouton Effacer</string>
    <string name="pref_show_delete_button_summaryon">le bouton Effacer est activé</string>
    <string name="pref_show_delete_button_summaryoff">le bouton Effacer est désactivé</string>
