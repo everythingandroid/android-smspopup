@@ -30,7 +30,7 @@ public class SmsMmsMessage {
   public static final int MESSAGE_TYPE_MMS = 1;
 
   // Timestamp compare buffer for incoming messages
-  public static final int MESSAGE_COMPARE_TIME_BUFFER = 3000; // 3 seconds
+  public static final int MESSAGE_COMPARE_TIME_BUFFER = 5000; // 5 seconds
 
   // Main message object private vars
   private Context context;
