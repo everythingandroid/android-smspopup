@@ -16,7 +16,7 @@ public class ClassZeroActivity extends Activity {
   protected void onCreate(Bundle icicle) {
     super.onCreate(icicle);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    // getWindow().setBackgroundDrawableResource(R.drawable.class_zero_background);
+    getWindow().setBackgroundDrawableResource(R.drawable.class_zero_background);
 
     CharSequence messageChars =
       getIntent().getCharSequenceExtra(SmsReceiverService.CLASS_ZERO_BODY_KEY);
