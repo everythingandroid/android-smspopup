@@ -738,9 +738,10 @@ public class SmsPopupActivity extends Activity {
     super.onPrepareDialog(id, dialog);
 
     if (Log.DEBUG) Log.v("onPrepareDialog()");
-    // User interacted with phone, remove any held locks
+    // User interacted so remove all locks and cancel reminders
     ClearAllReceiver.removeCancel(getApplicationContext());
     ClearAllReceiver.clearAll(false);
+    ReminderReceiver.cancelReminder(getApplicationContext());
 
     switch (id) {
       case DIALOG_QUICKREPLY:
@@ -853,9 +854,10 @@ public class SmsPopupActivity extends Activity {
 
       showDialog(DIALOG_LOADING);
 
-      // User interacted so remove all locks
+      // User interacted so remove all locks and cancel reminders
       ClearAllReceiver.removeCancel(getApplicationContext());
       ClearAllReceiver.clearAll(false);
+      ReminderReceiver.cancelReminder(getApplicationContext());
 
       // We'll use update notification to stop the sound playing
       ManageNotification.update(getApplicationContext(), message);
