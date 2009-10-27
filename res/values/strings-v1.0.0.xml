@@ -38,7 +38,9 @@
   <string name="contact_customization_enabled">Notifications are enabled for %s</string>
   <string name="contact_customization_disabled">Notifications are disabled for %s</string>
   <string name="contact_customization_add_hint">Add/Edit contact notifications...</string>
-
+  
+  <string name="ringtone_silent">Silent</string>
+  
 <!-- Preset Quick Reply Message Strings -->
   <string name="quickmessages_key">quickmessages_key</string>
 

@@ -55,9 +55,14 @@ public class ConfigPerContactActivity extends PreferenceActivity {
     Uri ringtoneUri = Uri.parse(
         myPrefs.getString(
             getString(R.string.c_pref_notif_sound_key), ManageNotification.defaultRingtone));
+    Log.v("Ringtone URI is: " + ringtoneUri.toString());
     Ringtone mRingtone = RingtoneManager.getRingtone(this, ringtoneUri);
-    ringtonePref.setSummary(mRingtone.getTitle(this));
 
+    if (mRingtone == null) {
+      ringtonePref.setSummary(getString(R.string.ringtone_silent));
+    } else {
+      ringtonePref.setSummary(mRingtone.getTitle(this));
+    }
   }
 
   @Override
