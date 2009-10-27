@@ -130,7 +130,7 @@ public class ConfigContactsActivity extends ListActivity {
 
       // Now create an array adapter and set it to display using our row
       SimpleCursorAdapter contacts =
-        new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, from, to);
+        new SimpleCursorAdapter(this, R.layout.simple_list_item_2, c, from, to);
       setListAdapter(contacts);
     }
   }
