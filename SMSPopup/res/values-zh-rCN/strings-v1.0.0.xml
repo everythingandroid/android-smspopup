@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<!-- Contact Notification Customization Strings -->
+  <string name="pref_notif_default_title">默认通知</string>
+  <string name="pref_notif_default_summary">没有单独定制的联系人的默认通知</string>
+  
+  <string name="pref_contacts_title">联系人通知</string>
+  <string name="pref_contacts_summary">联系人单独定制</string>
+
+  <string name="pref_notif_help_title">帮助 - 我很困惑!</string>
+  <string name="pref_notif_help_summary">通知帮助</string>
+  <string name="pref_notif_help_message">SMS Popup 现在可以为每个联系人定制单独的通知。当收到新信息时，SMS Popup 将先会检查此联系人是否有单独定制的通知。如果有，将使用这些设置，否则使用默认的通知。\n\n通过此功能，您可以设置在收到信息时只有一小部分联系人会显示弹出通知而其他联系人使用默认通知。您也可以通过设置特定的联系人通知为安静来忽略他们。</string>
+
+  <string name="contact_customization_add">添加定制通知</string>
+  <string name="contact_customization_edit">编辑定制通知</string>
+  <string name="contact_customization_remove">删除定制通知</string>
+  <string name="contact_customization_removed_toast">定制通知已删除</string>  
+  <string name="contact_customization_save">保存</string>
+  <string name="contact_customization_title">%s 的通知</string>
+  <string name="contact_customization_enabled">%s 的通知已启用</string>
+  <string name="contact_customization_disabled">%s 的通知已禁用</string>
+  <string name="contact_customization_add_hint">添加/编辑联系人通知...</string>
+  
+<!-- Preset Quick Reply Message Strings -->
+  <string name="pref_message_presets_title">预设信息</string>
+  <string name="pref_message_presets_summary">设置快速回复的预设信息</string>
+  
+  <string name="message_presets_add">添加预设信息</string>
+  <string name="message_presets_edit">编辑预设信息</string>
+    
+  <string name="message_presets_add_text">创建</string>
+  <string name="message_presets_save_text">保存</string>
+  <string name="message_presets_delete_text">删除</string>
+  <string name="message_presets_edit_text">编辑</string>
+  <string name="message_presets_reorder_text">上移到顶部</string>
+  <string name="message_presets_empty_text">没有定义预设</string>
+
+  <string name="message_presets_add_toast">预设信息已添加</string>    
+  <string name="message_presets_save_toast">预设信息已更新</string>
+  <string name="message_presets_delete_toast">预设信息已删除</string>
+  <string name="message_presets_reorder_toast">预设信息已移动到顶部</string>
+  <string name="message_presets_error_toast">错误 - 请重试</string>
+
+<!-- Quick Reply Strings -->
+  <string name="message_counter">%d 个字符剩余</string>
+  <string name="message_counter_multiple">%d 个字符剩余，%d 条信息</string>
+    
+  <string name="quickreply_title">快速回复</string>
+  <string name="quickreply_from_text">到: %s</string>
+  <string name="quickreply_preset_button">预设</string>
+  <string name="quickreply_send_button">发送</string>
+  <string name="quickreply_sending_toast">正在发送信息...</string>
+  <string name="quickreply_nomessage_toast">发送</string>
+
+<!-- Text-To-Speech and Voice Transcription Strings -->
+  <string name="loading_message">载入中...</string>
+  <string name="error_message">错误</string>
+  <string name="error_no_voice_recognition">此设备上声音识别不可用</string>
+    
+<!-- Popup Button Configuration -->
+  <string name="pref_button_config_title">按钮配置</string>
+  <string name="pref_button_config_summary">弹出按钮配置</string>
+  <string name="pref_button_summary">当前设置: %s</string>
+  
+  <string name="pref_button1_title">按钮 1 配置</string>
+  <string name="pref_button2_title">按钮 2 配置</string>
+  <string name="pref_button3_title">按钮 3 配置</string>
+    
+  <string name="button_speak">说话</string>
+  <string name="button_delete_noconfirm">删除 (没有确认框)</string>
+  <string name="button_quickreply">快速回复</string>
+  <string name="button_disabled">禁用</string>
+   
+  <string name="pref_show_buttons_title">在弹出框上显示按钮</string>
+  <string name="pref_show_buttons_summaryon">弹出框上的按钮可见</string>
+  <string name="pref_show_buttons_summaryoff">长按菜单时隐藏按钮</string>
+
+  <string name="pref_popup_enabled_title">显示一个弹出框</string>
+  <string name="pref_popup_enabled_summaryon">信息将会在弹出框中打开</string>
+  <string name="pref_popup_enabled_summaryoff">信息将会在通知区域显示(如果启用)</string>
+
+<!-- Donate Strings (not used right now) -->
+  <string name="pref_donate_title">捐赠 SMS Popup</string>    
+  <string name="pref_donate_text">SMS Popup 是我在业余时间制作的一款免费的程序。如果您感觉它很有用，可以捐赠我的开发。\n\n感谢支持!</string>
+  <string name="pref_donate_market_button">通过Android Market捐赠</string>
+  <string name="pref_donate_paypal_button">通过PayPal捐赠</string>
+      
+</resources>
