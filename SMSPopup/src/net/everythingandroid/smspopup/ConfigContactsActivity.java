@@ -301,6 +301,7 @@ public class ConfigContactsActivity extends ListActivity {
         long contactId;
         String contactName;
         String sysContactName;
+        String rawSysContactName;
 
         // loop through the local sms popup contacts table
         while (mCursor.moveToNext()) {
@@ -319,11 +320,14 @@ public class ConfigContactsActivity extends ListActivity {
 
           if (sysContactCursor != null) {
             if (sysContactCursor.moveToFirst()) {
-              sysContactName = sysContactCursor.getString(0);
-              if (!contactName.equals(sysContactName)) {
-                // if different, update the local db
-                mDbAdapter.updateContact(contactId, SmsPopupDbAdapter.KEY_CONTACT_NAME,
-                    sysContactName);
+              rawSysContactName = sysContactCursor.getString(0);
+              if (rawSysContactName != null) {
+                sysContactName = rawSysContactName.trim();
+                if (!contactName.equals(sysContactName)) {
+                  // if different, update the local db
+                  mDbAdapter.updateContact(contactId, SmsPopupDbAdapter.KEY_CONTACT_NAME,
+                      sysContactName);
+                }
               }
             } else {
               // if this contact has been removed from the system db then delete
