@@ -196,7 +196,7 @@ public class SmsPopupDbAdapter {
 
       ContentValues vals = new ContentValues();
       vals.put(KEY_CONTACT_ID, contactId);
-      vals.put(KEY_CONTACT_NAME, contactName);
+      vals.put(KEY_CONTACT_NAME, contactName.trim());
       return mDb.insert(CONTACTS_DB_TABLE, null, vals);
     }
     c.close();
