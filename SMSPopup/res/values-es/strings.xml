@@ -25,20 +25,23 @@
    <string name="button_unlock">Desbloquear</string>
    
 <!-- Main Preferences -->
-   <string name="pref_config_title">Configuraciones SMS Popup</string>
+   <string name="pref_config_title">Configuración del SMS Popup</string>
    <string name="pref_other_title">Otro</string>
 
    <string name="pref_enabled_title">Habilitar SMS Popup</string>
    <string name="pref_enabled_summaryon">SMS Popup habilitado</string>
    <string name="pref_enabled_summaryoff">SMS Popup deshabilitado</string>
 
+   <string name="pref_faq_title">FAQ</string>
+   <string name="pref_faq_summary">Preguntas frecuentes</string>
+
    <string name="pref_about_title">Acerca de</string>
    <string name="pref_about_summary">Acerca de SMS Popup</string>
-   <string name="pref_about_text">Creado por: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nAgradecimientos a Diego Fernández por la traducción a Español.\n(profediego@gmail.com)\n\nSMS Popup es una aplicación simpĺe que muestra un dialogo cuando un SMS es recibido, similar al iPhone - encendiendo la pantalla y desbloqueando el teclado si es necesario.  Muestra el mensaje mas reciente, de quién es y la foto del contacto, si esta disponible.\n\nSientase libre de enviarme un email con cualquier comentario, sugerencia o fallo. \n\nAgradecimientos a Min Tran por el icono de la aplicacion.\n(http://min.frexy.com)\n</string>
+   <string name="pref_about_text">Creado por: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nAgradecimientos a Diego Fernández por la traducción a Español.\n(profediego@gmail.com)\n\nSMS Popup es una aplicación simple que muestra un diálogo cuando un SMS es recibido, similar al iPhone - encendiendo la pantalla y desbloqueando el teclado si es necesario.  Muestra el mensaje más reciente, de quién es y la foto del contacto, si está disponible.\n\nSiéntase libre de enviarme un email con cualquier comentario, sugerencia o fallo. \n\nAgradecimientos a Min Tran por el ícono de la aplicación.\n(http://min.frexy.com)\n</string>
    
    <string name="pref_sendemail_title">Enviar e-mail al desarrollador</string>
    <string name="pref_sendemail_summary">Enviar e-mail con comentarios o fallos al desarrollador</string>
-   <string name="pref_sendemail_dialog">¿Puedo Incluir información sobre el sistema en el e-mail (Esto me ayudará a corregir mas facilmente el(los) error(es))?</string>
+   <string name="pref_sendemail_dialog">¿Puedo incluir información sobre el sistema en el e-mail (Esto me ayudará a corregir más fácilmente el(los) error(es))?</string>
    <string name="pref_sendemail_buttonok">Seguro</string>
    <string name="pref_sendemail_buttoncancel">De ninguna manera</string>
    
@@ -47,22 +50,22 @@
    <string name="pref_additional_summary">Configuraciones Adicionales de SMS Popup</string>
 
    <string name="pref_timeout_title">Tiempo de Pantalla</string>
-   <string name="pref_timeout_summary">La pantalla se apagará despues de este tiempo</string>
+   <string name="pref_timeout_summary">La pantalla se apagará después de este tiempo</string>
 
    <string name="pref_dimscreen_title">Atenuar la pantalla Popup</string>
    <string name="pref_dimscreen_summaryon">La pantalla Popup será atenuada (ahorra batería)</string>
    <string name="pref_dimscreen_summaryoff">La pantalla Popup será brillante</string>   
       
    <string name="pref_privacy_title">Modo de Privacidad</string>
-   <string name="pref_privacy_summaryon">Los contenidos del mensaje se mostrarán solo después de desbloquearlo</string>
-   <string name="pref_privacy_summaryoff">Los contenidos del mensaje se mostrarán inmediatamente</string>
+   <string name="pref_privacy_summaryon">El contenido del mensaje se mostrará sólo después de desbloquearlo</string>
+   <string name="pref_privacy_summaryoff">El contenido del mensaje se mostrará inmediatamente</string>
    
    <string name="pref_markread_title">Marcar como leído</string>
-   <string name="pref_markread_summaryon">Los mensajes se marcarán como leídos cuando se les hace click \"Cerrar\"</string>
-   <string name="pref_markread_summaryoff">Los mensajes no se marcarán como leídos cuando se les hace click \"Cerrar\"</string>
+   <string name="pref_markread_summaryon">Los mensajes se marcarán como leídos cuando se les hace click en \"Cerrar\"</string>
+   <string name="pref_markread_summaryoff">Los mensajes no se marcarán como leídos cuando se les hace click en \"Cerrar\"</string>
 
    <string name="pref_onlyShowOnKeyguard_title">Restringir Popup</string>
-   <string name="pref_onlyShowOnKeyguard_summaryon">La ventana Popup solo aparecerá cuando el teclado esté bloqueado</string>
+   <string name="pref_onlyShowOnKeyguard_summaryon">La ventana Popup sólo aparecerá cuando el teclado esté bloqueado</string>
    <string name="pref_onlyShowOnKeyguard_summaryoff">Popup siempre se mostrará</string>
 
    <!-- Not yet implemented -->
@@ -79,7 +82,7 @@
    <string name="pref_show_delete_button_summaryon">Botón de Borrar Habilitado</string>
    <string name="pref_show_delete_button_summaryoff">Botón de Borrar deshabilitado</string>
    <string name="pref_show_delete_button_dialog_title">Borrar Mensaje</string>
-   <string name="pref_show_delete_button_dialog_text">Está seguro?</string>
+   <string name="pref_show_delete_button_dialog_text">¿Está seguro?</string>
    
    <string name="pref_blur_title">Fondo Borroso</string>
    <string name="pref_blur_summaryon">El fondo detrás de la ventana de mensaje se tornará borroso</string>
@@ -87,7 +90,7 @@
 
 <!-- Notification Preferences -->
    <string name="pref_notif_title">Notificaciones</string>
-   <string name="pref_notif_summary">Configuración de Notificación</string>
+   <string name="pref_notif_summary">Configuración de las notificaciones</string>
 
    <!-- Category headings -->
    <string name="pref_notif_category_title">Configuración de Notificación</string>
@@ -102,7 +105,7 @@
 
    <string name="pref_notif_test_title">Notificación de Prueba</string>
    <string name="pref_notif_test_summary">Probar su Notificación</string>
-   <string name="pref_notif_test_message">Probando su notificación ahora!</string>
+   <string name="pref_notif_test_message">¡Se está probando su notificación!</string>
    
    <string name="pref_notif_sound_title">Sonido de Notificación</string>
    <string name="pref_notif_sound_summary">Este sonido se reproducirá cuando un mensaje sea recibido</string>
@@ -114,8 +117,8 @@
    <string name="pref_vibrate_pattern_title">Patrón de Vibración</string>
    <string name="pref_vibrate_pattern_summary">Establecer el patrón de vibración</string>
    <string name="pref_vibrate_pattern_ok">Patrón de vibración personalizado establecido</string>
-   <string name="pref_vibrate_pattern_bad">Patrón de vibración personalizado invalido, utilizando el predeterminado</string>
-   <string name="pref_vibrate_pattern_help">Ingrese un Patrón de vibración personalizado, con el formato:\nmillisOff, millisOn, etc.\n\nPor ejemplo:\n0,1000\n0,500,200,500,200,500</string>
+   <string name="pref_vibrate_pattern_bad">Patrón de vibración personalizado inválido, utilizando el predeterminado</string>
+   <string name="pref_vibrate_pattern_help">Ingrese un patrón de vibración personalizado, con el formato:\nmillisOff, millisOn, etc.\n\nPor ejemplo:\n0,1000\n0,500,200,500,200,500</string>
 
    <string name="pref_flashled_title">Parpadeo del LED</string>
    <string name="pref_flashled_summaryon">Parpadear el LED cuando un mensaje es recibido</string>
@@ -149,7 +152,7 @@
    <string name="pref_notif_repeat_summaryoff">Recordatorios de mensajes sin leer deshabilitados</string>
    
    <string name="pref_notif_repeat_interval_title">Intervalo de Recordatorios</string>
-   <string name="pref_notif_repeat_interval_summary">El periodo de tiempo entre notificaciones de recordatorio</string>
+   <string name="pref_notif_repeat_interval_summary">El período de tiempo entre notificaciones de recordatorio</string>
    <string name="pref_notif_repeat_interval_dialogTitle">Intervalo (minutos)</string>
    
    <string name="pref_notif_repeat_times_title">Número de Recordatorios</string>
