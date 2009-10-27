@@ -20,12 +20,6 @@
    <string name="button_delete">Delete</string>
    <string name="button_tts">Text-to-speech</string>
    
-   <!-- New -->
-   <string name="button_speak">Speak</string>
-   <string name="button_delete_noconfirm">Delete (no confirmation)</string>
-   <string name="button_quickreply">Quick Reply</string>
-   <string name="button_disabled">Disabled</string>   
-   
    <!-- Not yet implemented -->
    <string name="button_next">Next</string>
    <string name="button_previous">Previous</string>
@@ -42,9 +36,6 @@
    <string name="pref_about_title">About</string>
    <string name="pref_about_summary">About SMS Popup</string>
    <string name="pref_about_text">Created by: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup is a simple application that shows a dialog when an SMS is received - turning on the screen and unlocking the keyguard if needed.  It shows the most recent message, who it\'s from and the contact picture if available.\n\nFeel free to email me any comments, suggestions or bugs.\n\nGerman translation by: Feyyaz A.\nEmail: f_alingan@hotmail.com\nWebsite: http://www.yenio.com\n\nDutch translation by: mellie@xs4all.nl\n\nSpanish translation by: Diego Fernández\nEmail: profediego@gmail.com\n\nRussian translation by: Artem Kavalerov\nEmail: artem.kavalerov@gmail.com\n\nCredits to Min Tran for the app icon.\n(http://min.frexy.com)\n</string>
-
-   <string name="pref_faq_title">FAQ</string>
-   <string name="pref_faq_summary">Frequently Asked Questions</string>
    
    <string name="pref_sendemail_title">E-mail the Developer</string>
    <string name="pref_sendemail_summary">E-mail comments or bugs to the developer</string>
@@ -85,10 +76,6 @@
    <string name="pref_inbox_app_summary">Choose the application that is launched for multiple messages</string>
    <string name="pref_inbox_app_info">Note that the "Reply" messaging application is set by the system</string>
 
-   <string name="pref_show_buttons_title">Show Buttons</string>
-   <string name="pref_show_buttons_summaryon">Buttons on popup are visible</string>
-   <string name="pref_show_buttons_summaryoff">Buttons are hidden in long press menu</string>
-
    <string name="pref_show_delete_button_title">Show a Delete Button</string>
    <string name="pref_show_delete_button_summaryon">Delete button is enabled</string>
    <string name="pref_show_delete_button_summaryoff">Delete button is disabled</string>
@@ -113,11 +100,6 @@
    <string name="pref_notif_enabled_summaryon">Notifications are enabled</string>
    <string name="pref_notif_enabled_summaryoff">Notifications are disabled</string>
    <string name="pref_notif_enabled_warning">To avoid conflicts and multiple alerts, please disable the system SMS notifications and any other apps that provide a notification when a SMS is received.\n\nTo turn off the system notification, go to the messaging app, hit menu -> settings and un-check notifications.</string>
-
-   <string name="pref_popup_enabled_title">Show a Popup</string>
-   <string name="pref_popup_enabled_summaryon">Message will open in a popup</string>
-   <string name="pref_popup_enabled_summaryoff">Message will only show in notification area (if enabled)</string>
-   <string name="pref_popup_enabled_default">true</string>
 
    <string name="pref_notif_test_title">Test Notification</string>
    <string name="pref_notif_test_summary">Test out your notification</string>
