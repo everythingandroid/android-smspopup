@@ -226,9 +226,16 @@ public class SmsPopupUtils {
     // Not found or error, get out
     if (contactBitmap == null) return null;
 
-    // Now let's resize the photo so it has a max height or width of CONTACT_PHOTO_THUMBSIZE
+    // Calculate new dimensions based on screen density
+    final float scale = context.getResources().getDisplayMetrics().density;
     int newHeight = CONTACT_PHOTO_THUMBSIZE;
     int newWidth = CONTACT_PHOTO_THUMBSIZE;
+
+    if (scale != 1.0) {
+      if (Log.DEBUG) Log.v("Screen density is not 1.0, adjusting contact photo");
+      newHeight = Math.round(CONTACT_PHOTO_THUMBSIZE * scale);
+      newWidth = Math.round(CONTACT_PHOTO_THUMBSIZE * scale);
+    }
 
     if (height != CONTACT_PHOTO_THUMBSIZE || width != CONTACT_PHOTO_THUMBSIZE) {
       if (height > width) {

@@ -882,7 +882,11 @@ public class SmsPopupActivity extends Activity {
   private void closeMessage() {
     if (messageViewed) {
       Intent i = new Intent(getApplicationContext(), SmsPopupUtilsService.class);
-      i.setAction(SmsPopupUtilsService.ACTION_MARK_MESSAGE_READ);
+      /*
+       * Switched to mark thread read for v1.0.0, not sure which is better.
+       */
+      // i.setAction(SmsPopupUtilsService.ACTION_MARK_MESSAGE_READ);
+      i.setAction(SmsPopupUtilsService.ACTION_MARK_THREAD_READ);
       i.putExtras(message.toBundle());
       SmsPopupUtilsService.beginStartingService(getApplicationContext(), i);
     }

@@ -19,7 +19,7 @@
     layout="@layout/popup_divider" />
   <ScrollView
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="0dip"
     android:id="@+id/MessageScrollView"
     android:visibility="gone"
     android:layout_weight="1"
@@ -31,7 +31,7 @@
       android:autoLink="all"
       android:textAppearance="?android:attr/textAppearanceMedium"
       android:textColor="?android:attr/textColorPrimaryDisableOnly"
-      android:layout_height="fill_parent"
+      android:layout_height="wrap_content"
       android:layout_width="fill_parent"
       android:gravity="center"
       android:paddingRight="10sp"
