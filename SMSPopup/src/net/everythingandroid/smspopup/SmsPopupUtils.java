@@ -56,7 +56,7 @@ public class SmsPopupUtils {
   public static final int CONTACT_PHOTO_PLACEHOLDER = android.R.drawable.ic_dialog_info;
 
   // The size of the contact photo thumbnail on the popup
-  public static final int CONTACT_PHOTO_THUMBSIZE = 96;
+  public static final int CONTACT_PHOTO_THUMBSIZE = 96;  
 
   // The max size of either the width or height of the contact photo
   public static final int CONTACT_PHOTO_MAXSIZE = 1024;
@@ -202,14 +202,22 @@ public class SmsPopupUtils {
 
     // This time we're going to do it for real
     options.inJustDecodeBounds = false;
+    
+    // Calculate new dimensions based on screen density
+    final float scale = context.getResources().getDisplayMetrics().density;
+    int thumbsize = CONTACT_PHOTO_THUMBSIZE;
+    if (scale != 1.0) {
+      if (Log.DEBUG) Log.v("Screen density is not 1.0, adjusting contact photo");
+      thumbsize = Math.round(thumbsize * scale);
+    }
 
     // If we have an abnormal photo size then sample it down
-    if (height > CONTACT_PHOTO_THUMBSIZE || width > CONTACT_PHOTO_THUMBSIZE) {
+    if (height > thumbsize || width > thumbsize) {
       if (height < width) {
-        options.inSampleSize = Math.round(height / CONTACT_PHOTO_THUMBSIZE);
+        options.inSampleSize = Math.round(height / thumbsize);
         // if (Log.DEBUG) Log.v("Contact photo inSampleSize = " + Math.round(height / CONTACT_PHOTO_THUMBSIZE));
       } else {
-        options.inSampleSize = Math.round(width / CONTACT_PHOTO_THUMBSIZE);
+        options.inSampleSize = Math.round(width / thumbsize);
         // if (Log.DEBUG) Log.v("Contact photo inSampleSize = " + Math.round(height / CONTACT_PHOTO_THUMBSIZE));
       }
     }
@@ -227,21 +235,20 @@ public class SmsPopupUtils {
     if (contactBitmap == null) return null;
 
     // Calculate new dimensions based on screen density
-    final float scale = context.getResources().getDisplayMetrics().density;
-    int newHeight = CONTACT_PHOTO_THUMBSIZE;
-    int newWidth = CONTACT_PHOTO_THUMBSIZE;
+    int newHeight = thumbsize;
+    int newWidth = thumbsize;
 
     if (scale != 1.0) {
       if (Log.DEBUG) Log.v("Screen density is not 1.0, adjusting contact photo");
-      newHeight = Math.round(CONTACT_PHOTO_THUMBSIZE * scale);
-      newWidth = Math.round(CONTACT_PHOTO_THUMBSIZE * scale);
+      newHeight = Math.round(thumbsize * scale);
+      newWidth = Math.round(thumbsize * scale);
     }
 
-    if (height != CONTACT_PHOTO_THUMBSIZE || width != CONTACT_PHOTO_THUMBSIZE) {
+    if (height != thumbsize || width != thumbsize) {
       if (height > width) {
-        newWidth = Math.round(CONTACT_PHOTO_THUMBSIZE * width / height);
+        newWidth = Math.round(thumbsize * width / height);
       } else if (height < width) {
-        newHeight = Math.round(CONTACT_PHOTO_THUMBSIZE * height / width);
+        newHeight = Math.round(thumbsize * height / width);
       }
     }
 
