@@ -196,8 +196,14 @@ public class SmsMmsMessage {
   }
 
   public Intent getReplyIntent() {
-    locateThreadId();
-    return SmsPopupUtils.getSmsToIntentFromThreadId(context, threadId);
+    if (messageType == MESSAGE_TYPE_SMS) {
+      return SmsPopupUtils.getSmsToIntentFromThreadId(context, fromAddress);
+    } else if (messageType == MESSAGE_TYPE_MMS) {
+      locateThreadId();
+      return SmsPopupUtils.getSmsToIntentFromThreadId(context, threadId);
+    }
+    
+    return null;
   }
 
   public void setThreadRead() {
