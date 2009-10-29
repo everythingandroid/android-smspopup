@@ -39,6 +39,7 @@ public class SmsPopupUtils {
     Uri.withAppendedPath(MMS_SMS_CONTENT_URI, "threadID");
   public static final Uri CONVERSATION_CONTENT_URI =
     Uri.withAppendedPath(MMS_SMS_CONTENT_URI, "conversations");
+  public static final String SMSTO_URI = "smsto:";
 
   public static final Uri SMS_CONTENT_URI = Uri.parse("content://sms");
   public static final Uri SMS_INBOX_CONTENT_URI = Uri.withAppendedPath(SMS_CONTENT_URI, "inbox");
@@ -47,7 +48,6 @@ public class SmsPopupUtils {
   public static final Uri MMS_INBOX_CONTENT_URI = Uri.withAppendedPath(MMS_CONTENT_URI, "inbox");
 
   public static final String SMSMMS_ID = "_id";
-  public static final String SMS_TO_URI = "smsto:/";
   public static final String SMS_MIME_TYPE = "vnd.android-dir/mms-sms";
   public static final int READ_THREAD = 1;
   public static final int MESSAGE_TYPE_SMS = 1;
@@ -472,6 +472,26 @@ public class SmsPopupUtils {
     }
     return popup;
   }
+  
+  /**
+   * 
+   */
+  public static Intent getSmsToIntentFromThreadId(Context context, String phoneNumber) {
+    Intent popup = new Intent(Intent.ACTION_SENDTO);
+    // should I be using FLAG_ACTIVITY_RESET_TASK_IF_NEEDED??
+    int flags =
+      Intent.FLAG_ACTIVITY_NEW_TASK |
+      Intent.FLAG_ACTIVITY_SINGLE_TOP |
+      Intent.FLAG_ACTIVITY_CLEAR_TOP;
+    popup.setFlags(flags);
+    if (!"".equals(phoneNumber)) {
+      //Log.v("^^Found threadId (" + threadId + "), sending to Sms intent");
+      popup.setData(Uri.parse(SMSTO_URI + Uri.encode(phoneNumber)));
+    } else {
+      return getSmsIntent();
+    }
+    return popup;
+  }  
 
   /**
    * 
