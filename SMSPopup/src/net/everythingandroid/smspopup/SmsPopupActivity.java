@@ -665,7 +665,7 @@ public class SmsPopupActivity extends Activity {
         qrCounterTextView.setText(
             QmTextWatcher.getQuickReplyCounterText(this, qrEditText.getText().toString()));
 
-        return new AlertDialog.Builder(this)
+        AlertDialog qrAlertDialog = new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_email)
         .setTitle(R.string.quickreply_title)
         .setView(qrLayout)
@@ -681,7 +681,12 @@ public class SmsPopupActivity extends Activity {
           }
         })
         .create();
-
+        
+        qrAlertDialog.getWindow().clearFlags(
+            WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+            //WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        
+        return qrAlertDialog;
 
       case DIALOG_PRESET_MSG:
         mDbAdapter.open(true);
