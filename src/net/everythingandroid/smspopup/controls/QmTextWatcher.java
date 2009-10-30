@@ -18,17 +18,16 @@ public class QmTextWatcher implements TextWatcher {
     mContext = context;
   }
 
-  public void afterTextChanged(Editable s) {
-    mTextView.setText(getQuickReplyCounterText(mContext, s.toString()));
-  }
+  public void afterTextChanged(Editable s) {}
 
   public void beforeTextChanged(CharSequence s, int start, int count, int after) {
   }
 
   public void onTextChanged(CharSequence s, int start, int before, int count) {
+    mTextView.setText(getQuickReplyCounterText(mContext, s));
   }
 
-  public static String getQuickReplyCounterText(Context context, String message) {
+  public static String getQuickReplyCounterText(Context context, CharSequence message) {
     if (formatString1 == null) {
       formatString1 = context.getString(R.string.message_counter);
     }
@@ -40,13 +39,20 @@ public class QmTextWatcher implements TextWatcher {
     return getQuickReplyCounterText(message, formatString1, formatString2);
   }
 
-  public static String getQuickReplyCounterText(String message, String format1, String format2) {
-    int[] messageLength = SmsMessage.calculateLength(message, true);
+  public static String getQuickReplyCounterText(CharSequence message, String format1, String format2) {
+    int[] params = SmsMessage.calculateLength(message, true);
+    
+    /* SmsMessage.calculateLength returns an int[4] with:
+     *   int[0] being the number of SMS's required,
+     *   int[1] the number of code units used,
+     *   int[2] is the number of code units remaining until the next message.
+     *   int[3] is the encoding type that should be used for the message.
+     */    
 
-    if (messageLength[0] > 1) {
-      return String.format(format2, messageLength[2], messageLength[0]);
+    if (params[0] > 1) {
+      return String.format(format2, params[2], params[0]);
     } else {
-      return String.format(format1, messageLength[2]);
+      return String.format(format1, params[2]);
     }
   }
 
