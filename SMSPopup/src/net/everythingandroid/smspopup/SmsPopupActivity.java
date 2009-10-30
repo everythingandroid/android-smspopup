@@ -627,8 +627,13 @@ public class SmsPopupActivity extends Activity {
             if (event != null) {
               // if shift is not pressed then move focus to send button
               if (!event.isShiftPressed()) {
-                v.focusSearch(View.FOCUS_DOWN).requestFocus();
-                return true;
+                if (v != null) {
+                  View focusableView = v.focusSearch(View.FOCUS_DOWN);
+                  if (focusableView != null) {
+                    focusableView.requestFocus();
+                    return true;                    
+                  }
+                }
               }
 
               // otherwise allow keypress through
