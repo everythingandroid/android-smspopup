@@ -2,7 +2,9 @@ package net.everythingandroid.smspopup;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +30,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Contacts;
 import android.provider.Contacts.PeopleColumns;
+import android.provider.Contacts.Photos;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.gsm.SmsMessage;
 import android.text.TextUtils;
@@ -56,7 +59,7 @@ public class SmsPopupUtils {
   public static final int CONTACT_PHOTO_PLACEHOLDER = android.R.drawable.ic_dialog_info;
 
   // The size of the contact photo thumbnail on the popup
-  public static final int CONTACT_PHOTO_THUMBSIZE = 96;  
+  public static final int CONTACT_PHOTO_THUMBSIZE = 96;
 
   // The max size of either the width or height of the contact photo
   public static final int CONTACT_PHOTO_MAXSIZE = 1024;
@@ -187,8 +190,9 @@ public class SmsPopupUtils {
     options.inJustDecodeBounds = true;
 
     // The height and width are stored in 'options' but the photo itself is not loaded
-    Contacts.People.loadContactPhoto(
-        context, Uri.withAppendedPath(Contacts.People.CONTENT_URI, id), 0, options);
+    //    Contacts.People.loadContactPhoto(
+    //        context, Uri.withAppendedPath(Contacts.People.CONTENT_URI, id), 0, options);
+    loadContactPhoto(context, id, 0, options);
 
     // Raw height and width of contact photo
     int height = options.outHeight;
@@ -202,7 +206,7 @@ public class SmsPopupUtils {
 
     // This time we're going to do it for real
     options.inJustDecodeBounds = false;
-    
+
     // Calculate new dimensions based on screen density
     final float scale = context.getResources().getDisplayMetrics().density;
     int thumbsize = CONTACT_PHOTO_THUMBSIZE;
@@ -225,8 +229,9 @@ public class SmsPopupUtils {
     // Fetch the real contact photo (sampled down if needed)
     Bitmap contactBitmap = null;
     try {
-      contactBitmap = Contacts.People.loadContactPhoto(
-          context, Uri.withAppendedPath(Contacts.People.CONTENT_URI, id), 0, options);
+      //      contactBitmap = Contacts.People.loadContactPhoto(
+      //          context, Uri.withAppendedPath(Contacts.People.CONTENT_URI, id), 0, options);
+      contactBitmap = loadContactPhoto(context, id, 0, options);
     } catch (OutOfMemoryError e) {
       Log.e("Out of memory when loading contact photo");
     }
@@ -254,6 +259,65 @@ public class SmsPopupUtils {
 
     // Return bitmap scaled to new height and width
     return Bitmap.createScaledBitmap(contactBitmap, newWidth, newHeight, true);
+  }
+
+  /**
+   * Opens an InputStream for the person's photo and returns the photo as a Bitmap.
+   * If the person's photo isn't present returns the placeholderImageResource instead.
+   * @param context the Context
+   * @param person the person whose photo should be used
+   * @param placeholderImageResource the image resource to use if the person doesn't
+   *   have a photo
+   * @param options the decoding options, can be set to null
+   */
+  public static Bitmap loadContactPhoto(Context context, String id,
+      int placeholderImageResource, BitmapFactory.Options options) {
+    if (id == null) {
+      return loadPlaceholderPhoto(placeholderImageResource, context, options);
+    }
+
+    InputStream stream = openContactPhotoInputStream(context.getContentResolver(), id);
+    Bitmap bm = stream != null ? BitmapFactory.decodeStream(stream, null, options) : null;
+    if (bm == null) {
+      bm = loadPlaceholderPhoto(placeholderImageResource, context, options);
+    }
+    return bm;
+  }
+
+  private static Bitmap loadPlaceholderPhoto(int placeholderImageResource, Context context,
+      BitmapFactory.Options options) {
+    if (placeholderImageResource == 0) {
+      return null;
+    }
+    return BitmapFactory.decodeResource(context.getResources(),
+        placeholderImageResource, options);
+  }
+
+  /**
+   * Opens an InputStream for the person's photo and returns the photo as a Bitmap.
+   * If the person's photo isn't present returns the placeholderImageResource instead.
+   * @param person the person whose photo should be used
+   */
+  public static InputStream openContactPhotoInputStream(ContentResolver cr, String id) {
+    if (id == null) return null;
+    if ("0".equals(id)) return null;
+
+    // Uri photoUri = Uri.withAppendedPath(person, Contacts.Photos.CONTENT_DIRECTORY);
+    Uri photoUri = Uri.withAppendedPath(Contacts.Photos.CONTENT_URI, id);
+    Cursor cursor = cr.query(photoUri, new String[]{Photos.DATA}, null, null, null);
+
+    try {
+      if (!cursor.moveToNext()) {
+        return null;
+      }
+      byte[] data = cursor.getBlob(0);
+      if (data == null) {
+        return null;
+      }
+      return new ByteArrayInputStream(data);
+    } finally {
+      cursor.close();
+    }
   }
 
   /**
@@ -472,7 +536,7 @@ public class SmsPopupUtils {
     }
     return popup;
   }
-  
+
   /**
    * 
    */
@@ -491,7 +555,7 @@ public class SmsPopupUtils {
       return getSmsIntent();
     }
     return popup;
-  }  
+  }
 
   /**
    * 
