@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/QuickReplyEntryLinearLayout"
   android:layout_width="fill_parent"
-  android:orientation="vertical"
-  android:id="@+id/QuickReplyLinearLayout"
-  android:layout_height="fill_parent">
-  <TextView
-    android:layout_height="wrap_content"
-    android:layout_marginTop="5sp"
-    android:id="@+id/QuickReplyCounterTextView"
-    android:gravity="right"
-    android:textAppearance="?android:attr/textAppearanceSmall"
+  android:layout_height="wrap_content"
+  android:paddingBottom="8dip" android:paddingTop="8dip" android:paddingLeft="10dip" android:paddingRight="10dip">
+  <RelativeLayout
+    android:id="@+id/editor_with_counter"
     android:layout_width="fill_parent"
-    android:text="@string/message_counter"
-    android:lines="1"
-    android:layout_marginRight="10sp"
-    android:layout_marginLeft="10sp" />
-  <EditText
-    android:layout_width="fill_parent"
-    android:layout_marginLeft="5sp"
-    android:layout_marginRight="5sp"
-    android:layout_marginTop="5sp"
-    android:layout_marginBottom="5sp"
-    android:id="@+id/QuickReplyEditText"
     android:layout_height="wrap_content"
-    android:maxLength="1000"
-    android:maxLines="3"
-    android:nextFocusDown="@android:id/button1"
-    android:inputType="textCapSentences|textAutoCorrect|textMultiLine|textShortMessage"
-    android:imeOptions="actionDone|flagNoEnterAction" />
+    android:addStatesFromChildren="true"
+    android:background="@android:drawable/edit_text">
+    <EditText
+      android:id="@+id/QuickReplyEditText"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:maxLines="3"
+      android:inputType="textShortMessage|textAutoCorrect|textCapSentences|textMultiLine"
+      android:background="@null"
+      android:maxLength="1000" />
+    <TextView
+      android:id="@+id/QuickReplyCounterTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="#88000000"
+      android:textColor="#ffffffff"
+      android:textSize="11sp"
+      android:textStyle="bold"
+      android:paddingLeft="3dip"
+      android:paddingRight="3dip"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentTop="true"
+      android:text="50/100" />
+  </RelativeLayout>
 </LinearLayout>

@@ -106,7 +106,7 @@
     <item>@string/button_delete</item>
     <item>@string/button_delete</item>
     <item>@string/button_reply</item>
-    <item>@string/button_reply</item>
+    <item>@string/button_quickreply</item>
     <item>@string/button_inbox</item>
     <item>@string/button_speak</item>
   </string-array>

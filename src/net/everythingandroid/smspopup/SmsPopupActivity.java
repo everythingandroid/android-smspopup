@@ -88,7 +88,7 @@ public class SmsPopupActivity extends Activity {
   private boolean privacyMode = false;
   private boolean messageViewed = true;
 
-  private static final double WIDTH = 0.8;
+  private static final double WIDTH = 0.9;
   private static final int DIALOG_DELETE          = Menu.FIRST;
   private static final int DIALOG_QUICKREPLY      = Menu.FIRST + 1;
   private static final int DIALOG_PRESET_MSG      = Menu.FIRST + 2;
@@ -141,7 +141,8 @@ public class SmsPopupActivity extends Activity {
     // This sets the minimum width of the activity to a minimum of 80% of the screen
     // size only needed because the theme of this activity is "dialog" so it looks
     // like it's floating and doesn't seem to fill_parent like a regular activity
-    // TODO: not need anymore?
+    // TODO: not need anymore?  acutally should limit the minWidht in the case of devices
+    // with bigger screens...
     LinearLayout mainLL = (LinearLayout) findViewById(R.id.MainLinearLayout);
     Display d = getWindowManager().getDefaultDisplay();
     int width = (int)(d.getWidth() * WIDTH);
@@ -201,6 +202,22 @@ public class SmsPopupActivity extends Activity {
       button3.setOnClickListener(button3Vals);
       button3.setText(button3Vals.buttonText);
       button3.setVisibility(button3Vals.buttonVisibility);
+
+      /*
+       * This is really hacky.  There are two types of reply buttons (quick reply and reply).
+       * If the user has selected to show both the replies then the text on the buttons should
+       * be different.  If they only use one then the text can just be "Reply".
+       */
+      int numReplyButtons = 0;
+      if (button1Vals.isReplyButton) numReplyButtons++;
+      if (button2Vals.isReplyButton) numReplyButtons++;
+      if (button3Vals.isReplyButton) numReplyButtons++;
+
+      if (numReplyButtons == 1) {
+        if (button1Vals.isReplyButton) button1.setText(R.string.button_reply);
+        if (button2Vals.isReplyButton) button2.setText(R.string.button_reply);
+        if (button3Vals.isReplyButton) button3.setText(R.string.button_reply);
+      }
     }
 
     if (bundle == null) {
@@ -217,11 +234,14 @@ public class SmsPopupActivity extends Activity {
 
   class PopupButton implements OnClickListener {
     private int buttonId;
+    public boolean isReplyButton;
     public String buttonText;
     public int buttonVisibility = View.VISIBLE;
 
     public PopupButton(Context mContext, int id) {
       buttonId = id;
+      isReplyButton = false;
+      if (buttonId == 4 || buttonId == 5) isReplyButton = true;
       String[] buttonTextArray = mContext.getResources().getStringArray(R.array.buttons_text);
       buttonText = buttonTextArray[buttonId];
 
@@ -258,7 +278,6 @@ public class SmsPopupActivity extends Activity {
       }
     }
   }
-
 
   @Override
   protected void onNewIntent(Intent intent) {
@@ -567,6 +586,9 @@ public class SmsPopupActivity extends Activity {
   protected Dialog onCreateDialog(int id) {
     switch (id) {
 
+      /*
+       * Delete message dialog
+       */
       case DIALOG_DELETE:
         return new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -580,12 +602,16 @@ public class SmsPopupActivity extends Activity {
         .setNegativeButton(android.R.string.cancel, null)
         .create();
 
+        /*
+         * Quick Reply Dialog
+         */
       case DIALOG_QUICKREPLY:
         LayoutInflater factory = LayoutInflater.from(this);
         final View qrLayout = factory.inflate(R.layout.message_quick_reply, null);
         qrEditText = (EditText) qrLayout.findViewById(R.id.QuickReplyEditText);
         final TextView qrCounterTextView =
           (TextView) qrLayout.findViewById(R.id.QuickReplyCounterTextView);
+        final Button qrSendButton = (Button) qrLayout.findViewById(R.id.send_button);
 
         final ImageButton voiceRecognitionButton =
           (ImageButton) qrLayout.findViewById(R.id.SpeechRecogButton);
@@ -619,7 +645,7 @@ public class SmsPopupActivity extends Activity {
           }
         });
 
-        qrEditText.addTextChangedListener(new QmTextWatcher(this, qrCounterTextView));
+        qrEditText.addTextChangedListener(new QmTextWatcher(this, qrCounterTextView, qrSendButton));
         qrEditText.setOnEditorActionListener(new OnEditorActionListener() {
           public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
@@ -628,11 +654,11 @@ public class SmsPopupActivity extends Activity {
               // if shift is not pressed then move focus to send button
               if (!event.isShiftPressed()) {
                 if (v != null) {
-                  View focusableView = v.focusSearch(View.FOCUS_DOWN);
+                  View focusableView = v.focusSearch(View.FOCUS_RIGHT);
                   if (focusableView != null) {
                     focusableView.requestFocus();
-                    return true;                    
                   }
+                  return true;
                 }
               }
 
@@ -661,33 +687,56 @@ public class SmsPopupActivity extends Activity {
         });
 
         quickreplyTextView = (TextView) qrLayout.findViewById(R.id.QuickReplyTextView);
+        QmTextWatcher.getQuickReplyCounterText(qrEditText.getText().toString(), qrCounterTextView, qrSendButton);
 
-        qrCounterTextView.setText(
-            QmTextWatcher.getQuickReplyCounterText(this, qrEditText.getText().toString()));
+        qrSendButton.setOnClickListener(new OnClickListener() {
+          public void onClick(View v) {
+            sendQuickReply(qrEditText.getText().toString());
+          }
+        });
 
         AlertDialog qrAlertDialog = new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_email)
         .setTitle(R.string.quickreply_title)
         .setView(qrLayout)
-        .setPositiveButton(R.string.quickreply_send_button, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int whichButton) {
-            sendQuickReply(qrEditText.getText().toString());
-          }
-        })
+        //        .setPositiveButton(R.string.quickreply_send_button, new DialogInterface.OnClickListener() {
+        //          public void onClick(DialogInterface dialog, int whichButton) {
+        //            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        //            inputManager.hideSoftInputFromWindow(qrEditText.getWindowToken(), 0);
+        //            // sendQuickReply(qrEditText.getText().toString());
+        //          }
+        //        })
         .setNegativeButton(android.R.string.cancel, null)
         .setNeutralButton(R.string.quickreply_preset_button, new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int whichButton) {
             showDialog(DIALOG_PRESET_MSG);
           }
         })
+        //        .setOnCancelListener(new OnCancelListener() {
+        //          public void onCancel(DialogInterface dialog) {
+        //            if (Log.DEBUG) Log.v("Quick Reply Dialog: onCancel()");
+        //            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        //            inputManager.hideSoftInputFromWindow(qrEditText.getWindowToken(), 0);
+        //          }
+        //        })
         .create();
-        
+
         qrAlertDialog.getWindow().clearFlags(
             WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-            //WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-        
+
+        //        qrAlertDialog.setOnDismissListener(new OnDismissListener() {
+        //          public void onDismiss(DialogInterface dialog) {
+        //            if (Log.DEBUG) Log.v("Quick Reply Dialog: onDissmiss()");
+        //            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        //            inputManager.hideSoftInputFromWindow(qrEditText.getWindowToken(), 0);
+        //          }
+        //        });
+
         return qrAlertDialog;
 
+        /*
+         * Preset messages dialog
+         */
       case DIALOG_PRESET_MSG:
         mDbAdapter.open(true);
         mCursor = mDbAdapter.fetchAllQuickMessages();
@@ -732,6 +781,9 @@ public class SmsPopupActivity extends Activity {
 
         return mDialogBuilder.create();
 
+        /*
+         * Loading Dialog
+         */
       case DIALOG_LOADING:
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage(getString(R.string.loading_message));
@@ -759,11 +811,13 @@ public class SmsPopupActivity extends Activity {
 
         qrEditText.requestFocus();
 
+        //        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        //        inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
         // Set width of dialog to fill_parent
         LayoutParams mLP = dialog.getWindow().getAttributes();
         mLP.width = LayoutParams.FILL_PARENT;
         dialog.getWindow().setAttributes(mLP);
-
         break;
       case DIALOG_PRESET_MSG:
         break;
