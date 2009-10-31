@@ -1,59 +1,65 @@
 package net.everythingandroid.smspopup.controls;
 
-import net.everythingandroid.smspopup.R;
 import android.content.Context;
 import android.telephony.gsm.SmsMessage;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class QmTextWatcher implements TextWatcher {
   private TextView mTextView;
-  private Context mContext;
-  private static String formatString1 = null;
-  private static String formatString2 = null;
+  private Button mSendButton;
+  private static final int CHARS_REMAINING_BEFORE_COUNTER_SHOWN = 30;
 
-  public QmTextWatcher(Context context, TextView mUpdateTextView) {
-    mTextView = mUpdateTextView;
-    mContext = context;
+  public QmTextWatcher(Context context, TextView updateTextView, Button sendButton) {
+    mTextView = updateTextView;
+    mSendButton = sendButton;
+  }
+
+  public QmTextWatcher(Context context, TextView updateTextView) {
+    mTextView = updateTextView;
+    mSendButton = null;
   }
 
   public void afterTextChanged(Editable s) {}
 
-  public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-  }
+  public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
   public void onTextChanged(CharSequence s, int start, int before, int count) {
-    mTextView.setText(getQuickReplyCounterText(mContext, s));
+    getQuickReplyCounterText(s, mTextView, mSendButton);
   }
 
-  public static String getQuickReplyCounterText(Context context, CharSequence message) {
-    if (formatString1 == null) {
-      formatString1 = context.getString(R.string.message_counter);
+  public static void getQuickReplyCounterText(CharSequence s, TextView mTextView, Button mSendButton) {
+    if (mSendButton != null) {
+      if (s.length() > 0) {
+        mSendButton.setEnabled(true);
+      } else {
+        mSendButton.setEnabled(false);
+      }
     }
 
-    if (formatString2 == null) {
-      formatString2 = context.getString(R.string.message_counter_multiple);
+    if (s.length() < (100 - CHARS_REMAINING_BEFORE_COUNTER_SHOWN)) {
+      mTextView.setVisibility(View.GONE);
+      return;
     }
 
-    return getQuickReplyCounterText(message, formatString1, formatString2);
-  }
+    /*
+     * SmsMessage.calculateLength returns an int[4] with: int[0] being the
+     * number of SMS's required, int[1] the number of code units used, int[2] is
+     * the number of code units remaining until the next message. int[3] is the
+     * encoding type that should be used for the message.
+     */
+    int[] params = SmsMessage.calculateLength(s, true);
+    int msgCount = params[0];
+    int remainingInCurrentMessage = params[2];
 
-  public static String getQuickReplyCounterText(CharSequence message, String format1, String format2) {
-    int[] params = SmsMessage.calculateLength(message, true);
-    
-    /* SmsMessage.calculateLength returns an int[4] with:
-     *   int[0] being the number of SMS's required,
-     *   int[1] the number of code units used,
-     *   int[2] is the number of code units remaining until the next message.
-     *   int[3] is the encoding type that should be used for the message.
-     */    
-
-    if (params[0] > 1) {
-      return String.format(format2, params[2], params[0]);
+    if (msgCount > 1 || remainingInCurrentMessage <= CHARS_REMAINING_BEFORE_COUNTER_SHOWN) {
+      mTextView.setText(remainingInCurrentMessage + " / " + msgCount);
+      mTextView.setVisibility(View.VISIBLE);
     } else {
-      return String.format(format1, params[2]);
+      mTextView.setVisibility(View.GONE);
     }
   }
-
 }

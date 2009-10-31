@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -267,11 +266,12 @@ public class ManageNotification {
         if (callState == TelephonyManager.CALL_STATE_OFFHOOK
             && AM.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
 
-          if (Log.DEBUG) Log.v("User on a call, running own mediaplayer");
-          MediaPlayer mMediaPlayer = MediaPlayer.create(context, alarmSoundURI);
-          mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-          mMediaPlayer.setLooping(false);
-          mMediaPlayer.start();
+          // TODO: make this an option
+          //          if (Log.DEBUG) Log.v("User on a call, running own mediaplayer");
+          //          MediaPlayer mMediaPlayer = MediaPlayer.create(context, alarmSoundURI);
+          //          mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+          //          mMediaPlayer.setLooping(false);
+          //          mMediaPlayer.start();
         } else { // Otherwise just use built in notifications
           // Notification sound
           notification.sound = alarmSoundURI;
