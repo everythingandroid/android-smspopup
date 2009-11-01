@@ -695,31 +695,50 @@ public class SmsPopupActivity extends Activity {
           }
         });
 
-        AlertDialog qrAlertDialog = new AlertDialog.Builder(this)
+        final AlertDialog qrAlertDialog = new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_email)
         .setTitle(R.string.quickreply_title)
         .setView(qrLayout)
-        //        .setPositiveButton(R.string.quickreply_send_button, new DialogInterface.OnClickListener() {
-        //          public void onClick(DialogInterface dialog, int whichButton) {
-        //            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        //            inputManager.hideSoftInputFromWindow(qrEditText.getWindowToken(), 0);
-        //            // sendQuickReply(qrEditText.getText().toString());
-        //          }
-        //        })
+        /*
+        .setPositiveButton(R.string.quickreply_send_button, new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int whichButton) {
+            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(qrEditText.getWindowToken(), 0);
+            // sendQuickReply(qrEditText.getText().toString());
+          }
+        })
         .setNegativeButton(android.R.string.cancel, null)
         .setNeutralButton(R.string.quickreply_preset_button, new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int whichButton) {
             showDialog(DIALOG_PRESET_MSG);
           }
         })
-        //        .setOnCancelListener(new OnCancelListener() {
-        //          public void onCancel(DialogInterface dialog) {
-        //            if (Log.DEBUG) Log.v("Quick Reply Dialog: onCancel()");
-        //            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        //            inputManager.hideSoftInputFromWindow(qrEditText.getWindowToken(), 0);
-        //          }
-        //        })
+         */
+        /*
+        .setOnCancelListener(new OnCancelListener() {
+          public void onCancel(DialogInterface dialog) {
+            if (Log.DEBUG) Log.v("Quick Reply Dialog: onCancel()");
+            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(qrEditText.getWindowToken(), 0);
+          }
+        })
+         */
         .create();
+
+        Button presetButton = (Button) qrLayout.findViewById(R.id.PresetMessagesButton);
+        presetButton.setOnClickListener(new OnClickListener() {
+          public void onClick(View v) {
+            showDialog(DIALOG_PRESET_MSG);
+          }
+        });
+        Button cancelButton = (Button) qrLayout.findViewById(R.id.CancelButton);
+        cancelButton.setOnClickListener(new OnClickListener() {
+          public void onClick(View v) {
+            if (qrAlertDialog != null) {
+              qrAlertDialog.dismiss();
+            }
+          }
+        });
 
         qrAlertDialog.getWindow().clearFlags(
             WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
