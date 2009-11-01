@@ -40,6 +40,7 @@ import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -666,23 +667,22 @@ public class SmsPopupActivity extends Activity {
               return false;
             }
 
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+              if (v != null) {
+                sendQuickReply(v.getText().toString());
+              }
+              /*
+               * Hide the IME - not needed as we finish the activity after sending
+               * which hides the IME anyway
+               */
+              // InputMethodManager inputManager = (InputMethodManager)
+              // SmsPopupActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+              // inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+              return true;
+            }
+
             // else consume
             return true;
-
-            // This was for the IME action, but is no longer needed as the built in IME type
-            // has its own special button now.
-            //            if (actionId == EditorInfo.IME_ACTION_SEND) {
-            //              sendQuickReply(v.getText().toString());
-            //              /*
-            //                Hide the IME - not needed as we finish the activity after sending which hides
-            //                the IME anyway
-            //               */
-            //              // InputMethodManager inputManager = (InputMethodManager)
-            //              // SmsPopupActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-            //              // inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            //              return true;
-            //            }
-            //            return false;
           }
         });
 
@@ -695,25 +695,10 @@ public class SmsPopupActivity extends Activity {
           }
         });
 
+        // Construct basic AlertDialog using AlertDialog.Builder
         final AlertDialog qrAlertDialog = new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_email)
         .setTitle(R.string.quickreply_title)
-        .setView(qrLayout)
-        /*
-        .setPositiveButton(R.string.quickreply_send_button, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int whichButton) {
-            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputManager.hideSoftInputFromWindow(qrEditText.getWindowToken(), 0);
-            // sendQuickReply(qrEditText.getText().toString());
-          }
-        })
-        .setNegativeButton(android.R.string.cancel, null)
-        .setNeutralButton(R.string.quickreply_preset_button, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int whichButton) {
-            showDialog(DIALOG_PRESET_MSG);
-          }
-        })
-         */
         /*
         .setOnCancelListener(new OnCancelListener() {
           public void onCancel(DialogInterface dialog) {
@@ -725,12 +710,18 @@ public class SmsPopupActivity extends Activity {
          */
         .create();
 
+        // Set the custom layout with no spacing at the bottom
+        qrAlertDialog.setView(qrLayout, 0, 5, 0, 0);
+
+        // Preset messages button
         Button presetButton = (Button) qrLayout.findViewById(R.id.PresetMessagesButton);
         presetButton.setOnClickListener(new OnClickListener() {
           public void onClick(View v) {
             showDialog(DIALOG_PRESET_MSG);
           }
         });
+
+        // Cancel button
         Button cancelButton = (Button) qrLayout.findViewById(R.id.CancelButton);
         cancelButton.setOnClickListener(new OnClickListener() {
           public void onClick(View v) {
@@ -740,16 +731,19 @@ public class SmsPopupActivity extends Activity {
           }
         });
 
+        // Ensure this dialog is counted as "editable" (so soft keyboard will always show on top)
         qrAlertDialog.getWindow().clearFlags(
             WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
-        //        qrAlertDialog.setOnDismissListener(new OnDismissListener() {
-        //          public void onDismiss(DialogInterface dialog) {
-        //            if (Log.DEBUG) Log.v("Quick Reply Dialog: onDissmiss()");
-        //            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        //            inputManager.hideSoftInputFromWindow(qrEditText.getWindowToken(), 0);
-        //          }
-        //        });
+        /*
+        qrAlertDialog.setOnDismissListener(new OnDismissListener() {
+          public void onDismiss(DialogInterface dialog) {
+            if (Log.DEBUG) Log.v("Quick Reply Dialog: onDissmiss()");
+            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(qrEditText.getWindowToken(), 0);
+          }
+        });
+         */
 
         return qrAlertDialog;
 
