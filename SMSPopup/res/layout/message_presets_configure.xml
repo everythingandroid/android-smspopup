@@ -4,7 +4,10 @@
   android:id="@+id/QuickReplyEntryLinearLayout"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
-  android:paddingBottom="8dip" android:paddingTop="8dip" android:paddingLeft="10dip" android:paddingRight="10dip">
+  android:paddingBottom="8dip"
+  android:paddingTop="8dip"
+  android:paddingLeft="10dip"
+  android:paddingRight="10dip">
   <RelativeLayout
     android:id="@+id/editor_with_counter"
     android:layout_width="fill_parent"
