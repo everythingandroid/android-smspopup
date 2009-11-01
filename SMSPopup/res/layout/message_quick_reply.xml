@@ -47,7 +47,8 @@
         android:maxLines="3"
         android:inputType="textShortMessage|textAutoCorrect|textCapSentences|textMultiLine"
         android:background="@null"
-        android:maxLength="1000" />
+        android:maxLength="1000"
+        android:imeOptions="actionSend|flagNoEnterAction" />
       <TextView
         android:id="@+id/QuickReplyCounterTextView"
         android:layout_width="wrap_content"
@@ -80,13 +81,6 @@
     android:paddingLeft="2dip"
     android:background="@android:color/darker_gray"
     android:paddingRight="2dip">
-    <LinearLayout
-      android:id="@+id/leftSpacer"
-      android:layout_weight="0.25"
-      android:layout_width="0dip"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:visibility="gone" />
     <ImageButton
       android:src="@android:drawable/ic_btn_speak_now"
       android:id="@+id/SpeechRecogButton"
@@ -101,20 +95,15 @@
       android:layout_gravity="left"
       android:layout_weight="1"
       android:maxLines="2"
-      android:layout_height="wrap_content" android:text="@string/quickreply_preset_button"/>
+      android:layout_height="wrap_content"
+      android:text="@string/quickreply_preset_button" />
     <Button
       android:id="@+id/CancelButton"
       android:layout_width="0dip"
       android:layout_gravity="center_horizontal"
       android:layout_weight="1"
       android:maxLines="2"
-      android:layout_height="wrap_content" android:text="@android:string/cancel"/>
-    <LinearLayout
-      android:id="@+id/rightSpacer"
-      android:layout_width="0dip"
-      android:layout_weight="0.25"
       android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:visibility="gone"></LinearLayout>
+      android:text="@android:string/cancel" />
   </LinearLayout>
 </LinearLayout>
