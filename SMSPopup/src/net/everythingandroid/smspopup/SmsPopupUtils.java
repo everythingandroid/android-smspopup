@@ -114,8 +114,7 @@ public class SmsPopupUtils {
    * Returns null if not found
    */
   public static String getPersonIdFromPhoneNumber(Context context, String address) {
-    if (address == null)
-      return null;
+    if (address == null) return null;
 
     Cursor cursor = context.getContentResolver().query(
         Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, address),
@@ -265,7 +264,7 @@ public class SmsPopupUtils {
    * Opens an InputStream for the person's photo and returns the photo as a Bitmap.
    * If the person's photo isn't present returns the placeholderImageResource instead.
    * @param context the Context
-   * @param person the person whose photo should be used
+   * @param id the id of the person
    * @param placeholderImageResource the image resource to use if the person doesn't
    *   have a photo
    * @param options the decoding options, can be set to null
@@ -296,28 +295,62 @@ public class SmsPopupUtils {
   /**
    * Opens an InputStream for the person's photo and returns the photo as a Bitmap.
    * If the person's photo isn't present returns the placeholderImageResource instead.
-   * @param person the person whose photo should be used
+   * @param id the id of the person
    */
   public static InputStream openContactPhotoInputStream(ContentResolver cr, String id) {
     if (id == null) return null;
     if ("0".equals(id)) return null;
 
-    // Uri photoUri = Uri.withAppendedPath(person, Contacts.Photos.CONTENT_DIRECTORY);
-    Uri photoUri = Uri.withAppendedPath(Contacts.Photos.CONTENT_URI, id);
-    Cursor cursor = cr.query(photoUri, new String[]{Photos.DATA}, null, null, null);
+    Cursor cursor;
+    Uri photoUri;
 
-    try {
-      if (!cursor.moveToNext()) {
-        return null;
+    /*
+     * Contacts.People.CONTENT_URI is "content://contacts/people"
+     * Contacts.Photos.CONTENT_DIRECTORY is "photo";
+     * Uri will end up being "content://contacts/people/#contactId/photo"
+     */
+    if (Log.DEBUG) Log.v("openContactPhotoInputStream(): looking in Contacts.People");
+    photoUri = Uri.withAppendedPath(
+        Uri.withAppendedPath(Contacts.People.CONTENT_URI, id),
+        Contacts.Photos.CONTENT_DIRECTORY);
+    cursor = cr.query(photoUri, new String[] {Photos.DATA}, null, null, null);
+    if (cursor != null) {
+      try {
+        if (cursor.moveToFirst()) {
+          byte[] data = cursor.getBlob(0);
+          if (data != null) {
+            if (Log.DEBUG) Log.v("openContactPhotoInputStream(): contact photo found");
+            return new ByteArrayInputStream(data);
+          }
+        }
+      } finally {
+        cursor.close();
       }
-      byte[] data = cursor.getBlob(0);
-      if (data == null) {
-        return null;
-      }
-      return new ByteArrayInputStream(data);
-    } finally {
-      cursor.close();
     }
+
+    if (Log.DEBUG) Log.v("openContactPhotoInputStream(): looking in Contacts.Photos");
+    /*
+     * Contacts.Photos.CONTENT_URI is "content://contacts/photos"
+     * Uri will end up being "content://contacts/photos/#contactId"
+     */
+    photoUri = Uri.withAppendedPath(Contacts.Photos.CONTENT_URI, id);
+
+    cursor = cr.query(photoUri, new String[] {Photos.DATA}, null, null, null);
+    if (cursor != null) {
+      try {
+        if (cursor.moveToFirst()) {
+          byte[] data = cursor.getBlob(0);
+          if (data != null) {
+            if (Log.DEBUG) Log.v("openContactPhotoInputStream(): contact photo found");
+            return new ByteArrayInputStream(data);
+          }
+        }
+      } finally {
+        cursor.close();
+      }
+    }
+
+    return null;
   }
 
   /**
