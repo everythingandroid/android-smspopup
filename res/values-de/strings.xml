@@ -11,7 +11,8 @@
    <string name="notification_multiple_text">%d ungelesene Nachrichten.</string>
    <string name="notification_scroll_privacy">Neue Nachricht von: %s</string>
 
-<!-- Button Strings -->   
+<!-- Button Strings -->
+   <string name="view_contact">View Contact</string>
    <string name="button_close">Beenden</string>
    <string name="button_reply">Antworten</string>
    <string name="button_inbox">Posteingang</string>
