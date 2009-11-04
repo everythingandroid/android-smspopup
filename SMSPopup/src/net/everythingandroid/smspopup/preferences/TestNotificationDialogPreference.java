@@ -7,13 +7,11 @@ import net.everythingandroid.smspopup.SmsPopupDbAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
-import android.os.Parcelable;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 
 public class TestNotificationDialogPreference extends DialogPreference {
-  private static boolean opened = false;
   private Context context;
   private String contactId = null;
 
@@ -38,23 +36,11 @@ public class TestNotificationDialogPreference extends DialogPreference {
   @Override
   public void onDismiss(DialogInterface dialog) {
     super.onDismiss(dialog);
-    opened = false;
     ManageNotification.clear(context, ManageNotification.NOTIFICATION_TEST);
   }
 
   @Override
-  protected Parcelable onSaveInstanceState() {
-    opened = true;
-	return super.onSaveInstanceState();
-  }
-
-  @Override
   protected View onCreateDialogView() {
-
-	// If opened, don't resend the sms. 
-    if ( opened ) {
-    	return super.onCreateDialogView();
-    }
 
     // Create a test SmsMmsMessage
     String testPhone = "123-456-7890";

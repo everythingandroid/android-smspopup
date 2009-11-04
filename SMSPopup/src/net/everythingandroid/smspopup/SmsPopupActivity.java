@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.graphics.Bitmap;
@@ -82,6 +83,7 @@ public class SmsPopupActivity extends Activity {
   private View privacyView = null;
   private ViewStub buttonsViewStub;
   private View buttonsView = null;
+  LinearLayout mainLL = null;
 
   private boolean wasVisible = false;
   private boolean replying = false;
@@ -128,30 +130,18 @@ public class SmsPopupActivity extends Activity {
     myPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     // Check preferences and then blur out background behind window
-    if (myPrefs.getBoolean(getString(R.string.pref_blur_key), Boolean
-        .valueOf(getString(R.string.pref_blur_default)))) {
+    if (myPrefs.getBoolean(getString(R.string.pref_blur_key),
+        Boolean.valueOf(getString(R.string.pref_blur_default)))) {
       getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
           WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
     }
 
     // Fetch privacy mode
     privacyMode =
-      myPrefs.getBoolean(getString(R.string.pref_privacy_key), Boolean
-          .valueOf(getString(R.string.pref_privacy_default)));
+      myPrefs.getBoolean(getString(R.string.pref_privacy_key),
+          Boolean.valueOf(getString(R.string.pref_privacy_default)));
 
-    // This sets the minimum width of the activity to a minimum of 80% of the
-    // screen
-    // size only needed because the theme of this activity is "dialog" so it
-    // looks
-    // like it's floating and doesn't seem to fill_parent like a regular
-    // activity
-    // TODO: not need anymore? acutally should limit the minWidht in the case of
-    // devices
-    // with bigger screens...
-    LinearLayout mainLL = (LinearLayout) findViewById(R.id.MainLinearLayout);
-    Display d = getWindowManager().getDefaultDisplay();
-    int width = (int) (d.getWidth() * WIDTH);
-    mainLL.setMinimumWidth(width);
+    resizeLayout();
 
     // Find the main textviews
     fromTV = (TextView) findViewById(R.id.FromTextView);
@@ -174,8 +164,8 @@ public class SmsPopupActivity extends Activity {
     buttonsViewStub = (ViewStub) findViewById(R.id.ButtonsViewStub);
 
     // See if user wants to show buttons on the popup
-    if (myPrefs.getBoolean(getString(R.string.pref_show_buttons_key), Boolean
-        .valueOf(getString(R.string.pref_show_buttons_default)))) {
+    if (myPrefs.getBoolean(getString(R.string.pref_show_buttons_key),
+        Boolean.valueOf(getString(R.string.pref_show_buttons_default)))) {
 
       // Check if the ViewStub has been inflated and if not, inflate it
       if (buttonsView == null) {
@@ -1135,6 +1125,27 @@ public class SmsPopupActivity extends Activity {
       quickreplyTextView.setText(getString(R.string.quickreply_from_text, quickReplySmsMessage
           .getContactName()));
     }
+  }
+
+  @Override
+  public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    if (Log.DEBUG) Log.v("SMSPopupActivity: onConfigurationChanged()");
+    resizeLayout();
+  }
+
+  private void resizeLayout() {
+    // This sets the minimum width of the activity to a minimum of 80% of the screen
+    // size only needed because the theme of this activity is "dialog" so it looks
+    // like it's floating and doesn't seem to fill_parent like a regular activity
+    // TODO: not need anymore? acutally should limit the minWidth in the case of
+    // devices with bigger screens...
+    if (mainLL == null) {
+      mainLL = (LinearLayout) findViewById(R.id.MainLinearLayout);
+    }
+    Display d = getWindowManager().getDefaultDisplay();
+    int width = (int) (d.getWidth() * WIDTH);
+    mainLL.setMinimumWidth(width);
   }
 
   /**
