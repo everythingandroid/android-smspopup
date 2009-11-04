@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.CursorAdapter;
@@ -77,15 +78,13 @@ public class ConfigContactsActivity extends ListActivity {
     });
 
     mListView = getListView();
-    registerForContextMenu(mListView);
-
-    //    TextView tv = new TextView(getApplicationContext());
-    //    tv.setText(getString(R.string.contact_customization_add));
-    //    tv.setTextSize(25);
-    //    tv.setPadding(10, 10, 10, 10);
-
-    // mListView.addHeaderView(contactsAutoComplete, null, true);
-    // mListView.addHeaderView(tv, null, true);
+    mListView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+      public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        menu.add(0, CONTEXT_MENU_EDIT_ID, 0, R.string.contact_customization_edit);
+        menu.add(0, CONTEXT_MENU_DELETE_ID, 0, R.string.contact_customization_remove);
+      }
+    });
+    // registerForContextMenu(mListView);
 
     mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
 
@@ -224,6 +223,8 @@ public class ConfigContactsActivity extends ListActivity {
     return i;
   }
 
+  // Changed to add context menu only to Activity ListView
+  /*
   @Override
   public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
     super.onCreateContextMenu(menu, v, menuInfo);
@@ -235,6 +236,7 @@ public class ConfigContactsActivity extends ListActivity {
       menu.add(0, CONTEXT_MENU_DELETE_ID, 0, R.string.contact_customization_remove);
     }
   }
+   */
 
   @Override
   public boolean onContextItemSelected(MenuItem item) {
