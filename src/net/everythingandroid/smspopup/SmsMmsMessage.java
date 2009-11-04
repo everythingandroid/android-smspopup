@@ -202,7 +202,7 @@ public class SmsMmsMessage {
       locateThreadId();
       return SmsPopupUtils.getSmsToIntentFromThreadId(context, threadId);
     }
-    
+
     return null;
   }
 
@@ -272,7 +272,6 @@ public class SmsMmsMessage {
   }
 
   public void delete() {
-    locateMessageId();
     SmsPopupUtils.deleteMessage(context, getMessageId(), threadId, messageType);
   }
 
