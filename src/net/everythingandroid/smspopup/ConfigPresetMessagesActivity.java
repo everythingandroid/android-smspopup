@@ -323,14 +323,21 @@ public class ConfigPresetMessagesActivity extends ListActivity implements OnEdit
   }
 
   public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+    // event != null means enter key pressed
     if (event != null) {
+      // if shift is not pressed then move focus to send button
       if (!event.isShiftPressed()) {
-        v.focusSearch(View.FOCUS_DOWN).requestFocus();
-        return true;
+        if (v != null) {
+          View focusableView = v.focusSearch(View.FOCUS_DOWN);
+          if (focusableView != null) {
+            focusableView.requestFocus();
+            return true;
+          }
+        }
       }
-      return false;
     }
-    return true;
-  }
 
+    // otherwise allow keypress through
+    return false;
+  }
 }
