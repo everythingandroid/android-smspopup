@@ -52,6 +52,7 @@
       android:theme="@android:style/Theme.Dialog"
       android:launchMode="singleTask"
       android:configChanges="orientation|keyboardHidden"
+      android:screenOrientation="user"
       android:taskAffinity="net.everythingandroid.smspopup.popup">
     </activity>
     <activity
