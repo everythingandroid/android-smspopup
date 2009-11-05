@@ -657,8 +657,8 @@ public class SmsPopupActivity extends Activity {
                   View focusableView = v.focusSearch(View.FOCUS_RIGHT);
                   if (focusableView != null) {
                     focusableView.requestFocus();
+                    return true;
                   }
-                  return true;
                 }
               }
 

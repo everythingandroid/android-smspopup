@@ -487,8 +487,8 @@ public class SmsPopupUtils {
 
       Cursor cursor = context.getContentResolver().query(
           ContentUris.withAppendedId(CONVERSATION_CONTENT_URI, threadId),
-          new String[] { "_id", "date", "thread_id" },
-          where,
+          new String[] { "_id", "date", "thread_id" }, null,
+          // where,
           null, "date desc");
 
       if (cursor != null) {
