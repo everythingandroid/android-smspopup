@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -43,6 +44,7 @@ public class SmsPopupUtils {
   public static final Uri CONVERSATION_CONTENT_URI =
     Uri.withAppendedPath(MMS_SMS_CONTENT_URI, "conversations");
   public static final String SMSTO_URI = "smsto:";
+  private static final String UNREAD_CONDITION = "read=0";
 
   public static final Uri SMS_CONTENT_URI = Uri.parse("content://sms");
   public static final Uri SMS_INBOX_CONTENT_URI = Uri.withAppendedPath(SMS_CONTENT_URI, "inbox");
@@ -90,6 +92,7 @@ public class SmsPopupUtils {
     Cursor cursor = context.getContentResolver().query(
         Uri.withAppendedPath(Contacts.People.CONTENT_URI, id),
         new String[] { PeopleColumns.DISPLAY_NAME }, null, null, null);
+
     if (cursor != null) {
       try {
         if (cursor.getCount() > 0) {
@@ -313,7 +316,9 @@ public class SmsPopupUtils {
     photoUri = Uri.withAppendedPath(
         Uri.withAppendedPath(Contacts.People.CONTENT_URI, id),
         Contacts.Photos.CONTENT_DIRECTORY);
+
     cursor = cr.query(photoUri, new String[] {Photos.DATA}, null, null, null);
+
     if (cursor != null) {
       try {
         if (cursor.moveToFirst()) {
@@ -336,6 +341,7 @@ public class SmsPopupUtils {
     photoUri = Uri.withAppendedPath(Contacts.Photos.CONTENT_URI, id);
 
     cursor = cr.query(photoUri, new String[] {Photos.DATA}, null, null, null);
+
     if (cursor != null) {
       try {
         if (cursor.moveToFirst()) {
@@ -376,6 +382,7 @@ public class SmsPopupUtils {
         uriBuilder.build(),
         new String[] { SMSMMS_ID },
         null, null, null);
+
     if (cursor != null) {
       try {
         if (cursor.moveToFirst()) {
@@ -465,21 +472,15 @@ public class SmsPopupUtils {
       String body, int messageType) {
 
     long id = 0;
-    String where = String.format("body='%s' and ", body);
-    if (threadId > 0) {
+    String selection = "body = " + DatabaseUtils.sqlEscapeString(body);
+    final String sortOrder = "date DESC";
+    final String[] projection = new String[] { "_id", "date", "thread_id", "body" };
 
+    if (threadId > 0) {
       if (Log.DEBUG) Log.v("Trying to find message ID");
       if (SmsMmsMessage.MESSAGE_TYPE_MMS == messageType) {
         // It seems MMS timestamps are stored in a seconds, whereas SMS timestamps are in millis
-        where = "date=" + timestamp / 1000;
-      } else {
-        // As of Android OS >1.5 (>Cupcake) the system messaging process uses its own timestamp
-        // rather than the carrier timestamp on the SMS, therefore we can't match up directly
-        // against the timestamp as it's likely there is a difference by several millisecs.
-        // Instead we use a hacky method to find the message by using a buffer period.
-        where = String.format("date between %s and %s",
-            timestamp - SmsMmsMessage.MESSAGE_COMPARE_TIME_BUFFER,
-            timestamp + SmsMmsMessage.MESSAGE_COMPARE_TIME_BUFFER);
+        selection += " and date = " + (timestamp / 1000);
       }
 
       // Log.v("Where is: " + where);
@@ -487,9 +488,10 @@ public class SmsPopupUtils {
 
       Cursor cursor = context.getContentResolver().query(
           ContentUris.withAppendedId(CONVERSATION_CONTENT_URI, threadId),
-          new String[] { "_id", "date", "thread_id" }, null,
-          // where,
-          null, "date desc");
+          projection,
+          selection,
+          null,
+          sortOrder);
 
       if (cursor != null) {
         try {
@@ -709,7 +711,7 @@ public class SmsPopupUtils {
    * @return unread sms+mms message count
    */
   public static int getUnreadMessagesCount(Context context) {
-    return getUnreadMessagesCount(context, 0);
+    return getUnreadMessagesCount(context, 0, null);
   }
 
   /**
@@ -719,8 +721,8 @@ public class SmsPopupUtils {
    * @param timestamp only messages before this timestamp will be counted
    * @return unread sms+mms message count
    */
-  public static int getUnreadMessagesCount(Context context, long timestamp) {
-    return getUnreadSmsCount(context, timestamp) + getUnreadMmsCount(context);
+  public static int getUnreadMessagesCount(Context context, long timestamp, String messageBody) {
+    return getUnreadSmsCount(context, timestamp, messageBody) + getUnreadMmsCount(context);
   }
 
   /**
@@ -730,7 +732,7 @@ public class SmsPopupUtils {
    * @return unread sms message count
    */
   public static int getUnreadSmsCount(Context context) {
-    return getUnreadSmsCount(context, 0);
+    return getUnreadSmsCount(context, 0, null);
   }
 
   /**
@@ -740,39 +742,73 @@ public class SmsPopupUtils {
    * @param timestamp only messages before this timestamp will be counted
    * @return unread sms message count
    */
-  public static int getUnreadSmsCount(Context context, long timestamp) {
-    //    String SMS_READ_COLUMN = "read";
-    //    String UNREAD_CONDITION = SMS_READ_COLUMN + "=0";
-    String UNREAD_CONDITION = "read=0";
+  public static int getUnreadSmsCount(Context context, long timestamp, String messageBody) {
 
-    if (timestamp > 0) {
-      if (Log.DEBUG) Log.v("getUnreadSmsCount(), timestamp = " + timestamp);
-      UNREAD_CONDITION += " and date<"
-        + String.valueOf(timestamp - SmsMmsMessage.MESSAGE_COMPARE_TIME_BUFFER);
-    }
+    if (Log.DEBUG) Log.v("getUnreadSmsCount()");
+
+    final String[] projection = new String[] { SMSMMS_ID, "body" };
+    final String selection = UNREAD_CONDITION;
+    final String[] selectionArgs = null;
+    final String sortOrder = "date DESC";
+
+    //    if (timestamp > 0) {
+    //      if (Log.DEBUG) Log.v("getUnreadSmsCount(), timestamp = " + timestamp);
+    //      selection += " and date < ?";
+    //      selectionArgs =
+    //        new String[] { String.valueOf(timestamp - SmsMmsMessage.MESSAGE_COMPARE_TIME_BUFFER) };
+    //    }
 
     int count = 0;
 
     Cursor cursor = context.getContentResolver().query(
         SMS_INBOX_CONTENT_URI,
-        new String[] { SMSMMS_ID },
-        UNREAD_CONDITION, null, null);
+        projection,
+        selection,
+        selectionArgs,
+        sortOrder);
 
     if (cursor != null) {
       try {
         count = cursor.getCount();
+
+        /*
+         * If count was 0, its likely the message has been loaded in the db yet so unread
+         * so set count to 1
+         */
+        if (count == 0) {
+          count = 1;
+        } else {
+          /*
+           * Otherwise count was >0 so we need to check if the message received matches
+           * the most recent one in the db or not (to find out if our code ran before
+           * the system code or vice-versa)
+           */
+          if (messageBody != null) {
+            if (cursor.moveToFirst()) {
+              /*
+               * Check the most recent message, if the body does not match then it hasn't yet
+               * been inserted into the system database, therefore we need to add one to our
+               * total count
+               */
+              if (!messageBody.equals(cursor.getString(1))) {
+                if (Log.DEBUG) Log.v("getUnreadSmsCount(): most recent message did not match body, adding 1 to count");
+                count++;
+              }
+            }
+          }
+        }
       } finally {
         cursor.close();
       }
     }
 
     // We ignored the latest incoming message so add one to the total count
-    if (timestamp > 0) {
-      if (Log.DEBUG) Log.v("adding 1 to unread, previous count was " + count);
-      count += 1;
-    }
+    //    if (timestamp > 0) {
+    //      if (Log.DEBUG) Log.v("adding 1 to unread, previous count was " + count);
+    //      count += 1;
+    //    }
 
-    if (Log.DEBUG) Log.v("sms unread count = " + count);
+    if (Log.DEBUG) Log.v("getUnreadSmsCount(): unread count = " + count);
     return count;
   }
 
@@ -784,15 +820,15 @@ public class SmsPopupUtils {
    */
   public static int getUnreadMmsCount(Context context) {
 
-    String MMS_READ_COLUMN = "read";
-    String UNREAD_CONDITION = MMS_READ_COLUMN + "=0";
+    final String selection = UNREAD_CONDITION;
+    final String[] projection = new String[] { SMSMMS_ID };
 
     int count = 0;
 
     Cursor cursor = context.getContentResolver().query(
         MMS_INBOX_CONTENT_URI,
-        new String[] { SMSMMS_ID },
-        UNREAD_CONDITION, null, null);
+        projection,
+        selection, null, null);
 
     if (cursor != null) {
       try {
@@ -811,24 +847,26 @@ public class SmsPopupUtils {
   public static SmsMmsMessage getSmsDetails(Context context,
       long ignoreThreadId, boolean unreadOnly) {
 
-    String SMS_READ_COLUMN = "read";
-    String WHERE_CONDITION = unreadOnly ? SMS_READ_COLUMN + " = 0" : null;
-    String SORT_ORDER = "date DESC";
+    final String[] projection =
+      new String[] { "_id", "thread_id", "address", "person", "date", "body" };
+    String selection = unreadOnly ? UNREAD_CONDITION : null;
+    String[] selectionArgs = null;
+    final String sortOrder = "date DESC";
+
     int count = 0;
 
-    //Log.v(WHERE_CONDITION);
-
     if (ignoreThreadId > 0) {
-      //			Log.v("Ignoring sms threadId = " + ignoreThreadId);
-      WHERE_CONDITION += " AND thread_id != " + ignoreThreadId;
+      selection = (selection == null) ? "" : selection + " and ";
+      selection += "thread_id != ?";
+      selectionArgs = new String[] { String.valueOf(ignoreThreadId) };
     }
 
     Cursor cursor = context.getContentResolver().query(
         SMS_INBOX_CONTENT_URI,
-        new String[] { "_id", "thread_id", "address", "person", "date", "body" },
-        WHERE_CONDITION,
-        null,
-        SORT_ORDER);
+        projection,
+        selection,
+        selectionArgs,
+        sortOrder);
 
     if (cursor != null) {
       try {
@@ -885,21 +923,24 @@ public class SmsPopupUtils {
    * 
    */
   public static SmsMmsMessage getMmsDetails(Context context, long ignoreThreadId) {
-    String MMS_READ_COLUMN = "read";
-    String UNREAD_CONDITION = MMS_READ_COLUMN + " = 0";
-    String SORT_ORDER = "date DESC";
+
+    final String[] projection = new String[] { "_id", "thread_id", "date", "sub", "sub_cs" };
+    String selection = UNREAD_CONDITION;
+    String[] selectionArgs = null;
+    final String sortOrder = "date DESC";
     int count = 0;
 
     if (ignoreThreadId > 0) {
-      UNREAD_CONDITION += " AND thread_id != " + ignoreThreadId;
+      selection += " and thread_id != ?";
+      selectionArgs = new String[] { String.valueOf(ignoreThreadId) };
     }
 
     Cursor cursor = context.getContentResolver().query(
         MMS_INBOX_CONTENT_URI,
-        //new String[] { "m_id", "\"from\"", "sub", "d_tm", "thread_id" },
-        new String[] { "_id", "thread_id", "date", "sub", "sub_cs" },
-        UNREAD_CONDITION, null,
-        SORT_ORDER);
+        projection,
+        selection,
+        selectionArgs,
+        sortOrder);
 
     if (cursor != null) {
       try {
@@ -939,14 +980,17 @@ public class SmsPopupUtils {
   }
 
   public static String getMmsAddress(Context context, long message_id) {
+    final String[] projection =  new String[] { "address", "contact_id", "charset", "type" };
+    final String selection = "type=137"; // "type="+ PduHeaders.FROM,
 
     Uri.Builder builder = MMS_CONTENT_URI.buildUpon();
     builder.appendPath(String.valueOf(message_id)).appendPath("addr");
 
-    Cursor cursor = context.getContentResolver().query(builder.build(),
-        new String[] { "address", "contact_id", "charset", "type" },
-        // "type="+ PduHeaders.FROM,
-        "type=137", null, null);
+    Cursor cursor = context.getContentResolver().query(
+        builder.build(),
+        projection,
+        selection,
+        null, null);
 
     if (cursor != null) {
       try {
@@ -994,7 +1038,8 @@ public class SmsPopupUtils {
     Cursor cursor = context.getContentResolver().query(
         Contacts.ContactMethods.CONTENT_EMAIL_URI,
         new String[] { Contacts.ContactMethods.NAME },
-        Contacts.ContactMethods.DATA + " = \'" + email + "\'", null, null);
+        Contacts.ContactMethods.DATA + " = ?",
+        new String[] { email }, null);
 
     if (cursor != null) {
       try {

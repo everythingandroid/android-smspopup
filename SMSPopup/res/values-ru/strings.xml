@@ -165,39 +165,39 @@
 <!-- Arrays for drop-down prefs -->
    <string-array name="pref_timeout_entries">
 	   <item>10 секунд</item>
-		<item>20 секунд</item>
-		<item>30 секунд</item>
-		<item>1 минута</item>
-		<item>2 минуты</item>
-		<item>5 минут</item>
-		<item>10 минут</item>
+       <item>20 секунд</item>
+       <item>30 секунд</item>
+       <item>1 минута</item>
+       <item>2 минуты</item>
+       <item>5 минут</item>
+       <item>10 минут</item>
 	</string-array>
 
 	<string-array name="pref_vibrate_pattern_entries">
-		<item>Нормальное</item>
-		<item>Продолжительное</item>
-		<item>Несколько коротких</item>
-		<item>Несколько продолжительных</item>
-		<item>Собственное</item>
+       <item>Нормальное</item>
+       <item>Продолжительное</item>
+       <item>Несколько коротких</item>
+       <item>Несколько продолжительных</item>
+       <item>Собственное</item>
 	</string-array>
 
    <string-array name="pref_led_color_entries">
 	   <item>Синий</item>
-		<item>Зеленый</item>
-		<item>Красный</item>
-		<item>Оранжевый</item>
-		<item>Пурпурный</item>
-		<item>Голубой</item>
-		<item>Собственный</item>
+       <item>Зеленый</item>
+       <item>Красный</item>
+       <item>Оранжевый</item>
+       <item>Пурпурный</item>
+       <item>Голубой</item>
+       <item>Собственный</item>
    </string-array>
 
    <string-array name="pref_notif_repeat_times_entries">
 	   <item>1</item>
-		<item>2</item>
-		<item>3</item>
-		<item>4</item>
-		<item>5</item>
-		<item>10</item>
-		<item>Бесконечно</item>
+       <item>2</item>
+       <item>3</item>
+       <item>4</item>
+       <item>5</item>
+       <item>10</item>
+       <item>Бесконечно</item>
    </string-array>
 </resources>
