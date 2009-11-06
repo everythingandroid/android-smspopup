@@ -50,8 +50,8 @@
    <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
 
    <string name="pref_releasenotes_key">releasenotes</string>
-   <string name="pref_releasenotes_title">What's New?</string>
-   <string name="pref_releasenotes_summary">See what's new in this version</string>
+   <string name="pref_releasenotes_title">What\'s New?</string>
+   <string name="pref_releasenotes_summary">See what\'s new in this version</string>
    <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>
    
    <string name="pref_sendemail_key">sendemail</string>
