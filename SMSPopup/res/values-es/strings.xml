@@ -191,6 +191,7 @@
       <item>Naranja</item>
       <item>Magenta</item>
       <item>Cian</item>
+      <item>Personalizado</item>
    </string-array>
       
    <string-array name="pref_notif_repeat_times_entries">
