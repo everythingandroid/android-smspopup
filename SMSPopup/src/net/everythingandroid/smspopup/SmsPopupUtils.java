@@ -772,34 +772,33 @@ public class SmsPopupUtils {
         count = cursor.getCount();
 
         /*
-         * If count was 0, its likely the message has been loaded in the db yet so unread
-         * so set count to 1
+         * We need to check if the message received matches the most recent one in the db
+         * or not (to find out if our code ran before the system code or vice-versa)
          */
-        if (count == 0) {
-          count = 1;
-        } else {
-          /*
-           * Otherwise count was >0 so we need to check if the message received matches
-           * the most recent one in the db or not (to find out if our code ran before
-           * the system code or vice-versa)
-           */
-          if (messageBody != null) {
-            if (cursor.moveToFirst()) {
-              /*
-               * Check the most recent message, if the body does not match then it hasn't yet
-               * been inserted into the system database, therefore we need to add one to our
-               * total count
-               */
-              if (!messageBody.equals(cursor.getString(1))) {
-                if (Log.DEBUG) Log.v("getUnreadSmsCount(): most recent message did not match body, adding 1 to count");
-                count++;
-              }
+        if (messageBody != null && count > 0) {
+          if (cursor.moveToFirst()) {
+            /*
+             * Check the most recent message, if the body does not match then it hasn't yet
+             * been inserted into the system database, therefore we need to add one to our
+             * total count
+             */
+            if (!messageBody.equals(cursor.getString(1))) {
+              if (Log.DEBUG) Log.v("getUnreadSmsCount(): most recent message did not match body, adding 1 to count");
+              count++;
             }
           }
         }
       } finally {
         cursor.close();
       }
+    }
+
+    /*
+     * If count is still 0 and timestamp is set then its likely the system db had not updated
+     * when this code ran, therefore let's add 1 so the notify will run correctly.
+     */
+    if (count == 0 && timestamp > 0) {
+      count = 1;
     }
 
     // We ignored the latest incoming message so add one to the total count

@@ -8,7 +8,7 @@
   <string name="pref_contacts_title">Notificaties contacten</string>
   <string name="pref_contacts_summary">Individuele configuratie contact</string>
 
-  <string name="pref_notif_help_title">Help - Ik begrijp 't niet!</string>
+  <string name="pref_notif_help_title">Help - Ik begrijp \'t niet!</string>
   <string name="pref_notif_help_summary">Notificatie Hulp</string>
   <string name="pref_notif_help_message">SMS Popup geeft u nu de mogelijkheid om per contact de notificatie aan te passen. Als er een nieuwe bericht binnenkomt zal SMS Popup eerst controleren of de afzender een individuele configuratie heeft. Als dit zo is wordt deze configuratie gebruikt, anders wordt de standaard configuratie gebruikt.\n\n Deze functionaliteit kan gebruikt worden om alleen bij berichhen van specifieke contacten een popup te laten zien en voor overige berichten alleen een standaard notificatie te tonen. Ook is het mogelijk om berichten van bepaalde afzenders te negeren door de notificatie op stil te zetten.</string>
 

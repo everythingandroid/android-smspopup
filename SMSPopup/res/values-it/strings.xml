@@ -74,9 +74,9 @@
    <string name="pref_require_unlock_summaryoff">I pulsanti saranno mostrati da subito</string>
 
    <!-- Not yet implemented -->
-   <string name="pref_inbox_app_title">Scegli l'applicazione Inbox</string>
-   <string name="pref_inbox_app_summary">Scegli l'applicazione che sarà lanciata per msg multipli</string>
-   <string name="pref_inbox_app_info">Ricorda che l'applicazione di "Risposta" è settata dal sistema</string>
+   <string name="pref_inbox_app_title">Scegli l\'applicazione Inbox</string>
+   <string name="pref_inbox_app_summary">Scegli l\'applicazione che sarà lanciata per msg multipli</string>
+   <string name="pref_inbox_app_info">Ricorda che l\'applicazione di "Risposta" è settata dal sistema</string>
 
    <string name="pref_show_buttons_title">Mostra pulsanti</string>
    <string name="pref_show_buttons_summaryon">I pulsanti sono visibili sul Popup</string>
@@ -119,7 +119,7 @@
    <string name="pref_vibrate_summaryoff">La vibrazione è disattiva</string>
 
    <string name="pref_vibrate_pattern_title">Tipologia Vibrazione</string>
-   <string name="pref_vibrate_pattern_summary">Imposta l'intervallo di vibrazione</string>
+   <string name="pref_vibrate_pattern_summary">Imposta l\'intervallo di vibrazione</string>
    <string name="pref_vibrate_pattern_ok">Imposta un intervallo personalizzato</string>
    <string name="pref_vibrate_pattern_bad">Intervallo personalizzato non valido, usa quello di default</string>
    <string name="pref_vibrate_pattern_help">Inserisci un valore personalizzato, nel formato:\nmillisOff, millisOn, etc.\n\nFor example:\n0,1000\n0,500,200,500,200,500</string>
@@ -156,7 +156,7 @@
    <string name="pref_notif_repeat_summaryoff">Il ricorda messaggi non letti è disabilitato</string>
    
    <string name="pref_notif_repeat_interval_title">Intervallo di ricorda</string>
-   <string name="pref_notif_repeat_interval_summary">L'intervallo tra una notifica di ricorda e l'altra</string>
+   <string name="pref_notif_repeat_interval_summary">L\'intervallo tra una notifica di ricorda e l\'altra</string>
    <string name="pref_notif_repeat_interval_dialogTitle">Intervalllo in (minuti)</string>
    
    <string name="pref_notif_repeat_times_title">Numbero di Ricorda</string>
