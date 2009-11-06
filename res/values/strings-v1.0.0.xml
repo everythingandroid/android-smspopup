@@ -25,7 +25,7 @@
   <string name="pref_contacts_summary">Individual contact customization</string>
 	
   <string name="pref_notif_help_key">notif_help</string>
-  <string name="pref_notif_help_title">Help - I'm confused!</string>
+  <string name="pref_notif_help_title">Help - I\'m confused!</string>
   <string name="pref_notif_help_summary">Notifications Help</string>
   <string name="pref_notif_help_message">SMS Popup now offers the ability to customize notifications on a per contact basis.  When a new message comes in, SMS Popup will first check if the contact has a customized notification.  If so, those settings are used, otherwise the default notifications are used.\n\nUsing this functionality, you could set things up so only a few contacts show a popup while the rest trigger a regular notification.  You could also ignore certain contacts by setting their notification to silent.</string>
 
