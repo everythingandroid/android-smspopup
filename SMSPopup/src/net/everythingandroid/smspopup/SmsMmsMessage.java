@@ -61,7 +61,7 @@ public class SmsMmsMessage {
 
     contactId = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
     contactName = SmsPopupUtils.getPersonName(context, contactId, fromAddress);
-    unreadCount = SmsPopupUtils.getUnreadMessagesCount(context, timestamp);
+    unreadCount = SmsPopupUtils.getUnreadMessagesCount(context, timestamp, messageBody);
 
     if (contactName == null) {
       contactName = context.getString(android.R.string.unknownName);
@@ -256,6 +256,7 @@ public class SmsMmsMessage {
   }
 
   public boolean getNotify() {
+    if (Log.DEBUG) Log.v("getNotify() - notify is " + notify);
     return notify;
   }
 
