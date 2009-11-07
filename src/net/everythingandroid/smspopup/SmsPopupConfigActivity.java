@@ -4,6 +4,7 @@ import net.everythingandroid.smspopup.preferences.AppEnabledCheckBoxPreference;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.preferences.DialogPreference;
 import net.everythingandroid.smspopup.preferences.EmailDialogPreference;
+import net.everythingandroid.smspopup.preferences.QuickReplyCheckBoxPreference;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -16,16 +17,22 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class SmsPopupConfigActivity extends PreferenceActivity {
   private static final int DIALOG_DONATE = Menu.FIRST;
   private Preference donateDialogPref = null;
+  private QuickReplyCheckBoxPreference quickReplyPref;
+  private ButtonListPreference button1;
+  private ButtonListPreference button2;
+  private ButtonListPreference button3;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -45,44 +52,132 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     }
 
     // Set the version number in the about dialog preference
-    DialogPreference aboutPref =
+    final DialogPreference aboutPref =
       (DialogPreference) findPreference(getString(R.string.pref_about_key));
     aboutPref.setDialogTitle(getString(R.string.app_name) + version);
     aboutPref.setDialogLayoutResource(R.layout.about);
 
     // Set the version number in the email preference dialog
-    EmailDialogPreference emailPref = (EmailDialogPreference) findPreference(getString(R.string.pref_sendemail_key));
+    final EmailDialogPreference emailPref =
+      (EmailDialogPreference) findPreference(getString(R.string.pref_sendemail_key));
     emailPref.setVersion(version);
 
     // Set intent for contact notification option
-    PreferenceScreen contactsPS =
+    final PreferenceScreen contactsPS =
       (PreferenceScreen) findPreference(getString(R.string.contacts_key));
     contactsPS.setIntent(
         new Intent(this, net.everythingandroid.smspopup.ConfigContactsActivity.class));
 
     // Set intent for quick message option
-    PreferenceScreen quickMessagePS =
+    final PreferenceScreen quickMessagePS =
       (PreferenceScreen) findPreference(getString(R.string.quickmessages_key));
     quickMessagePS.setIntent(
         new Intent(this, net.everythingandroid.smspopup.ConfigPresetMessagesActivity.class));
 
     // Button 1 preference
-    ButtonListPreference button1 =
+    button1 =
       (ButtonListPreference) findPreference(getString(R.string.pref_button1_key));
-    button1.prefId = getString(R.string.pref_button1_key);
     button1.refreshSummary();
+    button1.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+      public boolean onPreferenceChange(Preference preference, Object newValue) {
+        quickReplyPref.setChecked(
+            isQuickReplyActive((String) newValue, button2.getValue(), button3.getValue()));
+        return true;
+      }
+    });
 
     // Button 2 preference
-    ButtonListPreference button2 =
+    button2 =
       (ButtonListPreference) findPreference(getString(R.string.pref_button2_key));
-    button2.prefId = getString(R.string.pref_button2_key);
     button2.refreshSummary();
+    button2.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+      public boolean onPreferenceChange(Preference preference, Object newValue) {
+        quickReplyPref.setChecked(
+            isQuickReplyActive((String) newValue, button1.getValue(), button3.getValue()));
+        return true;
+      }
+    });
 
     // Button 3 preference
-    ButtonListPreference button3 =
+    button3 =
       (ButtonListPreference) findPreference(getString(R.string.pref_button3_key));
-    button3.prefId = getString(R.string.pref_button3_key);
     button3.refreshSummary();
+    button3.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+      public boolean onPreferenceChange(Preference preference, Object newValue) {
+        quickReplyPref.setChecked(
+            isQuickReplyActive((String) newValue, button1.getValue(), button2.getValue()));
+        return true;
+      }
+    });
+
+    // Quick Reply checkbox preference
+    quickReplyPref =
+      (QuickReplyCheckBoxPreference) findPreference(getString(R.string.pref_quickreply_key));
+
+    /*
+     * This is a really manual way of dealing with this, but I didn't think it was worth
+     * spending the time to make it more generic.  This will basically look through the active
+     * buttons and switch any Reply buttons to Quick Reply buttons when enabling and the opposite
+     * when disabling.
+     */
+    quickReplyPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+      public boolean onPreferenceChange(Preference preference, Object newValue) {
+        int button1val = Integer.valueOf(button1.getValue());
+        int button2val = Integer.valueOf(button2.getValue());
+        int button3val = Integer.valueOf(button3.getValue());
+
+        int count = 0;
+
+        if (button1.isReplyButton()) count++;
+        if (button2.isReplyButton()) count++;
+        if (button3.isReplyButton()) count++;
+
+        if (count > 1) {
+          Toast.makeText(SmsPopupConfigActivity.this,
+              R.string.pref_quickreply_bothreplybuttons, Toast.LENGTH_LONG).show();
+          return false;
+        } else if (count == 0) {
+          Toast.makeText(SmsPopupConfigActivity.this,
+              R.string.pref_quickreply_noreplybuttons, Toast.LENGTH_LONG).show();
+          return false;
+        }
+
+        if (Boolean.FALSE == newValue) {
+
+          // Quick Reply should be turned off
+          if (button1val == ButtonListPreference.BUTTON_QUICKREPLY) {
+            button1.setValue(String.valueOf(ButtonListPreference.BUTTON_REPLY));
+          } else if (button2val == ButtonListPreference.BUTTON_QUICKREPLY) {
+            button2.setValue(String.valueOf(ButtonListPreference.BUTTON_REPLY));
+          } else if (button3val == ButtonListPreference.BUTTON_QUICKREPLY) {
+            button3.setValue(String.valueOf(ButtonListPreference.BUTTON_REPLY));
+          }
+          button1.refreshSummary();
+          button2.refreshSummary();
+          button3.refreshSummary();
+
+          return true;
+        } else if (Boolean.TRUE == newValue) {
+
+          // Quick Reply should be turned on
+          if (button1val == ButtonListPreference.BUTTON_REPLY) {
+            button1.setValue(String.valueOf(ButtonListPreference.BUTTON_QUICKREPLY));
+          } else if (button2val == ButtonListPreference.BUTTON_REPLY) {
+            button2.setValue(String.valueOf(ButtonListPreference.BUTTON_QUICKREPLY));
+          } else if (button3val == ButtonListPreference.BUTTON_REPLY) {
+            button3.setValue(String.valueOf(ButtonListPreference.BUTTON_QUICKREPLY));
+
+          }
+          button1.refreshSummary();
+          button2.refreshSummary();
+          button3.refreshSummary();
+
+          return true;
+        }
+
+        return false;
+      }
+    });
 
     // Donate dialog preference
     donateDialogPref = findPreference(getString(R.string.pref_donate_key));
@@ -100,20 +195,6 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     SmsPopupDbAdapter mDbAdapter = new SmsPopupDbAdapter(this);
     mDbAdapter.open(true); // Open database read-only
     mDbAdapter.close();
-
-    // Testing large photo insertion
-    //    Bitmap photo = BitmapFactory.decodeResource(getResources(), R.drawable.img);
-    //
-    //    Uri uri = Uri.withAppendedPath(Contacts.People.CONTENT_URI, "4");
-    //    if (photo != null) {
-    //      ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    //      photo.compress(Bitmap.CompressFormat.JPEG, 75, stream);
-    //      People.setPhotoData(getContentResolver(), uri, stream.toByteArray());
-    //    }
-
-    //    Intent i = new Intent(Intent.ACTION_VIEW);
-    //    i.setData(Uri.parse("content://contacts/people/1256"));
-    //    startActivity(i);
   }
 
   @Override
@@ -121,10 +202,6 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     super.onResume();
 
     SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-    //    SharedPreferences.Editor settings = myPrefs.edit();
-    //    settings.putBoolean(this.getString(R.string.pref_donated_key), false);
-    //    settings.commit();
 
     // Donate Dialog
     if (donateDialogPref != null) {
@@ -189,6 +266,18 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
         .create();
     }
     return super.onCreateDialog(id);
+  }
+
+  /*
+   * Quick method to work out if Quick Reply is active or not (to toggle the pref)
+   */
+  private boolean isQuickReplyActive(String val1, String val2, String val3) {
+    if (Integer.valueOf(val1) == ButtonListPreference.BUTTON_QUICKREPLY
+        || Integer.valueOf(val2) == ButtonListPreference.BUTTON_QUICKREPLY
+        || Integer.valueOf(val3) == ButtonListPreference.BUTTON_QUICKREPLY) {
+      return true;
+    }
+    return false;
   }
 
 }

@@ -325,13 +325,8 @@ public class SmsPopupDbAdapter {
       }
       if (one.equals(contact.getString(KEY_LED_ENABLED_NUM))) {
         String ledColor = contact.getString(KEY_LED_COLOR_NUM);
-        // TODO: super hacky, on the G1 the yellow LED color looks like orange so these are flipped
-        // in the led color selection, this corrects the summary but will probably be incorrect
-        // for future devices.
         Log.v("ledColor = " + ledColor);
-        if ("Yellow".equals(ledColor)) {
-          ledColor = "Orange";
-        } else if ("custom".equals(ledColor)) {
+        if ("custom".equals(ledColor)) {
           ledColor = "Custom";
         }
         summary.append(", " + ledColor + " LED");

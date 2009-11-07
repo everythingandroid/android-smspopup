@@ -190,6 +190,12 @@
               android:dependency="@string/pref_show_buttons_key" />
           </PreferenceCategory>
         </PreferenceScreen>
+        <net.everythingandroid.smspopup.preferences.QuickReplyCheckBoxPreference
+          android:key="@string/pref_quickreply_key"
+          android:title="@string/pref_quickreply_title"
+          android:summaryOn="@string/pref_quickreply_summaryon"
+          android:summaryOff="@string/pref_quickreply_summaryoff"
+          android:defaultValue="@string/pref_quickreply_default" />        
         <ListPreference
           android:key="@string/pref_timeout_key"
           android:title="@string/pref_timeout_title"

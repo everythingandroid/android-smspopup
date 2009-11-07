@@ -12,8 +12,6 @@
    <string name="notification_scroll_privacy">Nuevo mensaje de: %s</string>
 
 <!-- Button Strings -->
-   <string name="view_contact">Ver Contacto</string>
-   <string name="quick_reply">Respuesta rápida</string>
    <string name="button_close">Cerrar</string>
    <string name="button_reply">Responder</string>
    <string name="button_inbox">Bandeja de Entrada</string>
@@ -188,7 +186,7 @@
       <item>Azul</item>
       <item>Verde</item>
       <item>Rojo</item>
-      <item>Naranja</item>
+      <item>Amarillo</item>
       <item>Magenta</item>
       <item>Cian</item>
       <item>Personalizado</item>
