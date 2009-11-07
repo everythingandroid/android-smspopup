@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.everythingandroid.smspopup.ManageKeyguard.LaunchOnKeyguardExit;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
+import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -173,7 +174,7 @@ public class SmsPopupActivity extends Activity {
       }
 
       // Button 1
-      Button button1 = (Button) buttonsView.findViewById(R.id.button1);
+      final Button button1 = (Button) buttonsView.findViewById(R.id.button1);
       PopupButton button1Vals =
         new PopupButton(getApplicationContext(), Integer.parseInt(myPrefs.getString(
             getString(R.string.pref_button1_key), getString(R.string.pref_button1_default))));
@@ -182,7 +183,7 @@ public class SmsPopupActivity extends Activity {
       button1.setVisibility(button1Vals.buttonVisibility);
 
       // Button 2
-      Button button2 = (Button) buttonsView.findViewById(R.id.button2);
+      final Button button2 = (Button) buttonsView.findViewById(R.id.button2);
       PopupButton button2Vals =
         new PopupButton(getApplicationContext(), Integer.parseInt(myPrefs.getString(
             getString(R.string.pref_button2_key), getString(R.string.pref_button2_default))));
@@ -191,7 +192,7 @@ public class SmsPopupActivity extends Activity {
       button2.setVisibility(button2Vals.buttonVisibility);
 
       // Button 3
-      Button button3 = (Button) buttonsView.findViewById(R.id.button3);
+      final Button button3 = (Button) buttonsView.findViewById(R.id.button3);
       PopupButton button3Vals =
         new PopupButton(getApplicationContext(), Integer.parseInt(myPrefs.getString(
             getString(R.string.pref_button3_key), getString(R.string.pref_button3_default))));
@@ -239,38 +240,39 @@ public class SmsPopupActivity extends Activity {
     public PopupButton(Context mContext, int id) {
       buttonId = id;
       isReplyButton = false;
-      if (buttonId == 4 || buttonId == 5) isReplyButton = true;
+      if (buttonId == ButtonListPreference.BUTTON_REPLY
+          || buttonId == ButtonListPreference.BUTTON_QUICKREPLY) isReplyButton = true;
       String[] buttonTextArray = mContext.getResources().getStringArray(R.array.buttons_text);
       buttonText = buttonTextArray[buttonId];
 
-      if (buttonId == 0) { // Disabled
+      if (buttonId == ButtonListPreference.BUTTON_DISABLED) { // Disabled
         buttonVisibility = View.GONE;
       }
     }
 
     public void onClick(View v) {
       switch (buttonId) {
-        case 0: // Disabled
+        case ButtonListPreference.BUTTON_DISABLED: // Disabled
           break;
-        case 1: // Close
+        case ButtonListPreference.BUTTON_CLOSE: // Close
           closeMessage();
           break;
-        case 2: // Delete
+        case ButtonListPreference.BUTTON_DELETE: // Delete
           showDialog(DIALOG_DELETE);
           break;
-        case 3: // Delete no confirmation
+        case ButtonListPreference.BUTTON_DELETE_NO_CONFIRM: // Delete no confirmation
           deleteMessage();
           break;
-        case 4: // Reply
+        case ButtonListPreference.BUTTON_REPLY: // Reply
           replyToMessage();
           break;
-        case 5: // Quick Reply
+        case ButtonListPreference.BUTTON_QUICKREPLY: // Quick Reply
           quickReply();
           break;
-        case 6: // Inbox
+        case ButtonListPreference.BUTTON_INBOX: // Inbox
           gotoInbox();
           break;
-        case 7: // Text-to-Speech
+        case ButtonListPreference.BUTTON_TTS: // Text-to-Speech
           speakMessage();
           break;
       }
@@ -860,7 +862,7 @@ public class SmsPopupActivity extends Activity {
     menu.add(Menu.NONE, CONTEXT_CLOSE_ID, Menu.NONE, getString(R.string.button_close));
     menu.add(Menu.NONE, CONTEXT_DELETE_ID, Menu.NONE, getString(R.string.button_delete));
     menu.add(Menu.NONE, CONTEXT_REPLY_ID, Menu.NONE, getString(R.string.button_reply));
-    menu.add(Menu.NONE, CONTEXT_QUICKREPLY_ID, Menu.NONE, getString(R.string.quick_reply));
+    menu.add(Menu.NONE, CONTEXT_QUICKREPLY_ID, Menu.NONE, getString(R.string.button_quickreply));
     menu.add(Menu.NONE, CONTEXT_TTS_ID, Menu.NONE, getString(R.string.button_tts));
     menu.add(Menu.NONE, CONTEXT_INBOX_ID, Menu.NONE, getString(R.string.button_inbox));
   }

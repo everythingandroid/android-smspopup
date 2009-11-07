@@ -10,8 +10,6 @@
 <string name="notification_multiple_text">%d 個未讀短信。</string>
 <string name="notification_scroll_privacy">新短信來源: %s</string>
 <!-- Button Strings -->
-<string name="view_contact">View Contact</string>
-<string name="quick_reply">Quick Reply</string>
 <string name="button_close">關閉</string>
 <string name="button_reply">回復</string>
 <string name="button_inbox">收件箱</string>
@@ -150,7 +148,7 @@
 <item>藍</item>
 <item>綠</item>
 <item>紅</item>
-<item>橙</item>
+<item>黃</item>
 <item>紫</item>
 <item>青</item>
 <item>自定義</item>

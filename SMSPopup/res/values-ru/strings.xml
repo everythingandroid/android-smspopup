@@ -12,8 +12,6 @@
    <string name="notification_scroll_privacy">Новое сообщение от: %s</string>
 
 <!-- Button Strings -->
-   <string name="view_contact">View Contact</string>
-   <string name="quick_reply">Quick Reply</string>
    <string name="button_close">Закрыть</string>
    <string name="button_reply">Ответить</string>
    <string name="button_inbox">Входящие</string>
@@ -185,7 +183,7 @@
 	   <item>Синий</item>
        <item>Зеленый</item>
        <item>Красный</item>
-       <item>Оранжевый</item>
+       <item>Желтый</item>
        <item>Пурпурный</item>
        <item>Голубой</item>
        <item>Собственный</item>
