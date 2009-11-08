@@ -68,13 +68,6 @@ public class ConfigPerContactActivity extends PreferenceActivity {
   @Override
   protected void onPause() {
     super.onPause();
-
-    /*
-     * Finish up activity, we always want to call onCreate() to setup all the prefs.
-     * It would be more efficient to split things between onCreate and onResume but
-     * this code won't be run that often to bother :)
-     */
-    //finish();
   }
 
   @Override
@@ -118,6 +111,8 @@ public class ConfigPerContactActivity extends PreferenceActivity {
           finish();
         }
       }
+
+      startManagingCursor(contact);
 
       /*
        * Retrieve preferences from database

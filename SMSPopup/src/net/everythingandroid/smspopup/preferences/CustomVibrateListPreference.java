@@ -7,8 +7,6 @@ import net.everythingandroid.smspopup.SmsPopupDbAdapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.os.Parcelable;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -18,7 +16,6 @@ import android.widget.Toast;
 
 public class CustomVibrateListPreference extends ListPreference {
   private Context context;
-  private static boolean dialogShowing;
   private ManagePreferences mPrefs = null;
   private String contactId = null;
   private String vibrate_pattern;
@@ -71,6 +68,10 @@ public class CustomVibrateListPreference extends ListPreference {
           R.string.c_pref_vibrate_pattern_custom_key,
           R.string.pref_vibrate_pattern_default);
     }
+
+    if (mPrefs != null) {
+      mPrefs.close();
+    }
   }
 
   private void showDialog() {
@@ -87,21 +88,14 @@ public class CustomVibrateListPreference extends ListPreference {
     .setIcon(android.R.drawable.ic_dialog_info)
     .setTitle(R.string.pref_vibrate_pattern_title)
     .setView(v)
-    .setOnCancelListener(new OnCancelListener() {
-      public void onCancel(DialogInterface dialog) {
-        dialogShowing = false;
-      }
-    })
-    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialog, int whichButton) {
-        dialogShowing = false;
-      }
-    })
     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialog, int whichButton) {
         String new_pattern = et.getText().toString();
-        dialogShowing = false;
         if (ManageNotification.parseVibratePattern(et.getText().toString()) != null) {
+
+          if (mPrefs == null) {
+            mPrefs = new ManagePreferences(context, contactId);
+          }
 
           if (contactId == null) { // Default notifications
             mPrefs.putString(
@@ -113,6 +107,10 @@ public class CustomVibrateListPreference extends ListPreference {
                 R.string.c_pref_vibrate_pattern_custom_key,
                 new_pattern,
                 SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM);
+          }
+
+          if (mPrefs != null) {
+            mPrefs.close();
           }
 
           Toast.makeText(context, context.getString(R.string.pref_vibrate_pattern_ok),
@@ -138,21 +136,5 @@ public class CustomVibrateListPreference extends ListPreference {
       }
     })
     .show();
-    dialogShowing = true;
-  }
-
-  @Override
-  protected void onRestoreInstanceState(Parcelable state) {
-    super.onRestoreInstanceState(state);
-    if (dialogShowing) {
-      getPrefs();
-      showDialog();
-    }
-  }
-
-  @Override
-  protected View onCreateDialogView() {
-    dialogShowing = false;
-    return super.onCreateDialogView();
   }
 }

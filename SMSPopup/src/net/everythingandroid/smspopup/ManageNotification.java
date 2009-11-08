@@ -139,6 +139,9 @@ public class ManageNotification {
       boolean privacyMode =
         mPrefs.getBoolean(R.string.pref_privacy_key, R.string.pref_privacy_default);
 
+      // All done with prefs, close it up
+      mPrefs.close();
+
       // If we're updating the notification, do not set the ticker text
       if (onlyUpdate) {
         scrollText = null;
@@ -301,8 +304,6 @@ public class ManageNotification {
       // Seems this is needed for the .number value to take effect
       // on the Notification
       myNM.cancelAll();
-
-      mPrefs.close();
 
       // Finally: run the notification!
       if (Log.DEBUG) Log.v("*** Notify running ***");
