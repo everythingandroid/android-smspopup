@@ -297,6 +297,20 @@ public class ConfigContactsActivity extends ListActivity {
     private ContentResolver mContentResolver;
 
     @Override
+    protected void onPreExecute() {
+      mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
+      mDbAdapter.open(true);
+      mCursor = mDbAdapter.fetchAllContacts();
+      if (mCursor == null) {
+        totalCount = 0;
+      } else {
+        ConfigContactsActivity.this.startManagingCursor(mCursor);
+        totalCount = mCursor.getCount();
+        mContentResolver = ConfigContactsActivity.this.getContentResolver();
+      }
+    }
+
+    @Override
     protected Bitmap doInBackground(Object... params) {
       if (mCursor != null) {
         int count = 0;
@@ -315,12 +329,12 @@ public class ConfigContactsActivity extends ListActivity {
 
           // fetch the system db contact name
           sysContactCursor =
-            mContentResolver
-            .query(Uri.withAppendedPath(Contacts.People.CONTENT_URI, String
-                .valueOf(contactId)), new String[] {PeopleColumns.DISPLAY_NAME}, null, null,
-                null);
+            mContentResolver.query(
+                Uri.withAppendedPath(Contacts.People.CONTENT_URI, String.valueOf(contactId)),
+                new String[] {PeopleColumns.DISPLAY_NAME}, null, null, null);
 
           if (sysContactCursor != null) {
+            ConfigContactsActivity.this.startManagingCursor(sysContactCursor);
             if (sysContactCursor.moveToFirst()) {
               rawSysContactName = sysContactCursor.getString(0);
               if (rawSysContactName != null) {
@@ -354,19 +368,6 @@ public class ConfigContactsActivity extends ListActivity {
       });
 
       return null;
-    }
-
-    @Override
-    protected void onPreExecute() {
-      mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
-      mDbAdapter.open(true);
-      mCursor = mDbAdapter.fetchAllContacts();
-      if (mCursor == null) {
-        totalCount = 0;
-      } else {
-        totalCount = mCursor.getCount();
-        mContentResolver = ConfigContactsActivity.this.getContentResolver();
-      }
     }
 
     @Override

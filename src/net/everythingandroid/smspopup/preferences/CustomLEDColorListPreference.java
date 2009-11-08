@@ -6,9 +6,7 @@ import net.everythingandroid.smspopup.SmsPopupDbAdapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Color;
-import android.os.Parcelable;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -21,7 +19,6 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class CustomLEDColorListPreference extends ListPreference implements OnSeekBarChangeListener {
   private Context context;
-  private static boolean dialogShowing;
   private ManagePreferences mPrefs = null;
   private String contactId = null;
   private String led_color;
@@ -84,6 +81,10 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
           R.string.c_pref_flashled_color_custom_key,
           R.string.pref_flashled_color_default);
     }
+
+    if (mPrefs != null) {
+      mPrefs.close();
+    }
   }
 
   private void showDialog() {
@@ -130,16 +131,6 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
     .setIcon(android.R.drawable.ic_dialog_info)
     .setTitle(R.string.pref_flashled_color_title)
     .setView(v)
-    .setOnCancelListener(new OnCancelListener() {
-      public void onCancel(DialogInterface dialog) {
-        dialogShowing = false;
-      }
-    })
-    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialog, int whichButton) {
-        dialogShowing = false;
-      }
-    })
     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialog, int whichButton) {
         int red = redSeekBar.getProgress();
@@ -147,7 +138,9 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
         int blue = blueSeekBar.getProgress();
         int color = Color.rgb(red, green, blue);
 
-        dialogShowing = false;
+        if (mPrefs == null) {
+          mPrefs = new ManagePreferences(context, contactId);
+        }
 
         if (contactId == null) { // Default notifications
           mPrefs.putString(
@@ -161,26 +154,14 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
               SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM);
         }
 
+        if (mPrefs != null) {
+          mPrefs.close();
+        }
+
         Toast.makeText(context, R.string.pref_flashled_color_custom_set, Toast.LENGTH_LONG).show();
       }
     })
     .show();
-    dialogShowing = true;
-  }
-
-  @Override
-  protected void onRestoreInstanceState(Parcelable state) {
-    super.onRestoreInstanceState(state);
-    if (dialogShowing) {
-      getPrefs();
-      showDialog();
-    }
-  }
-
-  @Override
-  protected View onCreateDialogView() {
-    dialogShowing = false;
-    return super.onCreateDialogView();
   }
 
   public void onProgressChanged(SeekBar seekbar, int progress, boolean fromTouch) {
