@@ -74,6 +74,9 @@ public class SmsPopupUtils {
   public static final Uri DONATE_MARKET_URI =
     Uri.parse("market://search?q=pname:net.everythingandroid.smspopupdonate");
 
+  // TODO: remove once Cupcake support is no longer needed
+  private static final int ECLAIR_SDK_VERSION = 5;
+
   /**
    * Looks up a contacts display name by contact id - if not found, the address
    * (phone number) will be formatted and returned instead.
@@ -106,9 +109,47 @@ public class SmsPopupUtils {
       }
     }
 
+    // If we're pre-Eclair then the contact couldn't be found
+    if (getSDKVersionNumber() < ECLAIR_SDK_VERSION) {
+      if (address != null) {
+        return PhoneNumberUtils.formatNumber(address);
+      }
+      return null;
+    }
+
+    /*
+     * Lookup the contact display name via the Eclair URI:
+     * ContactsContract.PhoneLookup.CONTENT_FILTER_URI;
+     * 
+     * TODO: Shift away from using hard-coded URIs (will only be able to do this once
+     * pre-eclair support is no longer needed OR Market supports multiple apps per package so
+     * I can compile a different one for eclair.
+     */
+    Uri newPhoneLookupUri =
+      Uri.withAppendedPath(Uri.parse("content://com.android.contacts/phone_lookup"), address);
+    String[] newProjection = new String[] { "display_name" };
+
+    cursor = context.getContentResolver().query(
+        newPhoneLookupUri,
+        newProjection, null, null, null);
+
+    if (cursor != null) {
+      try {
+        if (cursor.getCount() > 0) {
+          cursor.moveToFirst();
+          String name = cursor.getString(0);
+          if (Log.DEBUG) Log.v("Found contact name (using Eclair+ URI): " + name);
+          return name;
+        }
+      } finally {
+        cursor.close();
+      }
+    }
+
     if (address != null) {
       return PhoneNumberUtils.formatNumber(address);
     }
+
     return null;
   }
 
@@ -135,6 +176,40 @@ public class SmsPopupUtils {
         cursor.close();
       }
     }
+
+    // If we're pre-Eclair then the contact couldn't be found
+    if (getSDKVersionNumber() < ECLAIR_SDK_VERSION) {
+      return null;
+    }
+
+    /*
+     * Lookup the contact id via the Eclair URI:
+     * ContactsContract.PhoneLookup.CONTENT_FILTER_URI;
+     * 
+     * TODO: Shift away from using hard-coded URIs (will only be able to do this once
+     * pre-eclair support is no longer needed OR Market supports multiple apps per package so
+     * I can compile a different one for eclair.
+     */
+    Uri newPhoneLookupUri =
+      Uri.withAppendedPath(Uri.parse("content://com.android.contacts/phone_lookup"), address);
+    String[] newProjection = new String[] { "_id" };
+
+    cursor = context.getContentResolver().query(
+        newPhoneLookupUri, newProjection, null, null, null);
+
+    if (cursor != null) {
+      try {
+        if (cursor.getCount() > 0) {
+          cursor.moveToFirst();
+          Long id = Long.valueOf(cursor.getLong(0));
+          if (Log.DEBUG) Log.v("Found contact id (using Eclair+ URI): " + id);
+          return (String.valueOf(id));
+        }
+      } finally {
+        cursor.close();
+      }
+    }
+
     return null;
   }
 
@@ -307,40 +382,83 @@ public class SmsPopupUtils {
     Cursor cursor;
     Uri photoUri;
 
-    /*
-     * Contacts.People.CONTENT_URI is "content://contacts/people"
-     * Contacts.Photos.CONTENT_DIRECTORY is "photo";
-     * Uri will end up being "content://contacts/people/#contactId/photo"
-     */
-    if (Log.DEBUG) Log.v("openContactPhotoInputStream(): looking in Contacts.People");
-    photoUri = Uri.withAppendedPath(
-        Uri.withAppendedPath(Contacts.People.CONTENT_URI, id),
-        Contacts.Photos.CONTENT_DIRECTORY);
+    // If we're pre-Eclair then lookup the contact using the standard URIs
+    if (getSDKVersionNumber() < ECLAIR_SDK_VERSION) {
 
-    cursor = cr.query(photoUri, new String[] {Photos.DATA}, null, null, null);
+      /*
+       * Contacts.People.CONTENT_URI is "content://contacts/people"
+       * Contacts.Photos.CONTENT_DIRECTORY is "photo";
+       * Uri will end up being "content://contacts/people/#contactId/photo"
+       */
+      if (Log.DEBUG) Log.v("openContactPhotoInputStream(): looking in Contacts.People");
+      photoUri = Uri.withAppendedPath(
+          Uri.withAppendedPath(Contacts.People.CONTENT_URI, id),
+          Contacts.Photos.CONTENT_DIRECTORY);
 
-    if (cursor != null) {
-      try {
-        if (cursor.moveToFirst()) {
-          byte[] data = cursor.getBlob(0);
-          if (data != null) {
-            if (Log.DEBUG) Log.v("openContactPhotoInputStream(): contact photo found");
-            return new ByteArrayInputStream(data);
+      cursor = cr.query(photoUri, new String[] {Photos.DATA}, null, null, null);
+
+      if (cursor != null) {
+        try {
+          if (cursor.moveToFirst()) {
+            byte[] data = cursor.getBlob(0);
+            if (data != null) {
+              if (Log.DEBUG) Log.v("openContactPhotoInputStream(): contact photo found");
+              return new ByteArrayInputStream(data);
+            }
           }
+        } finally {
+          cursor.close();
         }
-      } finally {
-        cursor.close();
       }
+
+      if (Log.DEBUG) Log.v("openContactPhotoInputStream(): looking in Contacts.Photos");
+      /*
+       * Contacts.Photos.CONTENT_URI is "content://contacts/photos"
+       * Uri will end up being "content://contacts/photos/#contactId"
+       */
+      photoUri = Uri.withAppendedPath(Contacts.Photos.CONTENT_URI, id);
+
+      cursor = cr.query(photoUri, new String[] {Photos.DATA}, null, null, null);
+
+      if (cursor != null) {
+        try {
+          if (cursor.moveToFirst()) {
+            byte[] data = cursor.getBlob(0);
+            if (data != null) {
+              if (Log.DEBUG) Log.v("openContactPhotoInputStream(): contact photo found");
+              return new ByteArrayInputStream(data);
+            }
+          }
+        } finally {
+          cursor.close();
+        }
+      }
+
+      return null;
     }
 
-    if (Log.DEBUG) Log.v("openContactPhotoInputStream(): looking in Contacts.Photos");
     /*
-     * Contacts.Photos.CONTENT_URI is "content://contacts/photos"
-     * Uri will end up being "content://contacts/photos/#contactId"
+     * Lookup the contact photo via the Eclair URI:
+     * ContactsContract.Contacts.CONTENT_URI + contact id +
+     * ContactsContract.Contacts.Photo.CONTENT_DIRECTORY
+     * 
+     * The final result should look like:
+     * "content://com.android.contacts/contacts/5/photo"
+     * 
+     * TODO: Shift away from using hard-coded URIs (will only be able to do this once
+     * pre-eclair support is no longer needed OR Market supports multiple apps per package so
+     * I can compile a different one for eclair.
+     * 
      */
-    photoUri = Uri.withAppendedPath(Contacts.Photos.CONTENT_URI, id);
 
-    cursor = cr.query(photoUri, new String[] {Photos.DATA}, null, null, null);
+    if (Log.DEBUG) Log.v("openContactPhotoInputStream(): looking up photo via Eclair URI");
+    Uri.Builder builder = Uri.parse("content://com.android.contacts/contacts").buildUpon();
+    builder.appendEncodedPath(id);
+    builder.appendEncodedPath("photo");
+    photoUri = builder.build();
+    String[] projection = new String[] { "data15" }; //ContactsContract.CommonDataKinds.Photo.PHOTO
+
+    cursor = cr.query(photoUri, projection, null, null, null);
 
     if (cursor != null) {
       try {
@@ -1237,4 +1355,21 @@ public class SmsPopupUtils {
     context.sendBroadcast(i);
   }
 
+  /**
+   * Fetch the current device Android OS platform number.
+   * 
+   * TODO: once Cupcake support is no longer needed the system var
+   * android.os.Build.VERSION.SDK_INT can be used instead.
+   * 
+   * @return SDK version number
+   */
+  public static int getSDKVersionNumber() {
+    int version_sdk;
+    try {
+      version_sdk = Integer.valueOf(android.os.Build.VERSION.SDK);
+    } catch (NumberFormatException e){
+      version_sdk = 0;
+    }
+    return version_sdk;
+  }
 }
