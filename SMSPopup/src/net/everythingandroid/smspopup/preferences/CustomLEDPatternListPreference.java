@@ -7,8 +7,6 @@ import net.everythingandroid.smspopup.SmsPopupDbAdapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.os.Parcelable;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -18,7 +16,6 @@ import android.widget.Toast;
 
 public class CustomLEDPatternListPreference extends ListPreference {
   private Context context;
-  private static boolean dialogShowing;
   private ManagePreferences mPrefs = null;
   private String contactId = null;
   private String flashLedPattern;
@@ -86,6 +83,10 @@ public class CustomLEDPatternListPreference extends ListPreference {
               R.string.c_pref_flashled_pattern_key,
               R.string.pref_flashled_pattern_default));
     }
+
+    if (mPrefs != null) {
+      mPrefs.close();
+    }
   }
 
   private void showDialog() {
@@ -100,73 +101,58 @@ public class CustomLEDPatternListPreference extends ListPreference {
     onEditText.setText(String.valueOf(led_pattern[0]));
     offEditText.setText(String.valueOf(led_pattern[1]));
 
-    new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_info).setTitle(
-        R.string.pref_flashled_pattern_title).setView(v).setOnCancelListener(
-            new OnCancelListener() {
-              public void onCancel(DialogInterface dialog) {
-                dialogShowing = false;
-              }
-            }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-              public void onClick(DialogInterface dialog, int whichButton) {
-                dialogShowing = false;
-              }
-            }).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-              public void onClick(DialogInterface dialog, int whichButton) {
-                dialogShowing = false;
-                String stringPattern = onEditText.getText() + "," + offEditText.getText();
+    new AlertDialog.Builder(context)
+    .setIcon(android.R.drawable.ic_dialog_info)
+    .setTitle(R.string.pref_flashled_pattern_title)
+    .setView(v)
+    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int whichButton) {
+        String stringPattern = onEditText.getText() + "," + offEditText.getText();
 
-                if (ManageNotification.parseLEDPattern(stringPattern) != null) {
+        if (ManageNotification.parseLEDPattern(stringPattern) != null) {
 
-                  if (contactId == null) { // Default notifications
-                    mPrefs.putString(
-                        R.string.pref_flashled_pattern_custom_key,
-                        stringPattern,
-                        SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
+          if (mPrefs == null) {
+            mPrefs = new ManagePreferences(context, contactId);
+          }
 
-                  } else { // Contact specific notifications
-                    mPrefs.putString(
-                        R.string.c_pref_flashled_pattern_custom_key,
-                        stringPattern,
-                        SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
-                  }
+          if (contactId == null) { // Default notifications
+            mPrefs.putString(
+                R.string.pref_flashled_pattern_custom_key,
+                stringPattern,
+                SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
 
-                  Toast.makeText(context, context.getString(R.string.pref_flashled_pattern_ok),
-                      Toast.LENGTH_LONG).show();
+          } else { // Contact specific notifications
+            mPrefs.putString(
+                R.string.c_pref_flashled_pattern_custom_key,
+                stringPattern,
+                SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
+          }
 
-                } else {
+          if (mPrefs != null) {
+            mPrefs.close();
+          }
 
-                  if (contactId == null) { // Default notifications
-                    mPrefs.putString(
-                        R.string.pref_flashled_pattern_custom_key,
-                        context.getString(R.string.pref_flashled_pattern_default),
-                        SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
-                  } else { // Contact specific notifications
-                    mPrefs.putString(
-                        R.string.c_pref_flashled_pattern_custom_key,
-                        context.getString(R.string.pref_flashled_pattern_default),
-                        SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
-                  }
+          Toast.makeText(context, context.getString(R.string.pref_flashled_pattern_ok),
+              Toast.LENGTH_LONG).show();
 
-                  Toast.makeText(context, context.getString(R.string.pref_flashled_pattern_bad),
-                      Toast.LENGTH_LONG).show();
-                }
-              }
-            }).show();
-    dialogShowing = true;
-  }
+        } else {
 
-  @Override
-  protected void onRestoreInstanceState(Parcelable state) {
-    super.onRestoreInstanceState(state);
-    if (dialogShowing) {
-      getPrefs();
-      showDialog();
-    }
-  }
+          if (contactId == null) { // Default notifications
+            mPrefs.putString(
+                R.string.pref_flashled_pattern_custom_key,
+                context.getString(R.string.pref_flashled_pattern_default),
+                SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
+          } else { // Contact specific notifications
+            mPrefs.putString(
+                R.string.c_pref_flashled_pattern_custom_key,
+                context.getString(R.string.pref_flashled_pattern_default),
+                SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
+          }
 
-  @Override
-  protected View onCreateDialogView() {
-    dialogShowing = false;
-    return super.onCreateDialogView();
+          Toast.makeText(context, context.getString(R.string.pref_flashled_pattern_bad),
+              Toast.LENGTH_LONG).show();
+        }
+      }
+    }).show();
   }
 }

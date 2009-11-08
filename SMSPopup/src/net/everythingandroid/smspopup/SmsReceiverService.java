@@ -154,6 +154,8 @@ public class SmsReceiverService extends Service {
       mPrefs.getBoolean(R.string.pref_notif_enabled_key, R.string.pref_notif_enabled_default,
           SmsPopupDbAdapter.KEY_ENABLED_NUM);
 
+    mPrefs.close();
+
     ManageKeyguard.initialize(context);
 
     if (showPopup

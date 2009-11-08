@@ -207,7 +207,7 @@ public class SmsMmsMessage {
   }
 
   public void setThreadRead() {
-    locateMessageId();
+    locateThreadId();
     SmsPopupUtils.setThreadRead(context, threadId);
   }
 
