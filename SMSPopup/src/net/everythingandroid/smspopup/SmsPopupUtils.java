@@ -284,7 +284,7 @@ public class SmsPopupUtils {
     // This time we're going to do it for real
     options.inJustDecodeBounds = false;
 
-    // Calculate new dimensions based on screen density
+    // Calculate new thumbnail size based on screen density
     final float scale = context.getResources().getDisplayMetrics().density;
     int thumbsize = CONTACT_PHOTO_THUMBSIZE;
     if (scale != 1.0) {
@@ -292,22 +292,25 @@ public class SmsPopupUtils {
       thumbsize = Math.round(thumbsize * scale);
     }
 
+    int newHeight = thumbsize;
+    int newWidth = thumbsize;
+
     // If we have an abnormal photo size then sample it down
     if (height > thumbsize || width > thumbsize) {
       if (height < width) {
         options.inSampleSize = Math.round(height / thumbsize);
-        // if (Log.DEBUG) Log.v("Contact photo inSampleSize = " + Math.round(height / CONTACT_PHOTO_THUMBSIZE));
+        newHeight = Math.round(thumbsize * height / width);
       } else {
         options.inSampleSize = Math.round(width / thumbsize);
-        // if (Log.DEBUG) Log.v("Contact photo inSampleSize = " + Math.round(height / CONTACT_PHOTO_THUMBSIZE));
+        newWidth = Math.round(thumbsize * width / height);
       }
     }
 
     // Fetch the real contact photo (sampled down if needed)
     Bitmap contactBitmap = null;
     try {
-      //      contactBitmap = Contacts.People.loadContactPhoto(
-      //          context, Uri.withAppendedPath(Contacts.People.CONTENT_URI, id), 0, options);
+      //contactBitmap = Contacts.People.loadContactPhoto(
+      //    context, Uri.withAppendedPath(Contacts.People.CONTENT_URI, id), 0, options);
       contactBitmap = loadContactPhoto(context, id, 0, options);
     } catch (OutOfMemoryError e) {
       Log.e("Out of memory when loading contact photo");
@@ -315,24 +318,6 @@ public class SmsPopupUtils {
 
     // Not found or error, get out
     if (contactBitmap == null) return null;
-
-    // Calculate new dimensions based on screen density
-    int newHeight = thumbsize;
-    int newWidth = thumbsize;
-
-    if (scale != 1.0) {
-      if (Log.DEBUG) Log.v("Screen density is not 1.0, adjusting contact photo");
-      newHeight = Math.round(thumbsize * scale);
-      newWidth = Math.round(thumbsize * scale);
-    }
-
-    if (height != thumbsize || width != thumbsize) {
-      if (height > width) {
-        newWidth = Math.round(thumbsize * width / height);
-      } else if (height < width) {
-        newHeight = Math.round(thumbsize * height / width);
-      }
-    }
 
     // Return bitmap scaled to new height and width
     return Bitmap.createScaledBitmap(contactBitmap, newWidth, newHeight, true);
