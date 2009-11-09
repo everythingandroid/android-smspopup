@@ -114,6 +114,9 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     quickReplyPref =
       (QuickReplyCheckBoxPreference) findPreference(getString(R.string.pref_quickreply_key));
 
+    quickReplyPref.setChecked(
+        isQuickReplyActive(button1.getValue(), button2.getValue(), button3.getValue()));
+
     /*
      * This is a really manual way of dealing with this, but I didn't think it was worth
      * spending the time to make it more generic.  This will basically look through the active
