@@ -13,8 +13,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Contacts;
-import android.provider.Contacts.PeopleColumns;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,13 +44,6 @@ public class ConfigContactsActivity extends ListActivity {
   private static final int DIALOG_ADD = 1;
 
   private static ListView mListView;
-  /*
-   * Eek, 2 static vars, not ideal but only way I could get the ProgressDialog
-   * sync'ing nicely with the AsyncTask on orientation changes (whole activity
-   * will get destroyed and created again)
-   */
-  private static int totalCount;
-  private static SynchronizeContactNames mSyncContactNames = null;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -62,8 +53,12 @@ public class ConfigContactsActivity extends ListActivity {
 
     ContentResolver content = getContentResolver();
     Cursor cursor =
-      content.query(Contacts.People.CONTENT_URI, PEOPLE_PROJECTION, null, null,
-          Contacts.People.DEFAULT_SORT_ORDER);
+      content.query(
+          ContactWrapper.getContentUri(),
+          ContactWrapper.getBasePeopleProjection(),
+          null,
+          null,
+          ContactWrapper.getDefaultSortOrder());
     ContactListAdapter adapter = new ContactListAdapter(this, cursor);
 
     final AutoCompleteTextView contactsAutoComplete =
@@ -88,10 +83,8 @@ public class ConfigContactsActivity extends ListActivity {
 
     mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
 
-    if (mSyncContactNames == null) {
-      mSyncContactNames = new SynchronizeContactNames();
-      mSyncContactNames.execute(new Object());
-    }
+    SynchronizeContactNames mSyncContactNames = new SynchronizeContactNames();
+    mSyncContactNames.execute(new Object());
   }
 
   @Override
@@ -176,7 +169,7 @@ public class ConfigContactsActivity extends ListActivity {
     //    startActivityForResult(i, REQ_CODE_CHOOSE_CONTACT);
 
     startActivityForResult(
-        new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI), REQ_CODE_CHOOSE_CONTACT);
+        new Intent(Intent.ACTION_PICK, ContactWrapper.getContentUri()), REQ_CODE_CHOOSE_CONTACT);
   }
 
   @Override
@@ -295,6 +288,7 @@ public class ConfigContactsActivity extends ListActivity {
     private SmsPopupDbAdapter mDbAdapter;
     private Cursor mCursor, sysContactCursor;
     private ContentResolver mContentResolver;
+    private int totalCount;
 
     @Override
     protected void onPreExecute() {
@@ -330,8 +324,9 @@ public class ConfigContactsActivity extends ListActivity {
           // fetch the system db contact name
           sysContactCursor =
             mContentResolver.query(
-                Uri.withAppendedPath(Contacts.People.CONTENT_URI, String.valueOf(contactId)),
-                new String[] {PeopleColumns.DISPLAY_NAME}, null, null, null);
+                Uri.withAppendedPath(ContactWrapper.getContentUri(), String.valueOf(contactId)),
+                new String[] {ContactWrapper.getContactColumn(ContactWrapper.COL_DISPLAY_NAME)},
+                null, null, null);
 
           if (sysContactCursor != null) {
             ConfigContactsActivity.this.startManagingCursor(sysContactCursor);
@@ -393,6 +388,8 @@ public class ConfigContactsActivity extends ListActivity {
   // XXX compiler bug in javac 1.5.0_07-164, we need to implement Filterable
   // to make compilation work
   public static class ContactListAdapter extends CursorAdapter implements Filterable {
+    private ContentResolver mContent;
+
     public ContactListAdapter(Context context, Cursor c) {
       super(context, c);
       mContent = context.getContentResolver();
@@ -403,18 +400,18 @@ public class ConfigContactsActivity extends ListActivity {
       final LayoutInflater inflater = LayoutInflater.from(context);
       final TextView view =
         (TextView) inflater.inflate(android.R.layout.simple_dropdown_item_1line, parent, false);
-      view.setText(cursor.getString(5));
+      view.setText(cursor.getString(1));
       return view;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-      ((TextView) view).setText(cursor.getString(5));
+      ((TextView) view).setText(cursor.getString(1));
     }
 
     @Override
     public String convertToString(Cursor cursor) {
-      return cursor.getString(5);
+      return cursor.getString(1);
     }
 
     @Override
@@ -428,20 +425,14 @@ public class ConfigContactsActivity extends ListActivity {
       if (constraint != null) {
         buffer = new StringBuilder();
         buffer.append("UPPER(");
-        buffer.append(Contacts.ContactMethods.NAME);
+        buffer.append(ContactWrapper.getContactColumn(ContactWrapper.COL_DISPLAY_NAME));
         buffer.append(") GLOB ?");
         args = new String[] {"*" + constraint.toString().toUpperCase() + "*"};
       }
 
-      return mContent.query(Contacts.People.CONTENT_URI, PEOPLE_PROJECTION, buffer == null ? null
-          : buffer.toString(), args, Contacts.People.DEFAULT_SORT_ORDER);
+      return mContent.query(ContactWrapper.getContentUri(),
+          ContactWrapper.getBasePeopleProjection(),
+          buffer == null ? null : buffer.toString(), args, ContactWrapper.getDefaultSortOrder());
     }
-
-    private ContentResolver mContent;
-
   }
-
-  private static final String[] PEOPLE_PROJECTION =
-    new String[] {Contacts.People._ID, Contacts.People.PRIMARY_PHONE_ID, Contacts.People.TYPE,
-    Contacts.People.NUMBER, Contacts.People.LABEL, Contacts.People.NAME,};
 }

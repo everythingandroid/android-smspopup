@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- App Strings -->
+   <string name="app_name">SMS Popup</string>   
+   <string name="new_text_at">New message at %s</string>
+   <string name="unread_text_waiting">%d další nepřečtená zpráva(y)</string>
+   <string name="mms_subject">Předmět:</string>
+
+<!-- Notification Strings -->
+   <string name="notification_multiple_title">Nové zprávy</string>
+   <string name="notification_multiple_text">%d nepřečtených zpráv.</string>
+   <string name="notification_scroll_privacy">Nová zpráva od: %s</string>
+
+<!-- Button Strings -->
+   <string name="view_contact">Prohlédnout kontakt</string>
+   <string name="quick_reply">Rychlá odpověď</string>  
+   <string name="button_close">Zavřít</string>
+   <string name="button_reply">Odpovědět</string>
+   <string name="button_inbox">Přijaté</string>
+   <string name="button_view">Zobrazit</string>
+   <string name="button_view_mms">Zobrazit MMS</string>
+   <string name="button_delete">Smazat</string>
+   <string name="button_tts">Přečíst text</string>
+   
+   <!-- Not yet implemented -->
+   <string name="button_next">Další</string>
+   <string name="button_previous">Předchozí</string>
+   <string name="button_unlock">Odemknout</string>
+   
+<!-- Main Preferences -->
+   <string name="pref_config_title">Nastavení SMS Popup</string>
+   <string name="pref_other_title">Ostatní</string>
+
+   <string name="pref_enabled_title">Povolit SMS Popup</string>
+   <string name="pref_enabled_summaryon">SMS Popup je aktivní</string>
+   <string name="pref_enabled_summaryoff">SMS Popup není aktivní</string>
+   
+   <string name="pref_about_title">O aplikaci</string>
+   <string name="pref_about_summary">O aplikaci SMS Popup</string>
+   <string name="pref_about_text">Vytvořil: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup je jednoduchá aplikace která zobrazí dialog při příchozí textové zprávě - rozsvítí a odemkne displej pokud je to potřeba.  V dialogu se zobrazí aktivní zprávavčetně odesílatele a jeho obrázku pokud ho u kontaktu máte nadefinovaný.\n\nPokud byste měli nějaké nápady či objevili nějakou chybu, neváhejte mne kontaktovat.\n\nNěmecký překlad: Feyyaz A.\nEmail: f_alingan@hotmail.com\nWebové stránky: http://www.yenio.com\n\nDánský překlad: mellie@xs4all.nl\n\nŠpanělský překlad: Diego FernĂˇndez\nEmail: profediego@gmail.com\n\nRuský překlad: Artem Kavalerov\nEmail: artem.kavalerov@gmail.com\n\nDěkuji Min Tran za ikonku k aplikaci.\n(http://min.frexy.com)\n</string>
+   
+   <string name="pref_sendemail_title">Kontaktovat vývojáře</string>
+   <string name="pref_sendemail_summary">Poslat email vývojáři</string>
+   <string name="pref_sendemail_dialog">Mohu do zprávy zahrnout informace o Vašem systému (pomůže mi to ke snažšímu odhalení chyby)?</string>
+   <string name="pref_sendemail_buttonok">Jistě</string>
+   <string name="pref_sendemail_buttoncancel">NE</string>
+   
+<!-- Additional Preferences -->
+   <string name="pref_additional_title">Další nastavení</string>
+   <string name="pref_additional_summary">Doplňkové nastavení SMS Popup</string>
+
+   <string name="pref_timeout_title">Doba ke zhasnutí displeje</string>
+   <string name="pref_timeout_summary">Displej po této době zhasne</string>
+   
+   <string name="pref_dimscreen_title">Ztmavit displej</string>
+   <string name="pref_dimscreen_summaryon">Dislej při dialogu bude ztmavený (šetří baterii)</string>
+   <string name="pref_dimscreen_summaryoff">Displej při dialogu bude jasný</string>   
+      
+   <string name="pref_privacy_title">Důvěrný  mód</string>
+   <string name="pref_privacy_summaryon">Obsah zprávy bude zobrazen až po odemknutí</string>
+   <string name="pref_privacy_summaryoff">Obsah zprávy bude zobrazen hned</string>
+   
+   <string name="pref_markread_title">Ozančit jako přečtené</string>
+   <string name="pref_markread_summaryon">Zpráva bude označená jako přečtená po kliknutí na \"Close\"</string>
+   <string name="pref_markread_summaryoff">Zpráva nebude označená jako přečtená po kliknutí na \"Close\"</string>
+
+   <string name="pref_onlyShowOnKeyguard_title">Omezení dialogu</string>
+   <string name="pref_onlyShowOnKeyguard_summaryon">Dialogové okno se zobrazí pouze když je odemčený displej</string>
+   <string name="pref_onlyShowOnKeyguard_summaryoff">Dialogové okno se zobrazí vždy</string>
+
+   <!-- Not yet implemented -->
+   <string name="pref_require_unlock_title">Požadovat odemknutí displeje</string>
+   <string name="pref_require_unlock_summaryon">Tlačítka budou do odemknutí displeje skrytá</string>
+   <string name="pref_require_unlock_summaryoff">Tlačítka budou viditelná vždy</string>
+
+   <!-- Not yet implemented -->
+   <string name="pref_inbox_app_title">Vybrat aplikaci pro SMS</string>
+   <string name="pref_inbox_app_summary">Vybrat aplikaci která se spustí pro správu sms</string>
+   <string name="pref_inbox_app_info">Aplikace pro odpověď je nastavena systémem!</string>
+
+   <string name="pref_show_delete_button_title">Zobrazit tlačítko Smazat</string>
+   <string name="pref_show_delete_button_summaryon">Tlačítko Smazat je aktivní</string>
+   <string name="pref_show_delete_button_summaryoff">Tlačítko smazat není aktivní</string>
+   <string name="pref_show_delete_button_dialog_title">Smazat zprávu</string>
+   <string name="pref_show_delete_button_dialog_text">Jste si jisti?</string>
+   
+   <string name="pref_blur_title">Rozostřit pozadí</string>
+   <string name="pref_blur_summaryon">Pozadí za zprávou bude rozostřeno</string>
+   <string name="pref_blur_summaryoff">Pozadí za zprávou nebude rozostřeno</string>
+
+<!-- Notification Preferences -->
+   <string name="pref_notif_title">Upozornění</string>
+   <string name="pref_notif_summary">Nastavení upozornění</string>
+   
+   <!-- Category headings -->
+   <string name="pref_notif_category_title">Nastavenmí upozornění</string>
+   <string name="pref_vibrate_category_title">Nastavení vibrací</string>
+   <string name="pref_flashled_category_title">Nastavení LED</string>
+   <string name="pref_reminder_category_title">Nastavení upomínky</string>
+   
+   <string name="pref_notif_enabled_title">Povolit upozornění</string>
+   <string name="pref_notif_enabled_summaryon">Upozornění je povoleno</string>
+   <string name="pref_notif_enabled_summaryoff">Upozornění není povoleno</string>
+   <string name="pref_notif_enabled_warning">Prosím vypněte upozornění na příchozí zprávy ve všech ostatních aplikacích které používáte na správu SMS abyste se vyhnuli problémům s několikanásobným upozorněním. \n\nPro vypnutí systémové aplikace stlačte po jejím spuštění tlačítko menu -> nastavení -> a zrušte upozornění.</string>
+
+   <string name="pref_notif_test_title">Test upozornění</string>
+   <string name="pref_notif_test_summary">Testovat Vaše upozornění</string>
+   <string name="pref_notif_test_message">Právě testuji Vaše upozornění!</string>
+   
+   <string name="pref_notif_sound_title">Zvuk pro upozornění</string>
+   <string name="pref_notif_sound_summary">Tento zvuk bude přehrán při příchozí zprávě</string>
+
+   <string name="pref_vibrate_title">Vibrace</string>
+   <string name="pref_vibrate_summaryon">Vibrace je zapnuta</string>
+   <string name="pref_vibrate_summaryoff">Vibrace je vypnuta</string>
+
+   <string name="pref_vibrate_pattern_title">Styl vibrace</string>
+   <string name="pref_vibrate_pattern_summary">Vyberte si styl vibrací</string>
+   <string name="pref_vibrate_pattern_ok">Vlastní styl vibrace</string>
+   <string name="pref_vibrate_pattern_bad">Vlastní styl vibrace není platný, použiji standartní</string>
+   <string name="pref_vibrate_pattern_help">Vložte vlastní styl vibraceve formátu:\nmillisOff, millisOn, atd.\n\nNapříklad:\n0,1000\n0,500,200,500,200,500</string>
+
+   <string name="pref_flashled_title">Blikání LED</string>
+   <string name="pref_flashled_summaryon">Blikání LED při příchozí zprávě</string>
+   <string name="pref_flashled_summaryoff">Nepoužívat blikání LED</string>
+   
+   <string name="pref_flashled_color_title">Barva LED diody</string>
+   <string name="pref_flashled_color_summary">Barva LED diody</string>
+   <string name="pref_flashled_color_custom_dialog_red">Červená:</string>
+   <string name="pref_flashled_color_custom_dialog_green">Zelená:</string>
+   <string name="pref_flashled_color_custom_dialog_blue">Modrá:</string>
+   <string name="pref_flashled_color_custom_dialog_preview">Ukázka:</string>
+   <string name="pref_flashled_color_custom_set">Vlastní nastavení barvy LED diody</string>
+
+   <string name="pref_flashled_pattern_title">Rychlost blikání LED</string>
+   <string name="pref_flashled_pattern_summary">Nastavení rychlosti blikání LED diody</string>
+   <string name="pref_flashled_pattern_ok">Vlastní nastavení rychlosti blikání LED</string>
+   <string name="pref_flashled_pattern_bad">Vlastní nastavení rychlosti blikání LED není platné, použiji výchozí</string>
+   <string name="pref_flashled_pattern_help">Vložte čas v milisekundách pro zapínání LED diody</string>
+   <string name="pref_flashled_pattern_help_on">Čas pro zapnutí:</string>
+   <string name="pref_flashled_pattern_help_off">Čas pro vypnutí:</string>
+   
+   <string-array name="pref_led_pattern_entries">
+      <item>Rychle</item>
+      <item>Normálně</item>
+      <item>Pomalu</item>
+      <item>Vlastní rychlost</item>
+   </string-array>
+   
+   <string name="pref_notif_repeat_title">Zapnout upomínku</string>
+   <string name="pref_notif_repeat_summaryon">Upomínky pro nepřečtené zprávy jsou zapnuty</string>
+   <string name="pref_notif_repeat_summaryoff">Upomínky pro nepřečtené zprávy jsou vypnuty</string>
+   
+   <string name="pref_notif_repeat_interval_title">Interval upomínky</string>
+   <string name="pref_notif_repeat_interval_summary">Časová prodleva mezi upomínkami</string>
+   <string name="pref_notif_repeat_interval_dialogTitle">Interval (v minutách)</string>
+   
+   <string name="pref_notif_repeat_times_title">Počet upomínek</string>
+   <string name="pref_notif_repeat_times_summary">Počet upomínek pro přehrání</string>
+
+   <string name="pref_notif_repeat_screen_on_title">Nastavení displeje pro upomínky</string>
+   <string name="pref_notif_repeat_screen_on_summaryon">Upomínky znovu zapnou displej</string>
+   <string name="pref_notif_repeat_screen_on_summaryoff">Upomínky nezapnout znovu displej</string>
+   <string name="pref_notif_repeat_screen_on_warning">Varování - zapínání dipleje při upomínkách razantně sníží nabití Vaší baterie</string>
+   
+<!-- Arrays for drop-down prefs -->
+   <string-array name="pref_timeout_entries">
+      <item>10 sekund</item>
+      <item>20 sekund</item>
+      <item>30 sekund</item>
+      <item>1 minuta</item>
+      <item>2 minuty</item>
+      <item>5 minut</item>
+      <item>10 minut</item>
+   </string-array>
+
+   <string-array name="pref_vibrate_pattern_entries">
+      <item>Normalní</item>
+      <item>Dlouhá vibrace</item>
+      <item>Opakovaná krátká</item>
+      <item>Opakovaná dlouhá</item>
+      <item>Vllastní</item>
+   </string-array>      
+   
+   <string-array name="pref_led_color_entries">
+      <item>Modrá</item>
+      <item>Zelená</item>
+      <item>Červená</item>
+      <item>Oranžová</item>
+      <item>Fialová</item>
+      <item>Azurová</item>
+      <item>Vlastní</item>
+   </string-array>   
+   
+   <string-array name="pref_notif_repeat_times_entries">
+      <item>1</item>
+      <item>2</item>
+      <item>3</item>
+      <item>4</item>
+      <item>5</item>
+      <item>10</item>
+      <item>Opakovat stále</item>
+   </string-array>   
+</resources>
