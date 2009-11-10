@@ -2,7 +2,6 @@ package net.everythingandroid.smspopup;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -29,9 +28,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.provider.Contacts;
-import android.provider.Contacts.PeopleColumns;
-import android.provider.Contacts.Photos;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.gsm.SmsMessage;
 import android.text.TextUtils;
@@ -75,7 +71,7 @@ public class SmsPopupUtils {
     Uri.parse("market://search?q=pname:net.everythingandroid.smspopupdonate");
 
   // TODO: remove once Cupcake support is no longer needed
-  private static final int ECLAIR_SDK_VERSION = 5;
+  public static final int ECLAIR_SDK_VERSION = 5;
 
   /**
    * Looks up a contacts display name by contact id - if not found, the address
@@ -93,8 +89,9 @@ public class SmsPopupUtils {
     }
 
     Cursor cursor = context.getContentResolver().query(
-        Uri.withAppendedPath(Contacts.People.CONTENT_URI, id),
-        new String[] { PeopleColumns.DISPLAY_NAME }, null, null, null);
+        Uri.withAppendedPath(ContactWrapper.getContentUri(), id),
+        new String[] { ContactWrapper.getContactColumn(ContactWrapper.COL_DISPLAY_NAME) },
+        null, null, null);
 
     if (cursor != null) {
       try {
@@ -102,43 +99,6 @@ public class SmsPopupUtils {
           cursor.moveToFirst();
           String name = cursor.getString(0);
           if (Log.DEBUG) Log.v("Contact Display Name: " + name);
-          return name;
-        }
-      } finally {
-        cursor.close();
-      }
-    }
-
-    // If we're pre-Eclair then the contact couldn't be found
-    if (getSDKVersionNumber() < ECLAIR_SDK_VERSION) {
-      if (address != null) {
-        return PhoneNumberUtils.formatNumber(address);
-      }
-      return null;
-    }
-
-    /*
-     * Lookup the contact display name via the Eclair URI:
-     * ContactsContract.PhoneLookup.CONTENT_FILTER_URI;
-     * 
-     * TODO: Shift away from using hard-coded URIs (will only be able to do this once
-     * pre-eclair support is no longer needed OR Market supports multiple apps per package so
-     * I can compile a different one for eclair.
-     */
-    Uri newPhoneLookupUri =
-      Uri.withAppendedPath(Uri.parse("content://com.android.contacts/phone_lookup"), address);
-    String[] newProjection = new String[] { "display_name" };
-
-    cursor = context.getContentResolver().query(
-        newPhoneLookupUri,
-        newProjection, null, null, null);
-
-    if (cursor != null) {
-      try {
-        if (cursor.getCount() > 0) {
-          cursor.moveToFirst();
-          String name = cursor.getString(0);
-          if (Log.DEBUG) Log.v("Found contact name (using Eclair+ URI): " + name);
           return name;
         }
       } finally {
@@ -161,8 +121,9 @@ public class SmsPopupUtils {
     if (address == null) return null;
 
     Cursor cursor = context.getContentResolver().query(
-        Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, address),
-        new String[] { Contacts.Phones.PERSON_ID }, null, null, null);
+        Uri.withAppendedPath(ContactWrapper.getPhoneLookupContentFilterUri(), Uri.encode(address)),
+        new String[] { ContactWrapper.getContactColumn(ContactWrapper.COL_CONTACT_ID) },
+        null, null, null);
 
     if (cursor != null) {
       try {
@@ -177,39 +138,6 @@ public class SmsPopupUtils {
       }
     }
 
-    // If we're pre-Eclair then the contact couldn't be found
-    if (getSDKVersionNumber() < ECLAIR_SDK_VERSION) {
-      return null;
-    }
-
-    /*
-     * Lookup the contact id via the Eclair URI:
-     * ContactsContract.PhoneLookup.CONTENT_FILTER_URI;
-     * 
-     * TODO: Shift away from using hard-coded URIs (will only be able to do this once
-     * pre-eclair support is no longer needed OR Market supports multiple apps per package so
-     * I can compile a different one for eclair.
-     */
-    Uri newPhoneLookupUri =
-      Uri.withAppendedPath(Uri.parse("content://com.android.contacts/phone_lookup"), address);
-    String[] newProjection = new String[] { "_id" };
-
-    cursor = context.getContentResolver().query(
-        newPhoneLookupUri, newProjection, null, null, null);
-
-    if (cursor != null) {
-      try {
-        if (cursor.getCount() > 0) {
-          cursor.moveToFirst();
-          Long id = Long.valueOf(cursor.getLong(0));
-          if (Log.DEBUG) Log.v("Found contact id (using Eclair+ URI): " + id);
-          return (String.valueOf(id));
-        }
-      } finally {
-        cursor.close();
-      }
-    }
-
     return null;
   }
 
@@ -217,24 +145,20 @@ public class SmsPopupUtils {
    * Looks up a contacts id, given their email address.
    * Returns null if not found
    */
-  public static String getPersonIdFromEmail(Context context, String address) {
-    if (address == null)
-      return null;
-
-    final Uri WITH_EMAIL_OR_IM_FILTER_URI =
-      Uri.parse("content://contacts/people/with_email_or_im_filter");
+  public static String getPersonIdFromEmail(Context context, String phone) {
+    if (phone == null) return null;
 
     Cursor cursor = context.getContentResolver().query(
-        Uri.withAppendedPath(WITH_EMAIL_OR_IM_FILTER_URI, Uri.encode(address)),
-        new String[] { SMSMMS_ID }, null, null, null);
+        Uri.withAppendedPath(ContactWrapper.getEmailLookupContentFilterUri(), Uri.encode(phone)),
+        new String[] { ContactWrapper.getContactColumn(ContactWrapper.COL_CONTACT_ID_EMAIL) },
+        null, null, null);
 
     if (cursor != null) {
       try {
-        if (cursor.getCount() > 0) {
-          cursor.moveToFirst();
-          Long id = Long.valueOf(cursor.getLong(0));
+        if (cursor.moveToFirst()) {
+          Long id = cursor.getLong(0);
           if (Log.DEBUG) Log.v("Found person (by email): " + id);
-          return (String.valueOf(id));
+          return String.valueOf(id);
         }
       } finally {
         cursor.close();
@@ -338,7 +262,9 @@ public class SmsPopupUtils {
       return loadPlaceholderPhoto(placeholderImageResource, context, options);
     }
 
-    InputStream stream = openContactPhotoInputStream(context.getContentResolver(), id);
+    InputStream stream =
+      ContactWrapper.openContactPhotoInputStream(context.getContentResolver(), id);
+
     Bitmap bm = stream != null ? BitmapFactory.decodeStream(stream, null, options) : null;
     if (bm == null) {
       bm = loadPlaceholderPhoto(placeholderImageResource, context, options);
@@ -353,113 +279,6 @@ public class SmsPopupUtils {
     }
     return BitmapFactory.decodeResource(context.getResources(),
         placeholderImageResource, options);
-  }
-
-  /**
-   * Opens an InputStream for the person's photo and returns the photo as a Bitmap.
-   * If the person's photo isn't present returns the placeholderImageResource instead.
-   * @param id the id of the person
-   */
-  public static InputStream openContactPhotoInputStream(ContentResolver cr, String id) {
-    if (id == null) return null;
-    if ("0".equals(id)) return null;
-
-    Cursor cursor;
-    Uri photoUri;
-
-    // If we're pre-Eclair then lookup the contact using the standard URIs
-    if (getSDKVersionNumber() < ECLAIR_SDK_VERSION) {
-
-      /*
-       * Contacts.People.CONTENT_URI is "content://contacts/people"
-       * Contacts.Photos.CONTENT_DIRECTORY is "photo";
-       * Uri will end up being "content://contacts/people/#contactId/photo"
-       */
-      if (Log.DEBUG) Log.v("openContactPhotoInputStream(): looking in Contacts.People");
-      photoUri = Uri.withAppendedPath(
-          Uri.withAppendedPath(Contacts.People.CONTENT_URI, id),
-          Contacts.Photos.CONTENT_DIRECTORY);
-
-      cursor = cr.query(photoUri, new String[] {Photos.DATA}, null, null, null);
-
-      if (cursor != null) {
-        try {
-          if (cursor.moveToFirst()) {
-            byte[] data = cursor.getBlob(0);
-            if (data != null) {
-              if (Log.DEBUG) Log.v("openContactPhotoInputStream(): contact photo found");
-              return new ByteArrayInputStream(data);
-            }
-          }
-        } finally {
-          cursor.close();
-        }
-      }
-
-      if (Log.DEBUG) Log.v("openContactPhotoInputStream(): looking in Contacts.Photos");
-      /*
-       * Contacts.Photos.CONTENT_URI is "content://contacts/photos"
-       * Uri will end up being "content://contacts/photos/#contactId"
-       */
-      photoUri = Uri.withAppendedPath(Contacts.Photos.CONTENT_URI, id);
-
-      cursor = cr.query(photoUri, new String[] {Photos.DATA}, null, null, null);
-
-      if (cursor != null) {
-        try {
-          if (cursor.moveToFirst()) {
-            byte[] data = cursor.getBlob(0);
-            if (data != null) {
-              if (Log.DEBUG) Log.v("openContactPhotoInputStream(): contact photo found");
-              return new ByteArrayInputStream(data);
-            }
-          }
-        } finally {
-          cursor.close();
-        }
-      }
-
-      return null;
-    }
-
-    /*
-     * Lookup the contact photo via the Eclair URI:
-     * ContactsContract.Contacts.CONTENT_URI + contact id +
-     * ContactsContract.Contacts.Photo.CONTENT_DIRECTORY
-     * 
-     * The final result should look like:
-     * "content://com.android.contacts/contacts/5/photo"
-     * 
-     * TODO: Shift away from using hard-coded URIs (will only be able to do this once
-     * pre-eclair support is no longer needed OR Market supports multiple apps per package so
-     * I can compile a different one for eclair.
-     * 
-     */
-
-    if (Log.DEBUG) Log.v("openContactPhotoInputStream(): looking up photo via Eclair URI");
-    Uri.Builder builder = Uri.parse("content://com.android.contacts/contacts").buildUpon();
-    builder.appendEncodedPath(id);
-    builder.appendEncodedPath("photo");
-    photoUri = builder.build();
-    String[] projection = new String[] { "data15" }; //ContactsContract.CommonDataKinds.Photo.PHOTO
-
-    cursor = cr.query(photoUri, projection, null, null, null);
-
-    if (cursor != null) {
-      try {
-        if (cursor.moveToFirst()) {
-          byte[] data = cursor.getBlob(0);
-          if (data != null) {
-            if (Log.DEBUG) Log.v("openContactPhotoInputStream(): contact photo found");
-            return new ByteArrayInputStream(data);
-          }
-        }
-      } finally {
-        cursor.close();
-      }
-    }
-
-    return null;
   }
 
   /**
@@ -1129,7 +948,7 @@ public class SmsPopupUtils {
    * the name, parse and return it. Otherwise, query the contact database. Cache
    * query results for repeated queries.
    */
-  private static String getDisplayName(Context context, String email) {
+  static String getDisplayName(Context context, String email) {
     Matcher match = NAME_ADDR_EMAIL_PATTERN.matcher(email);
     if (match.matches()) {
       // email has display name, return that
@@ -1137,18 +956,23 @@ public class SmsPopupUtils {
     }
 
     // otherwise let's check the contacts list for a user with this email
+    //    Cursor cursor = context.getContentResolver().query(
+    //        ContactWrapper.getEmailContentUri(),
+    //        new String[] { Contacts.ContactMethods.NAME },
+    //        Contacts.ContactMethods.DATA + " = ?",
+    //        new String[] { email }, null);
     Cursor cursor = context.getContentResolver().query(
-        Contacts.ContactMethods.CONTENT_EMAIL_URI,
-        new String[] { Contacts.ContactMethods.NAME },
-        Contacts.ContactMethods.DATA + " = ?",
-        new String[] { email }, null);
+        Uri.withAppendedPath(ContactWrapper.getEmailLookupContentFilterUri(), Uri.encode(email)),
+        new String[] { ContactWrapper.getContactColumn(ContactWrapper.COL_DISPLAY_NAME) },
+        null, null, null);
 
     if (cursor != null) {
       try {
-        int columnIndex =
-          cursor.getColumnIndexOrThrow(Contacts.ContactMethods.NAME);
+        //        int columnIndex =
+        //          cursor.getColumnIndexOrThrow(Contacts.ContactMethods.NAME);
         while (cursor.moveToNext()) {
-          String name = cursor.getString(columnIndex);
+          //String name = cursor.getString(columnIndex);
+          String name = cursor.getString(0);
           if (!TextUtils.isEmpty(name)) {
             return name;
           }
