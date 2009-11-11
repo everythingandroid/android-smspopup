@@ -28,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.provider.Contacts;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.gsm.SmsMessage;
 import android.text.TextUtils;
@@ -120,9 +121,11 @@ public class SmsPopupUtils {
   public static String getPersonIdFromPhoneNumber(Context context, String address) {
     if (address == null) return null;
 
+    String s = Contacts.Phones.PERSON_ID;
+
     Cursor cursor = context.getContentResolver().query(
         Uri.withAppendedPath(ContactWrapper.getPhoneLookupContentFilterUri(), Uri.encode(address)),
-        new String[] { ContactWrapper.getContactColumn(ContactWrapper.COL_CONTACT_ID) },
+        new String[] { ContactWrapper.getContactColumn(ContactWrapper.COL_CONTACT_PERSON_ID) },
         null, null, null);
 
     if (cursor != null) {
