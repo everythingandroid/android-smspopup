@@ -25,6 +25,7 @@ public class ContactWrapper {
   // Projection columns
   private static final String CONTACT_ID = Contacts.People._ID;
   private static final String CONTACT_DISPLAY_NAME = PeopleColumns.DISPLAY_NAME;
+  private static final String CONTACT_PERSON_ID = Contacts.Phones.PERSON_ID;
   private static final String CONTACT_ID_ECLAIR = "_id";
   private static final String CONTACT_DISPLAY_NAME_ECLAIR = "display_name";
   private static final String CONTACT_ID_EMAIL_ECLAIR = "contact_id";
@@ -33,6 +34,7 @@ public class ContactWrapper {
   public static final int COL_CONTACT_ID = 0;
   public static final int COL_DISPLAY_NAME = 1;
   public static final int COL_CONTACT_ID_EMAIL = 2;
+  public static final int COL_CONTACT_PERSON_ID = 3;
 
   // Projections
   private static final String[] PEOPLE_PROJECTION =
@@ -106,6 +108,9 @@ public class ContactWrapper {
 
         case COL_CONTACT_ID_EMAIL:
           return CONTACT_ID;
+
+        case COL_CONTACT_PERSON_ID:
+          return CONTACT_PERSON_ID;
       }
 
       return null;
@@ -120,6 +125,9 @@ public class ContactWrapper {
 
       case COL_CONTACT_ID_EMAIL:
         return CONTACT_ID_EMAIL_ECLAIR;
+
+      case COL_CONTACT_PERSON_ID:
+        return CONTACT_ID_ECLAIR;
     }
 
     return null;
