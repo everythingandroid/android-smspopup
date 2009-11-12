@@ -72,8 +72,9 @@ public class SmsMmsMessage {
    * Construct SmsMmsMessage for getMmsDetails() - info fetched from the MMS
    * database table
    */
-  public SmsMmsMessage(Context _context, String _contactId, String _contactName, String _fromAddress, String _messageBody,
-      long _timestamp, long _messageId, long _threadId, int _unreadCount, int _messageType) {
+  public SmsMmsMessage(Context _context, String _contactId, String _contactName,
+      String _fromAddress, String _messageBody, long _timestamp, long _messageId,
+      long _threadId, int _unreadCount, int _messageType) {
 
     context = _context;
     fromAddress = _fromAddress;
@@ -197,10 +198,10 @@ public class SmsMmsMessage {
 
   public Intent getReplyIntent() {
     if (messageType == MESSAGE_TYPE_SMS) {
-      return SmsPopupUtils.getSmsToIntentFromThreadId(context, fromAddress);
+      return SmsPopupUtils.getSmsToIntent(context, fromAddress);
     } else if (messageType == MESSAGE_TYPE_MMS) {
       locateThreadId();
-      return SmsPopupUtils.getSmsToIntentFromThreadId(context, threadId);
+      return SmsPopupUtils.getSmsToIntent(context, threadId);
     }
 
     return null;

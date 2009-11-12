@@ -473,7 +473,7 @@ public class SmsPopupUtils {
   /**
    * 
    */
-  public static Intent getSmsIntent() {
+  public static Intent getSmsInboxIntent() {
     Intent conversations = new Intent(Intent.ACTION_MAIN);
     //conversations.addCategory(Intent.CATEGORY_DEFAULT);
     conversations.setType(SMS_MIME_TYPE);
@@ -488,9 +488,13 @@ public class SmsPopupUtils {
   }
 
   /**
+   * Get system view sms thread Intent
    * 
+   * @param context context
+   * @param threadId the message thread id to view 
+   * @return the intent that can be started with startActivity()
    */
-  public static Intent getSmsToIntentFromThreadId(Context context, long threadId) {
+  public static Intent getSmsToIntent(Context context, long threadId) {
     Intent popup = new Intent(Intent.ACTION_VIEW);
     // should I be using FLAG_ACTIVITY_RESET_TASK_IF_NEEDED??
     int flags =
@@ -502,15 +506,19 @@ public class SmsPopupUtils {
       //Log.v("^^Found threadId (" + threadId + "), sending to Sms intent");
       popup.setData(Uri.withAppendedPath(THREAD_ID_CONTENT_URI, String.valueOf(threadId)));
     } else {
-      return getSmsIntent();
+      return getSmsInboxIntent();
     }
     return popup;
   }
 
   /**
+   * Get system sms-to Intent (normally "compose message" activity)
    * 
+   * @param context context
+   * @param phoneNumber the phone number to compose the message to
+   * @return the intent that can be started with startActivity()
    */
-  public static Intent getSmsToIntentFromThreadId(Context context, String phoneNumber) {
+  public static Intent getSmsToIntent(Context context, String phoneNumber) {
     Intent popup = new Intent(Intent.ACTION_SENDTO);
     // should I be using FLAG_ACTIVITY_RESET_TASK_IF_NEEDED??
     int flags =
@@ -522,7 +530,7 @@ public class SmsPopupUtils {
       //Log.v("^^Found threadId (" + threadId + "), sending to Sms intent");
       popup.setData(Uri.parse(SMSTO_URI + Uri.encode(phoneNumber)));
     } else {
-      return getSmsIntent();
+      return getSmsInboxIntent();
     }
     return popup;
   }
