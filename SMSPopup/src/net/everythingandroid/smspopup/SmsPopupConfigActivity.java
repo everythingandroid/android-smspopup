@@ -198,6 +198,14 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     SmsPopupDbAdapter mDbAdapter = new SmsPopupDbAdapter(this);
     mDbAdapter.open(true); // Open database read-only
     mDbAdapter.close();
+
+    String fromAddress = "adam@everythingandroid.net";
+    String contactId = SmsPopupUtils.getPersonIdFromPhoneNumber(this, fromAddress);
+    String contactName = SmsPopupUtils.getPersonName(this, contactId, fromAddress);
+
+    Log.v("contactId = " + contactId);
+    Log.v("contactName = " + contactName);
+
   }
 
   @Override
