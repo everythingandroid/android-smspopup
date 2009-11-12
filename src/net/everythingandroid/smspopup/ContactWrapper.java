@@ -16,11 +16,11 @@ public class ContactWrapper {
 
   // Reflection variables
   private static Class<?> contactsClass;
-  private static Method contactsClassPhotoStreamMethod;
+  private static Method contactsOpenPhotoStreamMethod;
   private static boolean preparedEclairSDK = false;
 
   private static boolean PRE_ECLAIR =
-    SmsPopupUtils.getSDKVersionNumber() < SmsPopupUtils.ECLAIR_SDK_VERSION ? true : false;
+    SmsPopupUtils.getSDKVersionNumber() < SmsPopupUtils.SDK_VERSION_ECLAIR ? true : false;
 
   // Projection columns
   private static final String CONTACT_ID = Contacts.People._ID;
@@ -208,7 +208,7 @@ public class ContactWrapper {
 
     if (preparedEclairSDK) {
       try {
-        return (InputStream) contactsClassPhotoStreamMethod.invoke(
+        return (InputStream) contactsOpenPhotoStreamMethod.invoke(
             contactsClass, cr,
             Uri.withAppendedPath(getContentUri(), id));
       } catch (IllegalArgumentException e) {
@@ -229,7 +229,7 @@ public class ContactWrapper {
   private static void prepareEclairSDK() {
     try {
       contactsClass = Class.forName("android.provider.ContactsContract$Contacts");
-      contactsClassPhotoStreamMethod = contactsClass.getMethod("openContactPhotoInputStream",
+      contactsOpenPhotoStreamMethod = contactsClass.getMethod("openContactPhotoInputStream",
           new Class[] { ContentResolver.class, Uri.class });
       preparedEclairSDK = true;
     } catch (ClassNotFoundException e) {
