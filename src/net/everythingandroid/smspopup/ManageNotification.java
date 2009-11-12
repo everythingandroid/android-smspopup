@@ -133,7 +133,7 @@ public class ManageNotification {
       SpannableString scrollText;
 
       // The default intent when the notification is clicked (Inbox)
-      Intent smsIntent = SmsPopupUtils.getSmsIntent();
+      Intent smsIntent = SmsPopupUtils.getSmsInboxIntent();
 
       // See if user wants some privacy
       boolean privacyMode =

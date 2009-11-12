@@ -1032,7 +1032,7 @@ public class SmsPopupActivity extends Activity {
     exitingKeyguardSecurely = true;
     ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
       public void LaunchOnKeyguardExitSuccess() {
-        Intent i = SmsPopupUtils.getSmsIntent();
+        Intent i = SmsPopupUtils.getSmsInboxIntent();
         SmsPopupActivity.this.getApplicationContext().startActivity(i);
         inbox = true;
         myFinish();
