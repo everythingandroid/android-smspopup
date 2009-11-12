@@ -3,6 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="libs/TTS_library_stub_1.9_market.jar"/>
+	<classpathentry kind="lib" path="libs/TTS_library_stub_1.8_market.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
