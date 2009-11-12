@@ -72,7 +72,8 @@ public class SmsPopupUtils {
     Uri.parse("market://search?q=pname:net.everythingandroid.smspopupdonate");
 
   // TODO: remove once Cupcake support is no longer needed
-  public static final int ECLAIR_SDK_VERSION = 5;
+  public static final int SDK_VERSION_ECLAIR = 5;
+  public static final int SDK_VERSION_DONUT = 4;
 
   /**
    * Looks up a contacts display name by contact id - if not found, the address
@@ -222,15 +223,24 @@ public class SmsPopupUtils {
     int newHeight = thumbsize;
     int newWidth = thumbsize;
 
-    // If we have an abnormal photo size then sample it down
+    // If we have an abnormal photo size that's larger than thumbsize then sample it down
+    boolean sampleDown = false;
+
     if (height > thumbsize || width > thumbsize) {
-      if (height < width) {
+      sampleDown = true;
+    }
+
+    // If the dimensions are not the same then calculate new scaled dimenions
+    if (height < width) {
+      if (sampleDown) {
         options.inSampleSize = Math.round(height / thumbsize);
-        newHeight = Math.round(thumbsize * height / width);
-      } else {
-        options.inSampleSize = Math.round(width / thumbsize);
-        newWidth = Math.round(thumbsize * width / height);
       }
+      newHeight = Math.round(thumbsize * height / width);
+    } else {
+      if (sampleDown) {
+        options.inSampleSize = Math.round(width / thumbsize);
+      }
+      newWidth = Math.round(thumbsize * width / height);
     }
 
     // Fetch the real contact photo (sampled down if needed)
