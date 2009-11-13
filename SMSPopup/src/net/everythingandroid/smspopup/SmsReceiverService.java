@@ -127,9 +127,10 @@ public class SmsReceiverService extends Service {
           }
 
           String address = messages[0].getDisplayOriginatingAddress();
+          boolean fromEmailGateway = messages[0].isEmail();
 
           notifySmsReceived(new SmsMmsMessage(context, address, body, System.currentTimeMillis(),
-              SmsMmsMessage.MESSAGE_TYPE_SMS));
+              fromEmailGateway, SmsMmsMessage.MESSAGE_TYPE_SMS));
         }
       }
     }

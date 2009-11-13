@@ -92,7 +92,7 @@ public class SmsPopupUtils {
 
     Cursor cursor = context.getContentResolver().query(
         Uri.withAppendedPath(ContactWrapper.getContentUri(), id),
-        new String[] { ContactWrapper.getContactColumn(ContactWrapper.COL_DISPLAY_NAME) },
+        new String[] { ContactWrapper.getColumn(ContactWrapper.COL_DISPLAY_NAME) },
         null, null, null);
 
     if (cursor != null) {
@@ -126,7 +126,7 @@ public class SmsPopupUtils {
 
     Cursor cursor = context.getContentResolver().query(
         Uri.withAppendedPath(ContactWrapper.getPhoneLookupContentFilterUri(), Uri.encode(address)),
-        new String[] { ContactWrapper.getContactColumn(ContactWrapper.COL_CONTACT_PERSON_ID) },
+        new String[] { ContactWrapper.getColumn(ContactWrapper.COL_CONTACT_PERSON_ID) },
         null, null, null);
 
     if (cursor != null) {
@@ -149,12 +149,12 @@ public class SmsPopupUtils {
    * Looks up a contacts id, given their email address.
    * Returns null if not found
    */
-  public static String getPersonIdFromEmail(Context context, String phone) {
-    if (phone == null) return null;
+  public static String getPersonIdFromEmail(Context context, String email) {
+    if (email == null) return null;
 
     Cursor cursor = context.getContentResolver().query(
-        Uri.withAppendedPath(ContactWrapper.getEmailLookupContentFilterUri(), Uri.encode(phone)),
-        new String[] { ContactWrapper.getContactColumn(ContactWrapper.COL_CONTACT_ID_EMAIL) },
+        Uri.withAppendedPath(ContactWrapper.getEmailLookupContentFilterUri(), Uri.encode(email)),
+        new String[] { ContactWrapper.getColumn(ContactWrapper.COL_CONTACT_ID_EMAIL) },
         null, null, null);
 
     if (cursor != null) {
@@ -315,7 +315,7 @@ public class SmsPopupUtils {
 
     Cursor cursor = context.getContentResolver().query(
         uriBuilder.build(),
-        new String[] { SMSMMS_ID },
+        new String[] { ContactWrapper.getColumn(ContactWrapper.COL_CONTACT_ID) },
         null, null, null);
 
     if (cursor != null) {
@@ -491,7 +491,7 @@ public class SmsPopupUtils {
    * Get system view sms thread Intent
    * 
    * @param context context
-   * @param threadId the message thread id to view 
+   * @param threadId the message thread id to view
    * @return the intent that can be started with startActivity()
    */
   public static Intent getSmsToIntent(Context context, long threadId) {
@@ -984,7 +984,7 @@ public class SmsPopupUtils {
     //        new String[] { email }, null);
     Cursor cursor = context.getContentResolver().query(
         Uri.withAppendedPath(ContactWrapper.getEmailLookupContentFilterUri(), Uri.encode(email)),
-        new String[] { ContactWrapper.getContactColumn(ContactWrapper.COL_DISPLAY_NAME) },
+        new String[] { ContactWrapper.getColumn(ContactWrapper.COL_DISPLAY_NAME) },
         null, null, null);
 
     if (cursor != null) {

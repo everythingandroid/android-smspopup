@@ -97,7 +97,7 @@ public class ContactWrapper {
   /**
    * Fetch contact table column
    */
-  public static String getContactColumn(int col) {
+  public static String getColumn(int col) {
     if (PRE_ECLAIR) {
       switch(col) {
         case COL_CONTACT_ID:
