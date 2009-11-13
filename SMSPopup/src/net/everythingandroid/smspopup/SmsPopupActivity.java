@@ -54,6 +54,7 @@ import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.google.tts.TTS;
+import com.google.tts.TTSVersionAlert;
 import com.google.tts.TTS.InitListener;
 
 @SuppressWarnings("deprecation")
@@ -115,6 +116,7 @@ public class SmsPopupActivity extends Activity {
   private Cursor mCursor = null;
 
   private TTS myTts = null;
+  private boolean ttsInitialized = false;
 
   @Override
   protected void onCreate(Bundle bundle) {
@@ -130,11 +132,18 @@ public class SmsPopupActivity extends Activity {
     // Get shared prefs
     myPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-    // Check preferences and then blur out background behind window
-    if (myPrefs.getBoolean(getString(R.string.pref_blur_key),
-        Boolean.valueOf(getString(R.string.pref_blur_default)))) {
-      getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-          WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+
+    /*
+     * TODO: Some bug with Android 2.0 (or it could just be the Droid device) makes the
+     * blur effect cause the system to run REALLY slow, so disabling for Android 2.0 for now
+     */
+    if (SmsPopupUtils.getSDKVersionNumber() < SmsPopupUtils.SDK_VERSION_ECLAIR) {
+      // Check preferences and then blur out background behind window
+      if (myPrefs.getBoolean(getString(R.string.pref_blur_key),
+          Boolean.valueOf(getString(R.string.pref_blur_default)))) {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
+            WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+      }
     }
 
     // Fetch privacy mode
@@ -920,6 +929,8 @@ public class SmsPopupActivity extends Activity {
       if (mProgressDialog != null) {
         mProgressDialog.dismiss();
       }
+      ttsInitialized = true;
+
       // if (status == TextToSpeech.SUCCESS) {
       speakMessage();
       // } else {
@@ -942,7 +953,7 @@ public class SmsPopupActivity extends Activity {
     // runOnUiThread(new Runnable() {
     //
     // public void run() {
-    if (myTts == null) {
+    if (!ttsInitialized) {
 
       showDialog(DIALOG_LOADING);
 
@@ -954,8 +965,43 @@ public class SmsPopupActivity extends Activity {
       // We'll use update notification to stop the sound playing
       ManageNotification.update(getApplicationContext(), message);
 
+      /*
+       * This is an aweful fix for the loading dialog not disappearing
+       * when the user decides to not install the TTS package but there didn't
+       * seem like another way to hook into the current TTS library.
+       * 
+       * This will all go away once we can just use the system TTS engine and do away
+       * with the eyes-free version from Market.
+       *
+       */
+      // Extend TTS alert dialog so we can dismiss the loading dialog correctly
+      class MyTTSVersionAlert extends TTSVersionAlert {
+        // Leaving this as hardcoded just as from the TTS source
+        private final static String QUIT = "Do not install the TTS";
+        MyTTSVersionAlert(Context context) {
+          super(context, null, null, null);
+          setNegativeButton(QUIT, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+              if (mProgressDialog != null) {
+                mProgressDialog.dismiss();
+              }
+            }
+          });
+          setOnCancelListener(new OnCancelListener() {
+            public void onCancel(DialogInterface dialog) {
+              if (mProgressDialog != null) {
+                mProgressDialog.dismiss();
+              }
+            }
+          });
+        }
+      }
+
+      // The instance of TTSVersionAlert to use if the user doesn't have the TTS package
+      MyTTSVersionAlert ttsVersionAlert = new MyTTSVersionAlert(this);
+
       // Init the TTS library
-      myTts = new TTS(SmsPopupActivity.this, ttsInitListener, true);
+      myTts = new TTS(SmsPopupActivity.this, ttsInitListener, ttsVersionAlert);
 
     } else {
       // Speak the message!
@@ -1106,7 +1152,7 @@ public class SmsPopupActivity extends Activity {
    */
   private void viewContact() {
     Intent contactIntent = new Intent(Contacts.Intents.SHOW_OR_CREATE_CONTACT);
-    if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
+    if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS || message.isEmail()) {
       contactIntent.setData(Uri.fromParts("mailto", message.getAddress(), null));
     } else {
       contactIntent.setData(Uri.fromParts("tel", message.getAddress(), null));

@@ -18,6 +18,7 @@ public class SmsMmsMessage {
   private static final String EXTRAS_CONTACT_NAME = PREFIX + "EXTRAS_CONTACT_NAME";
   private static final String EXTRAS_MESSAGE_TYPE = PREFIX + "EXTRAS_MESSAGE_TYPE";
   private static final String EXTRAS_MESSAGE_ID   = PREFIX + "EXTRAS_MESSAGE_ID";
+  private static final String EXTRAS_EMAIL_GATEWAY= PREFIX + "EXTRAS_EMAIL_GATEWAY";
 
   // Public EXTRAS strings
   public static final String EXTRAS_NOTIFY         = PREFIX + "EXTRAS_NOTIFY";
@@ -45,6 +46,7 @@ public class SmsMmsMessage {
   private boolean notify = true;
   private int reminderCount = 0;
   private long messageId = 0;
+  private boolean fromEmailGateway = false;
 
   /**
    * Construct SmsMmsMessage with minimal information - this is useful for when
@@ -52,14 +54,23 @@ public class SmsMmsMessage {
    * must then look in the database for the rest of the information
    */
   public SmsMmsMessage(Context _context, String _fromAddress, String _messageBody,
-      long _timestamp, int _messageType) {
+      long _timestamp, boolean _fromEmailGateway, int _messageType) {
     context = _context;
     fromAddress = _fromAddress;
     messageBody = _messageBody;
     timestamp = _timestamp;
     messageType = _messageType;
+    fromEmailGateway = _fromEmailGateway;
 
-    contactId = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
+    // If this SMS is from an email gateway then lookup contactId by email address
+    if (fromEmailGateway) {
+      if (Log.DEBUG) Log.v("Sms came from email gateway");
+      contactId = SmsPopupUtils.getPersonIdFromEmail(context, fromAddress);
+    } else { // Else lookup contactId by phone number
+      if (Log.DEBUG) Log.v("Sms did NOT come from email gateway");
+      contactId = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
+    }
+
     contactName = SmsPopupUtils.getPersonName(context, contactId, fromAddress);
     unreadCount = SmsPopupUtils.getUnreadMessagesCount(context, timestamp, messageBody);
 
@@ -142,6 +153,7 @@ public class SmsMmsMessage {
     notify = b.getBoolean(EXTRAS_NOTIFY, false);
     reminderCount = b.getInt(EXTRAS_REMINDER_COUNT, 0);
     messageId = b.getLong(EXTRAS_MESSAGE_ID, 0);
+    fromEmailGateway = b.getBoolean(EXTRAS_EMAIL_GATEWAY, false);
   }
 
   /**
@@ -180,6 +192,7 @@ public class SmsMmsMessage {
     b.putBoolean(EXTRAS_NOTIFY, notify);
     b.putInt(EXTRAS_REMINDER_COUNT, reminderCount);
     b.putLong(EXTRAS_MESSAGE_ID, messageId);
+    b.putBoolean(EXTRAS_EMAIL_GATEWAY, fromEmailGateway);
     return b;
   }
 
@@ -197,13 +210,12 @@ public class SmsMmsMessage {
   }
 
   public Intent getReplyIntent() {
-    if (messageType == MESSAGE_TYPE_SMS) {
-      return SmsPopupUtils.getSmsToIntent(context, fromAddress);
-    } else if (messageType == MESSAGE_TYPE_MMS) {
+    if (messageType == MESSAGE_TYPE_MMS) {
       locateThreadId();
       return SmsPopupUtils.getSmsToIntent(context, threadId);
+    } else if (messageType == MESSAGE_TYPE_SMS) {
+      return SmsPopupUtils.getSmsToIntent(context, fromAddress);
     }
-
     return null;
   }
 
@@ -309,6 +321,10 @@ public class SmsMmsMessage {
 
   public String getAddress() {
     return fromAddress;
+  }
+
+  public boolean isEmail() {
+    return fromEmailGateway;
   }
 
   //	public boolean equals(SmsMmsMessage compareMessage) {

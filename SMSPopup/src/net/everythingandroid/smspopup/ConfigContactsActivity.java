@@ -325,7 +325,7 @@ public class ConfigContactsActivity extends ListActivity {
           sysContactCursor =
             mContentResolver.query(
                 Uri.withAppendedPath(ContactWrapper.getContentUri(), String.valueOf(contactId)),
-                new String[] {ContactWrapper.getContactColumn(ContactWrapper.COL_DISPLAY_NAME)},
+                new String[] {ContactWrapper.getColumn(ContactWrapper.COL_DISPLAY_NAME)},
                 null, null, null);
 
           if (sysContactCursor != null) {
@@ -425,7 +425,7 @@ public class ConfigContactsActivity extends ListActivity {
       if (constraint != null) {
         buffer = new StringBuilder();
         buffer.append("UPPER(");
-        buffer.append(ContactWrapper.getContactColumn(ContactWrapper.COL_DISPLAY_NAME));
+        buffer.append(ContactWrapper.getColumn(ContactWrapper.COL_DISPLAY_NAME));
         buffer.append(") GLOB ?");
         args = new String[] {"*" + constraint.toString().toUpperCase() + "*"};
       }

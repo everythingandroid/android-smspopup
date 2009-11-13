@@ -123,7 +123,7 @@
    <string name="pref_blur_title">Blur Background</string>
    <string name="pref_blur_summaryon">The background behind the message window will be blurred out</string>
    <string name="pref_blur_summaryoff">The background behind the message window will not be blurred</string>
-   <string name="pref_blur_default">true</string>
+   <string name="pref_blur_default">false</string>
 
 <!-- Notification Preferences -->
    <string name="pref_notif_title">Notifications</string>
