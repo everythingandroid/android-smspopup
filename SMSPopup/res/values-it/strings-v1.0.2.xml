@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- Misc missing string -->
+   <string name="view_contact">Mostra Contatto</string>   
+
+<!-- Quick Reply Checkbox Preference -->
+   <string name="pref_quickreply_title">Risposta rapida</string>
+   <string name="pref_quickreply_summaryon">Risposta rapida è attiva</string>
+   <string name="pref_quickreply_summaryoff">Risposta rapida è disattiva</string>
+   <string name="pref_quickreply_bothreplybuttons">Entrambi i pulsanti di risposta sono attivi, per configurarli, vai alla schermata di configurazione pulsanti.</string>
+   <string name="pref_quickreply_noreplybuttons">Non sono attivi pulsanti di risposta, per configurarli vai alla schermata di configurazione pulsanti</string>
+</resources>
