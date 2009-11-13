@@ -30,12 +30,12 @@
    <string name="pref_other_title">Altro</string>
 
    <string name="pref_enabled_title">Abilita SMS Popup</string>
-   <string name="pref_enabled_summaryon">SMS Popup è attivato</string>
-   <string name="pref_enabled_summaryoff">SMS Popup è disattivato</string>
+   <string name="pref_enabled_summaryon">SMS Popup è attivo</string>
+   <string name="pref_enabled_summaryoff">SMS Popup è disattivo</string>
    
    <string name="pref_about_title">Info</string>
    <string name="pref_about_summary">Informazioni su SMS Popup</string>
-   <string name="pref_about_text">Creato da: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup è una semplice applicazione che mostra una finestra di dialogo quando si riceve un SMS  - Attivando lo schermo e sbloccando la tastiera se necessario.  Mostra il più recente messaggio, il mittente e una foto del contatto se disponibile.\n\nMandami una e-mail con commenti, suggerimenti o bugs.\n\nGerman translation by: Feyyaz A.\nEmail: f_alingan@hotmail.com\nWebsite: http://www.yenio.com\n\nDutch translation by: mellie@xs4all.nl\n\nSpanish translation by: Diego Fernández\nEmail: profediego@gmail.com\n\nRussian translation by: Artem Kavalerov\nEmail: artem.kavalerov@gmail.com\n\nItalian translation by: Giuseppe Ferro\nEmail: peppens1@gmail.com\n\nCredits to Min Tran for the app icon.\n(http://min.frexy.com)\n</string>
+   <string name="pref_about_text">Creato da: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup è una semplice applicazione che mostra una finestra di dialogo quando si riceve un SMS  - Attivando lo schermo e sbloccando la tastiera se necessario.  Mostra il più recente messaggio, il mittente e una foto del contatto se disponibile.\n\nMandami una e-mail con commenti, suggerimenti o bugs.\n\nGerman translation by: Feyyaz A.\nEmail: f_alingan@hotmail.com\nWebsite: http://www.yenio.com\n\nDutch translation by: mellie@xs4all.nl\n\nSpanish translation by: Diego Fernández\nEmail: profediego@gmail.com\n\nRussian translation by: Artem Kavalerov\nEmail: artem.kavalerov@gmail.com\n\nItalian translation by: Giuseppe Ferro\nEmail: peppens1@gmail.com\nWebsite: http://www.peppens1.eu\n\nCredits to Min Tran for the app icon.\n(http://min.frexy.com)\n</string>
    
    <string name="pref_sendemail_title">Scrivi una E-mail allo sviluppatore</string>
    <string name="pref_sendemail_summary">E-mail di commenti o bugs allo sviluppatore</string>
@@ -55,7 +55,7 @@
    <string name="pref_dimscreen_summaryoff">La finestra Popup illuminerà il display</string>   
       
    <string name="pref_privacy_title">Modalità Privacy</string>
-   <string name="pref_privacy_summaryon">Il contenuto del msg verrà visualizzato solo dopo lo sblocco</string>
+   <string name="pref_privacy_summaryon">Il contenuto del msg verrà visualizzato solo dopo lo sblocco display</string>
    <string name="pref_privacy_summaryoff">Il contenuto del msg verrà visualizzato subito</string>
    
    <string name="pref_markread_title">Segna come Letto</string>
@@ -75,10 +75,6 @@
    <string name="pref_inbox_app_title">Scegli l\'applicazione Inbox</string>
    <string name="pref_inbox_app_summary">Scegli l\'applicazione che sarà lanciata per msg multipli</string>
    <string name="pref_inbox_app_info">Ricorda che l\'applicazione di "Risposta" è settata dal sistema</string>
-
-   <string name="pref_show_buttons_title">Mostra pulsanti</string>
-   <string name="pref_show_buttons_summaryon">I pulsanti sono visibili sul Popup</string>
-   <string name="pref_show_buttons_summaryoff">I pulsanti sono nascosti fino alla pressione del tasto menu</string>
 
    <string name="pref_show_delete_button_title">Mostra il pulsante Elimina</string>
    <string name="pref_show_delete_button_summaryon">Il pulsante Elimina è abilitato</string>
@@ -157,7 +153,7 @@
    <string name="pref_notif_repeat_interval_summary">L\'intervallo tra una notifica di ricorda e l\'altra</string>
    <string name="pref_notif_repeat_interval_dialogTitle">Intervalllo in (minuti)</string>
    
-   <string name="pref_notif_repeat_times_title">Numbero di Ricorda</string>
+   <string name="pref_notif_repeat_times_title">Numero di Ricorda</string>
    <string name="pref_notif_repeat_times_summary">Il numero di ricorda da eseguire</string>
 
    <string name="pref_notif_repeat_screen_on_title">Accendi schermo per ogni ricorda</string>
