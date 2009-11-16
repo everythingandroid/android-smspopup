@@ -60,7 +60,7 @@
    <string name="pref_privacy_summaryon">Obsah zprávy bude zobrazen až po odemknutí</string>
    <string name="pref_privacy_summaryoff">Obsah zprávy bude zobrazen hned</string>
    
-   <string name="pref_markread_title">Ozančit jako přečtené</string>
+   <string name="pref_markread_title">Označit jako přečtené</string>
    <string name="pref_markread_summaryon">Zpráva bude označená jako přečtená po kliknutí na \"Close\"</string>
    <string name="pref_markread_summaryoff">Zpráva nebude označená jako přečtená po kliknutí na \"Close\"</string>
 
