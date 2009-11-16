@@ -3,7 +3,8 @@ package net.everythingandroid.smspopup;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
+import android.telephony.gsm.SmsMessage;
+import android.telephony.gsm.SmsMessage.MessageClass;
 import android.text.format.DateUtils;
 
 public class SmsMmsMessage {
@@ -47,20 +48,41 @@ public class SmsMmsMessage {
   private int reminderCount = 0;
   private long messageId = 0;
   private boolean fromEmailGateway = false;
+  private MessageClass messageClass;
 
   /**
-   * Construct SmsMmsMessage with minimal information - this is useful for when
-   * a raw SMS comes in which just contains address, body and timestamp.  We
-   * must then look in the database for the rest of the information
+   * Construct SmsMmsMessage given a raw message (created from pdu), used for when
+   * a message is initially received via the network.
    */
-  public SmsMmsMessage(Context _context, String _fromAddress, String _messageBody,
-      long _timestamp, boolean _fromEmailGateway, int _messageType) {
+  public SmsMmsMessage(Context _context, SmsMessage[] messages, long _timestamp) {
+    SmsMessage sms = messages[0];
+
     context = _context;
-    fromAddress = _fromAddress;
-    messageBody = _messageBody;
     timestamp = _timestamp;
-    messageType = _messageType;
-    fromEmailGateway = _fromEmailGateway;
+    messageType = MESSAGE_TYPE_SMS;
+
+    /*
+     * Fetch data from raw SMS
+     */
+    fromAddress = sms.getDisplayOriginatingAddress();
+    fromEmailGateway = sms.isEmail();
+    messageClass = sms.getMessageClass();
+
+    String body;
+    if (messages.length == 1 || sms.isReplace()) {
+      body = sms.getDisplayMessageBody();
+    } else {
+      StringBuilder bodyText = new StringBuilder();
+      for (int i = 0; i < messages.length; i++) {
+        bodyText.append(messages[i].getMessageBody());
+      }
+      body = bodyText.toString();
+    }
+    messageBody = body;
+
+    /*
+     * Lookup the rest of the info from the system db
+     */
 
     // If this SMS is from an email gateway then lookup contactId by email address
     if (fromEmailGateway) {
@@ -124,7 +146,6 @@ public class SmsMmsMessage {
       contactId = null;
 
     contactName = SmsPopupUtils.getPersonName(context, contactId, fromAddress);
-    //contactPhoto = SmsPopupUtils.getPersonPhoto(context, contactId);
 
     unreadCount = _unreadCount;
     threadId = _threadId;
@@ -146,7 +167,6 @@ public class SmsMmsMessage {
     timestamp = b.getLong(EXTRAS_TIMESTAMP);
     contactId = b.getString(EXTRAS_CONTACT_ID);
     contactName = b.getString(EXTRAS_CONTACT_NAME);
-    // contactPhoto = b.getByteArray(EXTRAS_CONTACT_PHOTO);
     unreadCount = b.getInt(EXTRAS_UNREAD_COUNT, 1);
     threadId = b.getLong(EXTRAS_THREAD_ID, 0);
     messageType = b.getInt(EXTRAS_MESSAGE_TYPE, MESSAGE_TYPE_SMS);
@@ -169,7 +189,6 @@ public class SmsMmsMessage {
     timestamp = _timestamp;
     contactId = _contactId;
     contactName = _contactName;
-    // contactPhoto = _contactPhoto;
     unreadCount = _unreadCount;
     threadId = _threadId;
     messageType = _messageType;
@@ -185,7 +204,6 @@ public class SmsMmsMessage {
     b.putLong(EXTRAS_TIMESTAMP, timestamp);
     b.putString(EXTRAS_CONTACT_ID, contactId);
     b.putString(EXTRAS_CONTACT_NAME, contactName);
-    //b.putByteArray(EXTRAS_CONTACT_PHOTO, contactPhoto);
     b.putInt(EXTRAS_UNREAD_COUNT, unreadCount);
     b.putLong(EXTRAS_THREAD_ID, threadId);
     b.putInt(EXTRAS_MESSAGE_TYPE, messageType);
@@ -195,12 +213,6 @@ public class SmsMmsMessage {
     b.putBoolean(EXTRAS_EMAIL_GATEWAY, fromEmailGateway);
     return b;
   }
-
-  //  public Bitmap getContactPhoto() {
-  //    if (contactPhoto == null)
-  //      return null;
-  //    return BitmapFactory.decodeStream(new ByteArrayInputStream(contactPhoto));
-  //  }
 
   public Intent getPopupIntent() {
     Intent popup = new Intent(context, SmsPopupActivity.class);
@@ -241,12 +253,11 @@ public class SmsMmsMessage {
     return timestamp;
   }
 
+  public MessageClass getMessageClass() {
+    return messageClass;
+  }
+
   public CharSequence getFormattedTimestamp() {
-    /*
-     * No need for my own format function now, the 1.5 SDK has this built in
-     * (this will detect the system settings and return the correct format)
-     */
-    // return SMSPopupUtils.formatTimestamp(context, timestamp);
     return DateUtils.formatDateTime(context, timestamp, DateUtils.FORMAT_SHOW_TIME);
   }
 
@@ -327,122 +338,15 @@ public class SmsMmsMessage {
     return fromEmailGateway;
   }
 
-  //	public boolean equals(SmsMmsMessage compareMessage) {
-  //		boolean equals = false;
-  //		if (PhoneNumberUtils.compare(this.fromAddress, compareMessage.fromAddress) &&
-  //				this.compareTimeStamp(compareMessage.timestamp) &&
-  //				this.messageType == compareMessage.messageType) {
-  //			equals = true;
-  //		}
-  //		return equals;
-  //	}
-
   /**
-   * Check if this message is sufficiently the same as the provided parameters
+   * Sned a reply to this message
+   * 
+   * @param quickreply the message to send
+   * @return true of the message was sent, false otherwise
    */
-  public boolean equals(String fromAddress, long timestamp, long timestamp_provider, String body) {
-    boolean equals = false;
-
-    if (PhoneNumberUtils.compare(this.fromAddress, fromAddress) &&
-        this.compareTimeStamp(timestamp, timestamp_provider) &&
-        this.compareBody(body)) {
-      equals = true;
-    }
-    return equals;
-  }
-
-  //	private boolean compareTimeStamp(long compareTimestamp) {
-  //		return compareTimeStamp(compareTimestamp, 0);
-  //	}
-
-  /*
-   * Compares the timestamps of a message, this is super hacky because the way
-   * which builds of Android store SMS timestamps changed in the cupcake branch -
-   * pre-cupcake it stored the timestamp provided by the telecom provider;
-   * post-cupcake it stored the system timestamp.
-   * Unfortunately this means we need to use 2 different ways to determine if
-   * the received message timestamp is sufficiently equal to the database timestamp :(
-   */
-  private boolean compareTimeStamp(long compareTimestamp, long providerTimestamp) {
-
-    //		final int buildVersion = Integer.valueOf(Build.VERSION.INCREMENTAL);
-
-    /*
-     * On March 28th, 2009 - these are the latest builds that I could find:
-     * 128600 TMI-RC9 (Tmobile EU)
-     * 126986 PLAT-RC33 (Tmobile US)
-     * 129975 Emulator (from Android 1.1 SDK r1)
-     * Hopefully anything later will have the updated SMS code that uses the system
-     * timestamp rather than the SMS timestamp
-     */
-    //		final int LATEST_BUILD = 129975;
-    //		boolean PRE_CUPCAKE = false;
-    //		if (buildVersion <= LATEST_BUILD) {
-    //			PRE_CUPCAKE = true;
-    //		}
-
-    if (Log.DEBUG) Log.v("DB timestamp = " + timestamp);
-    if (Log.DEBUG) Log.v("Provider timestamp = " + providerTimestamp);
-    if (Log.DEBUG) Log.v("System timestamp = " + compareTimestamp);
-
-    /*
-     * If pre-cupcake we can just do a direct comparison as the Mms app stores the
-     * timestamp from the telecom provider (in the sms pdu)
-     */
-    //		if (PRE_CUPCAKE) {
-    //			Log.v("Build is pre-cupcake ("+buildVersion+"), doing direct SMS timestamp comparison");
-    //			Log.v("DB timestamp = " + timestamp);
-    //			Log.v("Intent timestamp = " + providerTimestamp);
-    if (timestamp == providerTimestamp) {
-      if (Log.DEBUG) Log.v("SMS Compare: compareTimestamp() - intent timestamp = provider timestamp");
-      return true;
-    } //else {
-    //				return false;
-    //			}
-    //		}
-
-    /*
-     * If post-cupcake, the system app stores a system timestamp - the only problem is
-     * we have no way of knowing the exact time the system app used.  So what
-     * we'll do is compare against our own system timestamp and add a buffer in.
-     * This is an awful way of doing this, but I don't see any other way around it :(
-     */
-    //		Log.v("Build is post-cupcake ("+buildVersion+"), doing approx. SMS timestamp comparison");
-    //		Log.v("DB timestamp = " + timestamp);
-    //		Log.v("Intent timestamp = " + compareTimestamp);
-
-    if (timestamp < (compareTimestamp + MESSAGE_COMPARE_TIME_BUFFER)
-        && timestamp > (compareTimestamp - MESSAGE_COMPARE_TIME_BUFFER)) {
-      if (Log.DEBUG) Log.v("SMS Compare: compareTimestamp() - timestamp is approx. the same");
-      return true;
-    }
-    if (Log.DEBUG) Log.v("SMS Compare: compareTimestamp() - return false");
-    return false;
-  }
-
-  /*
-   * Compare message body
-   */
-  private boolean compareBody(String compareBody) {
-    if (compareBody != null) {
-      if (messageBody.length() != compareBody.length()) {
-        if (Log.DEBUG) Log.v("SMS Compare: compareBody() - length is different");
-        return false;
-      }
-
-      if (messageBody.equals(compareBody)) {
-        if (Log.DEBUG) Log.v("SMS Compare: compareBody() - messageBody is the same");
-        return true;
-      }
-    }
-    if (Log.DEBUG) Log.v("SMS Compare: compareBody() - return false");
-    return false;
-  }
-
   public boolean replyToMessage(String quickreply) {
-    locateThreadId();
     SmsMessageSender sender =
-      new SmsMessageSender(context, new String[] {fromAddress}, quickreply, threadId);
+      new SmsMessageSender(context, new String[] {fromAddress}, quickreply, getThreadId());
     return sender.sendMessage();
   }
 }

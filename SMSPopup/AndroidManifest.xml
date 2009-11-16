@@ -48,11 +48,6 @@
       android:screenOrientation="user"
       android:taskAffinity="net.everythingandroid.smspopup.popup">
     </activity>
-    <activity
-      android:name=".ClassZeroActivity"
-      android:label="Class 0 Message"
-      android:theme="@android:style/Theme.Dialog">
-    </activity>
     <receiver
       android:name=".SmsReceiver">
       <intent-filter>
@@ -117,5 +112,5 @@
   <uses-permission
     android:name="android.permission.READ_LOGS" />
   <uses-permission
-    android:name="android.permission.READ_PHONE_STATE" />    
+    android:name="android.permission.READ_PHONE_STATE" />
 </manifest>

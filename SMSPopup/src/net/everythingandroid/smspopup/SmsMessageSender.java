@@ -127,6 +127,14 @@ public class SmsMessageSender {
   // http://android.git.kernel.org/?p=platform/packages/apps/Mms.git;a=blob;f=src/com/android/mms/transaction/SmsReceiverService.java
   public static final String MESSAGE_SENT_ACTION = "com.android.mms.transaction.MESSAGE_SENT";
 
+  /**
+   * Send a message via the system app and system db
+   * 
+   * @param context the context
+   * @param dests the destination addresses
+   * @param msgText the message text
+   * @param threadId the message thread id
+   */
   public SmsMessageSender(Context context, String[] dests, String msgText, long threadId) {
     mContext = context;
     mMessageText = msgText;
@@ -143,6 +151,11 @@ public class SmsMessageSender {
 
   public boolean sendMessage() {
     if (!(mThreadId > 0)) {
+      return false;
+    }
+
+    // // Don't try to send an empty message.
+    if ((mMessageText == null) || (mNumberOfDests == 0)) {
       return false;
     }
 
@@ -181,11 +194,11 @@ public class SmsMessageSender {
       for (int j = 0; j < messageCount; j++) {
         if (requestDeliveryReport) {
 
-          deliveryIntents.add(PendingIntent.getBroadcast(mContext, 0, new Intent(
-              MESSAGE_STATUS_RECEIVED_ACTION, uri).setClassName(MMS_PACKAGE_NAME,
-                  MMS_STATUS_RECEIVED_CLASS_NAME),
-                  // MessageStatusReceiver.class),
-                  0));
+          deliveryIntents.add(PendingIntent.getBroadcast(mContext, 0,
+              new Intent(MESSAGE_STATUS_RECEIVED_ACTION, uri)
+          .setClassName(MMS_PACKAGE_NAME, MMS_STATUS_RECEIVED_CLASS_NAME),
+          // MessageStatusReceiver.class),
+          0));
         }
         sentIntents.add(PendingIntent.getBroadcast(mContext, 0,
             new Intent(MESSAGE_SENT_ACTION, uri)
@@ -193,8 +206,8 @@ public class SmsMessageSender {
         // SmsReceiver.class
         0));
       }
-      smsManager.sendMultipartTextMessage(mDests[i], mServiceCenter, messages, sentIntents,
-          deliveryIntents);
+      smsManager.sendMultipartTextMessage(
+          mDests[i], mServiceCenter, messages, sentIntents, deliveryIntents);
     }
     return false;
   }
@@ -215,7 +228,6 @@ public class SmsMessageSender {
     Cursor cursor = null;
 
     try {
-
       cursor =
         mContext.getContentResolver().query(SmsPopupUtils.SMS_CONTENT_URI,
             SERVICE_CENTER_PROJECTION, "thread_id = " + threadId, null, "date DESC");
