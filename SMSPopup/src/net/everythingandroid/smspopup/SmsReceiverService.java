@@ -14,12 +14,12 @@ import android.os.PowerManager;
 import android.os.Process;
 import android.preference.PreferenceManager;
 import android.telephony.gsm.SmsMessage;
+import android.telephony.gsm.SmsMessage.MessageClass;
 
 public class SmsReceiverService extends Service {
   private static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
   private static final String ACTION_MMS_RECEIVED = "android.provider.Telephony.WAP_PUSH_RECEIVED";
   private static final String MMS_DATA_TYPE = "application/vnd.wap.mms-message";
-  public static final String CLASS_ZERO_BODY_KEY = "CLASS_ZERO_BODY";
 
   /*
    * This is the number of retries and pause between retries that we will keep
@@ -102,36 +102,9 @@ public class SmsReceiverService extends Service {
 
     Bundle bundle = intent.getExtras();
     if (bundle != null) {
-
       SmsMessage[] messages = SmsPopupUtils.getMessagesFromIntent(intent);
       if (messages != null) {
-        SmsMessage sms = messages[0];
-
-        // Class 0 messages are for carrier announcements etc.
-        if (sms.getMessageClass() == SmsMessage.MessageClass.CLASS_0) {
-          displayClassZeroMessage(context, sms);
-        } else { // Otherwise regular sms message or sms replace message
-          /*
-           * Fetch message details from raw SMS data received from telecom
-           * provider
-           */
-          String body;
-          if (messages.length == 1 || sms.isReplace()) {
-            body = messages[0].getDisplayMessageBody();
-          } else {
-            StringBuilder bodyText = new StringBuilder();
-            for (int i = 0; i < messages.length; i++) {
-              bodyText.append(messages[i].getMessageBody());
-            }
-            body = bodyText.toString();
-          }
-
-          String address = messages[0].getDisplayOriginatingAddress();
-          boolean fromEmailGateway = messages[0].isEmail();
-
-          notifySmsReceived(new SmsMmsMessage(context, address, body, System.currentTimeMillis(),
-              fromEmailGateway, SmsMmsMessage.MESSAGE_TYPE_SMS));
-        }
+        notifySmsReceived(new SmsMmsMessage(context, messages, System.currentTimeMillis()));
       }
     }
   }
@@ -140,6 +113,9 @@ public class SmsReceiverService extends Service {
    * Notify the user of the SMS - either via notification bar or popup
    */
   private void notifySmsReceived(SmsMmsMessage smsMessage) {
+
+    // Class 0 message, let the system handle this
+    if (smsMessage.getMessageClass() == MessageClass.CLASS_0) return;
 
     ManagePreferences mPrefs = new ManagePreferences(context, smsMessage.getContactId());
 
@@ -191,8 +167,8 @@ public class SmsReceiverService extends Service {
         if (Log.DEBUG) Log.v("MMS found in content provider");
         SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean onlyShowOnKeyguard =
-          myPrefs.getBoolean(context.getString(R.string.pref_onlyShowOnKeyguard_key), Boolean
-              .valueOf(context.getString(R.string.pref_onlyShowOnKeyguard_default)));
+          myPrefs.getBoolean(context.getString(R.string.pref_onlyShowOnKeyguard_key),
+              Boolean.valueOf(context.getString(R.string.pref_onlyShowOnKeyguard_default)));
 
         if (ManageKeyguard.inKeyguardRestrictedInputMode() || !onlyShowOnKeyguard) {
           if (Log.DEBUG)
@@ -215,21 +191,6 @@ public class SmsReceiverService extends Service {
         }
       }
     }
-  }
-
-  /**
-   * Displays a class-zero message immediately in a pop-up window with the
-   * number from where it received the Notification with the body of the message
-   * 
-   */
-  private void displayClassZeroMessage(Context context, SmsMessage sms) {
-    // Using NEW_TASK here is necessary because we're calling
-    // startActivity from outside an activity.
-    Intent smsDialogIntent =
-      new Intent(context, ClassZeroActivity.class)
-    .putExtra(CLASS_ZERO_BODY_KEY, sms.getMessageBody())
-    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-    context.startActivity(smsDialogIntent);
   }
 
   /**

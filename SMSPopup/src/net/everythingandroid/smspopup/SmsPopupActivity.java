@@ -132,20 +132,6 @@ public class SmsPopupActivity extends Activity {
     // Get shared prefs
     myPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-
-    /*
-     * TODO: Some bug with Android 2.0 (or it could just be the Droid device) makes the
-     * blur effect cause the system to run REALLY slow, so disabling for Android 2.0 for now
-     */
-    if (SmsPopupUtils.getSDKVersionNumber() < SmsPopupUtils.SDK_VERSION_ECLAIR) {
-      // Check preferences and then blur out background behind window
-      if (myPrefs.getBoolean(getString(R.string.pref_blur_key),
-          Boolean.valueOf(getString(R.string.pref_blur_default)))) {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-            WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-      }
-    }
-
     // Fetch privacy mode
     privacyMode =
       myPrefs.getBoolean(getString(R.string.pref_privacy_key),
@@ -403,15 +389,11 @@ public class SmsPopupActivity extends Activity {
       // Convert current message to bundle
       i.putExtras(message.toBundle());
 
-      // We need to know if the user is replying - if so, the entire thread id
-      // should
+      // We need to know if the user is replying - if so, the entire thread id should
       // be ignored when working out the message tally in the notification bar.
-      // We
-      // can't rely on the system database as it may take a little while for the
-      // reply
-      // intent to fire and load up the messaging up (after which the messages
-      // will be
-      // marked read in the database).
+      // We can't rely on the system database as it may take a little while for the
+      // reply intent to fire and load up the messaging up (after which the messages
+      // will be marked read in the database).
       i.putExtra(SmsMmsMessage.EXTRAS_REPLYING, replying);
 
       // Start the service
@@ -466,8 +448,7 @@ public class SmsPopupActivity extends Activity {
         mmsView.setVisibility(View.GONE);
       }
 
-      // Refresh privacy settings (hide/show message) depending on privacy
-      // setting
+      // Refresh privacy settings (hide/show message) depending on privacy setting
       refreshPrivacy();
     }
 
@@ -1059,9 +1040,8 @@ public class SmsPopupActivity extends Activity {
       public void LaunchOnKeyguardExitSuccess() {
         // Yet another fix for the View button in privacy mode :(
         // This will remotely call refreshPrivacy in case the user doesn't have
-        // the security pattern on
-        // (so the screen will not refresh and therefore the popup will not come
-        // out of privacy mode)
+        // the security pattern on (so the screen will not refresh and therefore
+        // the popup will not come out of privacy mode)
         runOnUiThread(new Runnable() {
           public void run() {
             refreshPrivacy();

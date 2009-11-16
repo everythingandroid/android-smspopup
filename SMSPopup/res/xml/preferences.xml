@@ -227,12 +227,6 @@
           android:summaryOn="@string/pref_onlyShowOnKeyguard_summaryon"
           android:summaryOff="@string/pref_onlyShowOnKeyguard_summaryoff"
           android:defaultValue="@string/pref_onlyShowOnKeyguard_default" />
-        <CheckBoxPreference
-          android:key="@string/pref_blur_key"
-          android:title="@string/pref_blur_title"
-          android:summaryOn="@string/pref_blur_summaryon"
-          android:summaryOff="@string/pref_blur_summaryoff"
-          android:defaultValue="@string/pref_blur_default" />
       </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
