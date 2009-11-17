@@ -60,6 +60,10 @@
         <data
           android:mimeType="application/vnd.wap.mms-message" />
       </intent-filter>
+     <intent-filter>
+        <action
+          android:name="net.everythingandroid.smspopup.MESSAGE_RECEIVED" />
+      </intent-filter>      
     </receiver>
     <receiver
       android:name=".ExternalEventReceiver">
