@@ -231,7 +231,10 @@ public class SmsPopupDbAdapter {
       found = mCursor.moveToFirst();
     }
     if (!found) {
-      mCursor = null;
+      if (mCursor != null) {
+        mCursor.close();
+      }
+      return null;
     }
     return mCursor;
   }
@@ -254,7 +257,10 @@ public class SmsPopupDbAdapter {
       found = mCursor.moveToFirst();
     }
     if (!found) {
-      mCursor = null;
+      if (mCursor != null) {
+        mCursor.close();
+      }
+      return null;
     }
     return mCursor;
   }
@@ -393,7 +399,10 @@ public class SmsPopupDbAdapter {
       found = mCursor.moveToFirst();
     }
     if (!found) {
-      mCursor = null;
+      if (mCursor != null) {
+        mCursor.close();
+      }
+      return null;
     }
     return mCursor;
   }
