@@ -85,7 +85,7 @@ public class SmsPopupActivity extends Activity {
   private View privacyView = null;
   private ViewStub buttonsViewStub;
   private View buttonsView = null;
-  LinearLayout mainLL = null;
+  private LinearLayout mainLL = null;
 
   private boolean wasVisible = false;
   private boolean replying = false;
@@ -1166,8 +1166,7 @@ public class SmsPopupActivity extends Activity {
     // This sets the minimum width of the activity to a minimum of 80% of the screen
     // size only needed because the theme of this activity is "dialog" so it looks
     // like it's floating and doesn't seem to fill_parent like a regular activity
-    // TODO: not need anymore? acutally should limit the minWidth in the case of
-    // devices with bigger screens...
+    // TODO: acutally should limit the minWidth in the case of devices with bigger screens...
     if (mainLL == null) {
       mainLL = (LinearLayout) findViewById(R.id.MainLinearLayout);
     }
