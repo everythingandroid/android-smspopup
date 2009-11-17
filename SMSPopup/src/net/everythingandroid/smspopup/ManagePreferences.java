@@ -53,8 +53,7 @@ public class ManagePreferences {
     if (useDatabase) {
       return one.equals(contactCursor.getString(dbColumnNum));
     } else {
-      return mPrefs.getBoolean(context.getString(resPrefId),
-          Boolean.parseBoolean(context.getString(resDefaultId)));
+      return getBoolean(resPrefId, resDefaultId);
     }
   }
 
@@ -67,7 +66,7 @@ public class ManagePreferences {
     if (useDatabase) {
       return contactCursor.getString(dbColumnNum);
     } else {
-      return mPrefs.getString(context.getString(resPrefId), context.getString(resDefaultId));
+      return getString(resPrefId, resDefaultId);
     }
   }
 
@@ -99,15 +98,18 @@ public class ManagePreferences {
     return mPrefs.getInt(pref, defaultVal);
   }
 
-  @Override
-  protected void finalize() throws Throwable {
-    close();
-    super.finalize();
-  }
+  //  @Override
+  //  protected void finalize() throws Throwable {
+  //    close();
+  //    super.finalize();
+  //  }
 
   public void close() {
     if (contactCursor != null) {
       contactCursor.close();
+    }
+    if (mDbAdapter != null) {
+      mDbAdapter.close();
     }
   }
 }
