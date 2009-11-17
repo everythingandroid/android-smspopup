@@ -98,12 +98,6 @@ public class ManagePreferences {
     return mPrefs.getInt(pref, defaultVal);
   }
 
-  //  @Override
-  //  protected void finalize() throws Throwable {
-  //    close();
-  //    super.finalize();
-  //  }
-
   public void close() {
     if (contactCursor != null) {
       contactCursor.close();
