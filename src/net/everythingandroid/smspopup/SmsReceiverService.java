@@ -19,6 +19,7 @@ import android.telephony.gsm.SmsMessage.MessageClass;
 public class SmsReceiverService extends Service {
   private static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
   private static final String ACTION_MMS_RECEIVED = "android.provider.Telephony.WAP_PUSH_RECEIVED";
+  private static final String ACTION_MESSAGE_RECEIVED = "net.everythingandroid.smspopup.MESSAGE_RECEIVED";
   private static final String MMS_DATA_TYPE = "application/vnd.wap.mms-message";
 
   /*
@@ -86,6 +87,8 @@ public class SmsReceiverService extends Service {
         handleSmsReceived(intent);
       } else if (ACTION_MMS_RECEIVED.equals(action) && MMS_DATA_TYPE.equals(dataType)) {
         handleMmsReceived(intent);
+      } else if (ACTION_MESSAGE_RECEIVED.equals(action)) {
+        handleMessageReceived(intent);
       }
 
       // NOTE: We MUST not call stopSelf() directly, since we need to
@@ -192,6 +195,31 @@ public class SmsReceiverService extends Service {
       }
     }
   }
+  
+  /**
+   * Handle receiving an arbitrary message (potentially coming from a 3rd party app)
+   */
+  private void handleMessageReceived(Intent intent) {
+    if (Log.DEBUG) Log.v("SMSReceiver: Intercept Message");
+
+    Bundle bundle = intent.getExtras();
+    
+    /*
+     * FROM: ContactURI -or- display name and display address -or- display address
+     * MESSAGE BODY: message body
+     * TIMESTAMP: optional (will use system timestamp)
+     * 
+     * QUICK REPLY INTENT: 
+     * REPLY INTENT: 
+     * DELETE INTENT: 
+     */
+    
+    if (bundle != null) {
+      
+      //notifySmsReceived(new SmsMmsMessage(context, messages, System.currentTimeMillis()));
+    }
+  }
+  
 
   /**
    * Start the service to process the current event notifications, acquiring the
