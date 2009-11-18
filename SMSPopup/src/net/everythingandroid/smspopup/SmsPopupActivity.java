@@ -236,7 +236,10 @@ public class SmsPopupActivity extends Activity {
       buttonId = id;
       isReplyButton = false;
       if (buttonId == ButtonListPreference.BUTTON_REPLY
-          || buttonId == ButtonListPreference.BUTTON_QUICKREPLY) isReplyButton = true;
+          || buttonId == ButtonListPreference.BUTTON_QUICKREPLY
+          || buttonId == ButtonListPreference.BUTTON_REPLY_BY_ADDRESS) {
+        isReplyButton = true;
+      }
       String[] buttonTextArray = mContext.getResources().getStringArray(R.array.buttons_text);
       buttonText = buttonTextArray[buttonId];
 
@@ -259,10 +262,13 @@ public class SmsPopupActivity extends Activity {
           deleteMessage();
           break;
         case ButtonListPreference.BUTTON_REPLY: // Reply
-          replyToMessage();
+          replyToMessage(true);
           break;
         case ButtonListPreference.BUTTON_QUICKREPLY: // Quick Reply
           quickReply();
+          break;
+        case ButtonListPreference.BUTTON_REPLY_BY_ADDRESS: // Quick Reply
+          replyToMessage(false);
           break;
         case ButtonListPreference.BUTTON_INBOX: // Inbox
           gotoInbox();
@@ -1018,16 +1024,20 @@ public class SmsPopupActivity extends Activity {
   /*
    * Reply to the current message, start the reply intent
    */
-  private void replyToMessage() {
+  private void replyToMessage(final boolean replyToThread) {
     exitingKeyguardSecurely = true;
     ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
       public void LaunchOnKeyguardExitSuccess() {
-        Intent reply = message.getReplyIntent();
+        Intent reply = message.getReplyIntent(replyToThread);
         SmsPopupActivity.this.getApplicationContext().startActivity(reply);
         replying = true;
         myFinish();
       }
     });
+  }
+
+  private void replyToMessage() {
+    replyToMessage(true);
   }
 
   /*

@@ -109,6 +109,7 @@
     <item>@string/button_quickreply</item>
     <item>@string/button_inbox</item>
     <item>@string/button_speak</item>
+    <item>@string/button_reply</item>    
   </string-array>
   <string-array
     name="pref_buttons_entries">
@@ -117,6 +118,7 @@
     <item>@string/button_delete_noconfirm</item>
     <item>@string/button_reply</item>
     <item>@string/button_quickreply</item>
+    <item>@string/button_replybyaddress</item>
     <item>@string/button_inbox</item>
     <item>@string/button_tts</item>
     <item>@string/button_disabled</item>
@@ -128,6 +130,7 @@
     <item>3</item>
     <item>4</item>
     <item>5</item>
+    <item>8</item>
     <item>6</item>
     <item>7</item>
     <item>0</item>
