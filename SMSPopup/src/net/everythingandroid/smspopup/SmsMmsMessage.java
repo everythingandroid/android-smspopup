@@ -30,6 +30,7 @@ public class SmsMmsMessage {
   // Message types
   public static final int MESSAGE_TYPE_SMS = 0;
   public static final int MESSAGE_TYPE_MMS = 1;
+  public static final int MESSAGE_TYPE_MESSAGE = 2;
 
   // Timestamp compare buffer for incoming messages
   public static final int MESSAGE_COMPARE_TIME_BUFFER = 5000; // 5 seconds
@@ -221,14 +222,40 @@ public class SmsMmsMessage {
     return popup;
   }
 
-  public Intent getReplyIntent() {
+  /**
+   * Fetch the "reply to" message intent
+   * 
+   * @param replyToThread whether or not to reply using the message threadId or using the
+   * sender address
+   * 
+   * @return the intent to pass to startActivity()
+   */
+  public Intent getReplyIntent(boolean replyToThread) {
     if (messageType == MESSAGE_TYPE_MMS) {
       locateThreadId();
       return SmsPopupUtils.getSmsToIntent(context, threadId);
     } else if (messageType == MESSAGE_TYPE_SMS) {
-      return SmsPopupUtils.getSmsToIntent(context, fromAddress);
+      locateThreadId();
+      /*
+       * There are two ways to reply to a message, by "viewing" the threadId or by
+       * sending a new message to the address.  In most cases we should just execute
+       * the former, but in some cases its better to send a new message to an address
+       * (apps like Google Voice will intercept this intent as they don't seem to look
+       * at the threadId).
+       */
+      if (replyToThread && threadId > 0) {
+        if (Log.DEBUG) Log.v("Replying by threadId: " + threadId);
+        return SmsPopupUtils.getSmsToIntent(context, threadId);
+      } else {
+        if (Log.DEBUG) Log.v("Replying by address: " + fromAddress);
+        return SmsPopupUtils.getSmsToIntent(context, fromAddress);
+      }
     }
     return null;
+  }
+
+  public Intent getReplyIntent() {
+    return getReplyIntent(true);
   }
 
   public void setThreadRead() {
