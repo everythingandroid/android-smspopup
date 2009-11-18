@@ -14,6 +14,7 @@ public class ButtonListPreference extends ListPreference {
   public static final int BUTTON_QUICKREPLY = 5;
   public static final int BUTTON_INBOX = 6;
   public static final int BUTTON_TTS = 7;
+  public static final int BUTTON_REPLY_BY_ADDRESS = 8;
 
   private Context mContext;
 
