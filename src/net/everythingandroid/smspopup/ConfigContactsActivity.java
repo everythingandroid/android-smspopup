@@ -2,6 +2,8 @@ package net.everythingandroid.smspopup;
 
 import java.util.List;
 
+import net.everythingandroid.smspopup.wrappers.ContactWrapper;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;

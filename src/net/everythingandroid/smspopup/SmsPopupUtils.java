@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.everythingandroid.smspopup.wrappers.ContactWrapper;
+
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.ComponentName;
@@ -562,7 +564,7 @@ public class SmsPopupUtils {
           context.getString(R.string.pref_button1_key),
           context.getString(R.string.pref_button2_key),
           context.getString(R.string.pref_button3_key),
-          context.getString(R.string.pref_blur_key),
+          // context.getString(R.string.pref_blur_key),
           context.getString(R.string.pref_popup_enabled_key),
           context.getString(R.string.pref_notif_enabled_key),
           context.getString(R.string.pref_notif_sound_key),

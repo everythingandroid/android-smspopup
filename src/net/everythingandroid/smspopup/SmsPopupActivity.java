@@ -6,6 +6,8 @@ import java.util.List;
 import net.everythingandroid.smspopup.ManageKeyguard.LaunchOnKeyguardExit;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
+import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper;
+import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper.OnInitListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -115,8 +117,21 @@ public class SmsPopupActivity extends Activity {
   private SmsPopupDbAdapter mDbAdapter;
   private Cursor mCursor = null;
 
-  private TTS myTts = null;
+  // TextToSpeech variables
   private boolean ttsInitialized = false;
+  private static boolean androidTextToSpeechAvailable = false;
+  private TTS eyesFreeTts = null;
+  private TextToSpeechWrapper androidTts = null;
+
+  // Establish whether the Android TextToSpeech class is available to us
+  static {
+    try {
+      TextToSpeechWrapper.checkAvailable();
+      androidTextToSpeechAvailable = true;
+    } catch (Throwable t) {
+      androidTextToSpeechAvailable = false;
+    }
+  }
 
   @Override
   protected void onCreate(Bundle bundle) {
@@ -322,10 +337,19 @@ public class SmsPopupActivity extends Activity {
     super.onPause();
     if (Log.DEBUG) Log.v("SMSPopupActivity: onPause()");
 
-    if (myTts != null) {
-      myTts.shutdown();
+    // Shutdown eyes-free TTS
+    if (eyesFreeTts != null) {
+      eyesFreeTts.shutdown();
     }
 
+    // Shutdown Android TTS
+    if (androidTextToSpeechAvailable) {
+      if (androidTts != null) {
+        androidTts.shutdown();
+      }
+    }
+
+    // Dismiss loading dialog
     if (mProgressDialog != null) {
       mProgressDialog.dismiss();
     }
@@ -908,40 +932,43 @@ public class SmsPopupActivity extends Activity {
     }
   }
 
-  /*
-   * Text-to-speech InitListener
-   */
-  private final TTS.InitListener ttsInitListener = new InitListener() {
+  // The eyes-free text-to-speech library InitListener
+  private final TTS.InitListener eyesFreeTtsListener = new InitListener() {
     public void onInit(int version) {
       if (mProgressDialog != null) {
         mProgressDialog.dismiss();
       }
       ttsInitialized = true;
-
-      // if (status == TextToSpeech.SUCCESS) {
       speakMessage();
-      // } else {
-      // Toast.makeText(SmsPopupActivity.this, R.string.error_message,
-      // Toast.LENGTH_SHORT);
-      // }
+    }
+  };
+
+  // The Android text-to-speech library OnInitListener (via wrapper class)
+  private final TextToSpeechWrapper.OnInitListener androidTtsListener = new OnInitListener() {
+    public void onInit(int status) {
+      if (mProgressDialog != null) {
+        mProgressDialog.dismiss();
+      }
+      if (status == TextToSpeechWrapper.SUCCESS) {
+        ttsInitialized = true;
+        speakMessage();
+      } else {
+        Toast.makeText(SmsPopupActivity.this, R.string.error_message, Toast.LENGTH_SHORT);
+      }
     }
   };
 
   /*
-   * Speak the message out loud using TTS library
+   * Speak the message out loud using text-to-speech (either via Android text-to-speech or
+   * via the free eyes-free text-to-speech library)
    */
   private void speakMessage() {
-    // TODO: we should really require the keyguard be unlocked here if we are in
-    // privacy mode
-    // exitingKeyguardSecurely = true;
-    // ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
-    // public void LaunchOnKeyguardExitSuccess() {
-    //
-    // runOnUiThread(new Runnable() {
-    //
-    // public void run() {
+    // TODO: we should really require the keyguard be unlocked here if we are in privacy mode
+
+    // If not previously initialized...
     if (!ttsInitialized) {
 
+      // Show a loading dialog
       showDialog(DIALOG_LOADING);
 
       // User interacted so remove all locks and cancel reminders
@@ -952,53 +979,54 @@ public class SmsPopupActivity extends Activity {
       // We'll use update notification to stop the sound playing
       ManageNotification.update(getApplicationContext(), message);
 
-      /*
-       * This is an aweful fix for the loading dialog not disappearing
-       * when the user decides to not install the TTS package but there didn't
-       * seem like another way to hook into the current TTS library.
-       * 
-       * This will all go away once we can just use the system TTS engine and do away
-       * with the eyes-free version from Market.
-       *
-       */
-      // Extend TTS alert dialog so we can dismiss the loading dialog correctly
-      class MyTTSVersionAlert extends TTSVersionAlert {
-        // Leaving this as hardcoded just as from the TTS source
-        private final static String QUIT = "Do not install the TTS";
-        MyTTSVersionAlert(Context context) {
-          super(context, null, null, null);
-          setNegativeButton(QUIT, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-              if (mProgressDialog != null) {
-                mProgressDialog.dismiss();
+      if (androidTextToSpeechAvailable) {
+        // Android text-to-speech available (normally found on Android 1.6+, aka Donut)
+        androidTts = new TextToSpeechWrapper(SmsPopupActivity.this, androidTtsListener);
+      } else { // Else use eyes-free text-to-speech library
+        /*
+         * This is an aweful fix for the loading dialog not disappearing
+         * when the user decides to not install the TTS package but there didn't
+         * seem like another way to hook into the current TTS library.
+         * 
+         * This will all go away once we can purely use the system TTS engine and do away
+         * with the eyes-free version from Market.
+         */
+        // Extend TTS alert dialog so we can dismiss the loading dialog correctly
+        class mTtsVersionAlert extends TTSVersionAlert {
+          // Leaving this as hardcoded just as from the TTS source
+          private final static String QUIT = "Do not install the TTS";
+          mTtsVersionAlert(Context context) {
+            super(context, null, null, null);
+            setNegativeButton(QUIT, new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int which) {
+                if (mProgressDialog != null) {
+                  mProgressDialog.dismiss();
+                }
               }
-            }
-          });
-          setOnCancelListener(new OnCancelListener() {
-            public void onCancel(DialogInterface dialog) {
-              if (mProgressDialog != null) {
-                mProgressDialog.dismiss();
+            });
+            setOnCancelListener(new OnCancelListener() {
+              public void onCancel(DialogInterface dialog) {
+                if (mProgressDialog != null) {
+                  mProgressDialog.dismiss();
+                }
               }
-            }
-          });
+            });
+          }
         }
+
+        // Init the eyes-free text-to-speech library
+        eyesFreeTts = new TTS(this, eyesFreeTtsListener, new mTtsVersionAlert(this));
       }
 
-      // The instance of TTSVersionAlert to use if the user doesn't have the TTS package
-      MyTTSVersionAlert ttsVersionAlert = new MyTTSVersionAlert(this);
-
-      // Init the TTS library
-      myTts = new TTS(SmsPopupActivity.this, ttsInitListener, ttsVersionAlert);
-
     } else {
+
       // Speak the message!
-      myTts.speak(message.getMessageBody(), 0, null);
+      if (androidTextToSpeechAvailable) {
+        androidTts.speak(message.getMessageBody(), TextToSpeechWrapper.QUEUE_FLUSH, null);
+      } else {
+        eyesFreeTts.speak(message.getMessageBody(), 0 /* no queue mode */, null);
+      }
     }
-    // }
-    // });
-    // }
-    //
-    // });
   }
 
   /*

@@ -1,9 +1,12 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.wrappers;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import net.everythingandroid.smspopup.Log;
+import net.everythingandroid.smspopup.SmsPopupUtils;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
