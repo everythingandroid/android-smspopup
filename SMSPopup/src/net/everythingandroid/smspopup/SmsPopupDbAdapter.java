@@ -34,11 +34,11 @@ public class SmsPopupDbAdapter {
   public static final String KEY_LED_PATTERN             = "led_pattern";
   public static final int KEY_LED_PATTERN_NUM            = 9;
   public static final String KEY_LED_PATTERN_CUSTOM      = "led_pattern_custom";
-  public static final int KEY_LED_PATTERN_NUM_CUSTOM     = 10;
+  public static final int KEY_LED_PATTERN_CUSTOM_NUM     = 10;
   public static final String KEY_LED_COLOR               = "led_color";
   public static final int KEY_LED_COLOR_NUM              = 11;
   public static final String KEY_LED_COLOR_CUSTOM        = "led_color_custom";
-  public static final int   KEY_LED_COLOR_NUM_CUSTOM     = 12;
+  public static final int   KEY_LED_COLOR_CUSTOM_NUM     = 12;
   public static final String KEY_SUMMARY                 = "summary";
   public static final int   KEY_SUMMARY_NUM              = 13;
 

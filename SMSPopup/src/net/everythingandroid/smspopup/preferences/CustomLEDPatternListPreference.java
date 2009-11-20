@@ -63,10 +63,12 @@ public class CustomLEDPatternListPreference extends ListPreference {
     } else { // Contact specific notifications
       flashLedPattern = mPrefs.getString(
           R.string.c_pref_flashled_pattern_key,
-          R.string.pref_flashled_pattern_default);
+          R.string.pref_flashled_pattern_default,
+          SmsPopupDbAdapter.KEY_LED_PATTERN_NUM);
       flashLedPatternCustom = mPrefs.getString(
           R.string.c_pref_flashled_pattern_custom_key,
-          R.string.pref_flashled_pattern_default);
+          R.string.pref_flashled_pattern_default,
+          SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM_NUM);
     }
 
     led_pattern = null;
@@ -80,12 +82,13 @@ public class CustomLEDPatternListPreference extends ListPreference {
     if (led_pattern == null) {
       led_pattern = ManageNotification.parseLEDPattern(
           mPrefs.getString(
-              R.string.c_pref_flashled_pattern_key,
+              R.string.pref_flashled_pattern_default,
               R.string.pref_flashled_pattern_default));
     }
 
     if (mPrefs != null) {
       mPrefs.close();
+      mPrefs = null;
     }
   }
 
@@ -109,11 +112,11 @@ public class CustomLEDPatternListPreference extends ListPreference {
       public void onClick(DialogInterface dialog, int whichButton) {
         String stringPattern = onEditText.getText() + "," + offEditText.getText();
 
-        if (ManageNotification.parseLEDPattern(stringPattern) != null) {
+        if (mPrefs == null) {
+          mPrefs = new ManagePreferences(context, contactId);
+        }
 
-          if (mPrefs == null) {
-            mPrefs = new ManagePreferences(context, contactId);
-          }
+        if (ManageNotification.parseLEDPattern(stringPattern) != null) {
 
           if (contactId == null) { // Default notifications
             mPrefs.putString(
@@ -126,10 +129,6 @@ public class CustomLEDPatternListPreference extends ListPreference {
                 R.string.c_pref_flashled_pattern_custom_key,
                 stringPattern,
                 SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
-          }
-
-          if (mPrefs != null) {
-            mPrefs.close();
           }
 
           Toast.makeText(context, context.getString(R.string.pref_flashled_pattern_ok),
@@ -137,6 +136,11 @@ public class CustomLEDPatternListPreference extends ListPreference {
 
         } else {
 
+          /*
+           * No need to store anything if the led pattern is invalid (just leave it
+           * as the last good value).
+           */
+          /*
           if (contactId == null) { // Default notifications
             mPrefs.putString(
                 R.string.pref_flashled_pattern_custom_key,
@@ -148,9 +152,15 @@ public class CustomLEDPatternListPreference extends ListPreference {
                 context.getString(R.string.pref_flashled_pattern_default),
                 SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
           }
+           */
 
           Toast.makeText(context, context.getString(R.string.pref_flashled_pattern_bad),
               Toast.LENGTH_LONG).show();
+        }
+
+        if (mPrefs != null) {
+          mPrefs.close();
+          mPrefs = null;
         }
       }
     }).show();
