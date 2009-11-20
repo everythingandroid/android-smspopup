@@ -115,7 +115,7 @@
    <string name="pref_vibrate_pattern_title">Vibrate Pattern</string>
    <string name="pref_vibrate_pattern_summary">Set the vibration pattern</string>
    <string name="pref_vibrate_pattern_ok">Custom vibrate pattern set</string>
-   <string name="pref_vibrate_pattern_bad">Custom vibrate pattern invalid, using default</string>
+   <string name="pref_vibrate_pattern_bad">Custom vibrate pattern invalid</string>
    <string name="pref_vibrate_pattern_help">Enter a custom vibrate pattern, in the format:\nmillisOff, millisOn, etc.\n\nFor example:\n0,1000\n0,500,200,500,200,500</string>
 
    <string name="pref_flashled_title">Blink LED</string>
@@ -133,7 +133,7 @@
    <string name="pref_flashled_pattern_title">LED Blink Rate</string>
    <string name="pref_flashled_pattern_summary">Set the speed the LED blinks</string>
    <string name="pref_flashled_pattern_ok">Custom LED blink rate set</string>
-   <string name="pref_flashled_pattern_bad">Custom LED blink rate is invalid, using default</string>
+   <string name="pref_flashled_pattern_bad">Custom LED blink rate is invalid</string>
    <string name="pref_flashled_pattern_help">Enter the time in milliseconds to turn the LED on and off</string>
    <string name="pref_flashled_pattern_help_on">Time on:</string>
    <string name="pref_flashled_pattern_help_off">Time off:</string>

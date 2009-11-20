@@ -107,13 +107,13 @@ public class ManageNotification {
             SmsPopupDbAdapter.KEY_LED_COLOR_NUM);
       String flashLedColCustom =
         mPrefs.getString(R.string.pref_flashled_color_custom_key,
-            R.string.pref_flashled_color_default, SmsPopupDbAdapter.KEY_LED_COLOR_NUM_CUSTOM);
+            R.string.pref_flashled_color_default, SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM_NUM);
       String flashLedPattern =
         mPrefs.getString(R.string.pref_flashled_pattern_key,
             R.string.pref_flashled_pattern_default, SmsPopupDbAdapter.KEY_LED_PATTERN_NUM);
       String flashLedPatternCustom =
         mPrefs.getString(R.string.pref_flashled_pattern_custom_key,
-            R.string.pref_flashled_pattern_default, SmsPopupDbAdapter.KEY_LED_PATTERN_NUM_CUSTOM);
+            R.string.pref_flashled_pattern_default, SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM_NUM);
 
       // The default system ringtone
       // ("content://settings/system/notification_sound")

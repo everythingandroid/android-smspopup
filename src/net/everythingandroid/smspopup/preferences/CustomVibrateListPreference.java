@@ -63,14 +63,23 @@ public class CustomVibrateListPreference extends ListPreference {
     } else { // Contact specific notifications
       vibrate_pattern = mPrefs.getString(
           R.string.c_pref_vibrate_pattern_key,
-          R.string.pref_vibrate_pattern_default);
+          R.string.pref_vibrate_pattern_default,
+          SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_NUM);
       vibrate_pattern_custom = mPrefs.getString(
           R.string.c_pref_vibrate_pattern_custom_key,
+          R.string.pref_vibrate_pattern_default,
+          SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM_NUM);
+    }
+
+    if (vibrate_pattern_custom == null) {
+      vibrate_pattern_custom = mPrefs.getString(
+          R.string.pref_vibrate_pattern_default,
           R.string.pref_vibrate_pattern_default);
     }
 
     if (mPrefs != null) {
       mPrefs.close();
+      mPrefs = null;
     }
   }
 
@@ -91,11 +100,12 @@ public class CustomVibrateListPreference extends ListPreference {
     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialog, int whichButton) {
         String new_pattern = et.getText().toString();
-        if (ManageNotification.parseVibratePattern(et.getText().toString()) != null) {
 
-          if (mPrefs == null) {
-            mPrefs = new ManagePreferences(context, contactId);
-          }
+        if (mPrefs == null) {
+          mPrefs = new ManagePreferences(context, contactId);
+        }
+
+        if (ManageNotification.parseVibratePattern(et.getText().toString()) != null) {
 
           if (contactId == null) { // Default notifications
             mPrefs.putString(
@@ -107,10 +117,6 @@ public class CustomVibrateListPreference extends ListPreference {
                 R.string.c_pref_vibrate_pattern_custom_key,
                 new_pattern,
                 SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM);
-          }
-
-          if (mPrefs != null) {
-            mPrefs.close();
           }
 
           Toast.makeText(context, context.getString(R.string.pref_vibrate_pattern_ok),
@@ -118,6 +124,11 @@ public class CustomVibrateListPreference extends ListPreference {
 
         } else {
 
+          /*
+           * No need to store anything if the contact pattern is invalid (just leave it
+           * as the last good value).
+           */
+          /*
           if (contactId == null) { // Default notifications
             mPrefs.putString(
                 R.string.pref_vibrate_pattern_custom_key,
@@ -129,9 +140,15 @@ public class CustomVibrateListPreference extends ListPreference {
                 context.getString(R.string.pref_vibrate_pattern_default),
                 SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM);
           }
+           */
 
           Toast.makeText(context, context.getString(R.string.pref_vibrate_pattern_bad),
               Toast.LENGTH_LONG).show();
+        }
+
+        if (mPrefs != null) {
+          mPrefs.close();
+          mPrefs = null;
         }
       }
     })
