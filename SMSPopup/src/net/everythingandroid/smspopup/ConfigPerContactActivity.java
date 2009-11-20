@@ -279,11 +279,11 @@ public class ConfigPerContactActivity extends PreferenceActivity {
     editor.putString(getString(R.string.c_pref_flashled_color_key),
         c.getString(SmsPopupDbAdapter.KEY_LED_COLOR_NUM));
     editor.putString(getString(R.string.c_pref_flashled_color_custom_key),
-        c.getString(SmsPopupDbAdapter.KEY_LED_COLOR_NUM_CUSTOM));
+        c.getString(SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM_NUM));
     editor.putString(getString(R.string.c_pref_flashled_pattern_key),
         c.getString(SmsPopupDbAdapter.KEY_LED_PATTERN_NUM));
     editor.putString(getString(R.string.c_pref_flashled_pattern_custom_key),
-        c.getString(SmsPopupDbAdapter.KEY_LED_PATTERN_NUM_CUSTOM));
+        c.getString(SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM_NUM));
 
     // Commit prefs
     editor.commit();
