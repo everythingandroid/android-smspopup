@@ -139,6 +139,8 @@ public class ManageNotification {
       boolean privacyMode =
         mPrefs.getBoolean(R.string.pref_privacy_key, R.string.pref_privacy_default);
 
+      boolean replyToThread = mPrefs.getBoolean(R.string.pref_reply_to_thread_key, true);
+
       // All done with prefs, close it up
       mPrefs.close();
 
@@ -172,7 +174,7 @@ public class ManageNotification {
       } else { // Else 1 message, set text and intent accordingly
         contentTitle = contactName;
         contentText = messageBody;
-        smsIntent = message.getReplyIntent();
+        smsIntent = message.getReplyIntent(replyToThread);
       }
 
       /*

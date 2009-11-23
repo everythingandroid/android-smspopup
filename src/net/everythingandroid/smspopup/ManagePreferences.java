@@ -62,6 +62,10 @@ public class ManagePreferences {
         Boolean.parseBoolean(context.getString(resDefaultId)));
   }
 
+  public boolean getBoolean(int resPrefId, boolean prefDefault) {
+    return mPrefs.getBoolean(context.getString(resPrefId), prefDefault);
+  }
+
   public String getString(int resPrefId, int resDefaultId, int dbColumnNum) {
     if (useDatabase) {
       return contactCursor.getString(dbColumnNum);

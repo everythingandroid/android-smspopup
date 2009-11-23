@@ -85,8 +85,7 @@ public class SmsPopupActivity extends Activity {
   private View mmsView = null;
   private ViewStub privacyViewStub;
   private View privacyView = null;
-  private ViewStub buttonsViewStub;
-  private View buttonsView = null;
+  private View buttonsLL = null;
   private LinearLayout mainLL = null;
 
   private boolean wasVisible = false;
@@ -172,19 +171,15 @@ public class SmsPopupActivity extends Activity {
     unreadCountViewStub = (ViewStub) findViewById(R.id.UnreadCountViewStub);
     mmsViewStub = (ViewStub) findViewById(R.id.MmsViewStub);
     privacyViewStub = (ViewStub) findViewById(R.id.PrivacyViewStub);
-    buttonsViewStub = (ViewStub) findViewById(R.id.ButtonsViewStub);
+    buttonsLL = findViewById(R.id.ButtonLinearLayout);
 
     // See if user wants to show buttons on the popup
-    if (myPrefs.getBoolean(getString(R.string.pref_show_buttons_key),
+    if (!myPrefs.getBoolean(getString(R.string.pref_show_buttons_key),
         Boolean.valueOf(getString(R.string.pref_show_buttons_default)))) {
-
-      // Check if the ViewStub has been inflated and if not, inflate it
-      if (buttonsView == null) {
-        buttonsView = buttonsViewStub.inflate();
-      }
-
+      buttonsLL.setVisibility(View.GONE);
+    } else {
       // Button 1
-      final Button button1 = (Button) buttonsView.findViewById(R.id.button1);
+      final Button button1 = (Button) findViewById(R.id.button1);
       PopupButton button1Vals =
         new PopupButton(getApplicationContext(), Integer.parseInt(myPrefs.getString(
             getString(R.string.pref_button1_key), getString(R.string.pref_button1_default))));
@@ -193,7 +188,7 @@ public class SmsPopupActivity extends Activity {
       button1.setVisibility(button1Vals.buttonVisibility);
 
       // Button 2
-      final Button button2 = (Button) buttonsView.findViewById(R.id.button2);
+      final Button button2 = (Button) findViewById(R.id.button2);
       PopupButton button2Vals =
         new PopupButton(getApplicationContext(), Integer.parseInt(myPrefs.getString(
             getString(R.string.pref_button2_key), getString(R.string.pref_button2_default))));
@@ -202,7 +197,7 @@ public class SmsPopupActivity extends Activity {
       button2.setVisibility(button2Vals.buttonVisibility);
 
       // Button 3
-      final Button button3 = (Button) buttonsView.findViewById(R.id.button3);
+      final Button button3 = (Button) findViewById(R.id.button3);
       PopupButton button3Vals =
         new PopupButton(getApplicationContext(), Integer.parseInt(myPrefs.getString(
             getString(R.string.pref_button3_key), getString(R.string.pref_button3_default))));
@@ -437,16 +432,23 @@ public class SmsPopupActivity extends Activity {
     finish();
   }
 
-  /*
-   * Populate all the main SMS/MMS views with content from the actual
-   * SmsMmsMessage
-   */
+  // Populate views via bundle
   private void populateViews(Bundle b) {
     // Store bundle
     bundle = b;
 
     // Regenerate the SmsMmsMessage from the extras bundle
-    message = new SmsMmsMessage(getApplicationContext(), bundle);
+    populateViews(new SmsMmsMessage(getApplicationContext(), bundle));
+  }
+
+  /*
+   * Populate all the main SMS/MMS views with content from the actual
+   * SmsMmsMessage
+   */
+  private void populateViews(SmsMmsMessage newMessage) {
+
+    // Store message
+    message = newMessage;
 
     // If it's a MMS message, just show the MMS layout
     if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {

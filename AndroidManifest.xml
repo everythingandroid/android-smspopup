@@ -63,7 +63,11 @@
      <intent-filter>
         <action
           android:name="net.everythingandroid.smspopup.MESSAGE_RECEIVED" />
-      </intent-filter>      
+      </intent-filter>
+     <intent-filter>
+        <action
+          android:name="com.android.mms.transaction.MESSAGE_SENT" />
+      </intent-filter>
     </receiver>
     <receiver
       android:name=".ExternalEventReceiver">

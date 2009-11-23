@@ -82,6 +82,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
       public boolean onPreferenceChange(Preference preference, Object newValue) {
         quickReplyPref.setChecked(
             isQuickReplyActive((String) newValue, button2.getValue(), button3.getValue()));
+        updateReplyTypePref((String) newValue, button2.getValue(), button3.getValue());
         return true;
       }
     });
@@ -94,6 +95,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
       public boolean onPreferenceChange(Preference preference, Object newValue) {
         quickReplyPref.setChecked(
             isQuickReplyActive((String) newValue, button1.getValue(), button3.getValue()));
+        updateReplyTypePref((String) newValue, button1.getValue(), button3.getValue());
         return true;
       }
     });
@@ -106,6 +108,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
       public boolean onPreferenceChange(Preference preference, Object newValue) {
         quickReplyPref.setChecked(
             isQuickReplyActive((String) newValue, button1.getValue(), button2.getValue()));
+        updateReplyTypePref((String) newValue, button1.getValue(), button2.getValue());
         return true;
       }
     });
@@ -116,6 +119,9 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
 
     quickReplyPref.setChecked(
         isQuickReplyActive(button1.getValue(), button2.getValue(), button3.getValue()));
+
+    // Refresh reply type pref
+    updateReplyTypePref(button1.getValue(), button2.getValue(), button3.getValue());
 
     /*
      * This is a really manual way of dealing with this, but I didn't think it was worth
@@ -281,6 +287,26 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
       return true;
     }
     return false;
+  }
+
+  /*
+   * Updates reply-type preference based on the value passed
+   */
+  private void updateReplyTypePref(String val1, String val2, String val3) {
+    SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+    SharedPreferences.Editor settings = mPrefs.edit();
+
+    if (Integer.valueOf(val1) == ButtonListPreference.BUTTON_REPLY_BY_ADDRESS
+        || Integer.valueOf(val2) == ButtonListPreference.BUTTON_REPLY_BY_ADDRESS
+        || Integer.valueOf(val3) == ButtonListPreference.BUTTON_REPLY_BY_ADDRESS) {
+      settings.putBoolean(getString(R.string.pref_reply_to_thread_key), false);
+      if (Log.DEBUG) Log.v("Reply to address set");
+    } else {
+      settings.putBoolean(getString(R.string.pref_reply_to_thread_key), true);
+      if (Log.DEBUG) Log.v("Reply to threadId set");
+    }
+
+    settings.commit();
   }
 
 }
