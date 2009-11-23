@@ -124,8 +124,9 @@ public class SmsMessageSender {
   public static final String MESSAGE_STATUS_RECEIVED_ACTION =
     "com.android.mms.transaction.MessageStatusReceiver.MESSAGE_STATUS_RECEIVED";
 
-  // http://android.git.kernel.org/?p=platform/packages/apps/Mms.git;a=blob;f=src/com/android/mms/transaction/SmsReceiverService.java
-  public static final String MESSAGE_SENT_ACTION = "com.android.mms.transaction.MESSAGE_SENT";
+  public static final String MMS_PACKAGE_NAME = "com.android.mms";
+  public static final String MMS_SENT_CLASS_NAME = "com.android.mms.transaction.SmsReceiver";
+
 
   /**
    * Send a message via the system app and system db
@@ -201,8 +202,9 @@ public class SmsMessageSender {
           0));
         }
         sentIntents.add(PendingIntent.getBroadcast(mContext, 0,
-            new Intent(MESSAGE_SENT_ACTION, uri)
-        .setClassName(MMS_PACKAGE_NAME, MMS_SENT_CLASS_NAME),
+            new Intent(SmsReceiverService.MESSAGE_SENT_ACTION, uri)
+        .setClass(mContext, SmsReceiver.class),
+        //.setClassName(MMS_PACKAGE_NAME, MMS_SENT_CLASS_NAME),
         // SmsReceiver.class
         0));
       }
