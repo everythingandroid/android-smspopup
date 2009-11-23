@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.AudioManager;
@@ -25,7 +26,9 @@ import android.text.style.StyleSpan;
 public class ManageNotification {
   public static final int NOTIFICATION_ALERT = 1337;
   public static final int NOTIFICATION_TEST = 888;
+  public static final int NOTIFICATION_SEND_FAILED = 100;
   public static final String defaultRingtone = Settings.System.DEFAULT_NOTIFICATION_URI.toString();
+  private static final Uri UNDELIVERED_URI = Uri.parse("content://mms-sms/undelivered");
 
   /*
    * Show/play the notification given a SmsMmsMessage and a notification ID
@@ -189,7 +192,6 @@ public class ManageNotification {
       notification.flags = Notification.FLAG_AUTO_CANCEL;
 
       // Set audio stream to ring
-      // notification.audioStreamType = AudioManager.STREAM_RING;
       notification.audioStreamType = Notification.STREAM_DEFAULT;
 
       /*
@@ -294,8 +296,7 @@ public class ManageNotification {
         notification.number = unreadCount;
       }
 
-      // Set intent to execute if the "clear all" notifications button is
-      // pressed -
+      // Set intent to execute if the "clear all" notifications button is pressed -
       // basically stop any future reminders.
       Intent deleteIntent = new Intent(new Intent(context, ReminderReceiver.class));
       deleteIntent.setAction(Intent.ACTION_DELETE);
@@ -303,8 +304,7 @@ public class ManageNotification {
 
       notification.deleteIntent = pendingDeleteIntent;
 
-      // Seems this is needed for the .number value to take effect
-      // on the Notification
+      // Seems this is needed for the .number value to take effect on the Notification
       myNM.cancelAll();
 
       // Finally: run the notification!
@@ -423,6 +423,118 @@ public class ManageNotification {
     }
 
     return null;
+  }
+
+  //  //notifyFailed(context, false, 0, noisy);
+  public static void notifySendFailed(Context context) {
+    //    // TODO factor out common code for creating notifications
+    //    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+    //
+    //    boolean enabled = sp.getBoolean(MessagingPreferenceActivity.NOTIFICATION_ENABLED, true);
+    //    if (!enabled) {
+    //      return;
+    //    }
+    //
+    //    NotificationManager nm = (NotificationManager)
+    //    context.getSystemService(Context.NOTIFICATION_SERVICE);
+    //
+    //    // Strategy:
+    //    // a. If there is a single failure notification, tapping on the notification goes
+    //    //    to the compose view.
+    //    // b. If there are two failure it stays in the thread view. Selecting one undelivered
+    //    //    thread will dismiss one undelivered notification but will still display the
+    //    //    notification.If you select the 2nd undelivered one it will dismiss the notification.
+    //
+    //    long[] msgThreadId = {0};
+    //    int totalFailedCount = getUndeliveredMessageCount(context, msgThreadId);
+    //
+    //    Intent failedIntent;
+    //    Notification notification = new Notification();
+    //    String title;
+    //    String description;
+    //    if (totalFailedCount > 1) {
+    //      description = context.getString(R.string.notification_failed_multiple,
+    //          Integer.toString(totalFailedCount));
+    //      title = context.getString(R.string.notification_failed_multiple_title);
+    //
+    //      failedIntent = new Intent(context, ConversationList.class);
+    //    } else {
+    //      title = context.getString(R.string.message_send_failed_title);
+    //
+    //      description = context.getString(R.string.message_failed_body);
+    //      failedIntent = new Intent(context, ComposeMessageActivity.class);
+    //      threadId = (msgThreadId[0] != 0 ? msgThreadId[0] : 0);
+    //      failedIntent.putExtra("undelivered_flag", true);
+    //      failedIntent.putExtra("thread_id", threadId);
+    //    }
+    //
+    //    failedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    //    PendingIntent pendingIntent = PendingIntent.getActivity(
+    //        context, 0, failedIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    //
+    //    notification.icon = R.drawable.stat_notify_sms_failed;
+    //
+    //    notification.tickerText = title;
+    //
+    //    notification.setLatestEventInfo(context, title, description, pendingIntent);
+    //
+    //    if (noisy) {
+    //      boolean vibrate = sp.getBoolean(MessagingPreferenceActivity.NOTIFICATION_VIBRATE,
+    //          false /* don't vibrate by default */);
+    //      if (vibrate) {
+    //        notification.defaults |= Notification.DEFAULT_VIBRATE;
+    //      }
+    //
+    //      String ringtoneStr = sp.getString(MessagingPreferenceActivity.NOTIFICATION_RINGTONE,
+    //          null);
+    //      notification.sound = TextUtils.isEmpty(ringtoneStr) ? null : Uri.parse(ringtoneStr);
+    //    }
+    //
+    //    nm.notify(MESSAGE_FAILED_NOTIFICATION_ID, notification);
+  }
+
+  // threadIdResult[0] contains the thread id of the first message.
+  // threadIdResult[1] is nonzero if the thread ids of all the messages are the same.
+  // You can pass in null for threadIdResult.
+  // You can pass in a threadIdResult of size 1 to avoid the comparison of each thread id.
+  private static int getUndeliveredMessageCount(Context context, long[] threadIdResult) {
+
+    // TODO: switch projection to use common static variables
+    Cursor undeliveredCursor = context.getContentResolver().query(
+        UNDELIVERED_URI, new String[] { "thread_id" //Mms.THREAD_ID
+        }, "read=0", null, null);
+    if (undeliveredCursor == null) {
+      return 0;
+    }
+    int count = undeliveredCursor.getCount();
+    try {
+      if (threadIdResult != null && undeliveredCursor.moveToFirst()) {
+        threadIdResult[0] = undeliveredCursor.getLong(0);
+
+        if (threadIdResult.length >= 2) {
+          // Test to see if all the undelivered messages belong to the same thread.
+          long firstId = threadIdResult[0];
+          while (undeliveredCursor.moveToNext()) {
+            if (undeliveredCursor.getLong(0) != firstId) {
+              firstId = 0;
+              break;
+            }
+          }
+          threadIdResult[1] = firstId;    // non-zero if all ids are the same
+        }
+      }
+    } finally {
+      undeliveredCursor.close();
+    }
+    return count;
+  }
+
+  public static void updateSendFailedNotification(Context context) {
+    if (getUndeliveredMessageCount(context, null) < 1) {
+      clear(context, NOTIFICATION_SEND_FAILED);
+    } else {
+      notifySendFailed(context);      // rebuild and adjust the message count if necessary.
+    }
   }
 
 }
