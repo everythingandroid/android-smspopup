@@ -1,7 +1,9 @@
 package net.everythingandroid.smspopup;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.PendingIntent.CanceledException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -276,14 +278,16 @@ public class SmsReceiverService extends Service {
     } else if ((mResultCode == SmsManager.RESULT_ERROR_RADIO_OFF) ||
         (mResultCode == SmsManager.RESULT_ERROR_NO_SERVICE)) {
       if (Log.DEBUG) Log.v("SMSReceiver: Error sending message (will send later)");
-      mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_SEND_LATER);
+      // The system shows a Toast here so no need to show one
+      //mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_SEND_LATER);
     } else {
       if (Log.DEBUG) Log.v("SMSReceiver: Error sending message");
+      ManageNotification.notifySendFailed(this);
       mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_FAILED);
     }
 
     /*
-     * Now let's forward the same intent onto the system mms app to make sure
+     * Now let's forward the same intent onto the system app to make sure
      * things there are processed correctly
      */
     Intent sysIntent = intent.setClassName(
@@ -291,7 +295,15 @@ public class SmsReceiverService extends Service {
         SmsMessageSender.MMS_SENT_CLASS_NAME);
     //    Log.v("sysIntent = " + sysIntent.toString());
     //    Log.v("bundle = " + sysIntent.getExtras().toString());
-    sendBroadcast(sysIntent);
+
+    /*
+     * Start the broadcast via PendingIntent so result code is passed over correctly
+     */
+    try {
+      PendingIntent.getBroadcast(this, 0, sysIntent, 0).send(mResultCode);
+    } catch (CanceledException e) {
+      e.printStackTrace();
+    }
   }
 
   /**

@@ -109,7 +109,6 @@ public class SmsMessageSender {
    */
   public static final String BODY = "body";
 
-
   private static final String[] SERVICE_CENTER_PROJECTION =
     new String[] {REPLY_PATH_PRESENT, SERVICE_CENTER,};
 
@@ -126,7 +125,8 @@ public class SmsMessageSender {
 
   public static final String MMS_PACKAGE_NAME = "com.android.mms";
   public static final String MMS_SENT_CLASS_NAME = "com.android.mms.transaction.SmsReceiver";
-
+  public static final String MMS_STATUS_RECEIVED_CLASS_NAME =
+    "com.android.mms.transaction.MessageStatusReceiver";
 
   /**
    * Send a message via the system app and system db
@@ -159,11 +159,6 @@ public class SmsMessageSender {
     if ((mMessageText == null) || (mNumberOfDests == 0)) {
       return false;
     }
-
-    final String MMS_PACKAGE_NAME = "com.android.mms";
-    final String MMS_STATUS_RECEIVED_CLASS_NAME =
-      "com.android.mms.transaction.MessageStatusReceiver";
-    final String MMS_SENT_CLASS_NAME = "com.android.mms.transaction.SmsReceiver";
 
     SmsManager smsManager = SmsManager.getDefault();
 
