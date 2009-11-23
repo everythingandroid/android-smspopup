@@ -47,9 +47,30 @@
     android:layout="@layout/popup_privacy"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" />
-  <ViewStub
-    android:id="@+id/ButtonsViewStub"
-    android:layout="@layout/popup_buttons"
+  <LinearLayout
+    android:id="@+id/ButtonLinearLayout"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="2sp"
+    android:background="@android:color/darker_gray">
+    <Button
+      android:id="@+id/button1"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:text="@string/button_close"
+      android:layout_width="fill_parent" />
+    <Button
+      android:id="@+id/button2"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:text="@string/button_delete"
+      android:layout_width="fill_parent" />
+    <Button
+      android:id="@+id/button3"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:text="@string/button_reply"
+      android:layout_width="fill_parent" />
+  </LinearLayout>
 </LinearLayout>

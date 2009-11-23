@@ -95,6 +95,8 @@
   <string name="pref_button3_key">button3</string>
   <string name="pref_button3_title">Button 3 Configuration</string>
   <string name="pref_button3_default">4</string>
+  
+  <string name="pref_reply_to_thread_key">replytype</string>
     
 <!-- Donate Strings (not used right now) -->
   <string name="pref_donate_key">donate</string>
