@@ -899,7 +899,7 @@ public class SmsPopupActivity extends Activity {
         closeMessage();
         break;
       case CONTEXT_DELETE_ID:
-        deleteMessage();
+    	showDialog(DIALOG_DELETE);
         break;
       case CONTEXT_REPLY_ID:
         replyToMessage();
