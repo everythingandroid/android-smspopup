@@ -3,5 +3,15 @@
 
 <!-- Misc missing string -->
    <string name="button_replybyaddress">Reply (to phone number)</string>
+   
+<!-- Quick Reply Signature pref -->   
+   <string name="pref_notif_signature_key">signature</string>
+   <string name="pref_notif_signature_title">Quick Reply Signature</string>
+   <string name="pref_notif_signature_summary">Appears at the end of every quick reply</string>
+
+<!-- Eula Strings -->
+    <string name="eula_title">License Agreement</string>
+    <string name="eula_accept">Accept</string>
+    <string name="eula_refuse">Uninstall</string>
 
 </resources>
