@@ -75,7 +75,7 @@ public class SmsPopupActivity extends Activity {
   private ScrollView messageScrollView = null;
   private ImageView photoImageView = null;
   private Drawable contactPhotoPlaceholderDrawable = null;
-  private static Bitmap contactPhoto = null;
+  private Bitmap contactPhoto = null;
   private EditText qrEditText = null;
   private ProgressDialog mProgressDialog = null;
 
@@ -93,6 +93,7 @@ public class SmsPopupActivity extends Activity {
   private boolean inbox = false;
   private boolean privacyMode = false;
   private boolean messageViewed = true;
+  private String signatureText;
 
   private static final double WIDTH = 0.9;
   private static final int DIALOG_DELETE = Menu.FIRST;
@@ -111,7 +112,7 @@ public class SmsPopupActivity extends Activity {
   private static final int VOICE_RECOGNITION_REQUEST_CODE = 8888;
 
   private TextView quickreplyTextView;
-  private static SmsMmsMessage quickReplySmsMessage;
+  private SmsMmsMessage quickReplySmsMessage;
 
   private SmsPopupDbAdapter mDbAdapter;
   private Cursor mCursor = null;
@@ -150,6 +151,9 @@ public class SmsPopupActivity extends Activity {
     privacyMode =
       myPrefs.getBoolean(getString(R.string.pref_privacy_key),
           Boolean.valueOf(getString(R.string.pref_privacy_default)));
+
+    signatureText = myPrefs.getString(getString(R.string.pref_notif_signature_key), "");
+    if (signatureText.length() > 0) signatureText = " " + signatureText;
 
     resizeLayout();
 
@@ -226,8 +230,7 @@ public class SmsPopupActivity extends Activity {
     if (bundle == null) {
       contactPhoto = null;
       populateViews(getIntent().getExtras());
-    } else { // this activity was recreated after being destroyed (ie. on
-      // orientation change)
+    } else { // this activity was recreated after being destroyed (ie. on orientation change)
       populateViews(bundle);
     }
 
@@ -323,8 +326,6 @@ public class SmsPopupActivity extends Activity {
     wasVisible = false;
     // Reset exitingKeyguardSecurely bool to false
     exitingKeyguardSecurely = false;
-
-    updateQuickReplyView(null);
   }
 
   @Override
@@ -608,8 +609,9 @@ public class SmsPopupActivity extends Activity {
    */
   @Override
   protected Dialog onCreateDialog(int id) {
-    switch (id) {
+    if (Log.DEBUG) Log.v("onCreateDialog()");
 
+    switch (id) {
       /*
        * Delete message dialog
        */
@@ -711,8 +713,8 @@ public class SmsPopupActivity extends Activity {
         });
 
         quickreplyTextView = (TextView) qrLayout.findViewById(R.id.QuickReplyTextView);
-        QmTextWatcher.getQuickReplyCounterText(qrEditText.getText().toString(), qrCounterTextView,
-            qrSendButton);
+        QmTextWatcher.getQuickReplyCounterText(qrEditText.getText().toString(),
+            qrCounterTextView, qrSendButton);
 
         qrSendButton.setOnClickListener(new OnClickListener() {
           public void onClick(View v) {
@@ -721,19 +723,19 @@ public class SmsPopupActivity extends Activity {
         });
 
         // Construct basic AlertDialog using AlertDialog.Builder
-        final AlertDialog qrAlertDialog =
-          new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_email).setTitle(
-              R.string.quickreply_title)
-              /*
-               * .setOnCancelListener(new OnCancelListener() { public void
-               * onCancel(DialogInterface dialog) { if (Log.DEBUG)
-               * Log.v("Quick Reply Dialog: onCancel()"); InputMethodManager
-               * inputManager = (InputMethodManager)
-               * getSystemService(Context.INPUT_METHOD_SERVICE);
-               * inputManager.hideSoftInputFromWindow(qrEditText.getWindowToken(),
-               * 0); } })
-               */
-              .create();
+        final AlertDialog qrAlertDialog = new AlertDialog.Builder(this)
+        .setIcon(android.R.drawable.ic_dialog_email)
+        .setTitle(R.string.quickreply_title)
+        /*
+         * .setOnCancelListener(new OnCancelListener() { public void
+         * onCancel(DialogInterface dialog) { if (Log.DEBUG)
+         * Log.v("Quick Reply Dialog: onCancel()"); InputMethodManager
+         * inputManager = (InputMethodManager)
+         * getSystemService(Context.INPUT_METHOD_SERVICE);
+         * inputManager.hideSoftInputFromWindow(qrEditText.getWindowToken(),
+         * 0); } })
+         */
+        .create();
 
         // Set the custom layout with no spacing at the bottom
         qrAlertDialog.setView(qrLayout, 0, 5, 0, 0);
@@ -773,6 +775,20 @@ public class SmsPopupActivity extends Activity {
         });
          */
 
+        // Update quick reply views now that they have been created
+        updateQuickReplyView("");
+
+        /*
+         * TODO: due to what seems like a bug, setting selection to 0 here doesn't seem to work
+         * but setting it to 1 first then back to 0 does.  I couldn't find a way around this :|
+         * To reproduce, comment out the below line and set a quick reply signature, when
+         * clicking Quick Reply the cursor will be positioned at the end of the EditText
+         * rather than the start.
+         */
+        if (qrEditText.getText().toString().length() > 0) qrEditText.setSelection(1);
+
+        qrEditText.setSelection(0);
+
         return qrAlertDialog;
 
         /*
@@ -805,10 +821,6 @@ public class SmsPopupActivity extends Activity {
                 Log.v("Item text = " + mCursor.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM));
 
               quickReply(mCursor.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM));
-              // quickReplyText =
-              // mCursor.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM);
-              // updateQuickReplyView();
-              // showDialog(DIALOG_QUICKREPLY);
             }
           }, SmsPopupDbAdapter.KEY_QUICKMESSAGE);
         } else { // Otherwise display a placeholder as user has no presets
@@ -853,10 +865,6 @@ public class SmsPopupActivity extends Activity {
 
     switch (id) {
       case DIALOG_QUICKREPLY:
-        updateQuickReplyView(null);
-
-        qrEditText.requestFocus();
-
         /*
         InputMethodManager inputManager =
           (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -868,6 +876,7 @@ public class SmsPopupActivity extends Activity {
         mLP.width = LayoutParams.FILL_PARENT;
         dialog.getWindow().setAttributes(mLP);
         break;
+
       case DIALOG_PRESET_MSG:
         break;
     }
@@ -899,7 +908,7 @@ public class SmsPopupActivity extends Activity {
         closeMessage();
         break;
       case CONTEXT_DELETE_ID:
-    	showDialog(DIALOG_DELETE);
+        showDialog(DIALOG_DELETE);
         break;
       case CONTEXT_REPLY_ID:
         replyToMessage();
@@ -1142,8 +1151,7 @@ public class SmsPopupActivity extends Activity {
 
   /*
    * Show the quick reply dialog, resetting the text in the edittext and storing
-   * the current SmsMmsMessage in a static var (in case another message comes
-   * in)
+   * the current SmsMmsMessage (in case another message comes in)
    */
   private void quickReply() {
     quickReply("");
@@ -1151,11 +1159,11 @@ public class SmsPopupActivity extends Activity {
 
   /*
    * Show the quick reply dialog, if text passed is null or empty then store the
-   * current SmsMmsMessage in a static var (in case another message comes in)
+   * current SmsMmsMessage (in case another message comes in)
    */
   private void quickReply(String text) {
-    // If this is a MMS just use regular reply, TODO: need to work out how to
-    // reply to MMS myself
+
+    // If this is a MMS just use regular reply
     if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
       replyToMessage();
     } else { // Else show the quick reply dialog
@@ -1181,17 +1189,17 @@ public class SmsPopupActivity extends Activity {
   }
 
   /*
-   * Refresh the quick reply view - update a text field and the counter
+   * Refresh the quick reply view - update the edittext and the counter
    */
   private void updateQuickReplyView(String editText) {
-    if (Log.DEBUG) Log.v("updateQuickReplyView - " + editText);
+    if (Log.DEBUG) Log.v("updateQuickReplyView - '" + editText + "'");
     if (qrEditText != null && editText != null) {
-      qrEditText.setText(editText);
+      qrEditText.setText(editText + signatureText);
       qrEditText.setSelection(editText.length());
     }
     if (quickreplyTextView != null) {
-      quickreplyTextView.setText(getString(R.string.quickreply_from_text, quickReplySmsMessage
-          .getContactName()));
+      quickreplyTextView.setText(getString(R.string.quickreply_from_text,
+          quickReplySmsMessage.getContactName()));
     }
   }
 

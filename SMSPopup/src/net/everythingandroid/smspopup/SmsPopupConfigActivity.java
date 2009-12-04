@@ -204,6 +204,8 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     SmsPopupDbAdapter mDbAdapter = new SmsPopupDbAdapter(this);
     mDbAdapter.open(true); // Open database read-only
     mDbAdapter.close();
+
+    Eula.show(this);
   }
 
   @Override
