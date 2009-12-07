@@ -18,19 +18,17 @@ public class SmsMonitorService extends Service {
   private SmsContentObserver observerSMS = null;
   private Context context;
 
-  // private static PowerManager.WakeLock mStartingService;
-
   @Override
   public void onCreate() {
     super.onCreate();
     context = this.getApplicationContext();
+    if (Log.DEBUG) Log.v("SmsMonitorService created");
     registerSMSObserver();
   }
 
   @Override
   public void onStart(Intent intent, int startId) {
     super.onStart(intent, startId);
-    if (Log.DEBUG) Log.v("SmsMonitorService starting");
   }
 
   @Override
@@ -44,7 +42,7 @@ public class SmsMonitorService extends Service {
     return null;
   }
 
-  /**
+  /*
    * Registers the observer for SMS changes
    */
   private void registerSMSObserver() {
@@ -94,12 +92,6 @@ public class SmsMonitorService extends Service {
    */
   public static void beginStartingService(Context context) {
     if (Log.DEBUG) Log.v("SmsMonitorService: beginStartingService()");
-    //    if (mStartingService == null) {
-    //      PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-    //      mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG);
-    //      mStartingService.setReferenceCounted(false);
-    //    }
-    //    mStartingService.acquire();
     context.startService(new Intent(context, SmsMonitorService.class));
   }
 
@@ -109,11 +101,7 @@ public class SmsMonitorService extends Service {
    */
   public static void finishStartingService(Service service) {
     if (Log.DEBUG) Log.v("SmsMonitorService: finishStartingService()");
-    //    if (mStartingService != null) {
     service.stopSelf();
-    //      mStartingService.release();
-    //      mStartingService = null;
-    //}
   }
 
 }

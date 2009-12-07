@@ -372,6 +372,11 @@ public class SmsMmsMessage {
    * @return true of the message was sent, false otherwise
    */
   public boolean replyToMessage(String quickreply) {
+
+    // Mark the message we're replying to as read
+    setMessageRead();
+
+    // Send new message
     SmsMessageSender sender =
       new SmsMessageSender(context, new String[] {fromAddress}, quickreply, getThreadId());
     return sender.sendMessage();

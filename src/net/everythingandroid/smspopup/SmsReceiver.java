@@ -17,12 +17,5 @@ public class SmsReceiver extends BroadcastReceiver {
      * after it's work is done the service will be stopped.
      */
     SmsReceiverService.beginStartingService(context, intent);
-
-    /*
-     *  This service runs a content observer on the system sms db to help clear the notification
-     *  icon in the case the user reads the messages outside of sms popup.  the service will be
-     *  stopped when unread messages = 0
-     */
-    SmsMonitorService.beginStartingService(context);
   }
 }

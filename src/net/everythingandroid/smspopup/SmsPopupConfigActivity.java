@@ -205,7 +205,11 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     mDbAdapter.open(true); // Open database read-only
     mDbAdapter.close();
 
-    Eula.show(this);
+    // Eula.show(this);
+
+    //    for (int i=0; i<1000; i++) {
+    //      new SmsMessageSender(this, new String[] {"12345"}, "message " + i, 10).sendMessage();
+    //    }
   }
 
   @Override

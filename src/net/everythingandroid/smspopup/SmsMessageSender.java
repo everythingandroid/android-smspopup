@@ -165,7 +165,6 @@ public class SmsMessageSender {
     for (int i = 0; i < mNumberOfDests; i++) {
       ArrayList<String> messages = smsManager.divideMessage(mMessageText);
       int messageCount = messages.size();
-      if (Log.DEBUG) Log.v("messageCount = " + messageCount);
       ArrayList<PendingIntent> deliveryIntents = new ArrayList<PendingIntent>(messageCount);
       ArrayList<PendingIntent> sentIntents = new ArrayList<PendingIntent>(messageCount);
 
@@ -203,6 +202,7 @@ public class SmsMessageSender {
         // SmsReceiver.class
         0));
       }
+      if (Log.DEBUG) Log.v("Sending message in " + messageCount + " parts");
       smsManager.sendMultipartTextMessage(
           mDests[i], mServiceCenter, messages, sentIntents, deliveryIntents);
     }
