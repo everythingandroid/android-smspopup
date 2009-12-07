@@ -117,6 +117,12 @@ public class ManageNotification {
     if (onlyUpdate) {
       scrollText = null;
     } else {
+      /*
+       *  This service runs a content observer on the system sms db to help clear the notification
+       *  icon in the case the user reads the messages outside of sms popup.  the service will be
+       *  stopped when unread messages = 0
+       */
+      SmsMonitorService.beginStartingService(context);
 
       // If we're in privacy mode and the keyguard is on then just display
       // the name of the person, otherwise scroll the name and message
