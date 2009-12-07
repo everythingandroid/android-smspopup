@@ -237,6 +237,8 @@ public class SmsPopupActivity extends Activity {
     mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
 
     wakeApp();
+
+    // Eula.show(this);
   }
 
   class PopupButton implements OnClickListener {
@@ -1048,10 +1050,11 @@ public class SmsPopupActivity extends Activity {
     if (messageViewed) {
       Intent i = new Intent(getApplicationContext(), SmsPopupUtilsService.class);
       /*
-       * Switched to mark thread read for v1.0.0, not sure which is better.
+       * Switched back to mark messageId as read for >v1.0.6 (marking thread as read is slow
+       * for really large threads)
        */
-      // i.setAction(SmsPopupUtilsService.ACTION_MARK_MESSAGE_READ);
-      i.setAction(SmsPopupUtilsService.ACTION_MARK_THREAD_READ);
+      i.setAction(SmsPopupUtilsService.ACTION_MARK_MESSAGE_READ);
+      //i.setAction(SmsPopupUtilsService.ACTION_MARK_THREAD_READ);
       i.putExtras(message.toBundle());
       SmsPopupUtilsService.beginStartingService(getApplicationContext(), i);
     }

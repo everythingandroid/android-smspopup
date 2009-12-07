@@ -89,7 +89,7 @@ public class SmsPopupUtilsService extends Service {
       } else if (ACTION_QUICKREPLY.equals(action)) {
         if (Log.DEBUG) Log.v("SMSPopupUtilsService: Quick Reply to message");
         SmsMmsMessage message = new SmsMmsMessage(context, intent.getExtras());
-        message.setThreadRead();
+        //message.setThreadRead();
         message.replyToMessage(intent.getStringExtra(SmsMmsMessage.EXTRAS_QUICKREPLY));
       } else if (ACTION_UPDATE_NOTIFICATION.equals(action)) {
         if (Log.DEBUG) Log.v("SMSPopupUtilsService: Updating notification");

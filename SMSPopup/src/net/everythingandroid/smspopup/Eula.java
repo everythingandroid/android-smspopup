@@ -46,7 +46,6 @@ class Eula {
     void onEulaNotAgreedTo();
   }
 
-
   /**
    * Displays the EULA if necessary. This method should be called from the onCreate()
    * method of your main Activity.

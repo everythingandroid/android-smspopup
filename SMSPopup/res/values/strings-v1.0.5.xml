@@ -10,7 +10,7 @@
    <string name="pref_notif_signature_summary">Appears at the end of every quick reply</string>
 
 <!-- Eula Strings -->
-    <string name="eula_title">License Agreement</string>
+    <string name="eula_title">SMS Popup License Agreement</string>
     <string name="eula_accept">Accept</string>
     <string name="eula_refuse">Uninstall</string>
 

@@ -12,7 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.everythingandroid.smspopup.wrappers.ContactWrapper;
-
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.ComponentName;
@@ -453,6 +452,11 @@ public class SmsPopupUtils {
 
     if (messageId > 0) {
       if (Log.DEBUG) Log.v("id of message to delete is " + messageId);
+
+      // We need to mark this message read first to ensure the entire thread is marked as read
+      setMessageRead(context, messageId, messageType);
+
+      // Construct delete message uri
       Uri deleteUri;
 
       if (SmsMmsMessage.MESSAGE_TYPE_MMS == messageType) {
@@ -465,9 +469,8 @@ public class SmsPopupUtils {
       int count = context.getContentResolver().delete(deleteUri, null, null);
       if (Log.DEBUG) Log.v("Messages deleted: " + count);
       if (count == 1) {
-        //TODO: should only set the thread read if there are no more unread
-        // messages
-        setThreadRead(context, threadId);
+        //TODO: should only set the thread read if there are no more unread messages
+        //setThreadRead(context, threadId);
       }
     }
   }
@@ -696,13 +699,6 @@ public class SmsPopupUtils {
     final String[] selectionArgs = null;
     final String sortOrder = "date DESC";
 
-    //    if (timestamp > 0) {
-    //      if (Log.DEBUG) Log.v("getUnreadSmsCount(), timestamp = " + timestamp);
-    //      selection += " and date < ?";
-    //      selectionArgs =
-    //        new String[] { String.valueOf(timestamp - SmsMmsMessage.MESSAGE_COMPARE_TIME_BUFFER) };
-    //    }
-
     int count = 0;
 
     Cursor cursor = context.getContentResolver().query(
@@ -745,12 +741,6 @@ public class SmsPopupUtils {
     if (count == 0 && timestamp > 0) {
       count = 1;
     }
-
-    // We ignored the latest incoming message so add one to the total count
-    //    if (timestamp > 0) {
-    //      if (Log.DEBUG) Log.v("adding 1 to unread, previous count was " + count);
-    //      count += 1;
-    //    }
 
     if (Log.DEBUG) Log.v("getUnreadSmsCount(): unread count = " + count);
     return count;
