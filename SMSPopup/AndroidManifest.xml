@@ -2,8 +2,8 @@
 <manifest
   xmlns:android="http://schemas.android.com/apk/res/android"
   package="net.everythingandroid.smspopup"
-  android:versionCode="107"
-  android:versionName="1.0.5">
+  android:versionCode="108"
+  android:versionName="1.0.6">
   <uses-sdk
     android:minSdkVersion="3"
     android:targetSdkVersion="4" />
@@ -14,7 +14,7 @@
       android:name=".SmsPopupConfigActivity"
       android:label="@string/app_name"
       android:launchMode="singleTask"
-      android:configChanges="orientation|keyboardHidden">
+      android:configChanges="keyboardHidden|orientation">
       <intent-filter>
         <action
           android:name="android.intent.action.MAIN" />
@@ -26,25 +26,25 @@
       android:name=".ConfigContactsActivity"
       android:label="@string/pref_contacts_title"
       android:launchMode="singleTop"
-      android:configChanges="orientation|keyboardHidden">
+      android:configChanges="keyboardHidden|orientation">
     </activity>
     <activity
       android:name=".ConfigPerContactActivity"
       android:label="@string/pref_contacts_title"
       android:launchMode="singleTop"
-      android:configChanges="orientation|keyboardHidden">
+      android:configChanges="keyboardHidden|orientation">
     </activity>
     <activity
       android:name=".ConfigPresetMessagesActivity"
       android:label="@string/pref_message_presets_title"
       android:launchMode="singleTop"
-      android:configChanges="orientation|keyboardHidden">
+      android:configChanges="keyboardHidden|orientation">
     </activity>
     <activity
       android:name=".SmsPopupActivity"
       android:theme="@android:style/Theme.Dialog"
       android:launchMode="singleTask"
-      android:configChanges="orientation|keyboardHidden"
+      android:configChanges="keyboardHidden|orientation"
       android:screenOrientation="user"
       android:taskAffinity="net.everythingandroid.smspopup.popup">
     </activity>

@@ -201,8 +201,7 @@ public class ManageNotification {
     ManagePreferences mPrefs = new ManagePreferences(context, contactId);
     AudioManager AM = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
-    // Check if there are unread messages and if notifications are enabled -
-    // if not, we're done :)
+    // Check if notifications are enabled - if not, we're done :)
     if (!mPrefs.getBoolean(
         R.string.pref_notif_enabled_key,
         R.string.pref_notif_enabled_default,
@@ -239,11 +238,6 @@ public class ManageNotification {
       mPrefs.getString(R.string.pref_flashled_pattern_custom_key,
           R.string.pref_flashled_pattern_default, SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM_NUM);
 
-    // The default system ringtone
-    // ("content://settings/system/notification_sound")
-    // String defaultRingtone =
-    // Settings.System.DEFAULT_NOTIFICATION_URI.toString();
-
     // Try and parse the user ringtone, use the default if it fails
     Uri alarmSoundURI =
       Uri.parse(mPrefs.getString(R.string.pref_notif_sound_key, defaultRingtone,
@@ -263,7 +257,6 @@ public class ManageNotification {
     /*
      * Ok, let's create our Notification object and set up all its parameters.
      */
-
     Notification notification = new Notification();
 
     // Set auto-cancel flag
@@ -328,7 +321,6 @@ public class ManageNotification {
       /*
        * Set up vibrate pattern
        */
-
       // If vibrate is ON, or if phone is set to vibrate
       if ((vibrate || AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode())) {
         long[] vibrate_pattern = null;

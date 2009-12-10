@@ -282,7 +282,7 @@ public class SmsReceiverService extends Service {
       //mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_SEND_LATER);
     } else {
       if (Log.DEBUG) Log.v("SMSReceiver: Error sending message");
-      ManageNotification.notifySendFailed(this);
+      //ManageNotification.notifySendFailed(this);
       mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_FAILED);
     }
 
