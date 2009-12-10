@@ -65,7 +65,7 @@ public class SmsPopupUtils {
   public static final int CONTACT_PHOTO_MAXSIZE = 1024;
 
   private static final String[] AUTHOR_CONTACT_INFO = { "Adam K <smspopup@everythingandroid.net>" };
-  private static final String[] AUTHOR_CONTACT_INFO_DONATE = { "Adam K <adam@everythingandroid.net>" };
+  private static final String[] AUTHOR_CONTACT_INFO_DONATE = { "Adam K <smspopup+donate@everythingandroid.net>" };
 
   public static final Uri DONATE_PAYPAL_URI =
     Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8246419");
