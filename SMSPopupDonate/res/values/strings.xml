@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string
+    name="thanks">Thank you for donating to the SMS Popup project!\n\nYou don't need to keep this donate app installed - click the Uninstall button below to remove this app from your phone.\n\n</string>
+  <string
+    name="app_name">SMS Popup Donate</string>
+</resources>
