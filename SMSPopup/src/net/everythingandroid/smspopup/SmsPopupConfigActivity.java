@@ -220,8 +220,8 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
 
     // Donate Dialog
     if (donateDialogPref != null) {
-      // boolean donated = myPrefs.getBoolean(this.getString(R.string.pref_donated_key), false);
-      boolean donated = true;
+      boolean donated = myPrefs.getBoolean(this.getString(R.string.pref_donated_key), false);
+      // boolean donated = true;
       if (donated) {
         PreferenceCategory otherPrefCategory =
           (PreferenceCategory) findPreference(getString(R.string.pref_other_key));

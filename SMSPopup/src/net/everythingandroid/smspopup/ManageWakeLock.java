@@ -33,8 +33,8 @@ public class ManageWakeLock {
 
     int flags;
 
-    if (myPrefs.getBoolean(context.getString(R.string.pref_dimscreen_key), Boolean
-        .parseBoolean(context.getString(R.string.pref_dimscreen_default)))) {
+    if (myPrefs.getBoolean(context.getString(R.string.pref_dimscreen_key),
+        Boolean.parseBoolean(context.getString(R.string.pref_dimscreen_default)))) {
       flags = PowerManager.SCREEN_DIM_WAKE_LOCK;
     } else {
       flags = PowerManager.SCREEN_BRIGHT_WAKE_LOCK;
