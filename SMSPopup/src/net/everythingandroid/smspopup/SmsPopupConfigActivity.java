@@ -306,10 +306,10 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
         || Integer.valueOf(val2) == ButtonListPreference.BUTTON_REPLY_BY_ADDRESS
         || Integer.valueOf(val3) == ButtonListPreference.BUTTON_REPLY_BY_ADDRESS) {
       settings.putBoolean(getString(R.string.pref_reply_to_thread_key), false);
-      if (Log.DEBUG) Log.v("Reply to address set");
+      //      if (Log.DEBUG) Log.v("Reply to address set");
     } else {
       settings.putBoolean(getString(R.string.pref_reply_to_thread_key), true);
-      if (Log.DEBUG) Log.v("Reply to threadId set");
+      //      if (Log.DEBUG) Log.v("Reply to threadId set");
     }
 
     settings.commit();

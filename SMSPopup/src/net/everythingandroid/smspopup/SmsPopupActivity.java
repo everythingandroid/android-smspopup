@@ -96,6 +96,7 @@ public class SmsPopupActivity extends Activity {
   private String signatureText;
 
   private static final double WIDTH = 0.9;
+  private static final int MAX_WIDTH = 640;
   private static final int DIALOG_DELETE = Menu.FIRST;
   private static final int DIALOG_QUICKREPLY = Menu.FIRST + 1;
   private static final int DIALOG_PRESET_MSG = Menu.FIRST + 2;
@@ -875,6 +876,8 @@ public class SmsPopupActivity extends Activity {
 
         // Set width of dialog to fill_parent
         LayoutParams mLP = dialog.getWindow().getAttributes();
+
+        // TODO: this should be limited in case the screen is large
         mLP.width = LayoutParams.FILL_PARENT;
         dialog.getWindow().setAttributes(mLP);
         break;
@@ -1217,13 +1220,15 @@ public class SmsPopupActivity extends Activity {
     // This sets the minimum width of the activity to a minimum of 80% of the screen
     // size only needed because the theme of this activity is "dialog" so it looks
     // like it's floating and doesn't seem to fill_parent like a regular activity
-    // TODO: acutally should limit the minWidth in the case of devices with bigger screens...
     if (mainLL == null) {
       mainLL = (LinearLayout) findViewById(R.id.MainLinearLayout);
     }
     Display d = getWindowManager().getDefaultDisplay();
-    int width = (int) (d.getWidth() * WIDTH);
+
+    int width = d.getWidth() > MAX_WIDTH ? MAX_WIDTH : (int) (d.getWidth() * WIDTH);
+
     mainLL.setMinimumWidth(width);
+    mainLL.invalidate();
   }
 
   /**
