@@ -150,12 +150,13 @@ public class SmsMessageSender {
     mServiceCenter = getOutgoingServiceCenter(mThreadId);
   }
 
+  @SuppressWarnings("deprecation")
   public boolean sendMessage() {
     if (!(mThreadId > 0)) {
       return false;
     }
 
-    // // Don't try to send an empty message.
+    // Don't try to send an empty message.
     if ((mMessageText == null) || (mNumberOfDests == 0)) {
       return false;
     }
@@ -179,8 +180,8 @@ public class SmsMessageSender {
       Uri uri = null;
       try {
         uri =
-          addMessage(mContext.getContentResolver(), mDests[i], mMessageText, null, mTimestamp,
-              requestDeliveryReport, mThreadId);
+          addMessage(mContext.getContentResolver(), mDests[i], mMessageText, null,
+              mTimestamp, requestDeliveryReport, mThreadId);
       } catch (SQLiteException e) {
         // TODO: show error here
         // SqliteWrapper.checkSQLiteException(mContext, e);

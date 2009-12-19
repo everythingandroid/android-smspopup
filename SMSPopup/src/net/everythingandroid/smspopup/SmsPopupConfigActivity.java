@@ -251,7 +251,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     switch (id) {
 
       case DIALOG_DONATE:
-        LayoutInflater factory = LayoutInflater.from(this);
+        LayoutInflater factory = getLayoutInflater();
         final View donateView = factory.inflate(R.layout.donate, null);
 
         Button donateMarketButton = (Button) donateView.findViewById(R.id.DonateMarketButton);
