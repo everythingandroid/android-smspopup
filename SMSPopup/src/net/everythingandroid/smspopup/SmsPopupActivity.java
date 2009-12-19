@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -45,6 +46,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -66,6 +68,8 @@ public class SmsPopupActivity extends Activity {
   private boolean exitingKeyguardSecurely = false;
   private Bundle bundle = null;
   private SharedPreferences myPrefs;
+  private InputMethodManager inputManager = null;
+  private View inputView = null;
 
   private TextView fromTV;
   private TextView messageReceivedTV;
@@ -181,8 +185,12 @@ public class SmsPopupActivity extends Activity {
     // See if user wants to show buttons on the popup
     if (!myPrefs.getBoolean(getString(R.string.pref_show_buttons_key),
         Boolean.valueOf(getString(R.string.pref_show_buttons_default)))) {
+
+      // Hide button layout
       buttonsLL.setVisibility(View.GONE);
+
     } else {
+
       // Button 1
       final Button button1 = (Button) findViewById(R.id.button1);
       PopupButton button1Vals =
@@ -242,6 +250,9 @@ public class SmsPopupActivity extends Activity {
     // Eula.show(this);
   }
 
+  /*
+   * Internal class to handle dynamic button functions on popup
+   */
   class PopupButton implements OnClickListener {
     private int buttonId;
     public boolean isReplyButton;
@@ -335,6 +346,9 @@ public class SmsPopupActivity extends Activity {
   protected void onPause() {
     super.onPause();
     if (Log.DEBUG) Log.v("SMSPopupActivity: onPause()");
+
+    // Hide the soft keyboard in case it was shown via quick reply
+    hideSoftKeyboard();
 
     // Shutdown eyes-free TTS
     if (eyesFreeTts != null) {
@@ -635,7 +649,7 @@ public class SmsPopupActivity extends Activity {
          * Quick Reply Dialog
          */
       case DIALOG_QUICKREPLY:
-        LayoutInflater factory = LayoutInflater.from(this);
+        LayoutInflater factory = getLayoutInflater();
         final View qrLayout = factory.inflate(R.layout.message_quick_reply, null);
         qrEditText = (EditText) qrLayout.findViewById(R.id.QuickReplyEditText);
         final TextView qrCounterTextView =
@@ -656,8 +670,7 @@ public class SmsPopupActivity extends Activity {
             List<ResolveInfo> list = packageManager.queryIntentActivities(intent, 0);
 
             if (list.size() > 0) {
-              // TODO: really I should allow voice input here without unlocking
-              // first (I allow
+              // TODO: really I should allow voice input here without unlocking first (I allow
               // quick replies without unlock anyway)
               exitingKeyguardSecurely = true;
               ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
@@ -699,14 +712,6 @@ public class SmsPopupActivity extends Activity {
               if (v != null) {
                 sendQuickReply(v.getText().toString());
               }
-              /*
-               * Hide the IME - not needed as we finish the activity after
-               * sending which hides the IME anyway
-               */
-              // InputMethodManager inputManager = (InputMethodManager)
-              // SmsPopupActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-              // inputManager.hideSoftInputFromWindow(v.getWindowToken(),
-              // InputMethodManager.HIDE_NOT_ALWAYS);
               return true;
             }
 
@@ -716,8 +721,8 @@ public class SmsPopupActivity extends Activity {
         });
 
         quickreplyTextView = (TextView) qrLayout.findViewById(R.id.QuickReplyTextView);
-        QmTextWatcher.getQuickReplyCounterText(qrEditText.getText().toString(),
-            qrCounterTextView, qrSendButton);
+        QmTextWatcher.getQuickReplyCounterText(
+            qrEditText.getText().toString(), qrCounterTextView, qrSendButton);
 
         qrSendButton.setOnClickListener(new OnClickListener() {
           public void onClick(View v) {
@@ -729,21 +734,10 @@ public class SmsPopupActivity extends Activity {
         final AlertDialog qrAlertDialog = new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_email)
         .setTitle(R.string.quickreply_title)
-        /*
-         * .setOnCancelListener(new OnCancelListener() { public void
-         * onCancel(DialogInterface dialog) { if (Log.DEBUG)
-         * Log.v("Quick Reply Dialog: onCancel()"); InputMethodManager
-         * inputManager = (InputMethodManager)
-         * getSystemService(Context.INPUT_METHOD_SERVICE);
-         * inputManager.hideSoftInputFromWindow(qrEditText.getWindowToken(),
-         * 0); } })
-         */
         .create();
 
         // Set the custom layout with no spacing at the bottom
         qrAlertDialog.setView(qrLayout, 0, 5, 0, 0);
-
-        // qrAlertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         // Preset messages button
         Button presetButton = (Button) qrLayout.findViewById(R.id.PresetMessagesButton);
@@ -758,25 +752,20 @@ public class SmsPopupActivity extends Activity {
         cancelButton.setOnClickListener(new OnClickListener() {
           public void onClick(View v) {
             if (qrAlertDialog != null) {
+              hideSoftKeyboard();
               qrAlertDialog.dismiss();
             }
           }
         });
 
-        // Ensure this dialog is counted as "editable" (so soft keyboard will
-        // always show on top)
+        // Ensure this dialog is counted as "editable" (so soft keyboard will always show on top)
         qrAlertDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
-        /*
         qrAlertDialog.setOnDismissListener(new OnDismissListener() {
           public void onDismiss(DialogInterface dialog) {
             if (Log.DEBUG) Log.v("Quick Reply Dialog: onDissmiss()");
-            InputMethodManager inputManager =
-              (InputMethodManager) SmsPopupActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputManager.hideSoftInputFromWindow(fromTV.getWindowToken(), 0);
           }
         });
-         */
 
         // Update quick reply views now that they have been created
         updateQuickReplyView("");
@@ -805,7 +794,6 @@ public class SmsPopupActivity extends Activity {
         AlertDialog.Builder mDialogBuilder =
           new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_email)
-        // .setCustomTitle(arg0)
         .setTitle(R.string.pref_message_presets_title)
         .setOnCancelListener(new OnCancelListener() {
           public void onCancel(DialogInterface dialog) {
@@ -868,11 +856,7 @@ public class SmsPopupActivity extends Activity {
 
     switch (id) {
       case DIALOG_QUICKREPLY:
-        /*
-        InputMethodManager inputManager =
-          (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-         */
+        showSoftKeyboard(qrEditText);
 
         // Set width of dialog to fill_parent
         LayoutParams mLP = dialog.getWindow().getAttributes();
@@ -1045,9 +1029,8 @@ public class SmsPopupActivity extends Activity {
     }
   }
 
-  /*
-   * Close the message window/popup, mark the message read if the user has this
-   * option on
+  /**
+   * Close the message window/popup, mark the message read if the user has this option on
    */
   private void closeMessage() {
     if (messageViewed) {
@@ -1066,7 +1049,7 @@ public class SmsPopupActivity extends Activity {
     myFinish();
   }
 
-  /*
+  /**
    * Reply to the current message, start the reply intent
    */
   private void replyToMessage(final boolean replyToThread) {
@@ -1085,7 +1068,7 @@ public class SmsPopupActivity extends Activity {
     replyToMessage(true);
   }
 
-  /*
+  /**
    * View the private message (this basically just unlocks the keyguard and then
    * reloads the activity).
    */
@@ -1106,7 +1089,7 @@ public class SmsPopupActivity extends Activity {
     });
   }
 
-  /*
+  /**
    * Take the user to the messaging app inbox
    */
   private void gotoInbox() {
@@ -1121,7 +1104,7 @@ public class SmsPopupActivity extends Activity {
     });
   }
 
-  /*
+  /**
    * Delete the current message from the system database
    */
   private void deleteMessage() {
@@ -1133,10 +1116,11 @@ public class SmsPopupActivity extends Activity {
     myFinish();
   }
 
-  /*
+  /**
    * Sends the actual quick reply message
    */
   private void sendQuickReply(String quickReplyMessage) {
+    hideSoftKeyboard();
     if (quickReplyMessage != null) {
       if (quickReplyMessage.length() > 0) {
         Intent i =
@@ -1155,7 +1139,7 @@ public class SmsPopupActivity extends Activity {
     }
   }
 
-  /*
+  /**
    * Show the quick reply dialog, resetting the text in the edittext and storing
    * the current SmsMmsMessage (in case another message comes in)
    */
@@ -1163,7 +1147,7 @@ public class SmsPopupActivity extends Activity {
     quickReply("");
   }
 
-  /*
+  /**
    * Show the quick reply dialog, if text passed is null or empty then store the
    * current SmsMmsMessage (in case another message comes in)
    */
@@ -1181,7 +1165,7 @@ public class SmsPopupActivity extends Activity {
     }
   }
 
-  /*
+  /**
    * View contact that has the message address (or create if it doesn't exist)
    */
   private void viewContact() {
@@ -1194,7 +1178,7 @@ public class SmsPopupActivity extends Activity {
     startActivity(contactIntent);
   }
 
-  /*
+  /**
    * Refresh the quick reply view - update the edittext and the counter
    */
   private void updateQuickReplyView(String editText) {
@@ -1232,9 +1216,32 @@ public class SmsPopupActivity extends Activity {
   }
 
   /**
-   * 
+   * Show the soft keyboard and store the view that triggered it
+   */
+  private void showSoftKeyboard(View triggerView) {
+    if (Log.DEBUG) Log.v("showSoftKeyboard()");
+    if (inputManager == null) {
+      inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    }
+    inputView = triggerView;
+    inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+  }
+
+  /**
+   * Hide the soft keyboard
+   */
+  private void hideSoftKeyboard() {
+    if (inputView == null) return;
+    if (Log.DEBUG) Log.v("hideSoftKeyboard()");
+    if (inputManager == null) {
+      inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    }
+    inputManager.hideSoftInputFromWindow(inputView.getApplicationWindowToken(), 0);
+    inputView = null;
+  }
+
+  /**
    * AsyncTask to fetch contact photo in background
-   * 
    */
   private class FetchContactPhotoTask extends AsyncTask<String, Integer, Bitmap> {
     @Override
