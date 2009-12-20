@@ -33,14 +33,14 @@ public class ReminderReceiver extends BroadcastReceiver {
     SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
     boolean reminder_notifications =
-      myPrefs.getBoolean(context.getString(R.string.pref_notif_repeat_key), Boolean
-          .valueOf(context.getString(R.string.pref_notif_repeat_default)));
+      myPrefs.getBoolean(context.getString(R.string.pref_notif_repeat_key),
+          Boolean.valueOf(context.getString(R.string.pref_notif_repeat_default)));
 
     if (reminder_notifications) {
       int reminder_interval =
-        Integer.parseInt(myPrefs.getString(context
-            .getString(R.string.pref_notif_repeat_interval_key), context
-            .getString(R.string.pref_notif_repeat_interval_default)));
+        Integer.parseInt(myPrefs.getString(
+            context.getString(R.string.pref_notif_repeat_interval_key),
+            context.getString(R.string.pref_notif_repeat_interval_default)));
 
       reminder_interval *= 60;
 

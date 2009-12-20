@@ -151,45 +151,45 @@
       android:summary="@string/pref_additional_summary"
       android:dependency="@string/pref_enabled_key">
       <PreferenceCategory
-        android:title="@string/pref_additional_summary">
+        android:title="@string/pref_button_config_title">
         <PreferenceScreen
           android:title="@string/pref_button_config_title"
           android:key="pref_button_config_key"
           android:summary="@string/pref_button_config_summary">
-          <PreferenceCategory
-            android:title="@string/pref_button_config_title">
-            <CheckBoxPreference
-              android:key="@string/pref_show_buttons_key"
-              android:title="@string/pref_show_buttons_title"
-              android:summaryOn="@string/pref_show_buttons_summaryon"
-              android:summaryOff="@string/pref_show_buttons_summaryoff"
-              android:defaultValue="@string/pref_show_buttons_default" />
-            <net.everythingandroid.smspopup.preferences.ButtonListPreference
-              android:key="@string/pref_button1_key"
-              android:title="@string/pref_button1_title"
-              android:entries="@array/pref_buttons_entries"
-              android:entryValues="@array/pref_buttons_values"
-              android:dialogTitle="@string/pref_button1_title"
-              android:defaultValue="@string/pref_button1_default"
-              android:dependency="@string/pref_show_buttons_key" />
-            <net.everythingandroid.smspopup.preferences.ButtonListPreference
-              android:key="@string/pref_button2_key"
-              android:title="@string/pref_button2_title"
-              android:entries="@array/pref_buttons_entries"
-              android:entryValues="@array/pref_buttons_values"
-              android:dialogTitle="@string/pref_button2_title"
-              android:defaultValue="@string/pref_button2_default"
-              android:dependency="@string/pref_show_buttons_key" />
-            <net.everythingandroid.smspopup.preferences.ButtonListPreference
-              android:key="@string/pref_button3_key"
-              android:title="@string/pref_button3_title"
-              android:entries="@array/pref_buttons_entries"
-              android:entryValues="@array/pref_buttons_values"
-              android:dialogTitle="@string/pref_button3_title"
-              android:defaultValue="@string/pref_button3_default"
-              android:dependency="@string/pref_show_buttons_key" />
-          </PreferenceCategory>
+          <CheckBoxPreference
+            android:key="@string/pref_show_buttons_key"
+            android:title="@string/pref_show_buttons_title"
+            android:summaryOn="@string/pref_show_buttons_summaryon"
+            android:summaryOff="@string/pref_show_buttons_summaryoff"
+            android:defaultValue="@string/pref_show_buttons_default" />
+          <net.everythingandroid.smspopup.preferences.ButtonListPreference
+            android:key="@string/pref_button1_key"
+            android:title="@string/pref_button1_title"
+            android:entries="@array/pref_buttons_entries"
+            android:entryValues="@array/pref_buttons_values"
+            android:dialogTitle="@string/pref_button1_title"
+            android:defaultValue="@string/pref_button1_default"
+            android:dependency="@string/pref_show_buttons_key" />
+          <net.everythingandroid.smspopup.preferences.ButtonListPreference
+            android:key="@string/pref_button2_key"
+            android:title="@string/pref_button2_title"
+            android:entries="@array/pref_buttons_entries"
+            android:entryValues="@array/pref_buttons_values"
+            android:dialogTitle="@string/pref_button2_title"
+            android:defaultValue="@string/pref_button2_default"
+            android:dependency="@string/pref_show_buttons_key" />
+          <net.everythingandroid.smspopup.preferences.ButtonListPreference
+            android:key="@string/pref_button3_key"
+            android:title="@string/pref_button3_title"
+            android:entries="@array/pref_buttons_entries"
+            android:entryValues="@array/pref_buttons_values"
+            android:dialogTitle="@string/pref_button3_title"
+            android:defaultValue="@string/pref_button3_default"
+            android:dependency="@string/pref_show_buttons_key" />
         </PreferenceScreen>
+      </PreferenceCategory>
+      <PreferenceCategory
+        android:title="@string/pref_quickreply_title">
         <net.everythingandroid.smspopup.preferences.QuickReplyCheckBoxPreference
           android:key="@string/pref_quickreply_key"
           android:title="@string/pref_quickreply_title"
@@ -203,25 +203,59 @@
           android:dialogIcon="@android:drawable/ic_dialog_info"
           android:dialogTitle="@string/pref_notif_signature_title"
           android:dependency="@string/pref_quickreply_key" />
+        <CheckBoxPreference
+          android:key="@string/pref_delivery_report_key"
+          android:title="@string/pref_delivery_report_title"
+          android:summary="@string/pref_delivery_report_summary"
+          android:defaultValue="@string/pref_delivery_report_default"
+          android:dependency="@string/pref_quickreply_key" />
+        <CheckBoxPreference
+          android:key="@string/pref_split_message_key"
+          android:title="@string/pref_split_message_title"
+          android:summaryOn="@string/pref_split_message_summaryon"
+          android:summaryOff="@string/pref_split_message_summaryoff"
+          android:defaultValue="@string/pref_split_message_default"
+          android:dependency="@string/pref_quickreply_key" />
+      </PreferenceCategory>
+      <PreferenceCategory
+        android:title="@string/pref_screen_category">
+        <CheckBoxPreference
+          android:key="@string/pref_screen_on_key"
+          android:title="@string/pref_screen_on_title"
+          android:summaryOn="@string/pref_screen_on_summaryon"
+          android:summaryOff="@string/pref_screen_on_summaryoff"
+          android:defaultValue="@string/pref_screen_on_default" />
         <ListPreference
           android:key="@string/pref_timeout_key"
           android:title="@string/pref_timeout_title"
           android:summary="@string/pref_timeout_summary"
           android:entries="@array/pref_timeout_entries"
           android:entryValues="@array/pref_timeout_values"
-          android:defaultValue="@string/pref_timeout_default" />
+          android:defaultValue="@string/pref_timeout_default"
+          android:dependency="@string/pref_screen_on_key" />
         <CheckBoxPreference
           android:key="@string/pref_dimscreen_key"
           android:title="@string/pref_dimscreen_title"
           android:summaryOn="@string/pref_dimscreen_summaryon"
           android:summaryOff="@string/pref_dimscreen_summaryoff"
-          android:defaultValue="@string/pref_dimscreen_default" />
+          android:defaultValue="@string/pref_dimscreen_default"
+          android:dependency="@string/pref_screen_on_key" />
         <CheckBoxPreference
           android:key="@string/pref_privacy_key"
           android:title="@string/pref_privacy_title"
           android:summaryOn="@string/pref_privacy_summaryon"
           android:summaryOff="@string/pref_privacy_summaryoff"
-          android:defaultValue="@string/pref_privacy_default" />
+          android:defaultValue="@string/pref_privacy_default"
+          android:dependency="@string/pref_screen_on_key" />
+      </PreferenceCategory>
+      <PreferenceCategory
+        android:title="@string/pref_other_title">
+        <CheckBoxPreference
+          android:key="@string/pref_autorotate_key"
+          android:title="@string/pref_autorotate_title"
+          android:summaryOn="@string/pref_autorotate_summaryon"
+          android:summaryOff="@string/pref_autorotate_summaryoff"
+          android:defaultValue="@string/pref_autorotate_default" />
         <CheckBoxPreference
           android:key="@string/pref_markread_key"
           android:title="@string/pref_markread_title"

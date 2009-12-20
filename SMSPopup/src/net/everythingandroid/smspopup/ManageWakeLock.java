@@ -6,84 +6,77 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 
 public class ManageWakeLock {
-  private static PowerManager.WakeLock myWakeLock = null;
-  private static PowerManager.WakeLock myPartialWakeLock = null;
+  private static PowerManager.WakeLock mWakeLock = null;
+  private static PowerManager.WakeLock mPartialWakeLock = null;
+  private static final boolean PREFS_SCREENON_DEFAULT = true;
+  private static final boolean PREFS_DIMSCREEN_DEFAULT = false;
+  private static final String PREFS_TIMEOUT_DEFAULT = "30";
 
-  // private static PowerManager myPM = null;
+  public static synchronized void acquireFull(Context mContext) {
+    PowerManager mPm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 
-  // public static synchronized void setPM(Context context) {
-  // if (myPM == null) {
-  // myPM = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-  // }
-  // }
-
-  public static synchronized void acquireFull(Context context) {
-    // setPM(context);
-    PowerManager myPM = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-
-    if (myWakeLock != null) {
-      // myWakeLock.release();
+    if (mWakeLock != null) {
       if (Log.DEBUG) Log.v("**Wakelock already held");
       return;
     }
 
-    SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-    ManageKeyguard.disableKeyguard(context);
+    SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
     int flags;
 
-    if (myPrefs.getBoolean(context.getString(R.string.pref_dimscreen_key),
-        Boolean.parseBoolean(context.getString(R.string.pref_dimscreen_default)))) {
+    // Check dim screen preference
+    if (mPrefs.getBoolean(
+        mContext.getString(R.string.pref_dimscreen_key), PREFS_DIMSCREEN_DEFAULT)) {
       flags = PowerManager.SCREEN_DIM_WAKE_LOCK;
     } else {
       flags = PowerManager.SCREEN_BRIGHT_WAKE_LOCK;
     }
 
-    flags |= PowerManager.ACQUIRE_CAUSES_WAKEUP;
-    // PowerManager.ON_AFTER_RELEASE;
+    // Check if screen should turn on, if so, set flags and unlock keyguard
+    if (mPrefs.getBoolean(mContext.getString(R.string.pref_screen_on_key), PREFS_SCREENON_DEFAULT)) {
+      flags |= PowerManager.ACQUIRE_CAUSES_WAKEUP;
+      ManageKeyguard.disableKeyguard(mContext);
+    }
 
-    myWakeLock = myPM.newWakeLock(flags, Log.LOGTAG);
+    mWakeLock = mPm.newWakeLock(flags, Log.LOGTAG);
+    mWakeLock.setReferenceCounted(false);
+    mWakeLock.acquire();
     if (Log.DEBUG) Log.v("**Wakelock acquired");
-    myWakeLock.setReferenceCounted(false);
-    myWakeLock.acquire();
 
     // Fetch wakelock/screen timeout from preferences
     int timeout =
-      Integer.valueOf(myPrefs.getString(context.getString(R.string.pref_timeout_key), context
-          .getString(R.string.pref_timeout_default)));
+      Integer.valueOf(
+          mPrefs.getString(mContext.getString(R.string.pref_timeout_key), PREFS_TIMEOUT_DEFAULT));
 
     // Set a receiver to remove all locks in "timeout" seconds
-    ClearAllReceiver.setCancel(context, timeout);
+    ClearAllReceiver.setCancel(mContext, timeout);
   }
 
-  public static synchronized void acquirePartial(Context context) {
-    // setPM(context);
-    PowerManager myPM = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+  public static synchronized void acquirePartial(Context mContext) {
+    PowerManager mPm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 
-    if (myPartialWakeLock != null) {
-      return;
-    }
+    // Check if partial lock already exists
+    if (mPartialWakeLock != null) return;
 
-    myPartialWakeLock = myPM.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG + ": partial");
+    mPartialWakeLock = mPm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG + ": partial");
     if (Log.DEBUG) Log.v("**Wakelock (partial) acquired");
-    myPartialWakeLock.setReferenceCounted(false);
-    myPartialWakeLock.acquire();
+    mPartialWakeLock.setReferenceCounted(false);
+    mPartialWakeLock.acquire();
   }
 
   public static synchronized void releaseFull() {
-    if (myWakeLock != null) {
+    if (mWakeLock != null) {
       if (Log.DEBUG) Log.v("**Wakelock released");
-      myWakeLock.release();
-      myWakeLock = null;
+      mWakeLock.release();
+      mWakeLock = null;
     }
   }
 
   public static synchronized void releasePartial() {
-    if (myPartialWakeLock != null) {
+    if (mPartialWakeLock != null) {
       if (Log.DEBUG) Log.v("**Wakelock (partial) released");
-      myPartialWakeLock.release();
-      myPartialWakeLock = null;
+      mPartialWakeLock.release();
+      mPartialWakeLock = null;
     }
   }
 
