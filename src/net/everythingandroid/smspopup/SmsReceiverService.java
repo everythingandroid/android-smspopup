@@ -246,18 +246,18 @@ public class SmsReceiverService extends Service {
       if (msg != null) {
         switch (msg.what) {
           case TOAST_HANDLER_MESSAGE_SENT:
-            // TODO: move to resource files
-            Toast.makeText(SmsReceiverService.this, "Message sent",
+            Toast.makeText(SmsReceiverService.this,
+                SmsReceiverService.this.getString(R.string.quickreply_sent_toast),
                 Toast.LENGTH_SHORT).show();
             break;
           case TOAST_HANDLER_MESSAGE_SEND_LATER:
-            // TODO: move to resource files
-            Toast.makeText(SmsReceiverService.this, "Currently unable to send your message. It will be sent when the service becomes available.",
+            Toast.makeText(SmsReceiverService.this,
+                SmsReceiverService.this.getString(R.string.quickreply_failed_send_later),
                 Toast.LENGTH_SHORT).show();
             break;
           case TOAST_HANDLER_MESSAGE_FAILED:
-            // TODO: move to resource files
-            Toast.makeText(SmsReceiverService.this, "Message failed to send",
+            Toast.makeText(SmsReceiverService.this,
+                SmsReceiverService.this.getString(R.string.quickreply_failed),
                 Toast.LENGTH_SHORT).show();
             break;
         }

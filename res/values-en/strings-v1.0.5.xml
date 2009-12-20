@@ -32,4 +32,8 @@
     
     <string name="pref_screen_category">Screen Control</string>
     
+<!-- Other new Quick Reply prefs -->    
+    <string name="quickreply_sent_toast">Message Sent</string>
+    <string name="quickreply_failed_send_later">Currently unable to send your message. It will be sent when the service becomes available.</string>
+    <string name="quickreply_failed">Message failed to send</string>
 </resources>
