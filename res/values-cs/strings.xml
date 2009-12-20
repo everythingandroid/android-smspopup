@@ -200,5 +200,93 @@
       <item>5</item>
       <item>10</item>
       <item>Opakovat stále</item>
-   </string-array>   
+   </string-array>
+
+<!-- Contact Notification Customization Strings -->
+  <string name="pref_notif_default_title">Standartní upozornění</string>
+  <string name="pref_notif_default_summary">Upozornění pro všechny kontakty bez individuálního nastavení</string>
+  
+  <string name="pref_contacts_title">Upozornění pro kontakty</string>
+  <string name="pref_contacts_summary">Individuální nastavení pro kontakty</string>
+
+  <string name="pref_notif_help_title">Pomoc - jsem ztracený!</string>
+  <string name="pref_notif_help_summary">Nápověda</string>
+  <string name="pref_notif_help_message">SMS Popup nyní umožňuje nastavení upozornění pro jednotlivé kontakty. Když přijde nová zpráva, SMS Popup nejdříve zkontroluje zda u daného kontaktu nemáte nastavení nějaké individuální požadavky.  Pokud tomu tak je, použije je, pokud ne, použije se standartní nastavení.\n\nDíky této funkci si můžete nastavit upozornění pouze pro některé kontakty a u ostatních nechat pouze klasické upozorňování defaultní aplikace. Můžete také ignorovat některé kontakty tím, že jim nastavíte tiché vyzvánění.</string>
+
+  <string name="contact_customization_add">Přidat vlastní upozornění</string>
+  <string name="contact_customization_edit">Upravit vlastní upozornění</string>
+  <string name="contact_customization_remove">Odebrat vlastní upozornění</string>
+  <string name="contact_customization_removed_toast">Vlastní upozornění odebráno</string>  
+  <string name="contact_customization_save">Uložit</string>
+  <string name="contact_customization_title">Upozornění pro %s</string>
+  <string name="contact_customization_enabled">Upozornění je aktivní pro %s</string>
+  <string name="contact_customization_disabled">Upozornění není aktivní pro %s</string>
+  <string name="contact_customization_add_hint">Přidat vlastní upozornění...</string>
+  
+  <string name="ringtone_silent">Tiché</string>
+  
+<!-- Preset Quick Reply Message Strings -->
+  <string name="pref_message_presets_title">Zpráva pro odpověď</string>
+  <string name="pref_message_presets_summary">Nastavení zprávy pro rychlou odpověď</string>
+  
+  <string name="message_presets_add">Přidat odpověď</string>
+  <string name="message_presets_edit">Upravit odpověď</string>
+    
+  <string name="message_presets_add_text">Vytvořit</string>
+  <string name="message_presets_save_text">Uložit</string>
+  <string name="message_presets_delete_text">Odebrat</string>
+  <string name="message_presets_edit_text">Upravit</string>
+  <string name="message_presets_reorder_text">Přesunout nahoru</string>
+  <string name="message_presets_empty_text">Žádný text</string>
+
+  <string name="message_presets_add_toast">Zpráva pro odpověď přidána</string>    
+  <string name="message_presets_save_toast">Zpráva pro odpověď upravena</string>
+  <string name="message_presets_delete_toast">Zpráva pro odpověď smazána</string>
+  <string name="message_presets_reorder_toast">Zpráva pro odpověď přesunuta nahoru</string>
+  <string name="message_presets_error_toast">Chyba - prosím zkuste to znovu</string>
+
+<!-- Quick Reply Strings -->
+  <string name="message_counter">%d znaků zbývá</string>
+  <string name="message_counter_multiple">%d znaků zbývá, %d zpráv</string>
+    
+  <string name="quickreply_title">Rychlá odpověď</string>
+  <string name="quickreply_from_text">Komu: %s</string>
+  <string name="quickreply_preset_button">Odpovědi</string>
+  <string name="quickreply_send_button">Odeslat</string>
+  <string name="quickreply_sending_toast">Odesílám zprávu...</string>
+  <string name="quickreply_nomessage_toast">Odeslat</string>
+
+<!-- Text-To-Speech and Voice Transcription Strings -->
+  <string name="loading_message">Nahrávám...</string>
+  <string name="error_message">Chyba</string>
+  <string name="error_no_voice_recognition">Rozpoznávání hlasu není na tomto zařízení nainstalováno</string>
+    
+<!-- Popup Button Configuration -->
+  <string name="pref_button_config_title">Konfigurace tlačítek</string>
+  <string name="pref_button_config_summary">Konfigurace vyskakujícího okna</string>
+  <string name="pref_button_summary">Aktuální nastavení: %s</string>
+  
+  <string name="pref_button1_title">Konfigurace Tlačítka 1</string>
+  <string name="pref_button2_title">Konfigurace Tlačítka 2</string>
+  <string name="pref_button3_title">Konfigurace Tlačítka 3</string>
+    
+  <string name="button_speak">Číst</string>
+  <string name="button_delete_noconfirm">Smazat (bez upozornění)</string>
+  <string name="button_quickreply">Rychlá odpověď</string>
+  <string name="button_disabled">Zamčeno</string>
+   
+  <string name="pref_show_buttons_title">Zobrazit tlačítka</string>
+  <string name="pref_show_buttons_summaryon">Tlačítka budou viditelná</string>
+  <string name="pref_show_buttons_summaryoff">Tlačítka jsou skytá (stlačte dlouze tl. menu)</string>
+
+  <string name="pref_popup_enabled_title">Zobrazovat vyskakovací okno</string>
+  <string name="pref_popup_enabled_summaryon">Zpráva bude otevřena ve vysk. okně</string>
+  <string name="pref_popup_enabled_summaryoff">Zpráva se zobrazí pouze v oznamovací liště (pokud je zapnuto)</string>
+
+<!-- Donate Strings (not used right now) -->
+  <string name="pref_donate_title">Podpořte SMS Popup</string>    
+  <string name="pref_donate_text">SMS Popup je zdarma a pracuji na ní ve svém volném čase.  Pokud se Vám zdá užitečná a můžete oželet pár drobných, podpoříte vývoj dalších aplikací.\n\nDěkuji!</string>
+  <string name="pref_donate_market_button">Podpořit přes Android Market</string>
+  <string name="pref_donate_paypal_button">Podpořit přes PayPal</string>
+  
 </resources>
