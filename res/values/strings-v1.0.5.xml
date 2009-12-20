@@ -14,4 +14,30 @@
     <string name="eula_accept">Accept</string>
     <string name="eula_refuse">Uninstall</string>
 
+<!-- Send message prefs -->
+    <string name="pref_delivery_report_key">deliveryreport</string>
+    <string name="pref_delivery_report_title">Delivery Reports</string>
+    <string name="pref_delivery_report_summary">Request a delivery report for each message you send via quick reply</string>
+    <string name="pref_delivery_report_default">false</string>
+    
+    <string name="pref_split_message_key">splitmessage</string>
+    <string name="pref_split_message_title">Split Long Messages</string>
+    <string name="pref_split_message_summaryon">Long messages will be split up (only needed for some CDMA carriers)</string>
+    <string name="pref_split_message_summaryoff">Long messages will not be split up (only needed for some CDMA carriers)</string>
+    <string name="pref_split_message_default">false</string>
+    
+<!-- Other new prefs -->    
+    <string name="pref_autorotate_key">autorotate</string>
+    <string name="pref_autorotate_title">Autorotate Always On</string>
+    <string name="pref_autorotate_summaryon">Popup will always autorotate</string>
+    <string name="pref_autorotate_summaryoff">Popup will auto-rotate based on the screen behind it</string>
+    <string name="pref_autorotate_default">true</string>
+    
+    <string name="pref_screen_on_key">screenon</string>
+    <string name="pref_screen_on_title">Screen On for Popup</string>
+    <string name="pref_screen_on_summaryon">Screen will turn on when popup shows</string>
+    <string name="pref_screen_on_summaryoff">Screen will not turn on when popup shows</string>
+    <string name="pref_screen_on_default">true</string>
+    
+    <string name="pref_screen_category">Screen Control</string>
 </resources>

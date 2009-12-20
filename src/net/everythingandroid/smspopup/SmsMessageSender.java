@@ -23,9 +23,11 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.telephony.gsm.SmsManager;
 
 public class SmsMessageSender {
@@ -36,9 +38,12 @@ public class SmsMessageSender {
   private final String mServiceCenter;
   private final long mThreadId;
   private long mTimestamp;
+  private boolean splitMessage;
+  private boolean requestDeliveryReport;
 
   // Default preference values
   private static final boolean DEFAULT_DELIVERY_REPORT_MODE = false;
+  private static final boolean DEFAULT_SPLIT_MESSAGE = false;
 
   // http://android.git.kernel.org/?p=platform/frameworks/base.git;a=blob;f=core/java/android/provider/Telephony.java
   public static final String REPLY_PATH_PRESENT = "reply_path_present";
@@ -148,6 +153,18 @@ public class SmsMessageSender {
     // : Threads.getOrCreateThreadId(context,
     // new HashSet<String>(Arrays.asList(dests)));
     mServiceCenter = getOutgoingServiceCenter(mThreadId);
+
+    SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+
+    // Fetch split message pref
+    splitMessage =
+      mPrefs.getBoolean(
+          mContext.getString(R.string.pref_split_message_key), DEFAULT_SPLIT_MESSAGE);
+
+    // Fetch delivery report pref
+    requestDeliveryReport =
+      mPrefs.getBoolean(
+          mContext.getString(R.string.pref_delivery_report_key), DEFAULT_DELIVERY_REPORT_MODE);
   }
 
   @SuppressWarnings("deprecation")
@@ -169,43 +186,67 @@ public class SmsMessageSender {
       ArrayList<PendingIntent> deliveryIntents = new ArrayList<PendingIntent>(messageCount);
       ArrayList<PendingIntent> sentIntents = new ArrayList<PendingIntent>(messageCount);
 
-      // SharedPreferences prefs =
-      // PreferenceManager.getDefaultSharedPreferences(mContext);
+      // Apparently some CDMA networks have a 160 character limit on sending messages (no
+      // multi-part SMS messages), if splitMessage is true we will break apart the messages
+      // and send separately.
+      if (splitMessage) {
+        for (int j = 0; j < messageCount; j++) {
+          Uri uri = null;
+          try {
+            uri =
+              addMessage(mContext.getContentResolver(), mDests[i], messages.get(j), null,
+                  mTimestamp, requestDeliveryReport, mThreadId);
+          } catch (SQLiteException e) {
+            // TODO: show error here
+            // SqliteWrapper.checkSQLiteException(mContext, e);
+          }
 
-      // boolean requestDeliveryReport = prefs.getBoolean(
-      // MessagingPreferenceActivity.SMS_DELIVERY_REPORT_MODE,
-      // DEFAULT_DELIVERY_REPORT_MODE);
-      boolean requestDeliveryReport = DEFAULT_DELIVERY_REPORT_MODE;
+          PendingIntent deliveryReportIntent = null;
+          if (requestDeliveryReport) {
+            deliveryReportIntent = PendingIntent.getBroadcast(mContext, 0,
+                new Intent(MESSAGE_STATUS_RECEIVED_ACTION, uri)
+            .setClassName(MMS_PACKAGE_NAME, MMS_STATUS_RECEIVED_CLASS_NAME), 0);
+          }
 
-      Uri uri = null;
-      try {
-        uri =
-          addMessage(mContext.getContentResolver(), mDests[i], mMessageText, null,
-              mTimestamp, requestDeliveryReport, mThreadId);
-      } catch (SQLiteException e) {
-        // TODO: show error here
-        // SqliteWrapper.checkSQLiteException(mContext, e);
-      }
+          PendingIntent sentIntent = PendingIntent.getBroadcast(mContext, 0,
+              new Intent(SmsReceiverService.MESSAGE_SENT_ACTION, uri)
+          .setClass(mContext, SmsReceiver.class), 0);
 
-      for (int j = 0; j < messageCount; j++) {
-        if (requestDeliveryReport) {
+          smsManager.sendTextMessage(
+              mDests[i], mServiceCenter, messages.get(j), sentIntent, deliveryReportIntent);
+        }
 
-          deliveryIntents.add(PendingIntent.getBroadcast(mContext, 0,
-              new Intent(MESSAGE_STATUS_RECEIVED_ACTION, uri)
-          .setClassName(MMS_PACKAGE_NAME, MMS_STATUS_RECEIVED_CLASS_NAME),
-          // MessageStatusReceiver.class),
+      } else { // Otherwise send as multipart message
+        Uri uri = null;
+        try {
+          uri =
+            addMessage(mContext.getContentResolver(), mDests[i], mMessageText, null,
+                mTimestamp, requestDeliveryReport, mThreadId);
+        } catch (SQLiteException e) {
+          // TODO: show error here
+          // SqliteWrapper.checkSQLiteException(mContext, e);
+        }
+
+        for (int j = 0; j < messageCount; j++) {
+          if (requestDeliveryReport) {
+            deliveryIntents.add(PendingIntent.getBroadcast(mContext, 0,
+                new Intent(MESSAGE_STATUS_RECEIVED_ACTION, uri)
+            .setClassName(MMS_PACKAGE_NAME, MMS_STATUS_RECEIVED_CLASS_NAME),
+            // MessageStatusReceiver.class),
+            0));
+          }
+
+          sentIntents.add(PendingIntent.getBroadcast(mContext, 0,
+              new Intent(SmsReceiverService.MESSAGE_SENT_ACTION, uri)
+          .setClass(mContext, SmsReceiver.class),
+          //.setClassName(MMS_PACKAGE_NAME, MMS_SENT_CLASS_NAME),
+          // SmsReceiver.class
           0));
         }
-        sentIntents.add(PendingIntent.getBroadcast(mContext, 0,
-            new Intent(SmsReceiverService.MESSAGE_SENT_ACTION, uri)
-        .setClass(mContext, SmsReceiver.class),
-        //.setClassName(MMS_PACKAGE_NAME, MMS_SENT_CLASS_NAME),
-        // SmsReceiver.class
-        0));
+        if (Log.DEBUG) Log.v("Sending message in " + messageCount + " parts");
+        smsManager.sendMultipartTextMessage(
+            mDests[i], mServiceCenter, messages, sentIntents, deliveryIntents);
       }
-      if (Log.DEBUG) Log.v("Sending message in " + messageCount + " parts");
-      smsManager.sendMultipartTextMessage(
-          mDests[i], mServiceCenter, messages, sentIntents, deliveryIntents);
     }
     return false;
   }
