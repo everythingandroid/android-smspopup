@@ -198,5 +198,138 @@
       <item>5</item>
       <item>10</item>
       <item>Keep repeating</item>
-   </string-array>   
+   </string-array>
+
+<!-- Contact Notification Customization Strings -->
+  <string name="pref_notif_default_title">Default Notifications</string>
+  <string name="pref_notif_default_summary">Notifications for all contacts without an individual customization</string>
+  
+  <string name="pref_contacts_title">Contacts Notifications</string>
+  <string name="pref_contacts_summary">Individual contact customization</string>
+
+  <string name="pref_notif_help_title">Help - I\'m confused!</string>
+  <string name="pref_notif_help_summary">Notifications Help</string>
+  <string name="pref_notif_help_message">SMS Popup now offers the ability to customize notifications on a per contact basis.  When a new message comes in, SMS Popup will first check if the contact has a customized notification.  If so, those settings are used, otherwise the default notifications are used.\n\nUsing this functionality, you could set things up so only a few contacts show a popup while the rest trigger a regular notification.  You could also ignore certain contacts by setting their notification to silent.</string>
+
+  <string name="contact_customization_add">Add Custom Notifications</string>
+  <string name="contact_customization_edit">Edit Custom Notification</string>
+  <string name="contact_customization_remove">Remove Custom Notification</string>
+  <string name="contact_customization_removed_toast">Custom Notification Removed</string>  
+  <string name="contact_customization_save">Save</string>
+  <string name="contact_customization_title">Notifications for %s</string>
+  <string name="contact_customization_enabled">Notifications are enabled for %s</string>
+  <string name="contact_customization_disabled">Notifications are disabled for %s</string>
+  <string name="contact_customization_add_hint">Add/Edit contact notifications...</string>
+  
+  <string name="ringtone_silent">Silent</string>
+  
+<!-- Preset Quick Reply Message Strings -->
+  <string name="pref_message_presets_title">Preset Messages</string>
+  <string name="pref_message_presets_summary">Configure preset messages for quick replies</string>
+  
+  <string name="message_presets_add">Add Preset Message</string>
+  <string name="message_presets_edit">Edit Preset Message</string>
+    
+  <string name="message_presets_add_text">Create</string>
+  <string name="message_presets_save_text">Save</string>
+  <string name="message_presets_delete_text">Remove</string>
+  <string name="message_presets_edit_text">Edit</string>
+  <string name="message_presets_reorder_text">Move to top</string>
+  <string name="message_presets_empty_text">No presets defined</string>
+
+  <string name="message_presets_add_toast">Message preset added</string>    
+  <string name="message_presets_save_toast">Message preset updated</string>
+  <string name="message_presets_delete_toast">Message preset deleted</string>
+  <string name="message_presets_reorder_toast">Message preset moved to top</string>
+  <string name="message_presets_error_toast">Error - please try again</string>
+
+<!-- Quick Reply Strings -->
+  <string name="message_counter">%d chars remaining</string>
+  <string name="message_counter_multiple">%d chars remaining, %d messages</string>
+    
+  <string name="quickreply_title">Quick Reply</string>
+  <string name="quickreply_from_text">To: %s</string>
+  <string name="quickreply_preset_button">Presets</string>
+  <string name="quickreply_send_button">Send</string>
+  <string name="quickreply_sending_toast">Sending message...</string>
+  <string name="quickreply_nomessage_toast">Send</string>
+
+<!-- Text-To-Speech and Voice Transcription Strings -->
+  <string name="loading_message">Loading...</string>
+  <string name="error_message">Error</string>
+  <string name="error_no_voice_recognition">Voice recognition not available on this device</string>
+    
+<!-- Popup Button Configuration -->
+  <string name="pref_button_config_title">Button Configuration</string>
+  <string name="pref_button_config_summary">Popup button configuration</string>
+  <string name="pref_button_summary">Current Setting: %s</string>
+  
+  <string name="pref_button1_title">Button 1 Configuration</string>
+  <string name="pref_button2_title">Button 2 Configuration</string>
+  <string name="pref_button3_title">Button 3 Configuration</string>
+    
+  <string name="button_speak">Speak</string>
+  <string name="button_delete_noconfirm">Delete (no confirmation)</string>
+  <string name="button_quickreply">Quick Reply</string>
+  <string name="button_disabled">Disabled</string>
+   
+  <string name="pref_show_buttons_title">Show Buttons On Popup</string>
+  <string name="pref_show_buttons_summaryon">Buttons on popup are visible</string>
+  <string name="pref_show_buttons_summaryoff">Buttons are hidden in long press menu</string>
+
+  <string name="pref_popup_enabled_title">Show a Popup</string>
+  <string name="pref_popup_enabled_summaryon">Message will open in a popup</string>
+  <string name="pref_popup_enabled_summaryoff">Message will only show in notification area (if enabled)</string>
+
+<!-- Donate Strings (not used right now) -->
+  <string name="pref_donate_title">Donate to SMS Popup</string>    
+  <string name="pref_donate_text">SMS Popup is a free application that I work on in my spare time.  If you find it useful, and can spare a few bucks, a donation would be much appreciated.\n\nThanks!</string>
+  <string name="pref_donate_market_button">Donate via Android Market</string>
+  <string name="pref_donate_paypal_button">Donate via PayPal</string>
+
+<!-- Misc missing string -->
+   <string name="view_contact">View Contact</string>
+
+<!-- Quick Reply Checkbox Preference -->
+   <string name="pref_quickreply_title">Quick Reply</string>
+   <string name="pref_quickreply_summaryon">Quick Reply is enabled</string>
+   <string name="pref_quickreply_summaryoff">Quick Reply is disabled</string>
+   <string name="pref_quickreply_bothreplybuttons">Both reply buttons are already active, to configure them please go to the Button Configuration screen</string>
+   <string name="pref_quickreply_noreplybuttons">No reply buttons are currently active, to configure them please go to the Button Configuration screen</string>
+
+<!-- Misc missing string -->
+   <string name="button_replybyaddress">Reply (to phone number)</string>
+
+<!-- Quick Reply Signature pref -->   
+   <string name="pref_notif_signature_title">Quick Reply Signature</string>
+   <string name="pref_notif_signature_summary">Appears at the end of every quick reply</string>
+
+<!-- Eula Strings -->
+    <string name="eula_title">SMS Popup License Agreement</string>
+    <string name="eula_accept">Accept</string>
+    <string name="eula_refuse">Uninstall</string>
+
+<!-- Send message prefs -->
+    <string name="pref_delivery_report_title">Delivery Reports</string>
+    <string name="pref_delivery_report_summary">Request a delivery report for each message you send via quick reply</string>
+    
+    <string name="pref_split_message_title">Split Long Messages</string>
+    <string name="pref_split_message_summaryon">Long messages will be split up (only needed for some CDMA carriers)</string>
+    <string name="pref_split_message_summaryoff">Long messages will not be split up (only needed for some CDMA carriers)</string>
+    
+<!-- Other new prefs -->    
+    <string name="pref_autorotate_title">Autorotate Always On</string>
+    <string name="pref_autorotate_summaryon">Popup will always autorotate</string>
+    <string name="pref_autorotate_summaryoff">Popup will auto-rotate based on the screen behind it</string>
+    
+    <string name="pref_screen_on_title">Screen On for Popup</string>
+    <string name="pref_screen_on_summaryon">Screen will turn on when popup shows</string>
+    <string name="pref_screen_on_summaryoff">Screen will not turn on when popup shows</string>
+    
+    <string name="pref_screen_category">Screen Control</string>
+    
+<!-- Other new Quick Reply prefs -->    
+    <string name="quickreply_sent_toast">Message Sent</string>
+    <string name="quickreply_failed_send_later">Currently unable to send your message. It will be sent when the service becomes available.</string>
+    <string name="quickreply_failed">Message failed to send</string>
 </resources>

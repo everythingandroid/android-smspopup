@@ -198,5 +198,102 @@
       <item>5</item>
       <item>10</item>
       <item>Keep repeating</item>
-   </string-array>   
+   </string-array>
+
+<!-- Contact Notification Customization Strings -->
+  <string name="pref_notif_default_title">Notifiche Generiche</string>
+  <string name="pref_notif_default_summary">Notifiche generali per tutti i contatti senza personalizzazione individuale</string>
+  
+  <string name="pref_contacts_title">Notifiche Contatti</string>
+  <string name="pref_contacts_summary">Notifiche individuali per ogni contatto</string>
+
+  <string name="pref_notif_help_title">Aiuto - Sono confuso!</string>
+  <string name="pref_notif_help_summary">Aiuto sulle notifiche</string>
+  <string name="pref_notif_help_message">SMS Popup ora offre la possibilità di personalizzare le notifiche per ogni singolo contatto.Quando arriva un messaggio, SMS Popup verificherà prima se il contatto ha una notifica personalizzata.  In caso affermativo, queste personalizzazioni verranno usate, in caso contrario verranno usate le notifiche standard.\n\n Usando le notifiche personalizzate, tu potresti impostare di mostrare il popup solo per alcuni contatti e per i rimanenti una notifica standard. Tu potresti anche ignorare alcuni contatti disattivando le loro notifiche.</string>
+
+  <string name="contact_customization_add">Aggiungi una notifica personalizzata</string>
+  <string name="contact_customization_edit">Modifica una notifica personalizzata</string>
+  <string name="contact_customization_remove">Cancella notifica personalizzata</string>
+  <string name="contact_customization_removed_toast">Notifica personalizzata rimossa</string>  
+  <string name="contact_customization_save">Salva</string>
+  <string name="contact_customization_title">Notifiche per %s</string>
+  <string name="contact_customization_enabled">Notifiche abilitate per %s</string>
+  <string name="contact_customization_disabled">Notifiche disabilitate per %s</string>
+  <string name="contact_customization_add_hint">Aggiungi/Modifica notifiche contatto...</string>
+  
+  <string name="ringtone_silent">Silenzioso</string>
+  
+<!-- Preset Quick Reply Message Strings -->
+  <string name="pref_message_presets_title">Messaggi standard</string>
+  <string name="pref_message_presets_summary">Configura messaggi standard per risposte rapide</string>
+  
+  <string name="message_presets_add">Aggiungi messaggio standard</string>
+  <string name="message_presets_edit">Modifica messaggio standard</string>
+    
+  <string name="message_presets_add_text">Crea</string>
+  <string name="message_presets_save_text">Salva</string>
+  <string name="message_presets_delete_text">Rimuovi</string>
+  <string name="message_presets_edit_text">Modifica</string>
+  <string name="message_presets_reorder_text">Sposta in cima</string>
+  <string name="message_presets_empty_text">Nessun msg standard definito</string>
+
+  <string name="message_presets_add_toast">Messaggio standard aggiunto</string>    
+  <string name="message_presets_save_toast">Messaggio standard aggiornato</string>
+  <string name="message_presets_delete_toast">Messaggio standard eliminato</string>
+  <string name="message_presets_reorder_toast">Messaggio standard spostato in cima</string>
+  <string name="message_presets_error_toast">Errore - prego, prova di nuovo</string>
+
+<!-- Quick Reply Strings -->
+  <string name="message_counter">%d caratteri rimanenti</string>
+  <string name="message_counter_multiple">%d caratteri rimanenti, %d messagggi</string>
+    
+  <string name="quickreply_title">Risposta rapida</string>
+  <string name="quickreply_from_text">A: %s</string>
+  <string name="quickreply_preset_button">Msg standard</string>
+  <string name="quickreply_send_button">Invia</string>
+  <string name="quickreply_sending_toast">Inviando...</string>
+  <string name="quickreply_nomessage_toast">Invia</string>
+
+<!-- Text-To-Speech and Voice Transcription Strings -->
+  <string name="loading_message">Caricamento...</string>
+  <string name="error_message">Errore</string>
+  <string name="error_no_voice_recognition">Riconoscimento vocale non disponibile su questo dispositivo</string>
+    
+<!-- Popup Button Configuration -->
+  <string name="pref_button_config_title">Configurazione pulsanti</string>
+  <string name="pref_button_config_summary">Configurazione dei pulsanti del popup</string>
+  <string name="pref_button_summary">Impostazione corrente: %s</string>
+  
+  <string name="pref_button1_title">Configurazione 1. pulsante </string>
+  <string name="pref_button2_title">Configurazione 2. pulsante</string>
+  <string name="pref_button3_title">Configurazione 3. pulsante</string>
+    
+  <string name="button_speak">Parla</string>
+  <string name="button_delete_noconfirm">Cancella (senza conferma)</string>
+  <string name="button_quickreply">Risposta rapida</string>
+  <string name="button_disabled">Disabilita</string>
+   
+  <string name="pref_show_buttons_title">Mostra pulsanti sul popup</string>
+  <string name="pref_show_buttons_summaryon">I pulsanti sono attivi</string>
+  <string name="pref_show_buttons_summaryoff">I pulsanti sono nascosti fino alla pressione del tasto menu</string>
+
+  <string name="pref_popup_enabled_title">Mostra un popup</string>
+  <string name="pref_popup_enabled_summaryon">Il msg verrà aperto in un popup</string>
+  <string name="pref_popup_enabled_summaryoff">Il msg verrà mostrato solo nell'area notiche (se abilitata)</string>
+
+<!-- Donate Strings (not used right now) -->
+  <string name="pref_donate_title">Dona a Sms Popup</string>    
+  <string name="pref_donate_text">SMS Popup è un'applicazione gratuita che sviluppo nel mio tempo libero.  Se tu la trovi utile, e puoi risparmiare un pò di soldi, una donazione sarebbe molto apprezzata.\n\nGrazie!</string>
+  <string name="pref_donate_market_button">Dona tramite Android Market</string>
+  <string name="pref_donate_paypal_button">Dona tramite PayPal</string>
+
+<!-- Misc missing string -->
+   <string name="view_contact">Mostra Contatto</string>   
+
+<!-- Quick Reply Checkbox Preference -->
+   <string name="pref_quickreply_title">Risposta rapida</string>
+   <string name="pref_quickreply_summaryon">Risposta rapida è attiva</string>
+   <string name="pref_quickreply_summaryoff">Risposta rapida è disattiva</string>
+   <string name="pref_quickreply_bothreplybuttons">Entrambi i pulsanti di risposta sono attivi, per configurarli, vai alla schermata di configurazione pulsanti.</string>
+   <string name="pref_quickreply_noreplybuttons">Non sono attivi pulsanti di risposta, per configurarli vai alla schermata di configurazione pulsanti</string>
 </resources>

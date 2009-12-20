@@ -198,4 +198,91 @@
        <item>10</item>
        <item>Бесконечно</item>
    </string-array>
+
+<!-- Contact Notification Customization Strings -->
+  <string name="pref_notif_default_title">По умолчанию</string>
+  <string name="pref_notif_default_summary">Уведомления для всех контактов без индивидуальных настроек</string>
+  
+  <string name="pref_contacts_title">Уведомления для контактов</string>
+  <string name="pref_contacts_summary">Индивидуальные уведомления для контактов</string>
+
+  <string name="pref_notif_help_title">Помогите - Не получается!</string>
+  <string name="pref_notif_help_summary">Помощь по уведомлениям</string>
+  <string name="pref_notif_help_message">SMS Popup теперь предоставляет возможность задавать индивидуальные уведомления на каждый контакт. Когда приходит сообщение, вначале SMS Popup проверяет наличие индивидуального уведомления для данного контакта. При его наличии используются заданные настройки, в ином случае используются настройки по умолчанию.\n\nБлагодаря этой возможности вы можете сделать так, что только некоторые контакты будут вызывать всплывающее окно, когда остальные будут использовать стандартное уведомление. Вы также можете игнорировать определенные контакты, установив для них беззвучное уведомление.</string>
+
+  <string name="contact_customization_add">Добавить свое уведомление</string>
+  <string name="contact_customization_edit">Редактировать свои уведомления</string>
+  <string name="contact_customization_remove">Удалить свое уведомление</string>
+  <string name="contact_customization_removed_toast">Пользовательское уведомление удалено</string>  
+  <string name="contact_customization_save">Сохранить</string>
+  <string name="contact_customization_title">Уведомления для %s</string>
+  <string name="contact_customization_enabled">Уведомления включены для %s</string>
+  <string name="contact_customization_disabled">Уведомления отключены для %s</string>
+  <string name="contact_customization_add_hint">Добавить/Изменить уведомления контакта...</string>
+  
+  <string name="ringtone_silent">"Тишина"</string>
+  
+<!-- Preset Quick Reply Message Strings -->
+  <string name="pref_message_presets_title">Шаблоны</string>
+  <string name="pref_message_presets_summary">Задать шаблоны для быстрого ответа</string>
+  
+  <string name="message_presets_add">Добавить шаблон</string>
+  <string name="message_presets_edit">Изменить шаблон</string>
+    
+  <string name="message_presets_add_text">Создать</string>
+  <string name="message_presets_save_text">Сохранить</string>
+  <string name="message_presets_delete_text">Удалить</string>
+  <string name="message_presets_edit_text">Изменить</string>
+  <string name="message_presets_reorder_text">Переместить наверх</string>
+  <string name="message_presets_empty_text">Шаблон не определен</string>
+
+  <string name="message_presets_add_toast">Шаблон добавлен</string>    
+  <string name="message_presets_save_toast">Шаблон обновлен</string>
+  <string name="message_presets_delete_toast">Шаблон удален</string>
+  <string name="message_presets_reorder_toast">Шаблон перемещен наверх</string>
+  <string name="message_presets_error_toast">Ошибка - Попробуйте еще раз</string>
+
+<!-- Quick Reply Strings -->
+  <string name="message_counter">%d символов</string>
+  <string name="message_counter_multiple">%d символов, %d сообщений</string>
+    
+  <string name="quickreply_title">Быстрый ответ</string>
+  <string name="quickreply_from_text">Кому: %s</string>
+  <string name="quickreply_preset_button">Шаблоны</string>
+  <string name="quickreply_send_button">Отправить</string>
+  <string name="quickreply_sending_toast">Отправка сообщения...</string>
+  <string name="quickreply_nomessage_toast">Отправить</string>
+
+<!-- Text-To-Speech and Voice Transcription Strings -->
+  <string name="loading_message">Загрузка...</string>
+  <string name="error_message">Ошибка</string>
+  <string name="error_no_voice_recognition">Распознование голоса не доступно на этом устройстве</string>
+    
+<!-- Popup Button Configuration -->
+  <string name="pref_button_config_title">Настройка кнопки</string>
+  <string name="pref_button_config_summary">Настройка кнопки всплывающего окна</string>
+  <string name="pref_button_summary">Текущие настройки: %s</string>
+  
+  <string name="pref_button1_title">Настройка кнопки 1</string>
+  <string name="pref_button2_title">Настройка кнопки 2</string>
+  <string name="pref_button3_title">Настройка кнопки 3</string>
+    
+  <string name="button_speak">Говорите</string>
+  <string name="button_delete_noconfirm">Удалить (без подтверждения)</string>
+  <string name="button_quickreply">Быстрый ответ</string>
+  <string name="button_disabled">Отключено</string>
+   
+  <string name="pref_show_buttons_title">Показывать кнопки в окне</string>
+  <string name="pref_show_buttons_summaryon">Видимые кнопки в окне</string>
+  <string name="pref_show_buttons_summaryoff">Кнопки скрыты в меню по длительному нажатию</string>
+
+  <string name="pref_popup_enabled_title">Показать окно</string>
+  <string name="pref_popup_enabled_summaryon">Сообщение откроется в окне</string>
+  <string name="pref_popup_enabled_summaryoff">Сообщение будет выведено только в области уведомлений (если включено)</string>
+
+<!-- Donate Strings (not used right now) -->
+  <string name="pref_donate_title">Пожертвовать для SMS Popup</string>    
+  <string name="pref_donate_text">SMS Popup - это бесплатная программа, над которой я работаю в свое свободное время. Если она вам понравилась и у вас есть пара лишних долларов, я буду признателен за ваши пожертвования.\n\nСпасибо!</string>
+  <string name="pref_donate_market_button">Пожертвовать через Android Market</string>
+  <string name="pref_donate_paypal_button">Пожертвовать через PayPal</string>
 </resources>
