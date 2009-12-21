@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup;
 
+import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -29,7 +30,6 @@ public class SmsReceiverService extends Service {
 
   // http://android.git.kernel.org/?p=platform/packages/apps/Mms.git;a=blob;f=src/com/android/mms/transaction/SmsReceiverService.java
   public static final String MESSAGE_SENT_ACTION = "com.android.mms.transaction.MESSAGE_SENT";
-
 
   /*
    * This is the number of retries and pause between retries that we will keep
@@ -140,14 +140,17 @@ public class SmsReceiverService extends Service {
 
     boolean onlyShowOnKeyguard =
       mPrefs.getBoolean(R.string.pref_onlyShowOnKeyguard_key,
+          Defaults.PREFS_ONLY_SHOW_ON_KEYGUARD,
           R.string.pref_onlyShowOnKeyguard_default);
 
     boolean showPopup =
-      mPrefs.getBoolean(R.string.pref_popup_enabled_key, R.string.pref_popup_enabled_default,
+      mPrefs.getBoolean(R.string.pref_popup_enabled_key,
+          Defaults.PREFS_SHOW_POPUP,
           SmsPopupDbAdapter.KEY_POPUP_ENABLED_NUM);
 
     boolean notifEnabled =
-      mPrefs.getBoolean(R.string.pref_notif_enabled_key, R.string.pref_notif_enabled_default,
+      mPrefs.getBoolean(R.string.pref_notif_enabled_key,
+          Defaults.PREFS_NOTIF_ENABLED,
           SmsPopupDbAdapter.KEY_ENABLED_NUM);
 
     mPrefs.close();
