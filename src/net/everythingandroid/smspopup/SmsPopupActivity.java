@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.everythingandroid.smspopup.ManageKeyguard.LaunchOnKeyguardExit;
+import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper;
@@ -117,21 +118,6 @@ public class SmsPopupActivity extends Activity {
 
   private static final int VOICE_RECOGNITION_REQUEST_CODE = 8888;
 
-  /*
-   * Define some preference defaults, these are also in the resource strings unfortunately but
-   * it seems more optimal to have these as static values rather than having to fetch them from
-   * resources each time.
-   */
-  private static final boolean PREFS_AUTOROTATE_DEFAULT = true;
-  private static final boolean PREFS_PRIVACY_DEFAULT = false;
-  private static final boolean PREFS_SHOW_BUTTONS_DEFAULT = true;
-  private static final String PREFS_BUTTON1_DEFAULT =
-    String.valueOf(ButtonListPreference.BUTTON_CLOSE);
-  private static final String PREFS_BUTTON2_DEFAULT =
-    String.valueOf(ButtonListPreference.BUTTON_DELETE);
-  private static final String PREFS_BUTTON3_DEFAULT =
-    String.valueOf(ButtonListPreference.BUTTON_REPLY);
-
   private TextView quickreplyTextView;
   private SmsMmsMessage quickReplySmsMessage;
 
@@ -169,7 +155,7 @@ public class SmsPopupActivity extends Activity {
     mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     // Check if screen orientation should be "user" or "behind" based on prefs
-    if (mPrefs.getBoolean(getString(R.string.pref_autorotate_key), PREFS_AUTOROTATE_DEFAULT)) {
+    if (mPrefs.getBoolean(getString(R.string.pref_autorotate_key), Defaults.PREFS_AUTOROTATE)) {
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
     } else {
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_BEHIND);
@@ -177,7 +163,7 @@ public class SmsPopupActivity extends Activity {
 
     // Fetch privacy mode
     privacyMode =
-      mPrefs.getBoolean(getString(R.string.pref_privacy_key), PREFS_PRIVACY_DEFAULT);
+      mPrefs.getBoolean(getString(R.string.pref_privacy_key), Defaults.PREFS_PRIVACY);
 
     signatureText = mPrefs.getString(getString(R.string.pref_notif_signature_key), "");
     if (signatureText.length() > 0) signatureText = " " + signatureText;
@@ -205,7 +191,8 @@ public class SmsPopupActivity extends Activity {
     buttonsLL = findViewById(R.id.ButtonLinearLayout);
 
     // See if user wants to show buttons on the popup
-    if (!mPrefs.getBoolean(getString(R.string.pref_show_buttons_key), PREFS_SHOW_BUTTONS_DEFAULT)) {
+    if (!mPrefs.getBoolean(
+        getString(R.string.pref_show_buttons_key), Defaults.PREFS_SHOW_BUTTONS)) {
 
       // Hide button layout
       buttonsLL.setVisibility(View.GONE);
@@ -216,7 +203,7 @@ public class SmsPopupActivity extends Activity {
       final Button button1 = (Button) findViewById(R.id.button1);
       PopupButton button1Vals =
         new PopupButton(getApplicationContext(), Integer.parseInt(mPrefs.getString(
-            getString(R.string.pref_button1_key), PREFS_BUTTON1_DEFAULT)));
+            getString(R.string.pref_button1_key), Defaults.PREFS_BUTTON1)));
       button1.setOnClickListener(button1Vals);
       button1.setText(button1Vals.buttonText);
       button1.setVisibility(button1Vals.buttonVisibility);
@@ -225,7 +212,7 @@ public class SmsPopupActivity extends Activity {
       final Button button2 = (Button) findViewById(R.id.button2);
       PopupButton button2Vals =
         new PopupButton(getApplicationContext(), Integer.parseInt(mPrefs.getString(
-            getString(R.string.pref_button2_key), PREFS_BUTTON2_DEFAULT)));
+            getString(R.string.pref_button2_key), Defaults.PREFS_BUTTON2)));
       button2.setOnClickListener(button2Vals);
       button2.setText(button2Vals.buttonText);
       button2.setVisibility(button2Vals.buttonVisibility);
@@ -234,7 +221,7 @@ public class SmsPopupActivity extends Activity {
       final Button button3 = (Button) findViewById(R.id.button3);
       PopupButton button3Vals =
         new PopupButton(getApplicationContext(), Integer.parseInt(mPrefs.getString(
-            getString(R.string.pref_button3_key), PREFS_BUTTON3_DEFAULT)));
+            getString(R.string.pref_button3_key), Defaults.PREFS_BUTTON3)));
       button3.setOnClickListener(button3Vals);
       button3.setText(button3Vals.buttonText);
       button3.setVisibility(button3Vals.buttonVisibility);

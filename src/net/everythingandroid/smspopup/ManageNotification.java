@@ -2,6 +2,7 @@ package net.everythingandroid.smspopup;
 
 import java.util.ArrayList;
 
+import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -204,39 +205,45 @@ public class ManageNotification {
     // Check if notifications are enabled - if not, we're done :)
     if (!mPrefs.getBoolean(
         R.string.pref_notif_enabled_key,
-        R.string.pref_notif_enabled_default,
+        Defaults.PREFS_NOTIF_ENABLED,
         SmsPopupDbAdapter.KEY_ENABLED_NUM)) {
       return null;
     }
 
     // Get some preferences: vibrate and vibrate_pattern prefs
     boolean vibrate =
-      mPrefs.getBoolean(R.string.pref_vibrate_key, R.string.pref_vibrate_default,
+      mPrefs.getBoolean(R.string.pref_vibrate_key, Defaults.PREFS_VIBRATE_ENABLED,
           SmsPopupDbAdapter.KEY_VIBRATE_ENABLED_NUM);
+
     String vibrate_pattern_raw =
       mPrefs.getString(R.string.pref_vibrate_pattern_key,
-          R.string.pref_vibrate_pattern_default, SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_NUM);
+          Defaults.PREFS_VIBRATE_PATTERN, SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_NUM);
+
     String vibrate_pattern_custom_raw =
       mPrefs.getString(R.string.pref_vibrate_pattern_custom_key,
-          R.string.pref_vibrate_pattern_default,
+          Defaults.PREFS_VIBRATE_PATTERN,
           SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM_NUM);
 
     // Get LED preferences
     boolean flashLed =
-      mPrefs.getBoolean(R.string.pref_flashled_key, R.string.pref_flashled_default,
+      mPrefs.getBoolean(R.string.pref_flashled_key, Defaults.PREFS_LED_ENABLED,
           SmsPopupDbAdapter.KEY_LED_ENABLED_NUM);
+
     String flashLedCol =
-      mPrefs.getString(R.string.pref_flashled_color_key, R.string.pref_flashled_color_default,
+      mPrefs.getString(R.string.pref_flashled_color_key, Defaults.PREFS_LED_COLOR,
           SmsPopupDbAdapter.KEY_LED_COLOR_NUM);
+
     String flashLedColCustom =
       mPrefs.getString(R.string.pref_flashled_color_custom_key,
-          R.string.pref_flashled_color_default, SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM_NUM);
+          Defaults.PREFS_LED_COLOR, SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM_NUM);
+
     String flashLedPattern =
       mPrefs.getString(R.string.pref_flashled_pattern_key,
-          R.string.pref_flashled_pattern_default, SmsPopupDbAdapter.KEY_LED_PATTERN_NUM);
+          Defaults.PREFS_LED_PATTERN, SmsPopupDbAdapter.KEY_LED_PATTERN_NUM);
+
     String flashLedPatternCustom =
       mPrefs.getString(R.string.pref_flashled_pattern_custom_key,
-          R.string.pref_flashled_pattern_default, SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM_NUM);
+          Defaults.PREFS_LED_PATTERN, SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM_NUM);
 
     // Try and parse the user ringtone, use the default if it fails
     Uri alarmSoundURI =
@@ -247,9 +254,10 @@ public class ManageNotification {
 
     // See if user wants some privacy
     boolean privacyMode =
-      mPrefs.getBoolean(R.string.pref_privacy_key, R.string.pref_privacy_default);
+      mPrefs.getBoolean(R.string.pref_privacy_key, Defaults.PREFS_PRIVACY);
 
-    boolean replyToThread = mPrefs.getBoolean(R.string.pref_reply_to_thread_key, true);
+    boolean replyToThread =
+      mPrefs.getBoolean(R.string.pref_reply_to_thread_key, Defaults.PREFS_REPLY_TO_THREAD);
 
     // All done with prefs, close it up
     mPrefs.close();
