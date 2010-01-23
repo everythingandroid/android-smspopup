@@ -94,9 +94,9 @@ public class ReminderReceiverService extends Service {
 
       SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
       int repeat_times =
-        Integer.parseInt(myPrefs.getString(context
-            .getString(R.string.pref_notif_repeat_times_key), context
-            .getString(R.string.pref_notif_repeat_times_default)));
+        Integer.parseInt(myPrefs.getString(
+            context.getString(R.string.pref_notif_repeat_times_key),
+            context.getString(R.string.pref_notif_repeat_times_default)));
 
       // values of repeat_times as follows:
       // -1 repeat indefinitely
@@ -104,8 +104,9 @@ public class ReminderReceiverService extends Service {
       if (message.getReminderCount() <= repeat_times || repeat_times == -1) {
         ManageNotification.show(context, message);
         ReminderReceiver.scheduleReminder(context, message);
-        if (myPrefs.getBoolean(context.getString(R.string.pref_notif_repeat_screen_on_key), Boolean
-            .parseBoolean(context.getString(R.string.pref_notif_repeat_screen_on_default)))) {
+        if (myPrefs.getBoolean(context.getString(R.string.pref_notif_repeat_screen_on_key),
+            Boolean.parseBoolean(
+                context.getString(R.string.pref_notif_repeat_screen_on_default)))) {
           ManageWakeLock.acquireFull(context);
         }
 
@@ -123,7 +124,8 @@ public class ReminderReceiverService extends Service {
       if (Log.DEBUG) Log.v("ReminderReceiverService: beginStartingService()");
       if (mStartingService == null) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG);
+        mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+            Log.LOGTAG+".ReminderReceiverService");
         mStartingService.setReferenceCounted(false);
       }
       mStartingService.acquire();

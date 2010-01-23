@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 
+
 public class ManageWakeLock {
   private static PowerManager.WakeLock mWakeLock = null;
   private static PowerManager.WakeLock mPartialWakeLock = null;
@@ -13,12 +14,12 @@ public class ManageWakeLock {
   private static final String PREFS_TIMEOUT_DEFAULT = "30";
 
   public static synchronized void acquireFull(Context mContext) {
-    PowerManager mPm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-
     if (mWakeLock != null) {
       if (Log.DEBUG) Log.v("**Wakelock already held");
       return;
     }
+
+    PowerManager mPm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 
     SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
@@ -38,7 +39,7 @@ public class ManageWakeLock {
       ManageKeyguard.disableKeyguard(mContext);
     }
 
-    mWakeLock = mPm.newWakeLock(flags, Log.LOGTAG);
+    mWakeLock = mPm.newWakeLock(flags, Log.LOGTAG+".full");
     mWakeLock.setReferenceCounted(false);
     mWakeLock.acquire();
     if (Log.DEBUG) Log.v("**Wakelock acquired");
@@ -53,12 +54,15 @@ public class ManageWakeLock {
   }
 
   public static synchronized void acquirePartial(Context mContext) {
-    PowerManager mPm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-
     // Check if partial lock already exists
     if (mPartialWakeLock != null) return;
 
-    mPartialWakeLock = mPm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG + ": partial");
+    PowerManager mPm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+
+    // TODO: this should be partial wake lock, but that seems to be causing issues with the cpu
+    // sleeping so changed to screen bright wake lock
+    mPartialWakeLock = mPm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, Log.LOGTAG + ".partial");
+    //mPartialWakeLock = mPm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG + ".partial");
     if (Log.DEBUG) Log.v("**Wakelock (partial) acquired");
     mPartialWakeLock.setReferenceCounted(false);
     mPartialWakeLock.acquire();
@@ -85,10 +89,4 @@ public class ManageWakeLock {
     releasePartial();
   }
 
-  // This is not supported by the API at this time :(
-  // public static synchronized void goToSleep(Context context) {
-  // setPM(context);
-  // myPM.goToSleep(SystemClock.uptimeMillis() + 2000);
-  //
-  // }
 }
