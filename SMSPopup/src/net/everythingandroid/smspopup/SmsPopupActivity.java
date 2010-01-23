@@ -146,7 +146,7 @@ public class SmsPopupActivity extends Activity {
     if (Log.DEBUG) Log.v("SMSPopupActivity: onCreate()");
 
     // First things first, acquire wakelock, otherwise the phone may sleep
-    ManageWakeLock.acquirePartial(getApplicationContext());
+    //ManageWakeLock.acquirePartial(getApplicationContext());
 
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.popup);
@@ -321,7 +321,7 @@ public class SmsPopupActivity extends Activity {
     if (Log.DEBUG) Log.v("SMSPopupActivity: onNewIntent()");
 
     // First things first, acquire wakelock, otherwise the phone may sleep
-    ManageWakeLock.acquirePartial(getApplicationContext());
+    //ManageWakeLock.acquirePartial(getApplicationContext());
 
     setIntent(intent);
 
@@ -338,7 +338,7 @@ public class SmsPopupActivity extends Activity {
   protected void onStart() {
     super.onStart();
     if (Log.DEBUG) Log.v("SMSPopupActivity: onStart()");
-    ManageWakeLock.acquirePartial(getApplicationContext());
+    //ManageWakeLock.acquirePartial(getApplicationContext());
   }
 
   @Override
@@ -609,6 +609,7 @@ public class SmsPopupActivity extends Activity {
   private void wakeApp() {
     // Time to acquire a full WakeLock (turn on screen)
     ManageWakeLock.acquireFull(getApplicationContext());
+    ManageWakeLock.releasePartial();
 
     replying = false;
     inbox = false;

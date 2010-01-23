@@ -7,7 +7,6 @@ import java.lang.reflect.Method;
 
 import net.everythingandroid.smspopup.Log;
 import net.everythingandroid.smspopup.SmsPopupUtils;
-
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -20,6 +19,10 @@ public class ContactWrapper {
   // Reflection variables
   private static Class<?> contactsClass;
   private static Method contactsOpenPhotoStreamMethod;
+
+  private static Class<?> contactsDataClass;
+  private static Uri contactsDataContentUri;
+
   private static boolean preparedEclairSDK = false;
 
   private static boolean PRE_ECLAIR =
@@ -211,9 +214,16 @@ public class ContactWrapper {
 
     if (preparedEclairSDK) {
       try {
-        return (InputStream) contactsOpenPhotoStreamMethod.invoke(
-            contactsClass, cr,
-            Uri.withAppendedPath(getContentUri(), id));
+        InputStream photoStream = (InputStream) contactsOpenPhotoStreamMethod.invoke(
+            contactsClass, cr, Uri.withAppendedPath(getContentUri(), id));
+
+        return photoStream;
+        /*
+            if (photoStream != null) {
+              if (Log.DEBUG) Log.v("openContactPhotoInputStream(): contact photo found using Eclair SDK");
+              return photoStream;
+            }
+         */
       } catch (IllegalArgumentException e) {
         Log.e("Unable to fetch contact photo using Anroid 2.0+ SDK: " + e.toString());
       } catch (IllegalAccessException e) {
@@ -221,6 +231,35 @@ public class ContactWrapper {
       } catch (InvocationTargetException e) {
         Log.e("Unable to fetch contact photo using Anroid 2.0+ SDK: " + e.toString());
       }
+
+      // This tries to look for other contact photos directly in the contacts database
+      /*
+      Log.v("Looking for contact photo in Data table");
+      cursor =
+        cr.query(contactsDataContentUri,
+            //            new String[] {ContactsContract.CommonDataKinds.Photo.PHOTO, ContactsContract.Data.MIMETYPE},
+            //            ContactsContract.Data.MIMETYPE + "== '" + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE + "' AND " +
+            //            ContactsContract.Data.CONTACT_ID + " == " + id, null, null);
+            new String[] {"data15", "mimetype"},
+            "mimetype" + "== '" + "vnd.android.cursor.item/photo" + "' AND " +
+            "contact_id" + " == " + id, null, null);
+      if (cursor == null) return null;
+
+      try {
+        Log.v("CURSOR COUNT = " + cursor.getCount());
+        while (cursor.moveToNext()) {
+          byte[] data = cursor.getBlob(0);
+          if (data != null) {
+            if (Log.DEBUG) Log.v("openContactPhotoInputStream(): contact photo found using Data table");
+            return new ByteArrayInputStream(data);
+          } else {
+            if (Log.DEBUG) Log.v("PHOTO DATA WAS NULL");
+          }
+        }
+      } finally {
+        cursor.close();
+      }
+       */
     }
 
     return null;
@@ -234,6 +273,10 @@ public class ContactWrapper {
       contactsClass = Class.forName("android.provider.ContactsContract$Contacts");
       contactsOpenPhotoStreamMethod = contactsClass.getMethod("openContactPhotoInputStream",
           new Class[] { ContentResolver.class, Uri.class });
+
+      contactsDataClass = Class.forName("android.provider.ContactsContract$Data");
+      contactsDataContentUri = (Uri) contactsDataClass.getField("CONTENT_URI").get(null);
+
       preparedEclairSDK = true;
     } catch (ClassNotFoundException e) {
       Log.e("Unable to prepare Anroid 2.0+ SDK functions: " + e.toString());
@@ -241,6 +284,12 @@ public class ContactWrapper {
       Log.e("Unable to prepare Anroid 2.0+ SDK functions: " + e.toString());
     } catch (NoSuchMethodException e) {
       Log.e("Unable to prepare Anroid 2.0+ SDK functions: " + e.toString());
+    } catch (IllegalArgumentException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (NoSuchFieldException e) {
+      e.printStackTrace();
     }
   }
 }

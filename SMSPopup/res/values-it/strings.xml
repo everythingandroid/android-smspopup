@@ -279,11 +279,11 @@
 
   <string name="pref_popup_enabled_title">Mostra un popup</string>
   <string name="pref_popup_enabled_summaryon">Il msg verrà aperto in un popup</string>
-  <string name="pref_popup_enabled_summaryoff">Il msg verrà mostrato solo nell'area notiche (se abilitata)</string>
+  <string name="pref_popup_enabled_summaryoff">Il msg verrà mostrato solo nell\'area notiche (se abilitata)</string>
 
 <!-- Donate Strings (not used right now) -->
   <string name="pref_donate_title">Dona a Sms Popup</string>    
-  <string name="pref_donate_text">SMS Popup è un'applicazione gratuita che sviluppo nel mio tempo libero.  Se tu la trovi utile, e puoi risparmiare un pò di soldi, una donazione sarebbe molto apprezzata.\n\nGrazie!</string>
+  <string name="pref_donate_text">SMS Popup è un\'applicazione gratuita che sviluppo nel mio tempo libero.  Se tu la trovi utile, e puoi risparmiare un pò di soldi, una donazione sarebbe molto apprezzata.\n\nGrazie!</string>
   <string name="pref_donate_market_button">Dona tramite Android Market</string>
   <string name="pref_donate_paypal_button">Dona tramite PayPal</string>
 

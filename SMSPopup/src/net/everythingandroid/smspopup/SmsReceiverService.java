@@ -160,9 +160,10 @@ public class SmsReceiverService extends Service {
     if (showPopup
         && (ManageKeyguard.inKeyguardRestrictedInputMode() || (!onlyShowOnKeyguard &&
             !SmsPopupUtils.inMessagingApp(context)))) {
-      if (Log.DEBUG) Log.v("^^^^^^Showing SMS Popup");
       Intent popup = smsMessage.getPopupIntent();
-      ManageWakeLock.acquirePartial(context);
+      //ManageWakeLock.acquirePartial(context);
+      ManageWakeLock.acquireFull(context);
+      if (Log.DEBUG) Log.v("^^^^^^Showing SMS Popup");
       context.startActivity(popup);
     } else if (notifEnabled) {
       if (Log.DEBUG) Log.v("^^^^^^Not showing SMS Popup, using notifications");
@@ -196,7 +197,8 @@ public class SmsReceiverService extends Service {
           if (Log.DEBUG)
             Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
           Intent popup = mmsMessage.getPopupIntent();
-          ManageWakeLock.acquirePartial(context);
+          //ManageWakeLock.acquirePartial(context);
+          ManageWakeLock.acquireFull(context);
           context.startActivity(popup);
         } else {
           if (Log.DEBUG) Log.v("^^^^^^Not in keyguard, only using notification");
@@ -318,7 +320,8 @@ public class SmsReceiverService extends Service {
       if (Log.DEBUG) Log.v("SMSReceiverService: beginStartingService()");
       if (mStartingService == null) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG);
+        mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+            Log.LOGTAG+".SmsReceiverService");
         mStartingService.setReferenceCounted(false);
       }
       mStartingService.acquire();
