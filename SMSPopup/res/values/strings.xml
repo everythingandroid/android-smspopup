@@ -336,6 +336,7 @@
    <string name="view_contact">View Contact</string>
 
 <!-- Quick Reply Checkbox Preference -->
+   <string name="pref_quickreply_cat_key">qrcat</string>
    <string name="pref_quickreply_key">quickreply</string>
    <string name="pref_quickreply_title">Quick Reply</string>
    <string name="pref_quickreply_summaryon">Quick Reply is enabled</string>

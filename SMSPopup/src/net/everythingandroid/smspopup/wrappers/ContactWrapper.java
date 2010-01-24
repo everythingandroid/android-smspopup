@@ -19,14 +19,9 @@ public class ContactWrapper {
   // Reflection variables
   private static Class<?> contactsClass;
   private static Method contactsOpenPhotoStreamMethod;
-
-  private static Class<?> contactsDataClass;
-  private static Uri contactsDataContentUri;
+  private static Method contactsGetLookupUri;
 
   private static boolean preparedEclairSDK = false;
-
-  private static boolean PRE_ECLAIR =
-    SmsPopupUtils.getSDKVersionNumber() < SmsPopupUtils.SDK_VERSION_ECLAIR ? true : false;
 
   // Projection columns
   private static final String CONTACT_ID = Contacts.People._ID;
@@ -56,7 +51,7 @@ public class ContactWrapper {
    * Fetch regular contact content URI
    */
   public static Uri getContentUri() {
-    if (PRE_ECLAIR) return Contacts.People.CONTENT_URI;
+    if (SmsPopupUtils.PRE_ECLAIR) return Contacts.People.CONTENT_URI;
 
     // ContactsContract.Contacts.CONTENT_URI
     return Uri.parse("content://com.android.contacts/contacts");
@@ -66,26 +61,60 @@ public class ContactWrapper {
    * Fetch phone lookup content filter URI
    */
   public static Uri getPhoneLookupContentFilterUri() {
-    if (PRE_ECLAIR) return Contacts.Phones.CONTENT_FILTER_URL;
+    if (SmsPopupUtils.PRE_ECLAIR) {
+      return Contacts.Phones.CONTENT_FILTER_URL;
+    }
 
     // ContactsContract.PhoneLookup.CONTENT_FILTER_URI
     return Uri.parse("content://com.android.contacts/phone_lookup");
+  }
+
+  public static String[] getPhoneLookupProjection() {
+    if (SmsPopupUtils.PRE_ECLAIR) {
+      return new String[] { Contacts.Phones.PERSON_ID, Contacts.Phones.DISPLAY_NAME };
+      //new String[] { ContactWrapper.getColumn(ContactWrapper.COL_CONTACT_PERSON_ID) },
+    }
+
+    /*
+     * ContactsContract.PhoneLookup._ID
+     * ContactsContract.PhoneLookup.DISPLAY_NAME
+     * ContactsContract.PhoneLookup.LOOKUP_KEY
+     */
+    return new String[] { "_id", "display_name", "lookup" };
   }
 
   /**
    * Fetch email lookup content filter URI
    */
   public static Uri getEmailLookupContentFilterUri() {
-    if (PRE_ECLAIR) return Uri.parse("content://contacts/people/with_email_or_im_filter");
+    if (SmsPopupUtils.PRE_ECLAIR) {
+      return Uri.parse("content://contacts/people/with_email_or_im_filter");
+    }
 
+    // ContactsContract.CommonDataKinds.Email.CONTENT_LOOKUP_URI
     return Uri.parse("content://com.android.contacts/data/emails/lookup");
+  }
+
+  public static String[] getEmailLookupProjection() {
+    if (SmsPopupUtils.PRE_ECLAIR) {
+      return new String[] { Contacts.People._ID, Contacts.People.DISPLAY_NAME };
+    }
+
+    /*
+     * ContactsContract.CommonDataKinds.Email._ID
+     * ContactsContract.CommonDataKinds.Email.DISPLAY_NAME
+     * ContactsContract.CommonDataKinds.Email.LOOKUP_KEY
+     */
+    return new String[] { "_id", "display_name", "lookup" };
   }
 
   /**
    * Fetch default sort order for contacts
    */
   public static String getDefaultSortOrder() {
-    if (PRE_ECLAIR) return Contacts.People.DEFAULT_SORT_ORDER;
+    if (SmsPopupUtils.PRE_ECLAIR) {
+      return Contacts.People.DEFAULT_SORT_ORDER;
+    }
 
     // TODO: couldn't find what replaces this in 2.0 SDK
     return null;
@@ -95,7 +124,9 @@ public class ContactWrapper {
    * Fetch base contact projection (id and display name)
    */
   public static String[] getBasePeopleProjection() {
-    if (PRE_ECLAIR) return PEOPLE_PROJECTION;
+    if (SmsPopupUtils.PRE_ECLAIR) {
+      return PEOPLE_PROJECTION;
+    }
 
     return PEOPLE_PROJECTION_ECLAIR;
   }
@@ -104,7 +135,7 @@ public class ContactWrapper {
    * Fetch contact table column
    */
   public static String getColumn(int col) {
-    if (PRE_ECLAIR) {
+    if (SmsPopupUtils.PRE_ECLAIR) {
       switch(col) {
         case COL_CONTACT_ID:
           return CONTACT_ID;
@@ -151,7 +182,7 @@ public class ContactWrapper {
     Uri photoUri;
 
     // If we're pre-Eclair then lookup the contact using the standard URIs
-    if (PRE_ECLAIR) {
+    if (SmsPopupUtils.PRE_ECLAIR) {
 
       /*
        * Contacts.People.CONTENT_URI is "content://contacts/people"
@@ -265,17 +296,37 @@ public class ContactWrapper {
     return null;
   }
 
+  public static Uri getLookupUri(ContentResolver cr, Uri contactUri) {
+    if (!preparedEclairSDK) {
+      prepareEclairSDK();
+    }
+
+    Uri lookupUri = null;
+    try {
+      lookupUri = (Uri) contactsGetLookupUri.invoke(contactsClass, cr, contactUri);
+    } catch (IllegalArgumentException e) {
+      Log.e("Unable to get contact lookup Uri using Anroid 2.0+ SDK: " + e.toString());
+    } catch (IllegalAccessException e) {
+      Log.e("Unable to get contact lookup Uri using Anroid 2.0+ SDK: " + e.toString());
+    } catch (InvocationTargetException e) {
+      Log.e("Unable to get contact lookup Uri using Anroid 2.0+ SDK: " + e.toString());
+    }
+
+    return lookupUri;
+  }
+
   /*
    * Prepare Eclair (and beyond) SDK call using reflection
    */
   private static void prepareEclairSDK() {
     try {
       contactsClass = Class.forName("android.provider.ContactsContract$Contacts");
+
       contactsOpenPhotoStreamMethod = contactsClass.getMethod("openContactPhotoInputStream",
           new Class[] { ContentResolver.class, Uri.class });
 
-      contactsDataClass = Class.forName("android.provider.ContactsContract$Data");
-      contactsDataContentUri = (Uri) contactsDataClass.getField("CONTENT_URI").get(null);
+      contactsGetLookupUri = contactsClass.getMethod("getLookupUri",
+          new Class[] { ContentResolver.class, Uri.class });
 
       preparedEclairSDK = true;
     } catch (ClassNotFoundException e) {
@@ -285,10 +336,6 @@ public class ContactWrapper {
     } catch (NoSuchMethodException e) {
       Log.e("Unable to prepare Anroid 2.0+ SDK functions: " + e.toString());
     } catch (IllegalArgumentException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (NoSuchFieldException e) {
       e.printStackTrace();
     }
   }

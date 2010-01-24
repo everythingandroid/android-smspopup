@@ -1,8 +1,10 @@
 package net.everythingandroid.smspopup;
 
+import net.everythingandroid.smspopup.SmsPopupUtils.ContactIdentification;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
 import android.telephony.gsm.SmsMessage;
 import android.telephony.gsm.SmsMessage.MessageClass;
 import android.text.format.DateUtils;
@@ -10,16 +12,17 @@ import android.text.format.DateUtils;
 public class SmsMmsMessage {
   // Private EXTRAS strings
   private static final String PREFIX = "net.everythingandroid.smspopup.";
-  private static final String EXTRAS_FROM_ADDRESS = PREFIX + "EXTRAS_FROM_ADDRESS";
-  private static final String EXTRAS_MESSAGE_BODY = PREFIX + "EXTRAS_MESSAGE_BODY";
-  private static final String EXTRAS_TIMESTAMP    = PREFIX + "EXTRAS_TIMESTAMP";
-  private static final String EXTRAS_UNREAD_COUNT = PREFIX + "EXTRAS_UNREAD_COUNT";
-  private static final String EXTRAS_THREAD_ID    = PREFIX + "EXTRAS_THREAD_ID";
-  private static final String EXTRAS_CONTACT_ID   = PREFIX + "EXTRAS_CONTACT_ID";
-  private static final String EXTRAS_CONTACT_NAME = PREFIX + "EXTRAS_CONTACT_NAME";
-  private static final String EXTRAS_MESSAGE_TYPE = PREFIX + "EXTRAS_MESSAGE_TYPE";
-  private static final String EXTRAS_MESSAGE_ID   = PREFIX + "EXTRAS_MESSAGE_ID";
-  private static final String EXTRAS_EMAIL_GATEWAY= PREFIX + "EXTRAS_EMAIL_GATEWAY";
+  private static final String EXTRAS_FROM_ADDRESS   = PREFIX + "EXTRAS_FROM_ADDRESS";
+  private static final String EXTRAS_MESSAGE_BODY   = PREFIX + "EXTRAS_MESSAGE_BODY";
+  private static final String EXTRAS_TIMESTAMP      = PREFIX + "EXTRAS_TIMESTAMP";
+  private static final String EXTRAS_UNREAD_COUNT   = PREFIX + "EXTRAS_UNREAD_COUNT";
+  private static final String EXTRAS_THREAD_ID      = PREFIX + "EXTRAS_THREAD_ID";
+  private static final String EXTRAS_CONTACT_ID     = PREFIX + "EXTRAS_CONTACT_ID";
+  private static final String EXTRAS_CONTACT_LOOKUP = PREFIX + "EXTRAS_CONTACT_LOOKUP";
+  private static final String EXTRAS_CONTACT_NAME   = PREFIX + "EXTRAS_CONTACT_NAME";
+  private static final String EXTRAS_MESSAGE_TYPE   = PREFIX + "EXTRAS_MESSAGE_TYPE";
+  private static final String EXTRAS_MESSAGE_ID     = PREFIX + "EXTRAS_MESSAGE_ID";
+  private static final String EXTRAS_EMAIL_GATEWAY  = PREFIX + "EXTRAS_EMAIL_GATEWAY";
 
   // Public EXTRAS strings
   public static final String EXTRAS_NOTIFY         = PREFIX + "EXTRAS_NOTIFY";
@@ -43,6 +46,7 @@ public class SmsMmsMessage {
   private int unreadCount = 0;
   private long threadId = 0;
   private String contactId = null;
+  private String contactLookup = null;
   private String contactName = null;
   private int messageType = 0;
   private boolean notify = true;
@@ -85,16 +89,26 @@ public class SmsMmsMessage {
      * Lookup the rest of the info from the system db
      */
 
+    ContactIdentification contactIdentify;
+
     // If this SMS is from an email gateway then lookup contactId by email address
     if (fromEmailGateway) {
       if (Log.DEBUG) Log.v("Sms came from email gateway");
-      contactId = SmsPopupUtils.getPersonIdFromEmail(context, fromAddress);
+      contactIdentify = SmsPopupUtils.getPersonIdFromEmail(context, fromAddress);
+      contactName = fromAddress;
     } else { // Else lookup contactId by phone number
       if (Log.DEBUG) Log.v("Sms did NOT come from email gateway");
-      contactId = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
+      contactIdentify = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
+      contactName = PhoneNumberUtils.formatNumber(fromAddress);
     }
 
-    contactName = SmsPopupUtils.getPersonName(context, contactId, fromAddress);
+    if (contactIdentify != null) {
+      contactId = contactIdentify.contactId;
+      contactLookup = contactIdentify.contactLookup;
+      contactName = contactIdentify.contactName;
+    }
+
+    //contactName = SmsPopupUtils.getPersonName(context, contactId, fromAddress);
     unreadCount = SmsPopupUtils.getUnreadMessagesCount(context, timestamp, messageBody);
 
     if (contactName == null) {
@@ -106,9 +120,9 @@ public class SmsMmsMessage {
    * Construct SmsMmsMessage for getMmsDetails() - info fetched from the MMS
    * database table
    */
-  public SmsMmsMessage(Context _context, String _contactId, String _contactName,
-      String _fromAddress, String _messageBody, long _timestamp, long _messageId,
-      long _threadId, int _unreadCount, int _messageType) {
+  public SmsMmsMessage(Context _context, String _contactId, String _contactLookup,
+      String _contactName, String _fromAddress, String _messageBody, long _timestamp,
+      long _messageId, long _threadId, int _unreadCount, int _messageType) {
 
     context = _context;
     fromAddress = _fromAddress;
@@ -119,6 +133,7 @@ public class SmsMmsMessage {
     // TODO: I think contactId can come the MMS table, this would save
     // this database lookup
     contactId = _contactId;
+    contactLookup = _contactLookup;
     contactName = _contactName;
     unreadCount = _unreadCount;
     threadId = _threadId;
@@ -133,20 +148,31 @@ public class SmsMmsMessage {
    * Construct SmsMmsMessage for getSmsDetails() - info fetched from the SMS
    * database table
    */
-  public SmsMmsMessage(Context _context, String _fromAddress, String _contactId,
-      String _messageBody, long _timestamp, long _threadId,
-      int _unreadCount, long _messageId, int _messageType) {
+  public SmsMmsMessage(Context _context, String _fromAddress, String _messageBody,
+      long _timestamp, long _threadId, int _unreadCount, long _messageId, int _messageType) {
     context = _context;
     fromAddress = _fromAddress;
     messageBody = _messageBody;
     timestamp = _timestamp;
     messageType = _messageType;
-    contactId = _contactId;
 
-    if ("0".equals(contactId))
-      contactId = null;
+    ContactIdentification contactIdentify;
 
-    contactName = SmsPopupUtils.getPersonName(context, contactId, fromAddress);
+    if (PhoneNumberUtils.isWellFormedSmsAddress(fromAddress)) {
+      contactIdentify = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
+      contactName = PhoneNumberUtils.formatNumber(fromAddress);
+      fromEmailGateway = false;
+    } else {
+      contactIdentify = SmsPopupUtils.getPersonIdFromEmail(context, fromAddress);
+      contactName = fromAddress;
+      fromEmailGateway = true;
+    }
+
+    if (contactIdentify != null) {
+      contactId = contactIdentify.contactId;
+      contactLookup = contactIdentify.contactLookup;
+      contactName = contactIdentify.contactName;
+    }
 
     unreadCount = _unreadCount;
     threadId = _threadId;
@@ -167,6 +193,7 @@ public class SmsMmsMessage {
     messageBody = b.getString(EXTRAS_MESSAGE_BODY);
     timestamp = b.getLong(EXTRAS_TIMESTAMP);
     contactId = b.getString(EXTRAS_CONTACT_ID);
+    contactLookup = b.getString(EXTRAS_CONTACT_LOOKUP);
     contactName = b.getString(EXTRAS_CONTACT_NAME);
     unreadCount = b.getInt(EXTRAS_UNREAD_COUNT, 1);
     threadId = b.getLong(EXTRAS_THREAD_ID, 0);
@@ -182,13 +209,14 @@ public class SmsMmsMessage {
    * notification from the preferences screen
    */
   public SmsMmsMessage(Context _context, String _fromAddress, String _messageBody,
-      long _timestamp, String _contactId, String _contactName, int _unreadCount,
-      long _threadId, int _messageType) {
+      long _timestamp, String _contactId, String _contactLookup, String _contactName,
+      int _unreadCount, long _threadId, int _messageType) {
     context = _context;
     fromAddress = _fromAddress;
     messageBody = _messageBody;
     timestamp = _timestamp;
     contactId = _contactId;
+    contactLookup = _contactLookup;
     contactName = _contactName;
     unreadCount = _unreadCount;
     threadId = _threadId;
@@ -204,6 +232,7 @@ public class SmsMmsMessage {
     b.putString(EXTRAS_MESSAGE_BODY, messageBody);
     b.putLong(EXTRAS_TIMESTAMP, timestamp);
     b.putString(EXTRAS_CONTACT_ID, contactId);
+    b.putString(EXTRAS_CONTACT_LOOKUP, contactLookup);
     b.putString(EXTRAS_CONTACT_NAME, contactName);
     b.putInt(EXTRAS_UNREAD_COUNT, unreadCount);
     b.putLong(EXTRAS_THREAD_ID, threadId);

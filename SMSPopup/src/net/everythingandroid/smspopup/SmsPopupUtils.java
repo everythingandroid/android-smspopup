@@ -29,7 +29,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.provider.Contacts;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.gsm.SmsMessage;
 import android.text.TextUtils;
@@ -72,9 +71,12 @@ public class SmsPopupUtils {
   public static final Uri DONATE_MARKET_URI =
     Uri.parse("market://search?q=pname:net.everythingandroid.smspopupdonate");
 
-  // TODO: remove once Cupcake support is no longer needed
+  // Platform detection
   public static final int SDK_VERSION_ECLAIR = 5;
-  public static final int SDK_VERSION_DONUT = 4;
+  //public static final int SDK_VERSION_DONUT = 4;
+
+  public static boolean PRE_ECLAIR =
+    SmsPopupUtils.getSDKVersionNumber() < SmsPopupUtils.SDK_VERSION_ECLAIR ? true : false;
 
   /**
    * Looks up a contacts display name by contact id - if not found, the address
@@ -116,27 +118,53 @@ public class SmsPopupUtils {
     return null;
   }
 
+  /*
+   * Class to hold contact lookup info (as of Android 2.0+ we need the id and lookup key)
+   */
+  public static class ContactIdentification {
+    String contactId = null;
+    String contactLookup = null;
+    String contactName = null;
+
+    public ContactIdentification(String _contactId, String _contactLookup, String _contactName) {
+      contactId = _contactId;
+      contactLookup = _contactLookup;
+      contactName = _contactName;
+    }
+
+    public ContactIdentification(String _contactId, String _contactName) {
+      contactId = _contactId;
+      contactName = _contactName;
+    }
+  }
+
   /**
    * Looks up a contacts id, given their address (phone number in this case).
    * Returns null if not found
    */
-  public static String getPersonIdFromPhoneNumber(Context context, String address) {
+  public static ContactIdentification getPersonIdFromPhoneNumber(Context context, String address) {
     if (address == null) return null;
-
-    String s = Contacts.Phones.PERSON_ID;
 
     Cursor cursor = context.getContentResolver().query(
         Uri.withAppendedPath(ContactWrapper.getPhoneLookupContentFilterUri(), Uri.encode(address)),
-        new String[] { ContactWrapper.getColumn(ContactWrapper.COL_CONTACT_PERSON_ID) },
+        ContactWrapper.getPhoneLookupProjection(),
         null, null, null);
 
     if (cursor != null) {
       try {
         if (cursor.getCount() > 0) {
           cursor.moveToFirst();
-          Long id = Long.valueOf(cursor.getLong(0));
-          if (Log.DEBUG) Log.v("Found person: " + id);
-          return (String.valueOf(id));
+          String contactId = String.valueOf(cursor.getLong(0));
+          String contactName = cursor.getString(1);
+
+          String contactLookup = null;
+
+          if (!PRE_ECLAIR) {
+            contactLookup = cursor.getString(2);
+          }
+
+          if (Log.DEBUG) Log.v("Found person: " + contactId + ", " + contactName + ", " + contactLookup);
+          return new ContactIdentification(contactId, contactLookup, contactName);
         }
       } finally {
         cursor.close();
@@ -150,20 +178,28 @@ public class SmsPopupUtils {
    * Looks up a contacts id, given their email address.
    * Returns null if not found
    */
-  public static String getPersonIdFromEmail(Context context, String email) {
+  public static ContactIdentification getPersonIdFromEmail(Context context, String email) {
     if (email == null) return null;
 
     Cursor cursor = context.getContentResolver().query(
         Uri.withAppendedPath(ContactWrapper.getEmailLookupContentFilterUri(), Uri.encode(email)),
-        new String[] { ContactWrapper.getColumn(ContactWrapper.COL_CONTACT_ID_EMAIL) },
+        ContactWrapper.getEmailLookupProjection(),
         null, null, null);
 
     if (cursor != null) {
       try {
         if (cursor.moveToFirst()) {
-          Long id = cursor.getLong(0);
-          if (Log.DEBUG) Log.v("Found person (by email): " + id);
-          return String.valueOf(id);
+          String contactId = String.valueOf(cursor.getLong(0));
+          String contactName = cursor.getString(1);
+
+          String contactLookup = null;
+
+          if (!PRE_ECLAIR) {
+            contactLookup = cursor.getString(2);
+          }
+
+          if (Log.DEBUG) Log.v("Found person: " + contactId + ", " + contactName + ", " + contactLookup);
+          return new ContactIdentification(contactId, contactLookup, contactName);
         }
       } finally {
         cursor.close();
@@ -782,7 +818,7 @@ public class SmsPopupUtils {
       long ignoreThreadId, boolean unreadOnly) {
 
     final String[] projection =
-      new String[] { "_id", "thread_id", "address", "person", "date", "body" };
+      new String[] { "_id", "thread_id", "address", "date", "body" };
     String selection = unreadOnly ? UNREAD_CONDITION : null;
     String[] selectionArgs = null;
     final String sortOrder = "date DESC";
@@ -817,19 +853,16 @@ public class SmsPopupUtils {
           long messageId = cursor.getLong(0);
           long threadId = cursor.getLong(1);
           String address = cursor.getString(2);
-          long contactId = cursor.getLong(3);
-          String contactId_string = String.valueOf(contactId);
-          long timestamp = cursor.getLong(4);
-
-          String body = cursor.getString(5);
+          long timestamp = cursor.getLong(3);
+          String body = cursor.getString(4);
 
           if (!unreadOnly) {
             count = 0;
           }
 
           SmsMmsMessage smsMessage = new SmsMmsMessage(
-              context, address, contactId_string, body, timestamp,
-              threadId, count, messageId, SmsMmsMessage.MESSAGE_TYPE_SMS);
+              context, address, body, timestamp, threadId,
+              count, messageId, SmsMmsMessage.MESSAGE_TYPE_SMS);
 
           return smsMessage;
 
@@ -889,14 +922,21 @@ public class SmsPopupUtils {
           long messageId = cursor.getLong(0);
           String address = getMmsAddress(context, messageId);
           String contactName = getDisplayName(context, address).trim();
-          String contactId = getPersonIdFromEmail(context, address);
+          String contactId = null;
+          String contactLookup = null;
+
+          ContactIdentification contactIdentify = getPersonIdFromEmail(context, address);
+          if (contactIdentify != null) {
+            contactId = contactIdentify.contactId;
+            contactLookup = contactIdentify.contactLookup;
+          }
 
           long threadId = cursor.getLong(1);
           long timestamp = cursor.getLong(2) * 1000;
           String subject = cursor.getString(3);
 
           SmsMmsMessage mmsMessage = new SmsMmsMessage(
-              context, contactId, contactName, address, subject, timestamp,
+              context, contactId, contactLookup, contactName, address, subject, timestamp,
               messageId, threadId, count, SmsMmsMessage.MESSAGE_TYPE_MMS);
 
           return mmsMessage;
@@ -961,7 +1001,7 @@ public class SmsPopupUtils {
    * the name, parse and return it. Otherwise, query the contact database. Cache
    * query results for repeated queries.
    */
-  static String getDisplayName(Context context, String email) {
+  public static String getDisplayName(Context context, String email) {
     Matcher match = NAME_ADDR_EMAIL_PATTERN.matcher(email);
     if (match.matches()) {
       // email has display name, return that

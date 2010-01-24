@@ -7,11 +7,13 @@ import net.everythingandroid.smspopup.preferences.EmailDialogPreference;
 import net.everythingandroid.smspopup.preferences.QuickReplyCheckBoxPreference;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
@@ -19,6 +21,7 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -197,6 +200,21 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
           return true;
         }
       });
+    }
+
+    // Split long messages preference (for some CDMA carriers like Verizon)
+    CheckBoxPreference splitLongMessagesPref =
+      (CheckBoxPreference) findPreference(getString(R.string.pref_split_message_key));
+
+    // This pref is only shown for CDMA phones
+    if (splitLongMessagesPref != null) {
+      TelephonyManager mTM = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+      if (mTM.getPhoneType() != TelephonyManager.PHONE_TYPE_CDMA) {
+        PreferenceCategory quickreplyPrefCategory =
+          (PreferenceCategory) findPreference(getString(R.string.pref_quickreply_cat_key));
+        quickreplyPrefCategory.removePreference(splitLongMessagesPref);
+        splitLongMessagesPref = null;
+      }
     }
 
     // Opening and closing the database will trigger the update or create
