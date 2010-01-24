@@ -122,13 +122,6 @@
               android:dialogTitle="@string/pref_notif_repeat_interval_dialogTitle"
               android:defaultValue="@string/pref_notif_repeat_interval_default"
               android:dependency="@string/pref_notif_repeat_key" />
-            <CheckBoxPreference
-              android:key="@string/pref_notif_repeat_screen_on_key"
-              android:title="@string/pref_notif_repeat_screen_on_title"
-              android:summaryOn="@string/pref_notif_repeat_screen_on_summaryon"
-              android:summaryOff="@string/pref_notif_repeat_screen_on_summaryoff"
-              android:defaultValue="@string/pref_notif_repeat_screen_on_default"
-              android:dependency="@string/pref_notif_repeat_key" />
           </PreferenceCategory>
         </PreferenceScreen>
         <PreferenceScreen
@@ -189,7 +182,8 @@
         </PreferenceScreen>
       </PreferenceCategory>
       <PreferenceCategory
-        android:title="@string/pref_quickreply_title">
+        android:title="@string/pref_quickreply_title"
+        android:key="@string/pref_quickreply_cat_key">
         <net.everythingandroid.smspopup.preferences.QuickReplyCheckBoxPreference
           android:key="@string/pref_quickreply_key"
           android:title="@string/pref_quickreply_title"
@@ -225,6 +219,13 @@
           android:summaryOn="@string/pref_screen_on_summaryon"
           android:summaryOff="@string/pref_screen_on_summaryoff"
           android:defaultValue="@string/pref_screen_on_default" />
+        <CheckBoxPreference
+          android:key="@string/pref_notif_repeat_screen_on_key"
+          android:title="@string/pref_notif_repeat_screen_on_title"
+          android:summaryOn="@string/pref_notif_repeat_screen_on_summaryon"
+          android:summaryOff="@string/pref_notif_repeat_screen_on_summaryoff"
+          android:defaultValue="@string/pref_notif_repeat_screen_on_default"
+          android:dependency="@string/pref_screen_on_key" />          
         <ListPreference
           android:key="@string/pref_timeout_key"
           android:title="@string/pref_timeout_title"

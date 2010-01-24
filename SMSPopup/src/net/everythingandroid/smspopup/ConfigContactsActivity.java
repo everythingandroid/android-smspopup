@@ -3,7 +3,6 @@ package net.everythingandroid.smspopup;
 import java.util.List;
 
 import net.everythingandroid.smspopup.wrappers.ContactWrapper;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -137,6 +136,7 @@ public class ConfigContactsActivity extends ListActivity {
         if (resultCode == -1) { // Success, contact chosen
           Uri contactUri = data.getData();
           List<String> list = contactUri.getPathSegments();
+          //if (Log.DEBUG) Log.v("onActivityResult() - " + contactUri);
           if (Log.DEBUG) Log.v("onActivityResult() - " + data.getDataString() + ", " + list.get(list.size() - 1));
           long contactId = Long.parseLong(list.get(list.size() - 1));
           startActivity(getConfigPerContactIntent(contactId));
