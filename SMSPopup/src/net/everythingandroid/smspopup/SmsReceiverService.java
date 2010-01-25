@@ -140,8 +140,7 @@ public class SmsReceiverService extends Service {
 
     boolean onlyShowOnKeyguard =
       mPrefs.getBoolean(R.string.pref_onlyShowOnKeyguard_key,
-          Defaults.PREFS_ONLY_SHOW_ON_KEYGUARD,
-          R.string.pref_onlyShowOnKeyguard_default);
+          Defaults.PREFS_ONLY_SHOW_ON_KEYGUARD);
 
     boolean showPopup =
       mPrefs.getBoolean(R.string.pref_popup_enabled_key,
