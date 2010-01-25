@@ -2,8 +2,8 @@
 <manifest
   xmlns:android="http://schemas.android.com/apk/res/android"
   package="net.everythingandroid.smspopup"
-  android:versionCode="108"
-  android:versionName="1.0.6">
+  android:versionCode="109"
+  android:versionName="1.0.7">
   <uses-sdk
     android:minSdkVersion="3"
     android:targetSdkVersion="4" />
@@ -60,11 +60,11 @@
         <data
           android:mimeType="application/vnd.wap.mms-message" />
       </intent-filter>
-     <intent-filter>
+      <intent-filter>
         <action
           android:name="net.everythingandroid.smspopup.MESSAGE_RECEIVED" />
       </intent-filter>
-     <intent-filter>
+      <intent-filter>
         <action
           android:name="com.android.mms.transaction.MESSAGE_SENT" />
       </intent-filter>
