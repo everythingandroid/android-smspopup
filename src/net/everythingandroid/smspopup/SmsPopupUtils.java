@@ -628,6 +628,17 @@ public class SmsPopupUtils {
         }
       }
 
+      // Fetch number of db rows (=custom contact notifications)
+      SmsPopupDbAdapter mDbAdapter = new SmsPopupDbAdapter(context);
+      mDbAdapter.open(true);
+      Cursor c = mDbAdapter.fetchAllContacts();
+      int dbRowCount = 0;
+      if (c != null) {
+        dbRowCount = c.getCount();
+      }
+      mDbAdapter.close();
+      body.append("Db Rows: " + dbRowCount + "\n");
+
       // Add locale info
       body.append(String.format("locale: %s\n",
           context.getResources().getConfiguration().locale.getDisplayName()));
