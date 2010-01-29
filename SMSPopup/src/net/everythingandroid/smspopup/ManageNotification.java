@@ -89,7 +89,7 @@ public class ManageNotification {
   }
 
   /*
-   * The main notify method, this thing is WAY too long. Needs to be broken up.
+   * The main notify method
    */
   private static void notify(Context context, SmsMmsMessage message, boolean onlyUpdate, int notif) {
 
@@ -104,7 +104,6 @@ public class ManageNotification {
       return;
     }
 
-    AudioManager AM = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     PopupNotification n = buildNotification(context, message.getContactId(), onlyUpdate, notif);
 
     if (n == null) return;
