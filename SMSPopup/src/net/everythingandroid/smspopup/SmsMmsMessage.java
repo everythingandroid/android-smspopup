@@ -150,6 +150,7 @@ public class SmsMmsMessage {
    */
   public SmsMmsMessage(Context _context, String _fromAddress, String _messageBody,
       long _timestamp, long _threadId, int _unreadCount, long _messageId, int _messageType) {
+	  
     context = _context;
     fromAddress = _fromAddress;
     messageBody = _messageBody;
@@ -176,7 +177,6 @@ public class SmsMmsMessage {
 
     unreadCount = _unreadCount;
     threadId = _threadId;
-
     messageId = _messageId;
 
     if (contactName == null) {
