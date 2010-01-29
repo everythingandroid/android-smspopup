@@ -17,6 +17,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.Process;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.telephony.gsm.SmsManager;
 import android.telephony.gsm.SmsMessage;
 import android.telephony.gsm.SmsMessage.MessageClass;
@@ -36,7 +37,7 @@ public class SmsReceiverService extends Service {
    * checking the system message database for the latest incoming message
    */
   private static final int MESSAGE_RETRY = 8;
-  private static final int MESSAGE_RETRY_PAUSE = 500;
+  private static final int MESSAGE_RETRY_PAUSE = 1000;
 
   private Context context;
   private ServiceHandler mServiceHandler;
@@ -136,27 +137,42 @@ public class SmsReceiverService extends Service {
     // Class 0 message, let the system handle this
     if (smsMessage.getMessageClass() == MessageClass.CLASS_0) return;
 
+    // Fetch preferences
     ManagePreferences mPrefs = new ManagePreferences(context, smsMessage.getContactId());
 
+    // Whether or not the popup should only show when keyguard is on
     boolean onlyShowOnKeyguard =
       mPrefs.getBoolean(R.string.pref_onlyShowOnKeyguard_key,
           Defaults.PREFS_ONLY_SHOW_ON_KEYGUARD);
 
+    // check if popup is enabled for this contact
     boolean showPopup =
       mPrefs.getBoolean(R.string.pref_popup_enabled_key,
           Defaults.PREFS_SHOW_POPUP,
           SmsPopupDbAdapter.KEY_POPUP_ENABLED_NUM);
 
+    // check if notifications are on for this contact 
     boolean notifEnabled =
       mPrefs.getBoolean(R.string.pref_notif_enabled_key,
           Defaults.PREFS_NOTIF_ENABLED,
           SmsPopupDbAdapter.KEY_ENABLED_NUM);
 
     mPrefs.close();
+    
+    // Fetch call state, if the user is in a call or the phone is ringing we don't want to show the popup
+    TelephonyManager mTM = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    boolean callStateIdle = mTM.getCallState() == TelephonyManager.CALL_STATE_IDLE;
 
+    // Init keyguard manager
     ManageKeyguard.initialize(context);
 
-    if (showPopup
+    /* 
+     * If popup is enabled for this user and the user is not in a call -AND-
+     * screen is locked -OR- (setting is OFF to only show on keyguard -AND- user is not in messaging app:
+     * then show the popup activity, otherwise check if notifications are on and just use the standard
+     * notification
+     */    
+    if (showPopup && callStateIdle
         && (ManageKeyguard.inKeyguardRestrictedInputMode() || (!onlyShowOnKeyguard &&
             !SmsPopupUtils.inMessagingApp(context)))) {
       Intent popup = smsMessage.getPopupIntent();
