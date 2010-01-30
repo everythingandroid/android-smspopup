@@ -101,11 +101,11 @@ public class ContactWrapper {
     }
 
     /*
-     * ContactsContract.CommonDataKinds.Email._ID
+     * ContactsContract.CommonDataKinds.Email.CONTACT_ID
      * ContactsContract.CommonDataKinds.Email.DISPLAY_NAME
      * ContactsContract.CommonDataKinds.Email.LOOKUP_KEY
      */
-    return new String[] { "_id", "display_name", "lookup" };
+    return new String[] { "contact_id", "display_name", "lookup" };
   }
 
   /**
