@@ -262,6 +262,7 @@ public class SmsPopupDbAdapter {
       }
       return null;
     }
+    if (Log.DEBUG) Log.v("fetchContactSettings - found contact in db, " + contactId);
     return mCursor;
   }
 
