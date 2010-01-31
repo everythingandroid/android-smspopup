@@ -8,18 +8,27 @@ import java.lang.reflect.Method;
 import net.everythingandroid.smspopup.Log;
 import net.everythingandroid.smspopup.SmsPopupUtils;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.Contacts;
 import android.provider.Contacts.PeopleColumns;
 import android.provider.Contacts.Photos;
+import android.view.View;
 
 public class ContactWrapper {
 
   // Reflection variables
   private static Class<?> contactsClass;
   private static Method contactsOpenPhotoStreamMethod;
+  private static Method contactsGetLookupUriByContactUri;
   private static Method contactsGetLookupUri;
+
+  private static Class<?> quickContactClass;
+  private static Method showQuickContactMethod;
+  public static int QUICKCONTACT_MODE_SMALL = 1;
+  public static int QUICKCONTACT_MODE_MEDIUM = 2;
+  public static int QUICKCONTACT_MODE_LARGE = 3;
 
   private static boolean preparedEclairSDK = false;
 
@@ -296,14 +305,17 @@ public class ContactWrapper {
     return null;
   }
 
-  public static Uri getLookupUri(ContentResolver cr, Uri contactUri) {
+  public static Uri getLookupUri(long contactId, String lookupKey) {
+
+    if (SmsPopupUtils.PRE_ECLAIR) return null;
+
     if (!preparedEclairSDK) {
       prepareEclairSDK();
     }
 
     Uri lookupUri = null;
     try {
-      lookupUri = (Uri) contactsGetLookupUri.invoke(contactsClass, cr, contactUri);
+      lookupUri = (Uri) contactsGetLookupUri.invoke(contactsClass, contactId, lookupKey);
     } catch (IllegalArgumentException e) {
       Log.e("Unable to get contact lookup Uri using Anroid 2.0+ SDK: " + e.toString());
     } catch (IllegalAccessException e) {
@@ -315,20 +327,76 @@ public class ContactWrapper {
     return lookupUri;
   }
 
+  public static Uri getLookupUri(ContentResolver cr, Uri contactUri) {
+
+    if (SmsPopupUtils.PRE_ECLAIR) return null;
+
+    if (!preparedEclairSDK) {
+      prepareEclairSDK();
+    }
+
+    Uri lookupUri = null;
+    try {
+      lookupUri = (Uri) contactsGetLookupUriByContactUri.invoke(contactsClass, cr, contactUri);
+    } catch (IllegalArgumentException e) {
+      Log.e("Unable to get contact lookup Uri using Anroid 2.0+ SDK: " + e.toString());
+    } catch (IllegalAccessException e) {
+      Log.e("Unable to get contact lookup Uri using Anroid 2.0+ SDK: " + e.toString());
+    } catch (InvocationTargetException e) {
+      Log.e("Unable to get contact lookup Uri using Anroid 2.0+ SDK: " + e.toString());
+    }
+
+    return lookupUri;
+  }
+
+  public static void showQuickContact(Context context, View target,
+      Uri lookupUri, int mode, String[] excludeMimes) {
+
+    if (SmsPopupUtils.PRE_ECLAIR) return;
+
+    if (!preparedEclairSDK) {
+      prepareEclairSDK();
+    }
+
+    try {
+      showQuickContactMethod.invoke(quickContactClass,
+          context, target, lookupUri, mode, excludeMimes);
+    } catch (IllegalArgumentException e) {
+      Log.e("Unable to get show quick contact dialog using Anroid 2.0+ SDK: " + e.toString());
+    } catch (IllegalAccessException e) {
+      Log.e("Unable to get show quick contact dialog using Anroid 2.0+ SDK: " + e.toString());
+    } catch (InvocationTargetException e) {
+      Log.e("Unable to get show quick contact dialog using Anroid 2.0+ SDK: " + e.toString());
+    }
+
+  }
+
   /*
    * Prepare Eclair (and beyond) SDK call using reflection
    */
   private static void prepareEclairSDK() {
     try {
+
+      // ContactsContract.Contacts class and methods
       contactsClass = Class.forName("android.provider.ContactsContract$Contacts");
 
       contactsOpenPhotoStreamMethod = contactsClass.getMethod("openContactPhotoInputStream",
           new Class[] { ContentResolver.class, Uri.class });
 
       contactsGetLookupUri = contactsClass.getMethod("getLookupUri",
+          new Class[] { long.class, String.class });
+
+      contactsGetLookupUriByContactUri = contactsClass.getMethod("getLookupUri",
           new Class[] { ContentResolver.class, Uri.class });
 
+      // ContactsContract.QuickContacts class and method
+      quickContactClass = Class.forName("android.provider.ContactsContract$QuickContact");
+
+      showQuickContactMethod = quickContactClass.getMethod("showQuickContact",
+          new Class[] { Context.class, View.class, Uri.class, int.class, String[].class });
+
       preparedEclairSDK = true;
+
     } catch (ClassNotFoundException e) {
       Log.e("Unable to prepare Anroid 2.0+ SDK functions: " + e.toString());
     } catch (SecurityException e) {

@@ -189,9 +189,9 @@ public class SmsPopupUtils {
     if (cursor != null) {
       try {
         if (cursor.moveToFirst()) {
+
           String contactId = String.valueOf(cursor.getLong(0));
           String contactName = cursor.getString(1);
-
           String contactLookup = null;
 
           if (!PRE_ECLAIR) {
@@ -932,14 +932,19 @@ public class SmsPopupUtils {
           //          }
           long messageId = cursor.getLong(0);
           String address = getMmsAddress(context, messageId);
-          String contactName = getDisplayName(context, address).trim();
+
           String contactId = null;
           String contactLookup = null;
+          String contactName = address.trim();
+          //String contactName = getDisplayName(context, address).trim();
 
-          ContactIdentification contactIdentify = getPersonIdFromEmail(context, address);
+          ContactIdentification contactIdentify =
+            getPersonIdFromEmail(context, extractAddrSpec(address));
+
           if (contactIdentify != null) {
             contactId = contactIdentify.contactId;
             contactLookup = contactIdentify.contactLookup;
+            contactName = contactIdentify.contactName;
           }
 
           long threadId = cursor.getLong(1);
@@ -951,8 +956,8 @@ public class SmsPopupUtils {
               messageId, threadId, count, SmsMmsMessage.MESSAGE_TYPE_MMS);
 
           return mmsMessage;
-
         }
+
       } finally {
         cursor.close();
       }
@@ -964,12 +969,12 @@ public class SmsPopupUtils {
     return getMmsDetails(context, 0);
   }
 
-  public static String getMmsAddress(Context context, long message_id) {
+  public static String getMmsAddress(Context context, long messageId) {
     final String[] projection =  new String[] { "address", "contact_id", "charset", "type" };
     final String selection = "type=137"; // "type="+ PduHeaders.FROM,
 
     Uri.Builder builder = MMS_CONTENT_URI.buildUpon();
-    builder.appendPath(String.valueOf(message_id)).appendPath("addr");
+    builder.appendPath(String.valueOf(messageId)).appendPath("addr");
 
     Cursor cursor = context.getContentResolver().query(
         builder.build(),
@@ -998,6 +1003,15 @@ public class SmsPopupUtils {
 
   public static final Pattern QUOTED_STRING_PATTERN =
     Pattern.compile("\\s*\"([^\"]*)\"\\s*");
+
+  private static String extractAddrSpec(String address) {
+    Matcher match = NAME_ADDR_EMAIL_PATTERN.matcher(address);
+
+    if (match.matches()) {
+      return match.group(2);
+    }
+    return address;
+  }
 
   private static String getEmailDisplayName(String displayString) {
     Matcher match = QUOTED_STRING_PATTERN.matcher(displayString);
