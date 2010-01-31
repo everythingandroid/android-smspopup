@@ -7,7 +7,6 @@ import android.app.Service;
 import android.app.PendingIntent.CanceledException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -16,7 +15,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.Process;
-import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.SmsManager;
 import android.telephony.gsm.SmsMessage;
@@ -124,21 +122,21 @@ public class SmsReceiverService extends Service {
     if (bundle != null) {
       SmsMessage[] messages = SmsPopupUtils.getMessagesFromIntent(intent);
       if (messages != null) {
-        notifySmsReceived(new SmsMmsMessage(context, messages, System.currentTimeMillis()));
+        notifyMessageReceived(new SmsMmsMessage(context, messages, System.currentTimeMillis()));
       }
     }
   }
 
-  /**
-   * Notify the user of the SMS - either via notification bar or popup
-   */
-  private void notifySmsReceived(SmsMmsMessage smsMessage) {
+  private void notifyMessageReceived(SmsMmsMessage message) {
 
-    // Class 0 message, let the system handle this
-    if (smsMessage.getMessageClass() == MessageClass.CLASS_0) return;
+    // Class 0 SMS, let the system handle this
+    if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_SMS &&
+        message.getMessageClass() == MessageClass.CLASS_0) {
+      return;
+    }
 
     // Fetch preferences
-    ManagePreferences mPrefs = new ManagePreferences(context, smsMessage.getContactId());
+    ManagePreferences mPrefs = new ManagePreferences(context, message.getContactId());
 
     // Whether or not the popup should only show when keyguard is on
     boolean onlyShowOnKeyguard =
@@ -151,14 +149,14 @@ public class SmsReceiverService extends Service {
           Defaults.PREFS_SHOW_POPUP,
           SmsPopupDbAdapter.KEY_POPUP_ENABLED_NUM);
 
-    // check if notifications are on for this contact 
+    // check if notifications are on for this contact
     boolean notifEnabled =
       mPrefs.getBoolean(R.string.pref_notif_enabled_key,
           Defaults.PREFS_NOTIF_ENABLED,
           SmsPopupDbAdapter.KEY_ENABLED_NUM);
 
     mPrefs.close();
-    
+
     // Fetch call state, if the user is in a call or the phone is ringing we don't want to show the popup
     TelephonyManager mTM = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     boolean callStateIdle = mTM.getCallState() == TelephonyManager.CALL_STATE_IDLE;
@@ -166,24 +164,26 @@ public class SmsReceiverService extends Service {
     // Init keyguard manager
     ManageKeyguard.initialize(context);
 
-    /* 
+    /*
      * If popup is enabled for this user and the user is not in a call -AND-
      * screen is locked -OR- (setting is OFF to only show on keyguard -AND- user is not in messaging app:
      * then show the popup activity, otherwise check if notifications are on and just use the standard
      * notification
-     */    
+     */
     if (showPopup && callStateIdle
-        && (ManageKeyguard.inKeyguardRestrictedInputMode() || (!onlyShowOnKeyguard &&
-            !SmsPopupUtils.inMessagingApp(context)))) {
-      Intent popup = smsMessage.getPopupIntent();
-      //ManageWakeLock.acquirePartial(context);
-      ManageWakeLock.acquireFull(context);
+        && (ManageKeyguard.inKeyguardRestrictedInputMode() ||
+            (!onlyShowOnKeyguard && !SmsPopupUtils.inMessagingApp(context)))) {
+
       if (Log.DEBUG) Log.v("^^^^^^Showing SMS Popup");
-      context.startActivity(popup);
+      ManageWakeLock.acquireFull(context);
+      context.startActivity(message.getPopupIntent());
+
     } else if (notifEnabled) {
+
       if (Log.DEBUG) Log.v("^^^^^^Not showing SMS Popup, using notifications");
-      ManageNotification.show(context, smsMessage);
-      ReminderReceiver.scheduleReminder(context, smsMessage);
+      ManageNotification.show(context, message);
+      ReminderReceiver.scheduleReminder(context, message);
+
     }
   }
 
@@ -203,23 +203,7 @@ public class SmsReceiverService extends Service {
       mmsMessage = SmsPopupUtils.getMmsDetails(context);
       if (mmsMessage != null) {
         if (Log.DEBUG) Log.v("MMS found in content provider");
-        SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean onlyShowOnKeyguard =
-          myPrefs.getBoolean(context.getString(R.string.pref_onlyShowOnKeyguard_key),
-              Boolean.valueOf(context.getString(R.string.pref_onlyShowOnKeyguard_default)));
-
-        if (ManageKeyguard.inKeyguardRestrictedInputMode() || !onlyShowOnKeyguard) {
-          if (Log.DEBUG)
-            Log.v("^^^^^^In keyguard or pref set to always show - showing popup activity");
-          Intent popup = mmsMessage.getPopupIntent();
-          //ManageWakeLock.acquirePartial(context);
-          ManageWakeLock.acquireFull(context);
-          context.startActivity(popup);
-        } else {
-          if (Log.DEBUG) Log.v("^^^^^^Not in keyguard, only using notification");
-          ManageNotification.show(context, mmsMessage);
-          ReminderReceiver.scheduleReminder(context, mmsMessage);
-        }
+        notifyMessageReceived(mmsMessage);
       } else {
         if (Log.DEBUG) Log.v("MMS not found, sleeping (count is " + count + ")");
         count++;

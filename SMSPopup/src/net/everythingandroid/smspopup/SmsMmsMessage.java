@@ -46,14 +46,14 @@ public class SmsMmsMessage {
   private int unreadCount = 0;
   private long threadId = 0;
   private String contactId = null;
-  private String contactLookup = null;
+  private String contactLookupKey = null;
   private String contactName = null;
   private int messageType = 0;
   private boolean notify = true;
   private int reminderCount = 0;
   private long messageId = 0;
   private boolean fromEmailGateway = false;
-  private MessageClass messageClass;
+  private MessageClass messageClass = null;
 
   /**
    * Construct SmsMmsMessage given a raw message (created from pdu), used for when
@@ -104,7 +104,7 @@ public class SmsMmsMessage {
 
     if (contactIdentify != null) {
       contactId = contactIdentify.contactId;
-      contactLookup = contactIdentify.contactLookup;
+      contactLookupKey = contactIdentify.contactLookup;
       contactName = contactIdentify.contactName;
     }
 
@@ -133,7 +133,7 @@ public class SmsMmsMessage {
     // TODO: I think contactId can come the MMS table, this would save
     // this database lookup
     contactId = _contactId;
-    contactLookup = _contactLookup;
+    contactLookupKey = _contactLookup;
     contactName = _contactName;
     unreadCount = _unreadCount;
     threadId = _threadId;
@@ -150,7 +150,7 @@ public class SmsMmsMessage {
    */
   public SmsMmsMessage(Context _context, String _fromAddress, String _messageBody,
       long _timestamp, long _threadId, int _unreadCount, long _messageId, int _messageType) {
-	  
+
     context = _context;
     fromAddress = _fromAddress;
     messageBody = _messageBody;
@@ -171,7 +171,7 @@ public class SmsMmsMessage {
 
     if (contactIdentify != null) {
       contactId = contactIdentify.contactId;
-      contactLookup = contactIdentify.contactLookup;
+      contactLookupKey = contactIdentify.contactLookup;
       contactName = contactIdentify.contactName;
     }
 
@@ -193,7 +193,7 @@ public class SmsMmsMessage {
     messageBody = b.getString(EXTRAS_MESSAGE_BODY);
     timestamp = b.getLong(EXTRAS_TIMESTAMP);
     contactId = b.getString(EXTRAS_CONTACT_ID);
-    contactLookup = b.getString(EXTRAS_CONTACT_LOOKUP);
+    contactLookupKey = b.getString(EXTRAS_CONTACT_LOOKUP);
     contactName = b.getString(EXTRAS_CONTACT_NAME);
     unreadCount = b.getInt(EXTRAS_UNREAD_COUNT, 1);
     threadId = b.getLong(EXTRAS_THREAD_ID, 0);
@@ -216,7 +216,7 @@ public class SmsMmsMessage {
     messageBody = _messageBody;
     timestamp = _timestamp;
     contactId = _contactId;
-    contactLookup = _contactLookup;
+    contactLookupKey = _contactLookup;
     contactName = _contactName;
     unreadCount = _unreadCount;
     threadId = _threadId;
@@ -232,7 +232,7 @@ public class SmsMmsMessage {
     b.putString(EXTRAS_MESSAGE_BODY, messageBody);
     b.putLong(EXTRAS_TIMESTAMP, timestamp);
     b.putString(EXTRAS_CONTACT_ID, contactId);
-    b.putString(EXTRAS_CONTACT_LOOKUP, contactLookup);
+    b.putString(EXTRAS_CONTACT_LOOKUP, contactLookupKey);
     b.putString(EXTRAS_CONTACT_NAME, contactName);
     b.putInt(EXTRAS_UNREAD_COUNT, unreadCount);
     b.putLong(EXTRAS_THREAD_ID, threadId);
@@ -384,6 +384,10 @@ public class SmsMmsMessage {
 
   public String getContactId() {
     return contactId;
+  }
+
+  public String getContactLookupKey() {
+    return contactLookupKey;
   }
 
   public String getAddress() {

@@ -7,6 +7,7 @@ import net.everythingandroid.smspopup.ManageKeyguard.LaunchOnKeyguardExit;
 import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
+import net.everythingandroid.smspopup.wrappers.ContactWrapper;
 import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper;
 import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper.OnInitListener;
 import android.app.Activity;
@@ -100,6 +101,7 @@ public class SmsPopupActivity extends Activity {
   private boolean privacyMode = false;
   private boolean messageViewed = true;
   private String signatureText;
+  private Uri contactLookupUri = null;
 
   private static final double WIDTH = 0.9;
   private static final int MAX_WIDTH = 640;
@@ -512,12 +514,32 @@ public class SmsPopupActivity extends Activity {
 
     // Fetch contact photo in background
     if (contactPhoto == null) {
+      refreshPhotoBackground(photoImageView, contactPhoto);
       photoImageView.setImageDrawable(contactPhotoPlaceholderDrawable);
-      photoImageView.setBackgroundResource(0);
       new FetchContactPhotoTask().execute(message.getContactId());
     } else {
-      photoImageView.setBackgroundResource(android.R.drawable.picture_frame);
+      refreshPhotoBackground(photoImageView, contactPhoto);
       photoImageView.setImageBitmap(contactPhoto);
+    }
+
+    // Show QuickContact card on photo imageview click (only available on eclair+)
+    if (!SmsPopupUtils.PRE_ECLAIR) {
+
+      contactLookupUri = null;
+      String contactId = message.getContactId();
+      if (contactId != null) {
+        contactLookupUri = ContactWrapper.getLookupUri(Long.valueOf(contactId),
+            message.getContactLookupKey());
+      }
+
+      photoImageView.setOnClickListener(new OnClickListener() {
+        public void onClick(View v) {
+          if (contactLookupUri != null) {
+            ContactWrapper.showQuickContact(SmsPopupActivity.this, v, contactLookupUri,
+                ContactWrapper.QUICKCONTACT_MODE_MEDIUM, null);
+          }
+        }
+      });
     }
 
     // If only 1 unread message waiting
@@ -1224,6 +1246,22 @@ public class SmsPopupActivity extends Activity {
     mainLL.invalidate();
   }
 
+  /*
+   * Refresh the background of the contact photo
+   */
+  private static void refreshPhotoBackground(ImageView photoImageView, Bitmap contactPhoto) {
+
+    if (contactPhoto == null) {
+      photoImageView.setBackgroundResource(0);
+    } else {
+      if (SmsPopupUtils.PRE_ECLAIR) {
+        photoImageView.setBackgroundResource(android.R.drawable.picture_frame);
+      } else {
+        photoImageView.setBackgroundResource(R.drawable.quickcontact_badge_small);
+      }
+    }
+  }
+
   /**
    * Show the soft keyboard and store the view that triggered it
    */
@@ -1265,7 +1303,7 @@ public class SmsPopupActivity extends Activity {
       if (Log.DEBUG) Log.v("Done loading contact photo");
       contactPhoto = result;
       if (result != null) {
-        photoImageView.setBackgroundResource(android.R.drawable.picture_frame);
+        refreshPhotoBackground(photoImageView, contactPhoto);
         photoImageView.setImageBitmap(contactPhoto);
       }
     }
