@@ -182,9 +182,11 @@ public class SmsPopupUtils {
     if (email == null) return null;
 
     Cursor cursor = context.getContentResolver().query(
-        Uri.withAppendedPath(ContactWrapper.getEmailLookupContentFilterUri(), Uri.encode(email)),
-        ContactWrapper.getEmailLookupProjection(),
-        null, null, null);
+        Uri.withAppendedPath(
+            ContactWrapper.getEmailLookupContentFilterUri(),
+            Uri.encode(extractAddrSpec(email))),
+            ContactWrapper.getEmailLookupProjection(),
+            null, null, null);
 
     if (cursor != null) {
       try {
@@ -931,31 +933,12 @@ public class SmsPopupUtils {
           //                + cursor.getString(i));
           //          }
           long messageId = cursor.getLong(0);
-          String address = getMmsAddress(context, messageId);
-
-          String contactId = null;
-          String contactLookup = null;
-          String contactName = address.trim();
-          //String contactName = getDisplayName(context, address).trim();
-
-          ContactIdentification contactIdentify =
-            getPersonIdFromEmail(context, extractAddrSpec(address));
-
-          if (contactIdentify != null) {
-            contactId = contactIdentify.contactId;
-            contactLookup = contactIdentify.contactLookup;
-            contactName = contactIdentify.contactName;
-          }
-
           long threadId = cursor.getLong(1);
           long timestamp = cursor.getLong(2) * 1000;
           String subject = cursor.getString(3);
 
-          SmsMmsMessage mmsMessage = new SmsMmsMessage(
-              context, contactId, contactLookup, contactName, address, subject, timestamp,
-              messageId, threadId, count, SmsMmsMessage.MESSAGE_TYPE_MMS);
-
-          return mmsMessage;
+          return new SmsMmsMessage(context, messageId, threadId, timestamp,
+              subject, count, SmsMmsMessage.MESSAGE_TYPE_MMS);
         }
 
       } finally {

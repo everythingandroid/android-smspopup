@@ -89,7 +89,7 @@ public class SmsMmsMessage {
      * Lookup the rest of the info from the system db
      */
 
-    ContactIdentification contactIdentify;
+    ContactIdentification contactIdentify = null;
 
     // If this SMS is from an email gateway then lookup contactId by email address
     if (fromEmailGateway) {
@@ -117,30 +117,38 @@ public class SmsMmsMessage {
   }
 
   /**
-   * Construct SmsMmsMessage for getMmsDetails() - info fetched from the MMS
-   * database table
+   * Construct SmsMmsMessage for getMmsDetails() - fetched from the MMS database table
+   * @return
    */
-  public SmsMmsMessage(Context _context, String _contactId, String _contactLookup,
-      String _contactName, String _fromAddress, String _messageBody, long _timestamp,
-      long _messageId, long _threadId, int _unreadCount, int _messageType) {
+  public SmsMmsMessage(Context _context, long _messageId, long _threadId,
+      long _timestamp, String _messageBody, int _unreadCount, int _messageType) {
 
     context = _context;
-    fromAddress = _fromAddress;
-    messageBody = _messageBody;
+    messageId = _messageId;
+    threadId = _threadId;
     timestamp = _timestamp;
+    messageBody = _messageBody;
+    unreadCount = _unreadCount;
     messageType = _messageType;
 
-    // TODO: I think contactId can come the MMS table, this would save
-    // this database lookup
-    contactId = _contactId;
-    contactLookupKey = _contactLookup;
-    contactName = _contactName;
-    unreadCount = _unreadCount;
-    threadId = _threadId;
-    messageId = _messageId;
+    fromAddress = SmsPopupUtils.getMmsAddress(context, messageId);
 
-    if (contactName == null) {
-      contactName = context.getString(android.R.string.unknownName);
+    ContactIdentification contactIdentify = null;
+
+    if (PhoneNumberUtils.isWellFormedSmsAddress(fromAddress)) {
+      contactIdentify = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
+      contactName = PhoneNumberUtils.formatNumber(fromAddress);
+      fromEmailGateway = false;
+    } else {
+      contactIdentify = SmsPopupUtils.getPersonIdFromEmail(context, fromAddress);
+      contactName = fromAddress.trim();
+      fromEmailGateway = true;
+    }
+
+    if (contactIdentify != null) {
+      contactId = contactIdentify.contactId;
+      contactLookupKey = contactIdentify.contactLookup;
+      contactName = contactIdentify.contactName;
     }
   }
 
@@ -157,7 +165,7 @@ public class SmsMmsMessage {
     timestamp = _timestamp;
     messageType = _messageType;
 
-    ContactIdentification contactIdentify;
+    ContactIdentification contactIdentify = null;
 
     if (PhoneNumberUtils.isWellFormedSmsAddress(fromAddress)) {
       contactIdentify = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);

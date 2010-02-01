@@ -200,7 +200,9 @@ public class SmsReceiverService extends Service {
     // the MMS details in the database). This should really be
     // a content listener that waits for a while then gives up...
     while (mmsMessage == null && count < MESSAGE_RETRY) {
+
       mmsMessage = SmsPopupUtils.getMmsDetails(context);
+
       if (mmsMessage != null) {
         if (Log.DEBUG) Log.v("MMS found in content provider");
         notifyMessageReceived(mmsMessage);
