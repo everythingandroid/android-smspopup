@@ -6,17 +6,17 @@
   android:id="@+id/MmsLinearLayout"
   android:orientation="vertical"
   android:layout_weight="1"
-  android:paddingBottom="12sp"
-  android:paddingTop="12sp">
+  android:paddingBottom="12dp"
+  android:paddingTop="12dp">
   <TextView
     android:autoLink="all"
     android:layout_width="fill_parent"
-    android:paddingRight="5sp"
-    android:paddingLeft="5sp"
+    android:paddingRight="5dp"
+    android:paddingLeft="5dp"
     android:gravity="center"
     android:id="@+id/MmsSubjectTextView"
     android:layout_height="wrap_content"
-    android:paddingBottom="12sp"
+    android:paddingBottom="12dp"
     android:textAppearance="?android:attr/textAppearanceMedium"
     android:text="@string/mms_subject" />
   <Button
@@ -25,5 +25,5 @@
     android:id="@+id/ViewMmsButton"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:minWidth="140sp" />
+    android:minWidth="140dp" />
 </LinearLayout>

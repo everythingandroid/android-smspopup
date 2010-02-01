@@ -1,7 +1,7 @@
 <TwoLineListItem
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:paddingTop="5dip"
-  android:paddingBottom="8dip"
+  android:paddingTop="5dp"
+  android:paddingBottom="8dp"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
   android:minHeight="?android:attr/listPreferredItemHeight"
@@ -10,7 +10,7 @@
     android:id="@android:id/text1"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="6dip"
+    android:layout_marginLeft="6dp"
     android:textAppearance="?android:attr/textAppearanceLarge" />
   <TextView
     android:id="@android:id/text2"
