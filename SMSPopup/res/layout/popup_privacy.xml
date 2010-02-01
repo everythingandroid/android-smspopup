@@ -5,13 +5,13 @@
   android:gravity="center"
   android:id="@+id/ViewButtonLinearLayout"
   android:layout_height="fill_parent"
-  android:paddingTop="12sp"
-  android:paddingBottom="12sp"
+  android:paddingTop="12dp"
+  android:paddingBottom="12dp"
   android:layout_weight="1">
   <Button
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
     android:id="@+id/ViewButton"
     android:text="@string/button_view"
-    android:minWidth="140sp" />
+    android:minWidth="140dp" />
 </LinearLayout>

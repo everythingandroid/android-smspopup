@@ -4,8 +4,8 @@
   android:layout_width="fill_parent"
   android:orientation="vertical"
   android:id="@+id/CustomVibrateLinearLayout"
-  android:paddingLeft="5sp"
-  android:paddingRight="5sp"
+  android:paddingLeft="5dp"
+  android:paddingRight="5dp"
   android:layout_height="fill_parent">
   <ScrollView
     android:id="@+id/CustomVibrateScrollView"
@@ -20,14 +20,18 @@
         android:layout_width="fill_parent"
         android:id="@+id/CustomVibrateTextView"
         android:text="@string/pref_vibrate_pattern_help"
-        android:paddingBottom="4sp"
+        android:paddingBottom="4dp"
         android:layout_height="fill_parent" />
       <EditText
         android:layout_width="fill_parent"
         android:id="@+id/CustomVibrateEditText"
         android:text="@string/pref_vibrate_pattern_default"
         android:layout_height="wrap_content"
-        android:selectAllOnFocus="true" android:imeOptions="actionDone" android:maxLines="1" android:layout_marginLeft="3sp" android:layout_marginRight="3sp"/>
+        android:selectAllOnFocus="true"
+        android:imeOptions="actionDone"
+        android:maxLines="1"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp" />
     </LinearLayout>
   </ScrollView>
 </LinearLayout>

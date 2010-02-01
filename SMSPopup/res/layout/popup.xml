@@ -10,7 +10,7 @@
     android:id="@+id/UnreadCountViewStub"
     android:layout="@layout/popup_unreadcount"
     android:layout_width="fill_parent"
-    android:layout_height="41sp" />
+    android:layout_height="41dp" />
   <include
     layout="@layout/popup_header"
     android:layout_width="fill_parent"
@@ -23,8 +23,8 @@
     android:id="@+id/MessageScrollView"
     android:visibility="gone"
     android:layout_weight="1"
-    android:paddingBottom="10sp"
-    android:paddingTop="6sp">
+    android:paddingBottom="10dp"
+    android:paddingTop="6dp">
     <TextView
       android:text="Text here"
       android:id="@+id/MessageTextView"
@@ -34,8 +34,8 @@
       android:layout_height="wrap_content"
       android:layout_width="fill_parent"
       android:gravity="center"
-      android:paddingRight="10sp"
-      android:paddingLeft="10sp" />
+      android:paddingRight="10dp"
+      android:paddingLeft="10dp" />
   </ScrollView>
   <ViewStub
     android:id="@+id/MmsViewStub"
@@ -52,7 +52,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:padding="2sp"
+    android:padding="2dp"
     android:background="@android:color/darker_gray">
     <Button
       android:id="@+id/button1"

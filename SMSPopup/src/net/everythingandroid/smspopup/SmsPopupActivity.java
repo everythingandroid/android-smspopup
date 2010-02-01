@@ -47,6 +47,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -80,11 +81,14 @@ public class SmsPopupActivity extends Activity {
 
   private TextView mmsSubjectTV = null;
   private ScrollView messageScrollView = null;
+  private EditText qrEditText = null;
+  private ProgressDialog mProgressDialog = null;
+
   private ImageView photoImageView = null;
   private Drawable contactPhotoPlaceholderDrawable = null;
   private Bitmap contactPhoto = null;
-  private EditText qrEditText = null;
-  private ProgressDialog mProgressDialog = null;
+  private static int contactPhotoMargin = 3;
+  private static int contactPhotoDefaultMargin = 10;
 
   private ViewStub unreadCountViewStub;
   private View unreadCountView = null;
@@ -514,12 +518,10 @@ public class SmsPopupActivity extends Activity {
 
     // Fetch contact photo in background
     if (contactPhoto == null) {
-      refreshPhotoBackground(photoImageView, contactPhoto);
-      photoImageView.setImageDrawable(contactPhotoPlaceholderDrawable);
+      setContactPhotoToDefault(photoImageView);
       new FetchContactPhotoTask().execute(message.getContactId());
     } else {
-      refreshPhotoBackground(photoImageView, contactPhoto);
-      photoImageView.setImageBitmap(contactPhoto);
+      setContactPhoto(photoImageView, contactPhoto);
     }
 
     // Show QuickContact card on photo imageview click (only available on eclair+)
@@ -1247,19 +1249,52 @@ public class SmsPopupActivity extends Activity {
   }
 
   /*
-   * Refresh the background of the contact photo
+   * Sets contact photo to a default placeholder image
    */
-  private static void refreshPhotoBackground(ImageView photoImageView, Bitmap contactPhoto) {
+  private void setContactPhotoToDefault(ImageView photoImageView) {
+
+    // Reset background and padding
+    photoImageView.setBackgroundResource(0);
+    photoImageView.setPadding(0, 0, 0, 0);
+
+    // Set margins for placeholder image
+    MarginLayoutParams mLP = (MarginLayoutParams) photoImageView.getLayoutParams();
+    final int scaledMargin =
+      (int) (contactPhotoDefaultMargin * this.getResources().getDisplayMetrics().density);
+
+    mLP.setMargins(scaledMargin, scaledMargin, scaledMargin, scaledMargin);
+    photoImageView.setLayoutParams(mLP);
+
+    // Set placeholder image
+    photoImageView.setImageDrawable(contactPhotoPlaceholderDrawable);
+  }
+
+  /*
+   * Sets contact photo to the target imageview
+   */
+  private void setContactPhoto(ImageView photoImageView, Bitmap contactPhoto) {
 
     if (contactPhoto == null) {
-      photoImageView.setBackgroundResource(0);
-    } else {
-      if (SmsPopupUtils.PRE_ECLAIR) {
-        photoImageView.setBackgroundResource(android.R.drawable.picture_frame);
-      } else {
-        photoImageView.setBackgroundResource(R.drawable.quickcontact_badge_small);
-      }
+      setContactPhotoToDefault(photoImageView);
+      return;
     }
+
+    // Update background and padding
+    if (SmsPopupUtils.PRE_ECLAIR) {
+      photoImageView.setBackgroundResource(android.R.drawable.picture_frame);
+    } else {
+      photoImageView.setBackgroundResource(R.drawable.quickcontact_badge_small);
+    }
+
+    // Set margins for image
+    MarginLayoutParams mLP = (MarginLayoutParams) photoImageView.getLayoutParams();
+    final int scaledMargin =
+      (int) (contactPhotoMargin * this.getResources().getDisplayMetrics().density);
+    mLP.setMargins(scaledMargin, scaledMargin, scaledMargin, scaledMargin);
+    photoImageView.setLayoutParams(mLP);
+
+    // Set contact photo image
+    photoImageView.setImageBitmap(contactPhoto);
   }
 
   /**
@@ -1303,8 +1338,7 @@ public class SmsPopupActivity extends Activity {
       if (Log.DEBUG) Log.v("Done loading contact photo");
       contactPhoto = result;
       if (result != null) {
-        refreshPhotoBackground(photoImageView, contactPhoto);
-        photoImageView.setImageBitmap(contactPhoto);
+        setContactPhoto(photoImageView, contactPhoto);
       }
     }
   }

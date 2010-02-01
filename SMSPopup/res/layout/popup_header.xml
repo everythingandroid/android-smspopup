@@ -11,13 +11,15 @@
     android:layout_width="wrap_content"
     android:layout_gravity="center"
     android:scaleType="center"
-    android:layout_height="wrap_content" android:padding="5sp"/>
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp" />
   <LinearLayout
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
-    android:id="@+id/FromTextLinearLayout" android:padding="5sp">
+    android:id="@+id/FromTextLinearLayout"
+    android:padding="4dp">
     <TextView
       android:id="@+id/FromTextView"
       android:layout_width="fill_parent"
@@ -27,13 +29,15 @@
       android:maxLines="2"
       android:layout_height="wrap_content"
       android:text="Text Here"
-      android:ellipsize="end" android:paddingBottom="2sp"/>
+      android:ellipsize="end"
+      android:paddingBottom="2dp" />
     <TextView
       android:id="@+id/HeaderTextView"
       android:textAppearance="?android:attr/textAppearanceSmall"
       android:textColor="?android:attr/textColorPrimaryDisableOnly"
       android:text="@string/new_text_at"
       android:layout_width="fill_parent"
-      android:layout_height="wrap_content" android:paddingTop="2sp"/>
+      android:layout_height="wrap_content"
+      android:paddingTop="2dp" />
   </LinearLayout>
 </LinearLayout>

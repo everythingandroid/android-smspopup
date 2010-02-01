@@ -11,6 +11,6 @@
     android:textColor="?android:attr/textColorPrimaryDisableOnly"
     android:textAppearance="?android:attr/textAppearanceSmall"
     android:autoLink="all"
-    android:padding="11sp"
+    android:padding="11dp"
     android:text="@string/pref_about_text" />
 </ScrollView>

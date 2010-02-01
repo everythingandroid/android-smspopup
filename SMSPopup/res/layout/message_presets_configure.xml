@@ -4,10 +4,10 @@
   android:id="@+id/QuickReplyEntryLinearLayout"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
-  android:paddingBottom="8dip"
-  android:paddingTop="8dip"
-  android:paddingLeft="10dip"
-  android:paddingRight="10dip">
+  android:paddingBottom="8dp"
+  android:paddingTop="8dp"
+  android:paddingLeft="10dp"
+  android:paddingRight="10dp">
   <RelativeLayout
     android:id="@+id/editor_with_counter"
     android:layout_width="fill_parent"
@@ -30,8 +30,8 @@
       android:textColor="#ffffffff"
       android:textSize="11sp"
       android:textStyle="bold"
-      android:paddingLeft="3dip"
-      android:paddingRight="3dip"
+      android:paddingLeft="3dp"
+      android:paddingRight="3dp"
       android:layout_alignParentRight="true"
       android:layout_alignParentTop="true"
       android:text="50/100" />
