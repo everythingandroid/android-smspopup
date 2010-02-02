@@ -109,12 +109,6 @@
 <string name="pref_flashled_pattern_help">輸入LED燈開關的毫秒數</string>
 <string name="pref_flashled_pattern_help_on">開啟時間:</string>
 <string name="pref_flashled_pattern_help_off">關閉時間:</string>
-<string-array name="pref_led_pattern_entries">
-<item>Fast</item>
-<item>Normal</item>
-<item>Slow</item>
-<item>Custom</item>
-</string-array>
 <string name="pref_notif_repeat_title">啟用提醒</string>
 <string name="pref_notif_repeat_summaryon">在有未讀短信時進行提醒</string>
 <string name="pref_notif_repeat_summaryoff">在有未讀短信時不進行提醒</string>
@@ -127,41 +121,6 @@
 <string name="pref_notif_repeat_screen_on_summaryon">提醒時屏幕變亮</string>
 <string name="pref_notif_repeat_screen_on_summaryoff">提醒時屏幕不變亮</string>
 <string name="pref_notif_repeat_screen_on_warning">警告 - 提醒時開啟屏幕很消耗電量</string>
-<!-- Arrays for drop-down prefs -->
-<string-array name="pref_timeout_entries">
-<item>10 秒鐘</item>
-<item>20 秒鐘</item>
-<item>30 秒鐘</item>
-<item>1 分鐘</item>
-<item>2 分鐘</item>
-<item>5 分鐘</item>
-<item>10 分鐘</item>
-</string-array>
-<string-array name="pref_vibrate_pattern_entries">
-<item>普通</item>
-<item>長振動</item>
-<item>多次短振動</item>
-<item>多次長振動</item>
-<item>自定義</item>
-</string-array>
-<string-array name="pref_led_color_entries">
-<item>藍</item>
-<item>綠</item>
-<item>紅</item>
-<item>黃</item>
-<item>紫</item>
-<item>青</item>
-<item>自定義</item>
-</string-array>
-<string-array name="pref_notif_repeat_times_entries">
-<item>1</item>
-<item>2</item>
-<item>3</item>
-<item>4</item>
-<item>5</item>
-<item>10</item>
-<item>不斷重復</item>
-</string-array>
 
 <!-- Contact Notification Customization Strings -->
   <string name="pref_notif_default_title">預設通知</string>
