@@ -137,14 +137,7 @@
    <string name="pref_flashled_pattern_help">Inserisci un valore in millisecondi per accendere e spegnere il LED</string>
    <string name="pref_flashled_pattern_help_on">Tempo attivo:</string>
    <string name="pref_flashled_pattern_help_off">Tempo disattivo:</string>
-   
-   <string-array name="pref_led_pattern_entries">
-      <item>Veloce</item>
-      <item>Normale</item>
-      <item>Lento</item>
-      <item>Personalizzato</item>
-   </string-array>
-   
+
    <string name="pref_notif_repeat_title">Abilita Ricorda</string>
    <string name="pref_notif_repeat_summaryon">Il ricorda messaggi non letti è abilitato</string>
    <string name="pref_notif_repeat_summaryoff">Il ricorda messaggi non letti è disabilitato</string>
@@ -160,45 +153,6 @@
    <string name="pref_notif_repeat_screen_on_summaryon">Ricorda msg accenderà lo schermo</string>
    <string name="pref_notif_repeat_screen_on_summaryoff">Ricorda msg non accenderà lo schermo</string>
    <string name="pref_notif_repeat_screen_on_warning">Attenzione - Accendere lo schermo per i Ricorda, influisce in modo significativo sulla durata della batteria</string>
-   
-<!-- Arrays for drop-down prefs -->
-   <string-array name="pref_timeout_entries">
-      <item>10 secondi</item>
-      <item>20 secondi</item>
-      <item>30 secondi</item>
-      <item>1 minuto</item>
-      <item>2 minuti</item>
-      <item>5 minuti</item>
-      <item>10 minuti</item>
-   </string-array>
-
-   <string-array name="pref_vibrate_pattern_entries">
-      <item>Normale</item>
-      <item>Vibrazione lunga</item>
-      <item>Multiple brevi</item>
-      <item>Multiple lunghe</item>
-      <item>Personalizzato</item>
-   </string-array>      
-   
-   <string-array name="pref_led_color_entries">
-      <item>Blu</item>
-      <item>Verde</item>
-      <item>Rosso</item>
-      <item>Giallo</item>
-      <item>Magenta</item>
-      <item>Ciano</item>
-      <item>Personalizzato</item>
-   </string-array>   
-   
-   <string-array name="pref_notif_repeat_times_entries">
-      <item>1</item>
-      <item>2</item>
-      <item>3</item>
-      <item>4</item>
-      <item>5</item>
-      <item>10</item>
-      <item>Keep repeating</item>
-   </string-array>
 
 <!-- Contact Notification Customization Strings -->
   <string name="pref_notif_default_title">Notifiche Generiche</string>
@@ -279,11 +233,11 @@
 
   <string name="pref_popup_enabled_title">Mostra un popup</string>
   <string name="pref_popup_enabled_summaryon">Il msg verrà aperto in un popup</string>
-  <string name="pref_popup_enabled_summaryoff">Il msg verrà mostrato solo nell\'area notiche (se abilitata)</string>
+  <string name="pref_popup_enabled_summaryoff">Il msg verrà mostrato solo nell'area notiche (se abilitata)</string>
 
 <!-- Donate Strings (not used right now) -->
   <string name="pref_donate_title">Dona a Sms Popup</string>    
-  <string name="pref_donate_text">SMS Popup è un\'applicazione gratuita che sviluppo nel mio tempo libero.  Se tu la trovi utile, e puoi risparmiare un pò di soldi, una donazione sarebbe molto apprezzata.\n\nGrazie!</string>
+  <string name="pref_donate_text">SMS Popup è un'applicazione gratuita che sviluppo nel mio tempo libero.  Se tu la trovi utile, e puoi risparmiare un pò di soldi, una donazione sarebbe molto apprezzata.\n\nGrazie!</string>
   <string name="pref_donate_market_button">Dona tramite Android Market</string>
   <string name="pref_donate_paypal_button">Dona tramite PayPal</string>
 

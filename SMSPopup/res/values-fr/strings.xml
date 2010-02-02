@@ -137,14 +137,7 @@
    <string name="pref_flashled_pattern_help">Entrer le laps de temps, en ms, pour chaque état de la LED</string>
    <string name="pref_flashled_pattern_help_on">Temps allumée:</string>
    <string name="pref_flashled_pattern_help_off">Temps éteinte:</string>
-   
-   <string-array name="pref_led_pattern_entries">
-      <item>Rapide</item>
-      <item>Normal</item>
-      <item>Lent</item>
-      <item>Personnalisé</item>
-   </string-array>
-   
+
    <string name="pref_notif_repeat_title">Activer les rappels</string>
    <string name="pref_notif_repeat_summaryon">Les rappels de message non-lu sont activés</string>
    <string name="pref_notif_repeat_summaryoff">Les rappels de message non-lu sont désactivés</string>
@@ -160,45 +153,6 @@
    <string name="pref_notif_repeat_screen_on_summaryon">Les rappels vont allumer l\'écran</string>
    <string name="pref_notif_repeat_screen_on_summaryoff">Les rappels ne vont pas allumer l\'écran</string>
    <string name="pref_notif_repeat_screen_on_warning">Attention - Allumer l\'écran pour les rappels peut affecter la durée de vie de la batterie significativement.</string>
-   
-<!-- Arrays for drop-down prefs -->
-   <string-array name="pref_timeout_entries">
-      <item>10 secondes</item>
-      <item>20 secondes</item>
-      <item>30 secondes</item>
-      <item>1 minute</item>
-      <item>2 minutes</item>
-      <item>5 minutes</item>
-      <item>10 minutes</item>
-   </string-array>
-
-   <string-array name="pref_vibrate_pattern_entries">
-      <item>Normal</item>
-      <item>Vibration longue</item>
-      <item>Courtes %26 multiples</item>
-      <item>Longues %26 Multiples</item>
-      <item>Personnalisée</item>
-   </string-array>      
-   
-   <string-array name="pref_led_color_entries">
-      <item>Bleu</item>
-      <item>Vert</item>
-      <item>Rouge</item>
-      <item>Jaune</item>
-      <item>Magenta</item>
-      <item>Cyan</item>
-      <item>Personnalisée</item>
-   </string-array>  
-   
-   <string-array name="pref_notif_repeat_times_entries">
-      <item>1</item>
-      <item>2</item>
-      <item>3</item>
-      <item>4</item>
-      <item>5</item>
-      <item>10</item>
-      <item>Continuer de répéter</item>
-   </string-array>
 
 <!-- Contact Notification Customization Strings -->
   <string name="pref_notif_default_title">Notification par défaut</string>

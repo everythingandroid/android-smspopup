@@ -137,13 +137,6 @@
    <string name="pref_flashled_pattern_help_on">Время вкл:</string>
    <string name="pref_flashled_pattern_help_off">Время выкл:</string>
 
-   <string-array name="pref_led_pattern_entries">
-      <item>Быстро</item>
-		<item>Нормально</item>
-		<item>Медленно</item>
-		<item>Собственное</item>
-	</string-array>
-
    <string name="pref_notif_repeat_title">Включить напоминания</string>
    <string name="pref_notif_repeat_summaryon">Напоминания о непрочитанных сообщениях включены</string>
    <string name="pref_notif_repeat_summaryoff">Напоминания о непрочитанных сообщениях выключены</string>
@@ -159,45 +152,6 @@
    <string name="pref_notif_repeat_screen_on_summaryon">Напоминания снова включат экран</string>
    <string name="pref_notif_repeat_screen_on_summaryoff">Напоминания не включат экран</string>
    <string name="pref_notif_repeat_screen_on_warning">Внимание – включение экрана для напоминаний может значительно повлиять на время автономной работы</string>
-
-<!-- Arrays for drop-down prefs -->
-   <string-array name="pref_timeout_entries">
-	   <item>10 секунд</item>
-       <item>20 секунд</item>
-       <item>30 секунд</item>
-       <item>1 минута</item>
-       <item>2 минуты</item>
-       <item>5 минут</item>
-       <item>10 минут</item>
-	</string-array>
-
-	<string-array name="pref_vibrate_pattern_entries">
-       <item>Нормальное</item>
-       <item>Продолжительное</item>
-       <item>Несколько коротких</item>
-       <item>Несколько продолжительных</item>
-       <item>Собственное</item>
-	</string-array>
-
-   <string-array name="pref_led_color_entries">
-	   <item>Синий</item>
-       <item>Зеленый</item>
-       <item>Красный</item>
-       <item>Желтый</item>
-       <item>Пурпурный</item>
-       <item>Голубой</item>
-       <item>Собственный</item>
-   </string-array>
-
-   <string-array name="pref_notif_repeat_times_entries">
-	   <item>1</item>
-       <item>2</item>
-       <item>3</item>
-       <item>4</item>
-       <item>5</item>
-       <item>10</item>
-       <item>Бесконечно</item>
-   </string-array>
 
 <!-- Contact Notification Customization Strings -->
   <string name="pref_notif_default_title">По умолчанию</string>

@@ -137,14 +137,7 @@
    <string name="pref_flashled_pattern_help">Enter the time in milliseconds to turn the LED on and off</string>
    <string name="pref_flashled_pattern_help_on">Time on:</string>
    <string name="pref_flashled_pattern_help_off">Time off:</string>
-   
-   <string-array name="pref_led_pattern_entries">
-      <item>Fast</item>
-      <item>Normal</item>
-      <item>Slow</item>
-      <item>Custom</item>
-   </string-array>
-   
+
    <string name="pref_notif_repeat_title">Enable Reminders</string>
    <string name="pref_notif_repeat_summaryon">Unread message reminders are enabled</string>
    <string name="pref_notif_repeat_summaryoff">Unread message reminders are disabled</string>
@@ -156,49 +149,10 @@
    <string name="pref_notif_repeat_times_title">Number of Reminders</string>
    <string name="pref_notif_repeat_times_summary">The number of reminder notifications to play</string>
 
-   <string name="pref_notif_repeat_screen_on_title">Screen On for Reminders</string>
+   <string name="pref_notif_repeat_screen_on_title">Screen on for Reminders</string>
    <string name="pref_notif_repeat_screen_on_summaryon">Reminders will turn screen on again</string>
    <string name="pref_notif_repeat_screen_on_summaryoff">Reminders will not turn screen on</string>
    <string name="pref_notif_repeat_screen_on_warning">Warning - turning the screen on for reminders can significantly affect battery life</string>
-   
-<!-- Arrays for drop-down prefs -->
-   <string-array name="pref_timeout_entries">
-      <item>10 seconds</item>
-      <item>20 seconds</item>
-      <item>30 seconds</item>
-      <item>1 minute</item>
-      <item>2 minutes</item>
-      <item>5 minutes</item>
-      <item>10 minutes</item>
-   </string-array>
-
-   <string-array name="pref_vibrate_pattern_entries">
-      <item>Normal</item>
-      <item>Long Vibrate</item>
-      <item>Multiple Short</item>
-      <item>Multiple Long</item>
-      <item>Custom</item>
-   </string-array>      
-   
-   <string-array name="pref_led_color_entries">
-      <item>Blue</item>
-      <item>Green</item>
-      <item>Red</item>
-      <item>Yellow</item>
-      <item>Magenta</item>
-      <item>Cyan</item>
-      <item>Custom</item>
-   </string-array>   
-   
-   <string-array name="pref_notif_repeat_times_entries">
-      <item>1</item>
-      <item>2</item>
-      <item>3</item>
-      <item>4</item>
-      <item>5</item>
-      <item>10</item>
-      <item>Keep repeating</item>
-   </string-array>
 
 <!-- Contact Notification Customization Strings -->
   <string name="pref_notif_default_title">Default Notifications</string>

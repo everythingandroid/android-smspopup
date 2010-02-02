@@ -136,13 +136,6 @@
    <string name="pref_flashled_pattern_help">Zeit (in Millisekunden) für das Ein- und Ausschalten der LED eingeben</string>
    <string name="pref_flashled_pattern_help_on">Zeit bis zum Einschalten:</string>
    <string name="pref_flashled_pattern_help_off">Zeit bis zum Ausschalten:</string>
-   
-   <string-array name="pref_led_pattern_entries">
-      <item>Schnell</item>
-      <item>Normal</item>
-      <item>Langsam</item>
-      <item>Eigene...</item>
-   </string-array>         
 
    <string name="pref_notif_repeat_title">Aktivierung von Erinnerungen</string>
    <string name="pref_notif_repeat_summaryon">Erinnerungen für ungelesene Nachrichten ist aktiviert</string>
@@ -159,43 +152,4 @@
    <string name="pref_notif_repeat_screen_on_summaryon">Erinnerungen schalten das Display ein</string>
    <string name="pref_notif_repeat_screen_on_summaryoff">Erinnerungen schalten das Display nicht ein</string>
    <string name="pref_notif_repeat_screen_on_warning">Achtung - Das Aktivieren der Anzeige für Erinnerungen kann die Akku-Dauer extrem verringern</string>   
-
-<!-- Arrays for drop-down prefs -->
-   <string-array name="pref_timeout_entries">
-      <item>10 Sekunden</item>
-      <item>20 Sekunden</item>
-      <item>30 Sekunden</item>
-      <item>1 Minute</item>
-      <item>2 Minuten</item>
-      <item>5 Minuten</item>
-      <item>10 Minuten</item>
-   </string-array>
-   
-   <string-array name="pref_vibrate_pattern_entries">
-      <item>normal</item>
-      <item>lang vibrieren</item>
-      <item>mehrmals kurz</item>
-      <item>mehrmals lang</item>
-      <item>eigene</item>
-   </string-array>
-         
-   <string-array name="pref_led_color_entries">
-      <item>blau</item>
-      <item>grün</item>
-      <item>rot</item>
-      <item>gelb</item>
-      <item>magenta</item>
-      <item>cyan</item>
-      <item>eigene</item>
-   </string-array>
-      
-   <string-array name="pref_notif_repeat_times_entries">
-      <item>1</item>
-      <item>2</item>
-      <item>3</item>
-      <item>4</item>
-      <item>5</item>
-      <item>10</item>
-      <item>wiederhole weiterhin</item>
-   </string-array>
 </resources>
