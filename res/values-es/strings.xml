@@ -140,13 +140,6 @@
    <string name="pref_flashled_pattern_help_on">Tiempo encendido:</string>
    <string name="pref_flashled_pattern_help_off">Tiempo apagado:</string>
 
-   <string-array name="pref_led_pattern_entries">
-      <item>Rápido</item>
-      <item>Normal</item>
-      <item>Lento</item>
-      <item>Personalizado</item>
-   </string-array>         
-
    <string name="pref_notif_repeat_title">Habilitar Recordatorios</string>
    <string name="pref_notif_repeat_summaryon">Recordatorios de mensajes sin leer habilitados</string>
    <string name="pref_notif_repeat_summaryoff">Recordatorios de mensajes sin leer deshabilitados</string>
@@ -162,45 +155,6 @@
    <string name="pref_notif_repeat_screen_on_summaryon">Los recordatorios encienden la pantalla de nuevo</string>
    <string name="pref_notif_repeat_screen_on_summaryoff">Los recordatorios no encienden la pantalla de nuevo</string>
    <string name="pref_notif_repeat_screen_on_warning">Advertencia - Encender la pantalla para los recordatorios puede afectar significativamente la duración de la batería</string>   
-
-<!-- Arrays for drop-down prefs -->
-   <string-array name="pref_timeout_entries">
-      <item>10 segundos</item>
-      <item>20 segundos</item>
-      <item>30 segundos</item>
-      <item>1 minuto</item>
-      <item>2 minutos</item>
-      <item>5 minutos</item>
-      <item>10 minutos</item>
-   </string-array>
-   
-   <string-array name="pref_vibrate_pattern_entries">
-      <item>Normal</item>
-      <item>Vibración Larga</item>
-      <item>Múltiples Cortas</item>
-      <item>Múltiples Largas</item>
-      <item>Personalizada</item>
-   </string-array>
-         
-   <string-array name="pref_led_color_entries">
-      <item>Azul</item>
-      <item>Verde</item>
-      <item>Rojo</item>
-      <item>Amarillo</item>
-      <item>Magenta</item>
-      <item>Cian</item>
-      <item>Personalizado</item>
-   </string-array>
-      
-   <string-array name="pref_notif_repeat_times_entries">
-      <item>1</item>
-      <item>2</item>
-      <item>3</item>
-      <item>4</item>
-      <item>5</item>
-      <item>10</item>
-      <item>Seguir repitiendo</item>
-   </string-array>
 
 <!-- Contact Notification Customization Strings -->
   <string name="pref_notif_default_title">Notificación Default</string>

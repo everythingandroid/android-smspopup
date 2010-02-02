@@ -12,8 +12,7 @@
    <string name="notification_scroll_privacy">Nová zpráva od: %s</string>
 
 <!-- Button Strings -->
-   <string name="view_contact">Prohlédnout kontakt</string>
-   <string name="quick_reply">Rychlá odpověď</string>  
+   <string name="view_contact">Prohlédnout kontakt</string>  
    <string name="button_close">Zavřít</string>
    <string name="button_reply">Odpovědět</string>
    <string name="button_inbox">Přijaté</string>
@@ -140,13 +139,6 @@
    <string name="pref_flashled_pattern_help_on">Čas pro zapnutí:</string>
    <string name="pref_flashled_pattern_help_off">Čas pro vypnutí:</string>
    
-   <string-array name="pref_led_pattern_entries">
-      <item>Rychle</item>
-      <item>Normálně</item>
-      <item>Pomalu</item>
-      <item>Vlastní rychlost</item>
-   </string-array>
-   
    <string name="pref_notif_repeat_title">Zapnout upomínku</string>
    <string name="pref_notif_repeat_summaryon">Upomínky pro nepřečtené zprávy jsou zapnuty</string>
    <string name="pref_notif_repeat_summaryoff">Upomínky pro nepřečtené zprávy jsou vypnuty</string>
@@ -161,46 +153,7 @@
    <string name="pref_notif_repeat_screen_on_title">Nastavení displeje pro upomínky</string>
    <string name="pref_notif_repeat_screen_on_summaryon">Upomínky znovu zapnou displej</string>
    <string name="pref_notif_repeat_screen_on_summaryoff">Upomínky nezapnout znovu displej</string>
-   <string name="pref_notif_repeat_screen_on_warning">Varování - zapínání dipleje při upomínkách razantně sníží nabití Vaší baterie</string>
-   
-<!-- Arrays for drop-down prefs -->
-   <string-array name="pref_timeout_entries">
-      <item>10 sekund</item>
-      <item>20 sekund</item>
-      <item>30 sekund</item>
-      <item>1 minuta</item>
-      <item>2 minuty</item>
-      <item>5 minut</item>
-      <item>10 minut</item>
-   </string-array>
-
-   <string-array name="pref_vibrate_pattern_entries">
-      <item>Normalní</item>
-      <item>Dlouhá vibrace</item>
-      <item>Opakovaná krátká</item>
-      <item>Opakovaná dlouhá</item>
-      <item>Vllastní</item>
-   </string-array>      
-   
-   <string-array name="pref_led_color_entries">
-      <item>Modrá</item>
-      <item>Zelená</item>
-      <item>Červená</item>
-      <item>Oranžová</item>
-      <item>Fialová</item>
-      <item>Azurová</item>
-      <item>Vlastní</item>
-   </string-array>   
-   
-   <string-array name="pref_notif_repeat_times_entries">
-      <item>1</item>
-      <item>2</item>
-      <item>3</item>
-      <item>4</item>
-      <item>5</item>
-      <item>10</item>
-      <item>Opakovat stále</item>
-   </string-array>
+   <string name="pref_notif_repeat_screen_on_warning">Varování - zapínání dipleje při upomínkách razantně sníží nabití Vaší baterie</string>   
 
 <!-- Contact Notification Customization Strings -->
   <string name="pref_notif_default_title">Standartní upozornění</string>
