@@ -29,9 +29,9 @@ public class EmailDialogPreference extends DialogPreference {
   public void onClick(DialogInterface dialog, int which) {
     super.onClick(dialog, which);
 
-    if (which == DialogInterface.BUTTON1) {
+    if (which == DialogInterface.BUTTON_POSITIVE) {
       SmsPopupUtils.launchEmailToIntent(c, c.getString(R.string.app_name) + version, true);
-    } else if (which == DialogInterface.BUTTON2) {
+    } else if (which == DialogInterface.BUTTON_NEGATIVE) {
       SmsPopupUtils.launchEmailToIntent(c, c.getString(R.string.app_name) + version, false);
     }
   }
