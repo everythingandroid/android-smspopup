@@ -145,7 +145,6 @@
 
    <string name="pref_flashled_color_title">LED Color</string>
    <string name="pref_flashled_color_summary">The color of the LED</string>
-   <string name="pref_flashled_color_default">Sarı</string>   
    <string name="pref_flashled_color_custom_dialog_red">Kırmızı:</string>
    <string name="pref_flashled_color_custom_dialog_green">Yeşil:</string>
    <string name="pref_flashled_color_custom_dialog_blue">Mavi:</string>
