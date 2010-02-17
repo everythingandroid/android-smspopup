@@ -15,6 +15,7 @@
    <string name="pref_vibrate_pattern_default">0,1200</string>
    <string name="pref_flashled_default">true</string>
    <string name="pref_flashled_pattern_default">1000,1000</string>
+   <string name="pref_flashled_color_default">Yellow</string>
    <string name="pref_notif_repeat_default">false</string>
    <string name="pref_notif_repeat_interval_default">5</string>
    <string name="pref_notif_repeat_times_default">2</string>

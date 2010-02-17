@@ -144,8 +144,7 @@
    
    <string name="pref_flashled_color_title">LED Color</string>
    <string name="pref_flashled_color_summary">The color of the LED</string>
-   <string name="pref_flashled_color_default">Yellow</string>
-   <string name="pref_flashled_color_custom_dialog_red">Red:</string>
+      <string name="pref_flashled_color_custom_dialog_red">Red:</string>
    <string name="pref_flashled_color_custom_dialog_green">Green:</string>
    <string name="pref_flashled_color_custom_dialog_blue">Blue:</string>
    <string name="pref_flashled_color_custom_dialog_preview">Preview:</string>
@@ -322,6 +321,6 @@
     <string name="pref_led_color_cyan">Cyan</string>
 
     <string name="pref_led_pattern_entries_fast">Fast</string>
-    <string name="pref_led_pattern_entries_Normal">Normal</string>
-    <string name="pref_led_pattern_entries_Slow">Slow</string>
+    <string name="pref_led_pattern_entries_normal">Normal</string>
+    <string name="pref_led_pattern_entries_slow">Slow</string>
 </resources>
