@@ -106,7 +106,6 @@
   <string name="pref_flashled_summaryoff">No parpadear el LED cuando un mensaje es recibido</string>
   <string name="pref_flashled_color_title">Color del LED</string>
   <string name="pref_flashled_color_summary">El color del LED</string>
-  <string name="pref_flashled_color_default">Amarillo</string>
   <string name="pref_flashled_color_custom_dialog_red">Rojo:</string>
   <string name="pref_flashled_color_custom_dialog_green">Verde:</string>
   <string name="pref_flashled_color_custom_dialog_blue">Azul:</string>
@@ -231,6 +230,6 @@
   <string name="pref_led_color_magenta">Magenta</string>
   <string name="pref_led_color_cyan">Cian</string>
   <string name="pref_led_pattern_entries_fast">Rápido</string>
-  <string name="pref_led_pattern_entries_Normal">Normal</string>
-  <string name="pref_led_pattern_entries_Slow">Lento</string>
+  <string name="pref_led_pattern_entries_normal">Normal</string>
+  <string name="pref_led_pattern_entries_slow">Lento</string>
 </resources>

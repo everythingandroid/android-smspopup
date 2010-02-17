@@ -134,8 +134,8 @@
   <string-array
     name="pref_led_pattern_entries">
     <item>@string/pref_led_pattern_entries_fast</item>
-    <item>pref_led_pattern_entries_normal</item>
-    <item>pref_led_pattern_entries_slow</item>
+    <item>@string/pref_led_pattern_entries_normal</item>
+    <item>@string/pref_led_pattern_entries_slow</item>
     <item>@string/pref_custom</item>
   </string-array>
 </resources>
