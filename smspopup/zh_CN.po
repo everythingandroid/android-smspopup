@@ -1,4 +1,4 @@
-# Translations template for PROJECT.
+# Chinese (China) translations for PROJECT.
 # Copyright (C) 2010 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2010-02-16 22:17-0300\n"
-"PO-Revision-Date: 2010-02-09 09:36+0000\n"
-"Last-Translator: Macarse <macarse@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2010-02-19 18:09+0000\n"
+"Last-Translator: xin <Unknown>\n"
+"Language-Team: zh_CN <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-02-18 23:12+0000\n"
+"X-Launchpad-Export-Date: 2010-02-23 00:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-"Generated-By: Babel 1.0dev-r482\n"
+"Generated-By: Babel 1.0\n"
 
 msgctxt "app_name"
 msgid "SMS Popup"
@@ -48,7 +48,7 @@ msgstr "%d 个未读短信。"
 #, python-format
 msgctxt "notification_scroll"
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #, python-format
 msgctxt "notification_scroll_privacy"
@@ -93,7 +93,7 @@ msgstr "解锁"
 
 msgctxt "button_tts"
 msgid "Text-to-speech"
-msgstr ""
+msgstr "语音信息"
 
 msgctxt "button_speak"
 msgid "Speak"
@@ -195,29 +195,31 @@ msgstr ""
 
 msgctxt "pref_faq_title"
 msgid "FAQ"
-msgstr ""
+msgstr "常见问题"
 
 msgctxt "pref_faq_summary"
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "常见问题"
 
 msgctxt "pref_faq_url"
 msgid "http://code.google.com/p/android-smspopup/wiki/FAQ"
-msgstr ""
+msgstr "常见问题连锁"
 
 msgctxt "pref_releasenotes_title"
 msgid "What's New?"
-msgstr ""
+msgstr "有什么新的？"
 
 msgctxt "pref_releasenotes_summary"
 msgid "See what's new in this version"
-msgstr ""
+msgstr "查看本版新功能"
 
 msgctxt "pref_releasenotes_text"
 msgid ""
 "\n"
 "http://code.google.com/p/android-smspopup/wiki/ReleaseNotes"
 msgstr ""
+"\n"
+"回撤"
 
 msgctxt "pref_sendemail_title"
 msgid "E-mail the Developer"
@@ -500,7 +502,7 @@ msgstr ""
 
 msgctxt "pref_custom_val"
 msgid "custom"
-msgstr ""
+msgstr "自定义"
 
 msgctxt "pref_flashled_title"
 msgid "Blink LED"
@@ -860,203 +862,203 @@ msgstr "通过PayPal捐赠"
 
 msgctxt "view_contact"
 msgid "View Contact"
-msgstr ""
+msgstr "查看联络"
 
 msgctxt "pref_quickreply_title"
 msgid "Quick Reply"
-msgstr ""
+msgstr "快速回复"
 
 msgctxt "pref_quickreply_summaryon"
 msgid "Quick Reply is enabled"
-msgstr ""
+msgstr "快速回复已启动"
 
 msgctxt "pref_quickreply_summaryoff"
 msgid "Quick Reply is disabled"
-msgstr ""
+msgstr "快速回复未启动"
 
 msgctxt "pref_quickreply_bothreplybuttons"
 msgid ""
 "Both reply buttons are already active, to configure them please go to the "
 "Button Configuration screen"
-msgstr ""
+msgstr "两个回复按键都已启动，请回按键设置界面修改"
 
 msgctxt "pref_quickreply_noreplybuttons"
 msgid ""
 "No reply buttons are currently active, to configure them please go to the "
 "Button Configuration screen"
-msgstr ""
+msgstr "回复按键未启动，请回按键设置界面修改"
 
 msgctxt "button_replybyaddress"
 msgid "Reply (to phone number)"
-msgstr ""
+msgstr "回复（电话号码）"
 
 msgctxt "pref_notif_signature_title"
 msgid "Quick Reply Signature"
-msgstr ""
+msgstr "快速签名回复"
 
 msgctxt "pref_notif_signature_summary"
 msgid "Appears at the end of every quick reply"
-msgstr ""
+msgstr "出现在每次快速回复里"
 
 msgctxt "eula_title"
 msgid "SMS Popup License Agreement"
-msgstr ""
+msgstr "SMS Popup 许可协议"
 
 msgctxt "eula_accept"
 msgid "Accept"
-msgstr ""
+msgstr "接受"
 
 msgctxt "eula_refuse"
 msgid "Uninstall"
-msgstr ""
+msgstr "卸载"
 
 msgctxt "pref_delivery_report_title"
 msgid "Delivery Reports"
-msgstr ""
+msgstr "报告信息"
 
 msgctxt "pref_delivery_report_summary"
 msgid "Request a delivery report for each message you send via quick reply"
-msgstr ""
+msgstr "在每次快速回复信息时发送报告"
 
 msgctxt "pref_split_message_title"
 msgid "Split Long Messages"
-msgstr ""
+msgstr "信息分段"
 
 msgctxt "pref_split_message_summaryon"
 msgid "Long messages will be split up (only needed for some CDMA carriers)"
-msgstr ""
+msgstr "信息将自动分段（仅为某些CDMA公司）"
 
 msgctxt "pref_split_message_summaryoff"
 msgid ""
 "Long messages will not be split up (only needed for some CDMA carriers)"
-msgstr ""
+msgstr "信息将不会自动分段（仅为某些CDMA公司）"
 
 msgctxt "pref_autorotate_title"
 msgid "Autorotate Always On"
-msgstr ""
+msgstr "自动旋转启动"
 
 msgctxt "pref_autorotate_summaryon"
 msgid "Popup will always autorotate"
-msgstr ""
+msgstr "Popup将自动旋转"
 
 msgctxt "pref_autorotate_summaryoff"
 msgid "Popup will auto-rotate based on the screen behind it"
-msgstr ""
+msgstr "Popup将根据屏幕自动旋转"
 
 msgctxt "pref_screen_on_title"
 msgid "Screen On for Popup"
-msgstr ""
+msgstr "为Popup启动荧屏"
 
 msgctxt "pref_screen_on_summaryon"
 msgid "Screen will turn on when popup shows"
-msgstr ""
+msgstr "当Popup出现屏幕将会启动"
 
 msgctxt "pref_screen_on_summaryoff"
 msgid "Screen will not turn on when popup shows"
-msgstr ""
+msgstr "当Popup出现屏幕将不会启动"
 
 msgctxt "pref_screen_category"
 msgid "Screen Control"
-msgstr ""
+msgstr "屏幕控制"
 
 msgctxt "quickreply_sent_toast"
 msgid "Message Sent"
-msgstr ""
+msgstr "信息已发送"
 
 msgctxt "quickreply_failed_send_later"
 msgid ""
 "Currently unable to send your message. It will be sent when the service "
 "becomes available."
-msgstr ""
+msgstr "信息无法发送，当网络服务恢复后将再次发送。"
 
 msgctxt "quickreply_failed"
 msgid "Message failed to send"
-msgstr ""
+msgstr "信息发送失败"
 
 msgctxt "pref_custom"
 msgid "Custom"
-msgstr ""
+msgstr "自定义"
 
 msgctxt "pref_notif_repeat_times_entries_keep_repeting"
 msgid "Keep repeating"
-msgstr ""
+msgstr "继续重复"
 
 msgctxt "pref_timeout_entries_10s"
 msgid "10 seconds"
-msgstr ""
+msgstr "10 秒"
 
 msgctxt "pref_timeout_entries_20s"
 msgid "20 seconds"
-msgstr ""
+msgstr "20 秒"
 
 msgctxt "pref_timeout_entries_30s"
 msgid "30 seconds"
-msgstr ""
+msgstr "30 秒"
 
 msgctxt "pref_timeout_entries_1m"
 msgid "1 minute"
-msgstr ""
+msgstr "1 分钟"
 
 msgctxt "pref_timeout_entries_2m"
 msgid "2 minutes"
-msgstr ""
+msgstr "2 分钟"
 
 msgctxt "pref_timeout_entries_5m"
 msgid "5 minutes"
-msgstr ""
+msgstr "5 分钟"
 
 msgctxt "pref_timeout_entries_10m"
 msgid "10 minutes"
-msgstr ""
+msgstr "10 分钟"
 
 msgctxt "pref_vibrate_pattern_entries_normal"
 msgid "Normal"
-msgstr ""
+msgstr "正常"
 
 msgctxt "pref_vibrate_pattern_entries_long"
 msgid "Long Vibrate"
-msgstr ""
+msgstr "单次长性振动"
 
 msgctxt "pref_vibrate_pattern_entries_multiple_short"
 msgid "Multiple Short"
-msgstr ""
+msgstr "多次短性振动"
 
 msgctxt "pref_vibrate_pattern_entries_multiple_long"
 msgid "Multiple Long"
-msgstr ""
+msgstr "多次长性振动"
 
 msgctxt "pref_led_color_blue"
 msgid "Blue"
-msgstr ""
+msgstr "蓝色"
 
 msgctxt "pref_led_color_green"
 msgid "Green"
-msgstr ""
+msgstr "绿色"
 
 msgctxt "pref_led_color_red"
 msgid "Red"
-msgstr ""
+msgstr "红色"
 
 msgctxt "pref_led_color_yellow"
 msgid "Yellow"
-msgstr ""
+msgstr "黄色"
 
 msgctxt "pref_led_color_magenta"
 msgid "Magenta"
-msgstr ""
+msgstr "洋红色"
 
 msgctxt "pref_led_color_cyan"
 msgid "Cyan"
-msgstr ""
+msgstr "青色"
 
 msgctxt "pref_led_pattern_entries_fast"
 msgid "Fast"
-msgstr ""
+msgstr "快速"
 
 msgctxt "pref_led_pattern_entries_normal"
 msgid "Normal"
-msgstr ""
+msgstr "正常"
 
 msgctxt "pref_led_pattern_entries_slow"
 msgid "Slow"
-msgstr ""
+msgstr "慢速"
