@@ -142,7 +142,7 @@ public class SmsPopupUtils {
    * Looks up a contacts id, given their address (phone number in this case).
    * Returns null if not found
    */
-  public static ContactIdentification getPersonIdFromPhoneNumber(Context context, String address) {
+  synchronized public static ContactIdentification getPersonIdFromPhoneNumber(Context context, String address) {
     if (address == null) return null;
 
     Cursor cursor = context.getContentResolver().query(
@@ -178,7 +178,7 @@ public class SmsPopupUtils {
    * Looks up a contacts id, given their email address.
    * Returns null if not found
    */
-  public static ContactIdentification getPersonIdFromEmail(Context context, String email) {
+  synchronized public static ContactIdentification getPersonIdFromEmail(Context context, String email) {
     if (email == null) return null;
 
     Cursor cursor = context.getContentResolver().query(
@@ -342,7 +342,7 @@ public class SmsPopupUtils {
    * @param address phone number or email address of sender
    * @return the thread id (or 0 if there was a problem)
    */
-  public static long findThreadIdFromAddress(Context context, String address) {
+  synchronized public static long findThreadIdFromAddress(Context context, String address) {
     if (address == null) return 0;
 
     String THREAD_RECIPIENT_QUERY = "recipient";
@@ -442,7 +442,7 @@ public class SmsPopupUtils {
    * Tries to locate the message id (from the system database), given the message
    * thread id, the timestamp of the message and the type of message (sms/mms)
    */
-  public static long findMessageId(Context context, long threadId, long timestamp,
+  synchronized public static long findMessageId(Context context, long threadId, long timestamp,
       String body, int messageType) {
 
     long id = 0;
@@ -718,7 +718,7 @@ public class SmsPopupUtils {
    * @param timestamp only messages before this timestamp will be counted
    * @return unread sms+mms message count
    */
-  public static int getUnreadMessagesCount(Context context, long timestamp, String messageBody) {
+  synchronized public static int getUnreadMessagesCount(Context context, long timestamp, String messageBody) {
     return getUnreadSmsCount(context, timestamp, messageBody) + getUnreadMmsCount(context);
   }
 
@@ -728,7 +728,7 @@ public class SmsPopupUtils {
    * @param context
    * @return unread sms message count
    */
-  public static int getUnreadSmsCount(Context context) {
+  private static int getUnreadSmsCount(Context context) {
     return getUnreadSmsCount(context, 0, null);
   }
 
@@ -739,7 +739,7 @@ public class SmsPopupUtils {
    * @param timestamp only messages before this timestamp will be counted
    * @return unread sms message count
    */
-  public static int getUnreadSmsCount(Context context, long timestamp, String messageBody) {
+  private static int getUnreadSmsCount(Context context, long timestamp, String messageBody) {
 
     if (Log.DEBUG) Log.v("getUnreadSmsCount()");
 
@@ -801,7 +801,7 @@ public class SmsPopupUtils {
    * @param context
    * @return unread mms message count
    */
-  public static int getUnreadMmsCount(Context context) {
+  private static int getUnreadMmsCount(Context context) {
 
     final String selection = UNREAD_CONDITION;
     final String[] projection = new String[] { SMSMMS_ID };
@@ -827,7 +827,7 @@ public class SmsPopupUtils {
   /*
    * 
    */
-  public static SmsMmsMessage getSmsDetails(Context context,
+  synchronized public static SmsMmsMessage getSmsDetails(Context context,
       long ignoreThreadId, boolean unreadOnly) {
 
     final String[] projection =
@@ -902,7 +902,7 @@ public class SmsPopupUtils {
   /*
    * 
    */
-  public static SmsMmsMessage getMmsDetails(Context context, long ignoreThreadId) {
+  synchronized public static SmsMmsMessage getMmsDetails(Context context, long ignoreThreadId) {
 
     final String[] projection = new String[] { "_id", "thread_id", "date", "sub", "sub_cs" };
     String selection = UNREAD_CONDITION;
