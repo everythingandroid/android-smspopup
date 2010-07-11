@@ -662,6 +662,7 @@ public class SmsPopupActivity extends Activity {
     if (Log.DEBUG) Log.v("onCreateDialog()");
 
     switch (id) {
+
       /*
        * Delete message dialog
        */
@@ -1221,6 +1222,11 @@ public class SmsPopupActivity extends Activity {
       qrEditText.setSelection(editText.length());
     }
     if (quickreplyTextView != null) {
+
+      if (quickReplySmsMessage == null) {
+        quickReplySmsMessage = message;
+      }
+
       quickreplyTextView.setText(getString(R.string.quickreply_from_text,
           quickReplySmsMessage.getContactName()));
     }
