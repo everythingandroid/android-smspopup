@@ -372,7 +372,7 @@ public class SmsPopupUtils {
   /**
    * Marks a specific message as read
    */
-  public static void setMessageRead(Context context, long messageId, int messageType) {
+  synchronized public static void setMessageRead(Context context, long messageId, int messageType) {
 
     SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     boolean markRead = myPrefs.getBoolean(
@@ -413,7 +413,7 @@ public class SmsPopupUtils {
    * Marks a specific message thread as read - all messages in the thread will
    * be marked read
    */
-  public static void setThreadRead(Context context, long threadId) {
+  synchronized public static void setThreadRead(Context context, long threadId) {
     SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     boolean markRead = myPrefs.getBoolean(
         context.getString(R.string.pref_markread_key),
