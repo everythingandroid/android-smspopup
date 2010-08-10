@@ -132,6 +132,20 @@ public class SmsMessageSender {
   public static final String MMS_SENT_CLASS_NAME = "com.android.mms.transaction.SmsReceiver";
   public static final String MMS_STATUS_RECEIVED_CLASS_NAME =
     "com.android.mms.transaction.MessageStatusReceiver";
+  
+  public static final String[][] MMS_APP_LIST =
+  {
+    { // Stock Android messaging app
+       MMS_PACKAGE_NAME,
+       MMS_SENT_CLASS_NAME,
+       MMS_STATUS_RECEIVED_CLASS_NAME
+    },
+    { // Motoblur phones like Droid X
+      "com.motorola.blur.conversations",
+      "com.motorola.blur.conversations.transaction.SmsReceiver",
+      MMS_STATUS_RECEIVED_CLASS_NAME
+    },
+  };
 
   /**
    * Send a message via the system app and system db
@@ -194,8 +208,8 @@ public class SmsMessageSender {
           Uri uri = null;
           try {
             uri =
-              addMessage(mContext.getContentResolver(), mDests[i], messages.get(j), null,
-                  mTimestamp, requestDeliveryReport, mThreadId);
+              addMessage(mContext.getContentResolver(), mDests[i], messages.get(j),
+                  null, mTimestamp, requestDeliveryReport, mThreadId);
           } catch (SQLiteException e) {
             // TODO: show error here
             // SqliteWrapper.checkSQLiteException(mContext, e);
@@ -203,14 +217,16 @@ public class SmsMessageSender {
 
           PendingIntent deliveryReportIntent = null;
           if (requestDeliveryReport) {
-            deliveryReportIntent = PendingIntent.getBroadcast(mContext, 0,
+            deliveryReportIntent = 
+              PendingIntent.getBroadcast(mContext, 0,
                 new Intent(MESSAGE_STATUS_RECEIVED_ACTION, uri)
-            .setClassName(MMS_PACKAGE_NAME, MMS_STATUS_RECEIVED_CLASS_NAME), 0);
+                  .setClassName(MMS_PACKAGE_NAME, MMS_STATUS_RECEIVED_CLASS_NAME), 0);
           }
 
-          PendingIntent sentIntent = PendingIntent.getBroadcast(mContext, 0,
+          PendingIntent sentIntent =
+            PendingIntent.getBroadcast(mContext, 0,
               new Intent(SmsReceiverService.MESSAGE_SENT_ACTION, uri)
-          .setClass(mContext, SmsReceiver.class), 0);
+                .setClass(mContext, SmsReceiver.class), 0);
 
           smsManager.sendTextMessage(
               mDests[i], mServiceCenter, messages.get(j), sentIntent, deliveryReportIntent);
@@ -230,15 +246,17 @@ public class SmsMessageSender {
         for (int j = 0; j < messageCount; j++) {
           if (requestDeliveryReport) {
             deliveryIntents.add(PendingIntent.getBroadcast(mContext, 0,
-                new Intent(MESSAGE_STATUS_RECEIVED_ACTION, uri)
-            .setClassName(MMS_PACKAGE_NAME, MMS_STATUS_RECEIVED_CLASS_NAME),
+                new Intent(
+                    MESSAGE_STATUS_RECEIVED_ACTION, uri).setClassName(
+                        MMS_PACKAGE_NAME, MMS_STATUS_RECEIVED_CLASS_NAME),
             // MessageStatusReceiver.class),
             0));
           }
 
           sentIntents.add(PendingIntent.getBroadcast(mContext, 0,
-              new Intent(SmsReceiverService.MESSAGE_SENT_ACTION, uri)
-          .setClass(mContext, SmsReceiver.class),
+              new Intent(
+                  SmsReceiverService.MESSAGE_SENT_ACTION, uri).setClass(
+                      mContext, SmsReceiver.class),
           //.setClassName(MMS_PACKAGE_NAME, MMS_SENT_CLASS_NAME),
           // SmsReceiver.class
           0));
