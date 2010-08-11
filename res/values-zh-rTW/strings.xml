@@ -27,7 +27,7 @@
   <string name="pref_enabled_summaryoff">SMS Popup已關閉</string>
   <string name="pref_about_title">關于</string>
   <string name="pref_about_summary">關于SMS Popup</string>
-  <string name="pref_about_text">開發者: Adam K\nEmail: adam@everythingandroid.net\n博客: http://www.everythingandroid.net\n\nSMS Popup 是一款簡單的應用程序，當您收到短信時會彈出對話框-如果需要也可以同時開啟屏幕，解鎖鍵盤。它顯示最近的短信, 發件人以及聯系人圖標（需提前設置）。\n\n您可以隨時通過email進行評論，提出建議和bug。\n\n中文漢化: www.hiapk.com \n\n德語版翻譯: Feyyaz A.\nEmail: f_alingan@hotmail.com\n網站: http://www.yenio.com\n\nDutch 翻譯: mellie@xs4all.nl\n\n西班牙語版翻譯: Diego Fernández\nEmail: profediego@gmail.com\n\n俄羅斯語版翻譯: Artem Kavalerov\nEmail: artem.kavalerov@gmail.com\n\n感謝Min Tran提供圖標。\n(http://min.frexy.com)\n</string>
+  <string name="pref_about_text">開發者: Adam K\nEmail: adam\@everythingandroid.net\n博客: http://www.everythingandroid.net\n\nSMS Popup 是一款簡單的應用程序，當您收到短信時會彈出對話框-如果需要也可以同時開啟屏幕，解鎖鍵盤。它顯示最近的短信, 發件人以及聯系人圖標（需提前設置）。\n\n您可以隨時通過email進行評論，提出建議和bug。\n\n中文漢化: www.hiapk.com \n\n德語版翻譯: Feyyaz A.\nEmail: f_alingan\@hotmail.com\n網站: http://www.yenio.com\n\nDutch 翻譯: mellie\@xs4all.nl\n\n西班牙語版翻譯: Diego Fernández\nEmail: profediego\@gmail.com\n\n俄羅斯語版翻譯: Artem Kavalerov\nEmail: artem.kavalerov\@gmail.com\n\n感謝Min Tran提供圖標。\n(http://min.frexy.com)\n</string>
   <string name="pref_sendemail_title">給開發者發E-mail</string>
   <string name="pref_sendemail_summary">通過E-mail給開發者發送評論或提交Bug。</string>
   <string name="pref_sendemail_dialog">是否允許我把您的系統信息添加至e-mail中(這將幫助我更快修復bug)?</string>

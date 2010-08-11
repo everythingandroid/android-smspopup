@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="app_name">SMS Popup</string>
+  <string name="new_text_at">Missatge nou a les %s</string>
+  <string name="unread_text_waiting">%d missatge(s) més pendent(s) de llegir</string>
+  <string name="mms_subject">Assumpte:</string>
+  <string name="notification_multiple_title">Missatges nous</string>
+  <string name="notification_multiple_text">%d missatge(s) pendent(s) de llegir</string>
+  <string name="notification_scroll">%s: %s</string>
+  <string name="notification_scroll_privacy">Missatge nou de: %s</string>
+  <string name="button_close">Tanca</string>
+  <string name="button_reply">Respon</string>
+  <string name="button_inbox">Bústia</string>
+  <string name="button_view">Visualitza</string>
+  <string name="button_delete">Esborra</string>
+  <string name="button_next">Següent</string>
+  <string name="button_previous">Anterior</string>
+  <string name="button_unlock">Desbloqueja</string>
+  <string name="button_tts">Text-a-veu</string>
+  <string name="button_speak">Llegeix en veu alta</string>
+  <string name="button_delete_noconfirm">Esborra (sense demanar confirmació)</string>
+  <string name="button_quickreply">Resposta ràpida</string>
+  <string name="button_disabled">Desactivat</string>
+  <string name="pref_config_title">Configuració</string>
+  <string name="pref_other_title">Altres</string>
+  <string name="pref_enabled_title">Activar la notificació d\'SMS</string>
+  <string name="pref_enabled_summaryon">La notificació d\'SMS està activada</string>
+  <string name="pref_enabled_summaryoff">La notificació d\'SMS està desactivada</string>
+  <string name="pref_about_title">Quant a...</string>
+  <string name="pref_about_summary">Quant a SMS Popup</string>
+  <string name="pref_faq_title">Preguntes més freqüents</string>
+  <string name="pref_faq_summary">Preguntes més freqüents</string>
+  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
+  <string name="pref_releasenotes_title">Novetats</string>
+  <string name="pref_releasenotes_summary">Mostra les novetats d\'aquesta versió</string>
+  <string name="pref_sendemail_title">Envia un e-mail al desenvolupador</string>
+  <string name="pref_sendemail_summary">Envia comentaris o errors per e-mail al desenvolupador</string>
+  <string name="pref_sendemail_dialog">Voleu incloure informació del vostre terminal a l\'e-mail? (això m\'ajudarà a solucionar els errors)</string>
+  <string name="pref_sendemail_buttonok">I tant</string>
+  <string name="pref_sendemail_buttoncancel">De cap manera</string>
+  <string name="pref_additional_title">Preferències addicionals</string>
+  <string name="pref_additional_summary">Configuració addicional d\'SMS Popup</string>
+</resources>
