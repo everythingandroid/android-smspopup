@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="app_name">android</string>
+  <string name="app_name">SMSpopup</string>
   <string name="new_text_at">Nouveau message à %s</string>
   <string name="unread_text_waiting">%d Message(s) non-lus</string>
   <string name="mms_subject">Sujet:</string>
