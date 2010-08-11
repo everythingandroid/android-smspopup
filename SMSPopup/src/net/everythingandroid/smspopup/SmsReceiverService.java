@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -300,10 +301,15 @@ public class SmsReceiverService extends Service {
 
     // Search for system messaging app that will receive our "message sent complete" type intent
     while (sysIntent == null && i<SmsMessageSender.MMS_APP_LIST.length) {
+
       tempIntent = intent.setClassName(
           SmsMessageSender.MMS_APP_LIST[i][0],
           SmsMessageSender.MMS_APP_LIST[i][1]);
+
+      tempIntent.setAction(SmsMessageSender.MMS_APP_LIST[i][2]);
+
       receiverList = pm.queryBroadcastReceivers(tempIntent, 0);
+
       if (receiverList.size() > 0) {
         if (Log.DEBUG) Log.v("SMSReceiver: Found system messaging app - " + receiverList.get(0).toString());
         sysIntent = tempIntent;
@@ -312,20 +318,38 @@ public class SmsReceiverService extends Service {
       i++;
     }
 
-    // System messaging app not found
+    /*
+     * No system messaging app was found to forward this intent to, therefore we will need to do
+     * the final piece of this ourselves which is basically moving the message to the correct
+     * folder depending on the result.
+     */
     if (sysIntent == null) {
       forwardToSystemApp = false;
+      if (Log.DEBUG) Log.v("SMSReceiver: Did not find system messaging app, moving messages directly");
+
+      Uri uri = intent.getData();
+
+      if (mResultCode == Activity.RESULT_OK) {
+        SmsMessageSender.moveMessageToFolder(this, uri, SmsMessageSender.MESSAGE_TYPE_SENT);
+      } else if ((mResultCode == SmsManager.RESULT_ERROR_RADIO_OFF) ||
+          (mResultCode == SmsManager.RESULT_ERROR_NO_SERVICE)) {
+        SmsMessageSender.moveMessageToFolder(this, uri, SmsMessageSender.MESSAGE_TYPE_QUEUED);
+      } else {
+        SmsMessageSender.moveMessageToFolder(this, uri, SmsMessageSender.MESSAGE_TYPE_FAILED);
+      }
     }
 
-    // Check the result and notify the user
+    // Check the result and notify the user using a toast
     if (mResultCode == Activity.RESULT_OK) {
       if (Log.DEBUG) Log.v("SMSReceiver: Message was sent");
       mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_SENT);
+
     } else if ((mResultCode == SmsManager.RESULT_ERROR_RADIO_OFF) ||
         (mResultCode == SmsManager.RESULT_ERROR_NO_SERVICE)) {
       if (Log.DEBUG) Log.v("SMSReceiver: Error sending message (will send later)");
       // The system shows a Toast here so no need to show one
       //mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_SEND_LATER);
+
     } else {
       if (Log.DEBUG) Log.v("SMSReceiver: Error sending message");
       //ManageNotification.notifySendFailed(this);
