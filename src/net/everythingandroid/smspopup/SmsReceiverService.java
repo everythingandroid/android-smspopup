@@ -1,19 +1,16 @@
 package net.everythingandroid.smspopup;
 
-import net.everythingandroid.smspopup.ManagePreferences.Defaults;
-
-import java.util.Iterator;
 import java.util.List;
 
+import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import android.app.Activity;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.app.PendingIntent.CanceledException;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -129,7 +126,9 @@ public class SmsReceiverService extends Service {
     if (bundle != null) {
       SmsMessage[] messages = SmsPopupUtils.getMessagesFromIntent(intent);
       if (messages != null) {
+        //if (!messages[0].isReplace()) {
         notifyMessageReceived(new SmsMmsMessage(context, messages, System.currentTimeMillis()));
+        //}
       }
     }
   }
@@ -290,15 +289,15 @@ public class SmsReceiverService extends Service {
    */
   private void handleSmsSent(Intent intent) {
     if (Log.DEBUG) Log.v("SMSReceiver: Handle SMS sent");
-    
+
     PackageManager pm = getPackageManager();
     Intent sysIntent = null;
     Intent tempIntent;
     List<ResolveInfo> receiverList;
     boolean forwardToSystemApp = true;
-    
+
     int i=0;
-    
+
     // Search for system messaging app that will receive our "message sent complete" type intent
     while (sysIntent == null && i<SmsMessageSender.MMS_APP_LIST.length) {
       tempIntent = intent.setClassName(
@@ -309,15 +308,15 @@ public class SmsReceiverService extends Service {
         if (Log.DEBUG) Log.v("SMSReceiver: Found system messaging app - " + receiverList.get(0).toString());
         sysIntent = tempIntent;
       }
-    
+
       i++;
     }
-        
+
     // System messaging app not found
     if (sysIntent == null) {
       forwardToSystemApp = false;
     }
-    
+
     // Check the result and notify the user
     if (mResultCode == Activity.RESULT_OK) {
       if (Log.DEBUG) Log.v("SMSReceiver: Message was sent");
@@ -332,17 +331,17 @@ public class SmsReceiverService extends Service {
       //ManageNotification.notifySendFailed(this);
       mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_FAILED);
     }
-    
+
     /*
      * Now let's forward the same intent onto the system app to make sure
      * things there are processed correctly
      */
-//    sysIntent = intent.setClassName(
-//        SmsMessageSender.MMS_PACKAGE_NAME,
-//        SmsMessageSender.MMS_SENT_CLASS_NAME);
+    //    sysIntent = intent.setClassName(
+    //        SmsMessageSender.MMS_PACKAGE_NAME,
+    //        SmsMessageSender.MMS_SENT_CLASS_NAME);
 
-//    Log.v("sysIntent = " + sysIntent.toString());
-//    Log.v("bundle = " + sysIntent.getExtras().toString());   
+    //    Log.v("sysIntent = " + sysIntent.toString());
+    //    Log.v("bundle = " + sysIntent.getExtras().toString());
 
     /*
      * Start the broadcast via PendingIntent so result code is passed over correctly
