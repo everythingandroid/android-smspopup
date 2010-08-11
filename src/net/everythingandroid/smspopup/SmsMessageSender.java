@@ -114,6 +114,16 @@ public class SmsMessageSender {
    */
   public static final String BODY = "body";
 
+  public static final String TYPE = "type";
+
+  public static final int MESSAGE_TYPE_ALL    = 0;
+  public static final int MESSAGE_TYPE_INBOX  = 1;
+  public static final int MESSAGE_TYPE_SENT   = 2;
+  public static final int MESSAGE_TYPE_DRAFT  = 3;
+  public static final int MESSAGE_TYPE_OUTBOX = 4;
+  public static final int MESSAGE_TYPE_FAILED = 5; // for failed outgoing messages
+  public static final int MESSAGE_TYPE_QUEUED = 6; // for messages to send later
+
   private static final String[] SERVICE_CENTER_PROJECTION =
     new String[] {REPLY_PATH_PRESENT, SERVICE_CENTER,};
 
@@ -125,25 +135,30 @@ public class SmsMessageSender {
   private static final int COLUMN_SERVICE_CENTER = 1;
 
   // http://android.git.kernel.org/?p=platform/packages/apps/Mms.git;a=blob;f=src/com/android/mms/transaction/MessageStatusReceiver.java
-  public static final String MESSAGE_STATUS_RECEIVED_ACTION =
+  public static final String MESSAGING_STATUS_RECEIVED_ACTION =
     "com.android.mms.transaction.MessageStatusReceiver.MESSAGE_STATUS_RECEIVED";
 
-  public static final String MMS_PACKAGE_NAME = "com.android.mms";
-  public static final String MMS_SENT_CLASS_NAME = "com.android.mms.transaction.SmsReceiver";
-  public static final String MMS_STATUS_RECEIVED_CLASS_NAME =
-    "com.android.mms.transaction.MessageStatusReceiver";
-  
+  public static final String MESSAGING_PACKAGE_NAME = "com.android.mms";
+  public static final String MESSAGING_STATUS_CLASS_NAME =
+    MESSAGING_PACKAGE_NAME + ".transaction.MessageStatusReceiver";
+
+
   public static final String[][] MMS_APP_LIST =
   {
-    { // Stock Android messaging app
-       MMS_PACKAGE_NAME,
-       MMS_SENT_CLASS_NAME,
-       MMS_STATUS_RECEIVED_CLASS_NAME
+    { // Stock Android messaging app (the bulk of phones use the same class/package names)
+      MESSAGING_PACKAGE_NAME,
+      MESSAGING_PACKAGE_NAME + ".transaction.SmsReceiver",
+      SmsReceiverService.MESSAGE_SENT_ACTION,
+      MESSAGING_STATUS_CLASS_NAME,
+      MESSAGING_STATUS_RECEIVED_ACTION,
+
     },
     { // Motoblur phones like Droid X
       "com.motorola.blur.conversations",
       "com.motorola.blur.conversations.transaction.SmsReceiver",
-      MMS_STATUS_RECEIVED_CLASS_NAME
+      "com.motorola.blur.conversations.transaction.MESSAGE_SENT",
+      "com.motorola.blur.conversations.transaction.MessageStatusReceiver",
+      "com.motorola.blur.conversations.transaction.MessageStatusReceiver.MESSAGE_STATUS_RECEIVED",
     },
   };
 
@@ -217,16 +232,16 @@ public class SmsMessageSender {
 
           PendingIntent deliveryReportIntent = null;
           if (requestDeliveryReport) {
-            deliveryReportIntent = 
+            deliveryReportIntent =
               PendingIntent.getBroadcast(mContext, 0,
-                new Intent(MESSAGE_STATUS_RECEIVED_ACTION, uri)
-                  .setClassName(MMS_PACKAGE_NAME, MMS_STATUS_RECEIVED_CLASS_NAME), 0);
+                  new Intent(MESSAGING_STATUS_RECEIVED_ACTION, uri)
+              .setClassName(MESSAGING_PACKAGE_NAME, MESSAGING_STATUS_CLASS_NAME), 0);
           }
 
           PendingIntent sentIntent =
             PendingIntent.getBroadcast(mContext, 0,
-              new Intent(SmsReceiverService.MESSAGE_SENT_ACTION, uri)
-                .setClass(mContext, SmsReceiver.class), 0);
+                new Intent(SmsReceiverService.MESSAGE_SENT_ACTION, uri)
+            .setClass(mContext, SmsReceiver.class), 0);
 
           smsManager.sendTextMessage(
               mDests[i], mServiceCenter, messages.get(j), sentIntent, deliveryReportIntent);
@@ -247,19 +262,19 @@ public class SmsMessageSender {
           if (requestDeliveryReport) {
             deliveryIntents.add(PendingIntent.getBroadcast(mContext, 0,
                 new Intent(
-                    MESSAGE_STATUS_RECEIVED_ACTION, uri).setClassName(
-                        MMS_PACKAGE_NAME, MMS_STATUS_RECEIVED_CLASS_NAME),
-            // MessageStatusReceiver.class),
-            0));
+                    MESSAGING_STATUS_RECEIVED_ACTION, uri).setClassName(
+                        MESSAGING_PACKAGE_NAME, MESSAGING_STATUS_CLASS_NAME),
+                        // MessageStatusReceiver.class),
+                        0));
           }
 
           sentIntents.add(PendingIntent.getBroadcast(mContext, 0,
               new Intent(
                   SmsReceiverService.MESSAGE_SENT_ACTION, uri).setClass(
                       mContext, SmsReceiver.class),
-          //.setClassName(MMS_PACKAGE_NAME, MMS_SENT_CLASS_NAME),
-          // SmsReceiver.class
-          0));
+                      //.setClassName(MMS_PACKAGE_NAME, MMS_SENT_CLASS_NAME),
+                      // SmsReceiver.class
+                      0));
         }
         if (Log.DEBUG) Log.v("Sending message in " + messageCount + " parts");
         smsManager.sendMultipartTextMessage(
@@ -364,4 +379,57 @@ public class SmsMessageSender {
     }
     return resolver.insert(uri, values);
   }
+
+  /**
+   * Move a message to the given folder.
+   *
+   * @param context the context to use
+   * @param uri the message to move
+   * @param folder the folder to move to
+   * @return true if the operation succeeded
+   */
+  public static boolean moveMessageToFolder(Context context, Uri uri, int folder) {
+    if (uri == null) {
+      return false;
+    }
+
+    boolean markAsUnread = false;
+    boolean markAsRead = false;
+    switch(folder) {
+      case MESSAGE_TYPE_INBOX:
+      case MESSAGE_TYPE_DRAFT:
+        break;
+      case MESSAGE_TYPE_OUTBOX:
+      case MESSAGE_TYPE_SENT:
+        markAsRead = true;
+        break;
+      case MESSAGE_TYPE_FAILED:
+      case MESSAGE_TYPE_QUEUED:
+        markAsUnread = true;
+        break;
+      default:
+        return false;
+    }
+
+    ContentValues values = new ContentValues(2);
+
+    values.put(TYPE, folder);
+    if (markAsUnread) {
+      values.put(READ, Integer.valueOf(0));
+    } else if (markAsRead) {
+      values.put(READ, Integer.valueOf(1));
+    }
+
+    int result = 0;
+
+    try {
+      result = context.getContentResolver().update(uri, values, null, null);
+    } catch (Exception e) {
+
+    }
+
+    return 1 == result;
+
+  }
+
 }
