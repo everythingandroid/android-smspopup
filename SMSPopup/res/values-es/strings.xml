@@ -29,7 +29,7 @@
   <string name="pref_enabled_summaryoff">SMS Popup deshabilitado</string>
   <string name="pref_about_title">Acerca de</string>
   <string name="pref_about_summary">Acerca de SMS Popup</string>
-  <string name="pref_about_text">Creado por: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nAgradecimientos a Diego Fernández por la traducción a Español.\n(profediego@gmail.com)\n\nSMS Popup es una aplicación simple que muestra un diálogo cuando un SMS es recibido, similar al iPhone - encendiendo la pantalla y desbloqueando el teclado si es necesario. Muestra el mensaje más reciente, de quién es y la foto del contacto, si está disponible.\n\nSiéntase libre de enviarme un email con cualquier comentario, sugerencia o fallo. \n\nAgradecimientos a Min Tran por el ícono de la aplicación.\n(http://min.frexy.com)\n</string>
+  <string name="pref_about_text">Creado por: Adam K\nEmail: adam\@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nAgradecimientos a Diego Fernández por la traducción a Español.\n(profediego\@gmail.com)\n\nSMS Popup es una aplicación simple que muestra un diálogo cuando un SMS es recibido, similar al iPhone - encendiendo la pantalla y desbloqueando el teclado si es necesario. Muestra el mensaje más reciente, de quién es y la foto del contacto, si está disponible.\n\nSiéntase libre de enviarme un email con cualquier comentario, sugerencia o fallo. \n\nAgradecimientos a Min Tran por el ícono de la aplicación.\n(http://min.frexy.com)\n</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Preguntas más frecuentes (FAQ)</string>
   <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>

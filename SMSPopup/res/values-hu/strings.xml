@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="mms_subject">Tárgy:</string>
+  <string name="button_close">Bezár</string>
+  <string name="button_reply">Válasz</string>
+  <string name="button_inbox">Bejövő üzenetek</string>
+  <string name="button_view">Nézet</string>
+  <string name="button_view_mms">MMS megtekintése</string>
+  <string name="button_delete">Törlés</string>
+  <string name="button_next">Következő</string>
+  <string name="button_previous">Előző</string>
+  <string name="button_unlock">Feloldás</string>
+  <string name="button_speak">Felolvasás</string>
+  <string name="button_quickreply">Gyors válasz</string>
+  <string name="button_disabled">Letiltva</string>
+  <string name="pref_config_title">SMS Popup beállítások</string>
+  <string name="pref_other_title">Egyéb</string>
+  <string name="pref_enabled_title">SMS Popup engedélyezése</string>
+  <string name="pref_enabled_summaryon">SMS Popup engedélyezve</string>
+  <string name="pref_enabled_summaryoff">SMS Popup letiltva</string>
+  <string name="pref_about_title">Névjegy</string>
+  <string name="pref_about_summary">SMS Popup névjegye</string>
+  <string name="pref_faq_title">GYIK</string>
+  <string name="pref_faq_summary">Gyakran ismételt kérdések</string>
+  <string name="pref_releasenotes_summary">Újdonságok az új verzióban</string>
+  <string name="pref_sendemail_title">E-mail a készítőnek</string>
+  <string name="pref_sendemail_summary">Megjegyzés küldése a készítőnek</string>
+</resources>
