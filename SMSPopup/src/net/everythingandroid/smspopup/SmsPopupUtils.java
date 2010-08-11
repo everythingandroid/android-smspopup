@@ -181,12 +181,18 @@ public class SmsPopupUtils {
   synchronized public static ContactIdentification getPersonIdFromEmail(Context context, String email) {
     if (email == null) return null;
 
-    Cursor cursor = context.getContentResolver().query(
-        Uri.withAppendedPath(
-            ContactWrapper.getEmailLookupContentFilterUri(),
-            Uri.encode(extractAddrSpec(email))),
-            ContactWrapper.getEmailLookupProjection(),
-            null, null, null);
+    Cursor cursor = null;
+    try {
+      cursor = context.getContentResolver().query(
+          Uri.withAppendedPath(
+              ContactWrapper.getEmailLookupContentFilterUri(),
+              Uri.encode(extractAddrSpec(email))),
+              ContactWrapper.getEmailLookupProjection(),
+              null, null, null);
+    } catch (Exception e) {
+      Log.v("getPersonIdFromEmail(): " + e.toString());
+      return null;
+    }
 
     if (cursor != null) {
       try {
@@ -504,7 +510,14 @@ public class SmsPopupUtils {
       } else {
         return;
       }
-      int count = context.getContentResolver().delete(deleteUri, null, null);
+
+      int count = 0;
+      try {
+        count = context.getContentResolver().delete(deleteUri, null, null);
+      } catch (Exception e) {
+        if (Log.DEBUG) Log.v("deleteMessage(): Problem deleting message - " + e.toString());
+      }
+
       if (Log.DEBUG) Log.v("Messages deleted: " + count);
       if (count == 1) {
         //TODO: should only set the thread read if there are no more unread messages
