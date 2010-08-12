@@ -24,6 +24,8 @@ public class ManagePreferences {
   public static final class Defaults {
     public static final boolean PREFS_AUTOROTATE = true;
     public static final boolean PREFS_PRIVACY = false;
+    public static final boolean PREFS_PRIVACY_SENDER = false;
+    public static final boolean PREFS_PRIVACY_ALWAYS = false;
     public static final boolean PREFS_SHOW_BUTTONS = true;
     public static final String PREFS_BUTTON1 = String.valueOf(ButtonListPreference.BUTTON_CLOSE);
     public static final String PREFS_BUTTON2 = String.valueOf(ButtonListPreference.BUTTON_DELETE);
