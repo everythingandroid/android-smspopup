@@ -32,7 +32,6 @@
   <string name="pref_about_text">Utviklet av: Adam K\nE-post: adam\@everythingandroid.net\nBlogg: http://www.everythingandroid.net\n\nSMS Popup er en enkel applikasjon som viser et dialogvindu når du mottar SMS - slår på skjermen og låser opp tastelåsen om nødvendig. Det viser den siste mottatte meldingen, hvem det er fra og kontaktbilde hvis det er tilgjengelig.\n\nSend meg gjerne en e-post (skriv på engelsk) med kommentarer, forslag eller feil.\n\nNorsk oversettelse av: Harald H. Larsen\nE-post: harald.h.larsen\@gmail.com\nWebside: www.radarvarsling.no\n\nTysk oversettelse av: Feyyaz A.\nE-post: f_alingan\@hotmail.com\nWebside: http://www.yenio.com\n\nNederlandsk oversettelse av: mellie\@xs4all.nl\n\nSpansk oversettelse av: Diego Fernández\nE-post: profediego\@gmail.com\n\nRussisk oversettelse av: Artem Kavalerov\nE-post: artem.kavalerov\@gmail.com\n\nTakk til Min Tran for applikasjons ikonet.\n(http://min.frexy.com)\n</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Ofte stilte spørsmål</string>
-  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
   <string name="pref_releasenotes_title">Hva er nytt?</string>
   <string name="pref_releasenotes_summary">Se hva som er nytt i denne versjonen</string>
   <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>
