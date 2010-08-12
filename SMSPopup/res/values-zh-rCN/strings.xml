@@ -32,7 +32,6 @@
   <string name="pref_about_text">开发者: Adam K\nEmail: adam\@everythingandroid.net\n博客: http://www.everythingandroid.net\n\nSMS Popup 是一款简单的应用程序，当您收到短信时会弹出对话框-如果需要也可以同时开启屏幕，解锁键盘。它显示最近的短信, 发件人以及联系人图标（需提前设置）。\n\n您可以随时通过email进行评论，提出建议和bug。\n\n中文汉化: www.hiapk.com \n\n德语版翻译: Feyyaz A.\nEmail: f_alingan\@hotmail.com\n网站: http://www.yenio.com\n\nDutch 翻译: mellie\@xs4all.nl\n\n西班牙语版翻译: Diego Fernández\nEmail: profediego\@gmail.com\n\n俄罗斯语版翻译: Artem Kavalerov\nEmail: artem.kavalerov\@gmail.com\n\n感谢Min Tran提供图标。\n(http://min.frexy.com)\n</string>
   <string name="pref_faq_title">常见问题</string>
   <string name="pref_faq_summary">常见问题</string>
-  <string name="pref_faq_url">常见问题连锁</string>
   <string name="pref_releasenotes_title">有什么新的？</string>
   <string name="pref_releasenotes_summary">查看本版新功能</string>
   <string name="pref_releasenotes_text">\n回撤</string>
