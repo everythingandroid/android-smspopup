@@ -32,7 +32,6 @@
   <string name="pref_about_text">Entwickelt von: Adam K\nEmail: adam\@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nDeutsche Übersetzung: Feyyaz A.\nEmail: f_alingan\@hotmail.com \nWebsite: http://www.yenio.com\n\nSMS Popup ist ein simples Programm welches - ähnlich wie beim iPhone - bei empfangener Nachricht ein Fenster mit den wichtigsten Informationen über die Nachricht (z.B. Versender und wenn vorhanden, ein Kontaktbild) anzeigt.\n\nIch freue mich über jegliche Kommentare, Vorschläge oder gefundene Bugs.\n\nDanke an Min Tran für das Icon\n(http://min.frexy.com)\n</string>
   <string name="pref_faq_title">Häufig gestellte Fragen</string>
   <string name="pref_faq_summary">Häufig gestellte Fragen</string>
-  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
   <string name="pref_releasenotes_title">Was gibt\'s Neues?</string>
   <string name="pref_releasenotes_summary">Was gibt es neues in dieser Version</string>
   <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>
