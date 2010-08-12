@@ -3,6 +3,8 @@
    <string name="pref_timeout_default">30</string>
    <string name="pref_dimscreen_default">false</string>
    <string name="pref_privacy_default">false</string>
+   <string name="pref_privacy_sender_default">false</string>
+   <string name="pref_privacy_always_default">false</string>
    <string name="pref_markread_default">true</string>
    <string name="pref_onlyShowOnKeyguard_default">false</string>
    <string name="pref_require_unlock_default">false</string>

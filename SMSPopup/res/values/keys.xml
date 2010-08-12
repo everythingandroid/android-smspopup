@@ -9,6 +9,8 @@
    <string name="pref_timeout_key">timeout</string>
    <string name="pref_dimscreen_key">dimscreen</string>
    <string name="pref_privacy_key">privacy</string>
+   <string name="pref_privacy_sender_key">privacy_sender</string>
+   <string name="pref_privacy_always_key">privacy_always</string>
    <string name="pref_markread_key">markread</string>
    <string name="pref_onlyShowOnKeyguard_key">showonkeyguard</string>
    <string name="pref_require_unlock_key">requireunlock</string>
