@@ -11,6 +11,7 @@
    <string name="notification_multiple_text">%d unread messages.</string>
    <string name="notification_scroll">%s: %s</string>
    <string name="notification_scroll_privacy">New message from: %s</string>
+   <string name="notification_scroll_privacy_no_name">New message</string>
 
 <!-- Button Strings -->   
    <string name="button_close">Close</string>
@@ -66,9 +67,19 @@
    <string name="pref_dimscreen_summaryon">Popup screen will be dim (saves battery)</string>
    <string name="pref_dimscreen_summaryoff">Popup screen will be bright</string>
 
+   <string name="pref_privacy_category">Privacy</string>
+
    <string name="pref_privacy_title">Privacy Mode</string>
-   <string name="pref_privacy_summaryon">Contents of the message will only be shown after unlock</string>
-   <string name="pref_privacy_summaryoff">Contents of the message will be shown immediately</string>
+   <string name="pref_privacy_summaryon">Popup will use privacy mode </string>
+   <string name="pref_privacy_summaryoff">Popup will show all message details</string>
+
+   <string name="pref_privacy_sender_title">Hide Contact Name</string>
+   <string name="pref_privacy_sender_summaryon">Message sender name will also be hidden</string>
+   <string name="pref_privacy_sender_summaryoff">Message sender name will be shown</string>
+
+   <string name="pref_privacy_always_title">Always Use Privacy Mode</string>
+   <string name="pref_privacy_always_summaryon">Privacy mode will always be used</string>
+   <string name="pref_privacy_always_summaryoff">Only use privacy mode when screen is locked</string>
 
    <string name="pref_markread_title">Mark Read</string>
    <string name="pref_markread_summaryon">Messages will be marked as read when clicking \"Close\"</string>
@@ -288,12 +299,11 @@
     <string name="pref_screen_on_summaryoff">Screen will not turn on when popup shows</string>
     
     <string name="pref_screen_category">Screen Control</string>
-    
+        
 <!-- Other new Quick Reply prefs -->    
     <string name="quickreply_sent_toast">Message Sent</string>
     <string name="quickreply_failed_send_later">Currently unable to send your message. It will be sent when the service becomes available.</string>
     <string name="quickreply_failed">Message failed to send</string>
-
 
 <!-- Arrays texts -->
     <string name="pref_custom">Custom</string>

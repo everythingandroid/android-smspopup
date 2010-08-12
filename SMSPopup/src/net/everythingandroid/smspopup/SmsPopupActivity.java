@@ -16,10 +16,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -36,18 +36,18 @@ import android.provider.Contacts;
 import android.speech.RecognizerIntent;
 import android.text.TextUtils;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.view.ViewStub;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -58,12 +58,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
 import com.google.tts.TTS;
-import com.google.tts.TTSVersionAlert;
 import com.google.tts.TTS.InitListener;
+import com.google.tts.TTSVersionAlert;
 
 @SuppressWarnings("deprecation")
 public class SmsPopupActivity extends Activity {
@@ -103,7 +103,9 @@ public class SmsPopupActivity extends Activity {
   private boolean replying = false;
   private boolean inbox = false;
   private boolean privacyMode = false;
-  private boolean messageViewed = true;
+  private boolean privacySender = false;
+  private boolean privacyAlways = false;
+  private boolean messageViewed = false;
   private String signatureText;
   private Uri contactLookupUri = null;
 
@@ -170,6 +172,10 @@ public class SmsPopupActivity extends Activity {
     // Fetch privacy mode
     privacyMode =
       mPrefs.getBoolean(getString(R.string.pref_privacy_key), Defaults.PREFS_PRIVACY);
+    privacySender =
+        mPrefs.getBoolean(getString(R.string.pref_privacy_sender_key), Defaults.PREFS_PRIVACY_SENDER);
+    privacyAlways =
+        mPrefs.getBoolean(getString(R.string.pref_privacy_always_key), Defaults.PREFS_PRIVACY_ALWAYS);
 
     signatureText = mPrefs.getString(getString(R.string.pref_notif_signature_key), "");
     if (signatureText.length() > 0) signatureText = " " + signatureText;
@@ -408,14 +414,14 @@ public class SmsPopupActivity extends Activity {
   @Override
   public void onWindowFocusChanged(boolean hasFocus) {
     super.onWindowFocusChanged(hasFocus);
-    // Log.v("SMSPopupActivity: onWindowFocusChanged(" + hasFocus + ")");
+    if (Log.DEBUG) Log.v("SMSPopupActivity: onWindowFocusChanged(" + hasFocus + ")");
     if (hasFocus) {
       // This is really hacky, basically a flag that is set if the message
       // was at some point visible. I tried using onResume() or other methods
       // to prevent doing some things 2 times but this seemed to be the only
       // reliable way (?)
       wasVisible = true;
-      refreshPrivacy();
+      refreshPrivacy(false);
     }
   }
 
@@ -513,36 +519,26 @@ public class SmsPopupActivity extends Activity {
       }
 
       // Refresh privacy settings (hide/show message) depending on privacy setting
-      refreshPrivacy();
+      refreshPrivacy(false);
     }
 
     // Fetch contact photo in background
     if (contactPhoto == null) {
       setContactPhotoToDefault(photoImageView);
-      new FetchContactPhotoTask().execute(message.getContactId());
+
+      ManageKeyguard.initialize(getApplicationContext());
+
+      if (privacyMode && privacySender &&
+          (ManageKeyguard.inKeyguardRestrictedInputMode() || privacyAlways)) {
+        // Don't show contact photo, privacy mode with privacy sender is on
+      } else {
+        new FetchContactPhotoTask().execute(message.getContactId());
+      }
     } else {
       setContactPhoto(photoImageView, contactPhoto);
     }
 
-    // Show QuickContact card on photo imageview click (only available on eclair+)
-    if (!SmsPopupUtils.PRE_ECLAIR) {
-
-      contactLookupUri = null;
-      String contactId = message.getContactId();
-      if (contactId != null) {
-        contactLookupUri = ContactWrapper.getLookupUri(Long.valueOf(contactId),
-            message.getContactLookupKey());
-      }
-
-      photoImageView.setOnClickListener(new OnClickListener() {
-        public void onClick(View v) {
-          if (contactLookupUri != null) {
-            ContactWrapper.showQuickContact(SmsPopupActivity.this, v, contactLookupUri,
-                ContactWrapper.QUICKCONTACT_MODE_MEDIUM, null);
-          }
-        }
-      });
-    }
+    addQuickContactOnClick();
 
     // If only 1 unread message waiting
     if (message.getUnreadCount() <= 1) {
@@ -585,17 +581,27 @@ public class SmsPopupActivity extends Activity {
    * This handles hiding and showing various views depending on the privacy
    * settings of the app and the current state of the phone (keyguard on or off)
    */
-  final private void refreshPrivacy() {
-    if (Log.DEBUG) Log.v("refreshPrivacy()");
-    messageViewed = true;
+  final private void refreshPrivacy(boolean forceView) {
 
-    if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_SMS) {
+    if (Log.DEBUG) Log.v("refreshPrivacy(): "+forceView);
+
+    if (message.getMessageType() != SmsMmsMessage.MESSAGE_TYPE_SMS)
+    	return;
+
+
       if (privacyMode) {
-        // We need to init the keyguard class so we can check if the keyguard is
-        // on
+
+    	// if message has been already shown, disable privacy mode
+    	if (messageViewed == true) {
+    		forceView = true;
+    	}
+
+        // We need to init the keyguard class so we can check if the keyguard is on
         ManageKeyguard.initialize(getApplicationContext());
 
-        if (ManageKeyguard.inKeyguardRestrictedInputMode()) {
+        if ((ManageKeyguard.inKeyguardRestrictedInputMode()
+        		|| privacyAlways == true) && forceView == false) {
+
           messageViewed = false;
 
           if (privacyView == null) {
@@ -609,20 +615,46 @@ public class SmsPopupActivity extends Activity {
               }
             });
           }
+
+          // set to privacy mode
+          if (Log.DEBUG) Log.v("refreshPrivacy(): set to privacy mode.");
           messageScrollView.setVisibility(View.GONE);
+          if (privacySender)
+        	  fromTV.setVisibility(View.GONE);
+
         } else {
+
+	      // set public mode
+	      if (Log.DEBUG) Log.v("refreshPrivacy(): set to public mode.");
+
+	      // Fetch contact photo
+	      new FetchContactPhotoTask().execute(message.getContactId());
+
+	      // Add quick contact onClick to contact imageview
+	      addQuickContactOnClick(true);
+
           if (privacyView != null) {
             privacyView.setVisibility(View.GONE);
           }
+
           messageScrollView.setVisibility(View.VISIBLE);
+          fromTV.setVisibility(View.VISIBLE);
+          messageViewed = true;
         }
-      } else {
+
+      } else { // privacyMode
+
+    	// set public mode
+          if (Log.DEBUG) Log.v("refreshPrivacy(): set to public mode.");
         if (privacyView != null) {
           privacyView.setVisibility(View.GONE);
         }
         messageScrollView.setVisibility(View.VISIBLE);
+        fromTV.setVisibility(View.VISIBLE);
+        messageViewed = true;
+
       }
-    }
+
   }
 
   /*
@@ -1021,7 +1053,7 @@ public class SmsPopupActivity extends Activity {
          * This is an aweful fix for the loading dialog not disappearing
          * when the user decides to not install the TTS package but there didn't
          * seem like another way to hook into the current TTS library.
-         * 
+         *
          * This will all go away once we can purely use the system TTS engine and do away
          * with the eyes-free version from Market.
          */
@@ -1116,7 +1148,8 @@ public class SmsPopupActivity extends Activity {
         // the popup will not come out of privacy mode)
         runOnUiThread(new Runnable() {
           public void run() {
-            refreshPrivacy();
+        	// force message view this time!
+            refreshPrivacy(true);
           }
         });
       }
@@ -1348,4 +1381,31 @@ public class SmsPopupActivity extends Activity {
       }
     }
   }
+
+  // Show QuickContact card on photo imageview click (only available on eclair+)
+  private void addQuickContactOnClick() {
+    addQuickContactOnClick(false);
+  }
+
+  private void addQuickContactOnClick(boolean force) {
+    if (!SmsPopupUtils.PRE_ECLAIR && ((!privacyMode && !privacySender) || force)) {
+
+      contactLookupUri = null;
+      String contactId = message.getContactId();
+      if (contactId != null) {
+        contactLookupUri = ContactWrapper.getLookupUri(Long.valueOf(contactId),
+            message.getContactLookupKey());
+      }
+
+      photoImageView.setOnClickListener(new OnClickListener() {
+        public void onClick(View v) {
+          if (contactLookupUri != null) {
+            ContactWrapper.showQuickContact(SmsPopupActivity.this, v, contactLookupUri,
+                ContactWrapper.QUICKCONTACT_MODE_MEDIUM, null);
+          }
+        }
+      });
+    }
+  }
+
 }

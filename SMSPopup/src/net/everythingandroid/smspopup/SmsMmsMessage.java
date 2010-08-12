@@ -261,10 +261,10 @@ public class SmsMmsMessage {
 
   /**
    * Fetch the "reply to" message intent
-   * 
+   *
    * @param replyToThread whether or not to reply using the message threadId or using the
    * sender address
-   * 
+   *
    * @return the intent to pass to startActivity()
    */
   public Intent getReplyIntent(boolean replyToThread) {
@@ -408,7 +408,7 @@ public class SmsMmsMessage {
 
   /**
    * Sned a reply to this message
-   * 
+   *
    * @param quickreply the message to send
    * @return true of the message was sent, false otherwise
    */
