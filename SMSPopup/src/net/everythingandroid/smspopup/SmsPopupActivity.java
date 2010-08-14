@@ -586,74 +586,75 @@ public class SmsPopupActivity extends Activity {
     if (Log.DEBUG) Log.v("refreshPrivacy(): "+forceView);
 
     if (message.getMessageType() != SmsMmsMessage.MESSAGE_TYPE_SMS)
-    	return;
+      return;
 
+    if (privacyMode) {
 
-      if (privacyMode) {
+      // if message has been already shown, disable privacy mode
+      if (messageViewed == true) {
+        forceView = true;
+      }
 
-    	// if message has been already shown, disable privacy mode
-    	if (messageViewed == true) {
-    		forceView = true;
-    	}
+      // We need to init the keyguard class so we can check if the keyguard is on
+      ManageKeyguard.initialize(getApplicationContext());
 
-        // We need to init the keyguard class so we can check if the keyguard is on
-        ManageKeyguard.initialize(getApplicationContext());
+      if ((ManageKeyguard.inKeyguardRestrictedInputMode()
+      		|| privacyAlways == true) && forceView == false) {
 
-        if ((ManageKeyguard.inKeyguardRestrictedInputMode()
-        		|| privacyAlways == true) && forceView == false) {
+        messageViewed = false;
 
-          messageViewed = false;
+        if (privacyView == null) {
+          privacyView = privacyViewStub.inflate();
 
-          if (privacyView == null) {
-            privacyView = privacyViewStub.inflate();
-
-            // The view button (if in privacy mode)
-            Button viewButton = (Button) privacyView.findViewById(R.id.ViewButton);
-            viewButton.setOnClickListener(new OnClickListener() {
-              public void onClick(View v) {
-                viewMessage();
-              }
-            });
-          }
-
-          // set to privacy mode
-          if (Log.DEBUG) Log.v("refreshPrivacy(): set to privacy mode.");
-          messageScrollView.setVisibility(View.GONE);
-          if (privacySender)
-        	  fromTV.setVisibility(View.GONE);
-
-        } else {
-
-	      // set public mode
-	      if (Log.DEBUG) Log.v("refreshPrivacy(): set to public mode.");
-
-	      // Fetch contact photo
-	      new FetchContactPhotoTask().execute(message.getContactId());
-
-	      // Add quick contact onClick to contact imageview
-	      addQuickContactOnClick(true);
-
-          if (privacyView != null) {
-            privacyView.setVisibility(View.GONE);
-          }
-
-          messageScrollView.setVisibility(View.VISIBLE);
-          fromTV.setVisibility(View.VISIBLE);
-          messageViewed = true;
+          // The view button (if in privacy mode)
+          Button viewButton = (Button) privacyView.findViewById(R.id.ViewButton);
+          viewButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+              viewMessage();
+            }
+          });
         }
 
-      } else { // privacyMode
+        // set to privacy mode
+        if (Log.DEBUG) Log.v("refreshPrivacy(): set to privacy mode.");
+        messageScrollView.setVisibility(View.GONE);
 
-    	// set public mode
-          if (Log.DEBUG) Log.v("refreshPrivacy(): set to public mode.");
+        if (privacySender) {
+          fromTV.setVisibility(View.GONE);
+        }
+
+      } else {
+
+        // set public mode
+        if (Log.DEBUG) Log.v("refreshPrivacy(): set to public mode.");
+
+	    // Fetch contact photo
+	    new FetchContactPhotoTask().execute(message.getContactId());
+
+        // Add quick contact onClick to contact imageview
+        addQuickContactOnClick(true);
+
         if (privacyView != null) {
           privacyView.setVisibility(View.GONE);
         }
+
         messageScrollView.setVisibility(View.VISIBLE);
         fromTV.setVisibility(View.VISIBLE);
         messageViewed = true;
-
       }
+
+    } else {
+
+      // set public mode
+      if (Log.DEBUG) Log.v("refreshPrivacy(): set to public mode.");
+      if (privacyView != null) {
+        privacyView.setVisibility(View.GONE);
+      }
+
+      messageScrollView.setVisibility(View.VISIBLE);
+      fromTV.setVisibility(View.VISIBLE);
+      messageViewed = true;
+    }
 
   }
 

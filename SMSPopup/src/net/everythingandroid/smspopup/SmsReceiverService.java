@@ -164,7 +164,7 @@ public class SmsReceiverService extends Service {
 
     // get docked state of phone
     int docked_state =
-      mPrefs.getInt(getString(R.string.pref_docked_key), 0);
+      mPrefs.getInt(R.string.pref_docked_key, 0);
 
     boolean docked = docked_state == ExternalEventReceiver.EXTRA_DOCK_STATE_DESK;
 
@@ -244,7 +244,7 @@ public class SmsReceiverService extends Service {
      * FROM: ContactURI -or- display name and display address -or- display address
      * MESSAGE BODY: message body
      * TIMESTAMP: optional (will use system timestamp)
-     * 
+     *
      * QUICK REPLY INTENT:
      * REPLY INTENT:
      * DELETE INTENT:
