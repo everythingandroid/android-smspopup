@@ -13,6 +13,7 @@
    <string name="pref_blur_default">false</string>
    <string name="pref_notif_enabled_default">false</string>
    <string name="pref_popup_enabled_default">true</string>
+   <string name="pref_notif_icon_default">0</string>
    <string name="pref_vibrate_default">true</string>
    <string name="pref_vibrate_pattern_default">0,1200</string>
    <string name="pref_flashled_default">true</string>
