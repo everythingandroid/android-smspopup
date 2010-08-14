@@ -136,7 +136,10 @@
    
    <string name="pref_notif_sound_title">Notification Sound</string>
    <string name="pref_notif_sound_summary">This sound will play when a message is received</string>
-
+   
+   <string name="pref_notif_icon_title">Notification Icon</string>
+   <string name="pref_notif_icon_summary">Change the notification area icon</string>
+  
    <string name="pref_vibrate_title">Vibrate</string>
    <string name="pref_vibrate_summaryon">Vibrate is on</string>
    <string name="pref_vibrate_summaryoff">Vibrate is off</string>
