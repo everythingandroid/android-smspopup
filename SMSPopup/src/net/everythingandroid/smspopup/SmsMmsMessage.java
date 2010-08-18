@@ -78,15 +78,20 @@ public class SmsMmsMessage {
     fromEmailGateway = sms.isEmail();
     messageClass = sms.getMessageClass();
 
-    String body;
-    if (messages.length == 1 || sms.isReplace()) {
-      body = sms.getDisplayMessageBody();
-    } else {
-      StringBuilder bodyText = new StringBuilder();
-      for (int i = 0; i < messages.length; i++) {
-        bodyText.append(messages[i].getMessageBody());
+    String body = "";
+
+    try {
+      if (messages.length == 1 || sms.isReplace()) {
+        body = sms.getDisplayMessageBody();
+      } else {
+        StringBuilder bodyText = new StringBuilder();
+        for (int i = 0; i < messages.length; i++) {
+          bodyText.append(messages[i].getMessageBody());
+        }
+        body = bodyText.toString();
       }
-      body = bodyText.toString();
+    } catch (Exception e) {
+      if (Log.DEBUG) Log.v("SmsMmsMessage<init> exception: " + e.toString());
     }
     messageBody = body;
 
