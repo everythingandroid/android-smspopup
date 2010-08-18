@@ -3,6 +3,7 @@ package net.everythingandroid.smspopup;
 import net.everythingandroid.smspopup.SmsPopupUtils.ContactIdentification;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.gsm.SmsMessage;
@@ -54,6 +55,10 @@ public class SmsMmsMessage {
   private long messageId = 0;
   private boolean fromEmailGateway = false;
   private MessageClass messageClass = null;
+
+  // Sprint vars to check for special voicemail messages
+  private static final String SPRINT_BRAND = "sprint";
+  private static final String SPRINT_VOICEMAIL_PREFIX = "//ANDROID:";
 
   /**
    * Construct SmsMmsMessage given a raw message (created from pdu), used for when
@@ -422,6 +427,22 @@ public class SmsMmsMessage {
       new SmsMessageSender(context, new String[] {fromAddress}, quickReply, getThreadId());
 
     return sender.sendMessage();
+  }
+
+  // Checks if user is on carrier Sprint and message is a special system message
+  public boolean isSprintVisualVoicemail() {
+
+    if (!SPRINT_BRAND.equals(Build.BRAND)) {
+      return false;
+    }
+
+    if (messageBody != null) {
+      if (messageBody.trim().startsWith(SPRINT_VOICEMAIL_PREFIX)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
 }

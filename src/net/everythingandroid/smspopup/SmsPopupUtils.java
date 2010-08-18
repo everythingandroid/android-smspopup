@@ -78,6 +78,32 @@ public class SmsPopupUtils {
   public static boolean PRE_ECLAIR =
     SmsPopupUtils.getSDKVersionNumber() < SmsPopupUtils.SDK_VERSION_ECLAIR ? true : false;
 
+  // This is just a bad, bad idea, commenting out for now
+  /*
+  public static final ArrayList<Map<String, String>> TESTING = new ArrayList<Map<String, String>>() {
+    private static final long serialVersionUID = 1L;
+    {
+       add(new HashMap<String,String>() {
+        private static final long serialVersionUID = 1L;
+        {
+           put("key1", "value1");
+           put("key2", "value2");
+         }
+       });
+       add(new HashMap<String,String>() {
+        private static final long serialVersionUID = 1L;
+        {
+          put("","com.motorola.blur.conversations");
+          put("","com.motorola.blur.conversations.transaction.SmsReceiver");
+          put("","com.motorola.blur.conversations.transaction.MESSAGE_SENT");
+          put("","com.motorola.blur.conversations.transaction.MessageStatusReceiver");
+          put("","com.motorola.blur.conversations.transaction.MessageStatusReceiver.MESSAGE_STATUS_RECEIVED");
+         }
+       });
+    }
+  };
+  */
+
   /**
    * Looks up a contacts display name by contact id - if not found, the address
    * (phone number) will be formatted and returned instead.
@@ -217,15 +243,15 @@ public class SmsPopupUtils {
   }
 
   /**
-   * 
+   *
    * Looks up a contats photo by their contact id, returns a Bitmap array
    * that represents their photo (or null if not found or there was an error.
-   * 
+   *
    * I do my own scaling and validation of sizes - Android OS supports any size
    * for contact photos and some apps are adding huge photos to contacts.  Doing
    * the scaling myself allows me more control over how things play out in those
    * cases.
-   * 
+   *
    * @param context
    * @param id contact id
    * @return Bitmap of the contacts photo (null if none or an error)
@@ -340,10 +366,10 @@ public class SmsPopupUtils {
   }
 
   /**
-   * 
+   *
    * Tries to locate the message thread id given the address (phone or email)
    * of the message sender.
-   * 
+   *
    * @param context a context to use
    * @param address phone number or email address of sender
    * @return the thread id (or 0 if there was a problem)
@@ -527,7 +553,7 @@ public class SmsPopupUtils {
   }
 
   /**
-   * 
+   *
    */
   public static Intent getSmsInboxIntent() {
     Intent conversations = new Intent(Intent.ACTION_MAIN);
@@ -545,19 +571,25 @@ public class SmsPopupUtils {
 
   /**
    * Get system view sms thread Intent
-   * 
+   *
    * @param context context
    * @param threadId the message thread id to view
    * @return the intent that can be started with startActivity()
    */
   public static Intent getSmsToIntent(Context context, long threadId) {
     Intent popup = new Intent(Intent.ACTION_VIEW);
-    // should I be using FLAG_ACTIVITY_RESET_TASK_IF_NEEDED??
+
+    // Should *NOT* be using FLAG_ACTIVITY_MULTIPLE_TASK however something is broken on
+    // a few popular devices that received recent Froyo upgrades that means this is required
+    // in order to refresh the system compose message UI
     int flags =
       Intent.FLAG_ACTIVITY_NEW_TASK |
-      Intent.FLAG_ACTIVITY_SINGLE_TOP |
-      Intent.FLAG_ACTIVITY_CLEAR_TOP;
+      //Intent.FLAG_ACTIVITY_SINGLE_TOP |
+      //Intent.FLAG_ACTIVITY_CLEAR_TOP;
+      Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+
     popup.setFlags(flags);
+
     if (threadId > 0) {
       //Log.v("^^Found threadId (" + threadId + "), sending to Sms intent");
       popup.setData(Uri.withAppendedPath(THREAD_ID_CONTENT_URI, String.valueOf(threadId)));
@@ -569,19 +601,26 @@ public class SmsPopupUtils {
 
   /**
    * Get system sms-to Intent (normally "compose message" activity)
-   * 
+   *
    * @param context context
    * @param phoneNumber the phone number to compose the message to
    * @return the intent that can be started with startActivity()
    */
   public static Intent getSmsToIntent(Context context, String phoneNumber) {
+
     Intent popup = new Intent(Intent.ACTION_SENDTO);
-    // should I be using FLAG_ACTIVITY_RESET_TASK_IF_NEEDED??
+
+    // Should *NOT* be using FLAG_ACTIVITY_MULTIPLE_TASK however something is broken on
+    // a few popular devices that received recent Froyo upgrades that means this is required
+    // in order to refresh the system compose message UI
     int flags =
       Intent.FLAG_ACTIVITY_NEW_TASK |
-      Intent.FLAG_ACTIVITY_SINGLE_TOP |
-      Intent.FLAG_ACTIVITY_CLEAR_TOP;
+      //Intent.FLAG_ACTIVITY_SINGLE_TOP |
+      //Intent.FLAG_ACTIVITY_CLEAR_TOP;
+      Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+
     popup.setFlags(flags);
+
     if (!"".equals(phoneNumber)) {
       //Log.v("^^Found threadId (" + threadId + "), sending to Sms intent");
       popup.setData(Uri.parse(SMSTO_URI + Uri.encode(phoneNumber)));
@@ -592,7 +631,7 @@ public class SmsPopupUtils {
   }
 
   /**
-   * 
+   *
    */
   public static void launchEmailToIntent(Context context, String subject, boolean includeDebug) {
     Intent msg = new Intent(Intent.ACTION_SEND);
@@ -606,11 +645,15 @@ public class SmsPopupUtils {
       body.append(String.format("\n\n----------\nSysinfo - %s\nModel: %s\n\n",
           Build.FINGERPRINT, Build.MODEL));
 
+      //body.append(String.format("\n\nBrand: %s\n\n", Build.BRAND));
+
       // Array of preference keys to include in email
       final String[] pref_keys = {
           context.getString(R.string.pref_enabled_key),
           context.getString(R.string.pref_timeout_key),
           context.getString(R.string.pref_privacy_key),
+          context.getString(R.string.pref_privacy_sender_key),
+          context.getString(R.string.pref_privacy_always_key),
           context.getString(R.string.pref_dimscreen_key),
           context.getString(R.string.pref_markread_key),
           context.getString(R.string.pref_onlyShowOnKeyguard_key),
@@ -622,6 +665,7 @@ public class SmsPopupUtils {
           context.getString(R.string.pref_popup_enabled_key),
           context.getString(R.string.pref_notif_enabled_key),
           context.getString(R.string.pref_notif_sound_key),
+          context.getString(R.string.pref_notif_icon_key),
           context.getString(R.string.pref_vibrate_key),
           context.getString(R.string.pref_vibrate_pattern_key),
           context.getString(R.string.pref_vibrate_pattern_custom_key),
@@ -716,7 +760,7 @@ public class SmsPopupUtils {
 
   /**
    * Return current unread message count from system db (sms and mms)
-   * 
+   *
    * @param context
    * @return unread sms+mms message count
    */
@@ -726,7 +770,7 @@ public class SmsPopupUtils {
 
   /**
    * Return current unread message count from system db (sms and mms)
-   * 
+   *
    * @param context
    * @param timestamp only messages before this timestamp will be counted
    * @return unread sms+mms message count
@@ -737,7 +781,7 @@ public class SmsPopupUtils {
 
   /**
    * Return current unread message count from system db (sms only)
-   * 
+   *
    * @param context
    * @return unread sms message count
    */
@@ -747,7 +791,7 @@ public class SmsPopupUtils {
 
   /**
    * Return current unread message count from system db (sms only)
-   * 
+   *
    * @param context
    * @param timestamp only messages before this timestamp will be counted
    * @return unread sms message count
@@ -810,7 +854,7 @@ public class SmsPopupUtils {
 
   /**
    * Return current unread message count from system db (mms only)
-   * 
+   *
    * @param context
    * @return unread mms message count
    */
@@ -838,7 +882,7 @@ public class SmsPopupUtils {
   }
 
   /*
-   * 
+   *
    */
   synchronized public static SmsMmsMessage getSmsDetails(Context context,
       long ignoreThreadId, boolean unreadOnly) {
@@ -913,7 +957,7 @@ public class SmsPopupUtils {
   }
 
   /*
-   * 
+   *
    */
   synchronized public static SmsMmsMessage getMmsDetails(Context context, long ignoreThreadId) {
 
@@ -1065,7 +1109,7 @@ public class SmsPopupUtils {
    * to the message and we should ignore all messages in the thread when working out
    * what to display in the notification bar (as these messages will soon be marked read
    * but we can't be sure when the messaging app will actually start).
-   * 
+   *
    */
   public static SmsMmsMessage getRecentMessage(Context context, SmsMmsMessage ignoreMessage) {
     long ignoreThreadId = 0;
@@ -1102,7 +1146,7 @@ public class SmsPopupUtils {
   /**
    * Read the PDUs out of an {@link #SMS_RECEIVED_ACTION} or a
    * {@link #DATA_SMS_RECEIVED_ACTION} intent.
-   * 
+   *
    * @param intent
    *           the intent to read from
    * @return an array of SmsMessages for the PDUs
@@ -1136,15 +1180,26 @@ public class SmsPopupUtils {
    * the popup as the user is likely already viewing messages or composing a new message
    */
   public static final boolean inMessagingApp(Context context) {
-    // TODO: move these to static strings somewhere
-    final String PACKAGE_NAME = "com.android.mms";
-    //final String COMPOSE_CLASS_NAME = "com.android.mms.ui.ComposeMessageActivity";
-    final String CONVO_CLASS_NAME = "com.android.mms.ui.ConversationList";
+
+    /*
+    These appear to be the 2 main intents that mean the user is using the messaging app
+
+    action "android.intent.action.MAIN"
+    data null
+    class "com.android.mms.ui.ConversationList"
+    package "com.android.mms"
+
+    action "android.intent.action.VIEW"
+    data "content://mms-sms/threadID/3"
+    class "com.android.mms.ui.ComposeMessageActivity"
+    package "com.android.mms"
+    */
 
     ActivityManager mAM = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
     List<RunningTaskInfo> mRunningTaskList = mAM.getRunningTasks(1);
     Iterator<RunningTaskInfo> mIterator = mRunningTaskList.iterator();
+
     if (mIterator.hasNext()) {
       RunningTaskInfo mRunningTask = mIterator.next();
       if (mRunningTask != null) {
@@ -1153,50 +1208,14 @@ public class SmsPopupUtils {
         //				Log.v("baseActivity = " + mRunningTask.baseActivity.toString());
         //				Log.v("topActivity = " + mRunningTask.topActivity.toString());
 
-        if (PACKAGE_NAME.equals(runningTaskComponent.getPackageName()) &&
-            CONVO_CLASS_NAME.equals(runningTaskComponent.getClassName())) {
+        if (SmsMessageSender.MESSAGING_PACKAGE_NAME.equals(runningTaskComponent.getPackageName()) &&
+            (SmsMessageSender.MESSAGING_CONVO_CLASS_NAME.equals(runningTaskComponent.getClassName())) ||
+             SmsMessageSender.MESSAGING_COMPOSE_CLASS_NAME.equals(runningTaskComponent.getClassName())) {
           if (Log.DEBUG) Log.v("User in messaging app - from running task");
           return true;
         }
       }
     }
-
-    /*
-		List<RecentTaskInfo> mActivityList = mAM.getRecentTasks(1, 0);
-		Iterator<RecentTaskInfo> mIterator = mActivityList.iterator();
-
-		if (mIterator.hasNext()) {
-			RecentTaskInfo mRecentTask = (RecentTaskInfo) mIterator.next();
-			Intent recentTaskIntent = mRecentTask.baseIntent;
-
-			if (recentTaskIntent != null) {
-				ComponentName recentTaskComponentName = recentTaskIntent.getComponent();
-				if (recentTaskComponentName != null) {
-					String recentTaskClassName = recentTaskComponentName.getClassName();
-					if (PACKAGE_NAME.equals(recentTaskComponentName.getPackageName()) &&
-							(COMPOSE_CLASS_NAME.equals(recentTaskClassName) ||
-							 CONVO_CLASS_NAME.equals(recentTaskClassName))) {
-						if (Log.DEBUG) Log.v("User in messaging app");
-						return true;
-					}
-				}
-			}
-		}
-     */
-
-    /*
-		These appear to be the 2 main intents that mean the user is using the messaging app
-
-		action "android.intent.action.MAIN"
-		data null
-		class "com.android.mms.ui.ConversationList"
-		package "com.android.mms"
-
-		action "android.intent.action.VIEW"
-		data "content://mms-sms/threadID/3"
-		class "com.android.mms.ui.ComposeMessageActivity"
-		package "com.android.mms"
-     */
 
     return false;
   }
@@ -1240,10 +1259,10 @@ public class SmsPopupUtils {
 
   /**
    * Fetch the current device Android OS platform number.
-   * 
+   *
    * TODO: once Cupcake support is no longer needed the system var
    * android.os.Build.VERSION.SDK_INT can be used instead.
-   * 
+   *
    * @return SDK version number
    */
   public static int getSDKVersionNumber() {
