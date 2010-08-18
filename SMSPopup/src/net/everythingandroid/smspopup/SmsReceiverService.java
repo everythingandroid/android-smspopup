@@ -127,9 +127,7 @@ public class SmsReceiverService extends Service {
     if (bundle != null) {
       SmsMessage[] messages = SmsPopupUtils.getMessagesFromIntent(intent);
       if (messages != null) {
-        //if (!messages[0].isReplace()) {
         notifyMessageReceived(new SmsMmsMessage(context, messages, System.currentTimeMillis()));
-        //}
       }
     }
   }
@@ -139,6 +137,10 @@ public class SmsReceiverService extends Service {
     // Class 0 SMS, let the system handle this
     if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_SMS &&
         message.getMessageClass() == MessageClass.CLASS_0) {
+      return;
+    }
+
+    if (message.isSprintVisualVoicemail()) {
       return;
     }
 
@@ -297,25 +299,18 @@ public class SmsReceiverService extends Service {
     List<ResolveInfo> receiverList;
     boolean forwardToSystemApp = true;
 
-    int i=0;
-
     // Search for system messaging app that will receive our "message sent complete" type intent
-    while (sysIntent == null && i<SmsMessageSender.MMS_APP_LIST.length) {
+    tempIntent = intent.setClassName(
+        SmsMessageSender.MESSAGING_PACKAGE_NAME,
+        SmsMessageSender.MESSAGING_RECEIVER_CLASS_NAME);
 
-      tempIntent = intent.setClassName(
-          SmsMessageSender.MMS_APP_LIST[i][0],
-          SmsMessageSender.MMS_APP_LIST[i][1]);
+    tempIntent.setAction(SmsReceiverService.MESSAGE_SENT_ACTION);
 
-      tempIntent.setAction(SmsMessageSender.MMS_APP_LIST[i][2]);
+    receiverList = pm.queryBroadcastReceivers(tempIntent, 0);
 
-      receiverList = pm.queryBroadcastReceivers(tempIntent, 0);
-
-      if (receiverList.size() > 0) {
-        if (Log.DEBUG) Log.v("SMSReceiver: Found system messaging app - " + receiverList.get(0).toString());
-        sysIntent = tempIntent;
-      }
-
-      i++;
+    if (receiverList.size() > 0) {
+      if (Log.DEBUG) Log.v("SMSReceiver: Found system messaging app - " + receiverList.get(0).toString());
+      sysIntent = tempIntent;
     }
 
     /*
