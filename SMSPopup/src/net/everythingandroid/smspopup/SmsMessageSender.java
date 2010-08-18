@@ -1,13 +1,13 @@
 /*
  * Copyright (C) 2008 Esmertec AG. Copyright (C) 2008 The Android Open Source
  * Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -137,12 +137,16 @@ public class SmsMessageSender {
   // http://android.git.kernel.org/?p=platform/packages/apps/Mms.git;a=blob;f=src/com/android/mms/transaction/MessageStatusReceiver.java
   public static final String MESSAGING_STATUS_RECEIVED_ACTION =
     "com.android.mms.transaction.MessageStatusReceiver.MESSAGE_STATUS_RECEIVED";
-
   public static final String MESSAGING_PACKAGE_NAME = "com.android.mms";
   public static final String MESSAGING_STATUS_CLASS_NAME =
     MESSAGING_PACKAGE_NAME + ".transaction.MessageStatusReceiver";
+  public static final String MESSAGING_RECEIVER_CLASS_NAME =
+    MESSAGING_PACKAGE_NAME + ".transaction.SmsReceiver";
+  public static final String MESSAGING_CONVO_CLASS_NAME = "com.android.mms.ui.ConversationList";
+  public static final String MESSAGING_COMPOSE_CLASS_NAME = "com.android.mms.ui.ComposeMessageActivity";
 
-
+// Bad idea, commenting out for now
+/*
   public static final String[][] MMS_APP_LIST =
   {
     { // Stock Android messaging app (the bulk of phones use the same class/package names)
@@ -161,10 +165,11 @@ public class SmsMessageSender {
       "com.motorola.blur.conversations.transaction.MessageStatusReceiver.MESSAGE_STATUS_RECEIVED",
     },
   };
+*/
 
   /**
    * Send a message via the system app and system db
-   * 
+   *
    * @param context the context
    * @param dests the destination addresses
    * @param msgText the message text
@@ -286,12 +291,12 @@ public class SmsMessageSender {
 
   /**
    * Get the service center to use for a reply.
-   * 
+   *
    * The rule from TS 23.040 D.6 is that we send reply messages to the service
    * center of the message to which we're replying, but only if we haven't
    * already replied to that message and only if <code>TP-Reply-Path</code> was
    * set in that message.
-   * 
+   *
    * Therefore, return the service center from the most recent message in the
    * conversation, but only if it is a message from the other party, and only if
    * <code>TP-Reply-Path</code> is set. Otherwise, return null.
@@ -323,7 +328,7 @@ public class SmsMessageSender {
 
   /**
    * Add an SMS to the Out box.
-   * 
+   *
    * @param resolver the content resolver to use
    * @param address the address of the sender
    * @param body the body of the message
@@ -347,7 +352,7 @@ public class SmsMessageSender {
 
   /**
    * Add an SMS to the given URI with thread_id specified.
-   * 
+   *
    * @param resolver the content resolver to use
    * @param uri the URI to add the message to
    * @param address the address of the sender
