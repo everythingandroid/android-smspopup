@@ -2,8 +2,8 @@
 <manifest
   xmlns:android="http://schemas.android.com/apk/res/android"
   package="net.everythingandroid.smspopup"
-  android:versionCode="111"
-  android:versionName="1.0.8">
+  android:versionCode="112"
+  android:versionName="1.0.9">
   <uses-sdk
     android:minSdkVersion="3"
     android:targetSdkVersion="4" />
