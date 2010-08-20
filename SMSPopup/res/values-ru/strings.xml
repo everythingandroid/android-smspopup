@@ -99,7 +99,6 @@
   <string name="pref_vibrate_pattern_ok">Установка собственного шаблона вибро</string>
   <string name="pref_vibrate_pattern_bad">Шаблон вибро задан некорректно, включен шаблон по умолчанию</string>
   <string name="pref_vibrate_pattern_help">Введите собственный шаблон, в формате:\nмсекВыкл, мсекВкл, и т.д..\n\nПример:\n0,1000\n0,500,200,500,200,500</string>
-  <string name="pref_custom_val">другое</string>
   <string name="pref_flashled_title">Мигание светодиодом</string>
   <string name="pref_flashled_summaryon">Мигать светодиодом при входящем сообщении</string>
   <string name="pref_flashled_summaryoff">Не использовать светодиод для оповещения</string>
