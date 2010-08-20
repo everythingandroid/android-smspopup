@@ -97,10 +97,9 @@
     name="pref_vibrate_pattern_values">
     <item>0,1200</item>
     <item>0,2500</item>
-    <item>0,300,100,300,100,300,100,300,100,300
-    </item>
+    <item>0,300,100,300,100,300,100,300,100,300</item>
     <item>0,800,200,800,200,800</item>
-    <item>custom</item>
+    <item>@string/pref_custom_val</item>
   </string-array>
   
   <string-array
@@ -120,7 +119,7 @@
     <item>Yellow</item>
     <item>Magenta</item>
     <item>Cyan</item>
-    <item>custom</item>
+    <item>@string/pref_custom_val</item>
   </string-array>
   
   <string-array
@@ -139,7 +138,7 @@
     <item>300,300</item>
     <item>1000,1000</item>
     <item>3000,3000</item>
-    <item>custom</item>
+    <item>@string/pref_custom_val</item>
   </string-array>
   
   <string-array

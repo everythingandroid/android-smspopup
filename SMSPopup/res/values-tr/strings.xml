@@ -115,7 +115,6 @@
   <string name="pref_vibrate_pattern_ok">Custom vibrate pattern set</string>
   <string name="pref_vibrate_pattern_bad">Custom vibrate pattern invalid, using default</string>
   <string name="pref_vibrate_pattern_help">Enter a custom vibrate pattern, in the format:\nmillisOff, millisOn, etc.\n\nFor example:\n0,1000\n0,500,200,500,200,500</string>
-  <string name="pref_custom_val">custom</string>
   <string name="pref_flashled_title">Blink LED</string>
   <string name="pref_flashled_summaryon">Blink LED when a message is received</string>
   <string name="pref_flashled_summaryoff">Do not blink LED when a message is received</string>

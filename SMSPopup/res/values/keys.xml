@@ -65,4 +65,8 @@
    <string name="pref_autorotate_key">autorotate</string>
    <string name="pref_screen_on_key">screenon</string>
    <string name="pref_docked_key">docked</string>
+   
+   <!-- Value to set trigger custom dialogs -->
+   <string name="pref_custom_val">custom</string>
+      
 </resources>

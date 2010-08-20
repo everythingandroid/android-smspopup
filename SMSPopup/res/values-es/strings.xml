@@ -99,7 +99,6 @@
   <string name="pref_vibrate_pattern_ok">Patrón de vibración personalizado establecido</string>
   <string name="pref_vibrate_pattern_bad">Patrón de vibración personalizado inválido, utilizando el predeterminado</string>
   <string name="pref_vibrate_pattern_help">Ingrese un patrón de vibración personalizado, con el formato:\nmillisOff, millisOn, etc.\n\nPor ejemplo:\n0,1000\n0,500,200,500,200,500</string>
-  <string name="pref_custom_val">custom</string>
   <string name="pref_flashled_title">Parpadeo del LED</string>
   <string name="pref_flashled_summaryon">Parpadear el LED cuando un mensaje es recibido</string>
   <string name="pref_flashled_summaryoff">No parpadear el LED cuando un mensaje es recibido</string>

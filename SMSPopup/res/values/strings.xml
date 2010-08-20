@@ -121,6 +121,7 @@
    <string name="pref_flashled_category_title">LED Configuration</string>
    <string name="pref_reminder_category_title">Reminder Configuration</string>
 
+   <!-- General Notification Preferences -->
    <string name="pref_notif_enabled_title">Enable Notifications</string>
    <string name="pref_notif_enabled_summaryon">Notifications are enabled</string>
    <string name="pref_notif_enabled_summaryoff">Notifications are disabled</string>
@@ -144,21 +145,21 @@
    <string name="pref_vibrate_summaryon">Vibrate is on</string>
    <string name="pref_vibrate_summaryoff">Vibrate is off</string>
 
+   <!-- Vibrate Preferences -->
    <string name="pref_vibrate_pattern_title">Vibrate Pattern</string>
    <string name="pref_vibrate_pattern_summary">Set the vibration pattern</string>
    <string name="pref_vibrate_pattern_ok">Custom vibrate pattern set</string>
    <string name="pref_vibrate_pattern_bad">Custom vibrate pattern invalid</string>
    <string name="pref_vibrate_pattern_help">Enter a custom vibrate pattern, in the format:\nmillisOff, millisOn, etc.\n\nFor example:\n0,1000\n0,500,200,500,200,500</string>
    
-   <!-- Value to set trigger custom dialogs -->
-   <string name="pref_custom_val">custom</string>
+   <!-- LED Preferences -->
    <string name="pref_flashled_title">Blink LED</string>
    <string name="pref_flashled_summaryon">Blink LED when a message is received</string>
    <string name="pref_flashled_summaryoff">Do not blink LED when a message is received</string>
    
    <string name="pref_flashled_color_title">LED Color</string>
    <string name="pref_flashled_color_summary">The color of the LED</string>
-      <string name="pref_flashled_color_custom_dialog_red">Red:</string>
+   <string name="pref_flashled_color_custom_dialog_red">Red:</string>
    <string name="pref_flashled_color_custom_dialog_green">Green:</string>
    <string name="pref_flashled_color_custom_dialog_blue">Blue:</string>
    <string name="pref_flashled_color_custom_dialog_preview">Preview:</string>
@@ -172,6 +173,7 @@
    <string name="pref_flashled_pattern_help_on">Time on:</string>
    <string name="pref_flashled_pattern_help_off">Time off:</string>
 
+   <!-- Notification Repeat Preferences -->
    <string name="pref_notif_repeat_title">Enable Reminders</string>
    <string name="pref_notif_repeat_summaryon">Unread message reminders are enabled</string>
    <string name="pref_notif_repeat_summaryoff">Unread message reminders are disabled</string>
@@ -189,78 +191,78 @@
    <string name="pref_notif_repeat_screen_on_warning">Warning - turning the screen on for reminders can significantly affect battery life</string>
 
 <!-- Contact Notification Customization Strings -->
-  <string name="pref_notif_default_title">Default Notifications</string>
-  <string name="pref_notif_default_summary">Notifications for all contacts without an individual customization</string>
+   <string name="pref_notif_default_title">Default Notifications</string>
+   <string name="pref_notif_default_summary">Notifications for all contacts without an individual customization</string>
 
-  <string name="pref_contacts_title">Contacts Notifications</string>
-  <string name="pref_contacts_summary">Individual contact customization</string>
+   <string name="pref_contacts_title">Contacts Notifications</string>
+   <string name="pref_contacts_summary">Individual contact customization</string>
 
-  <string name="pref_notif_help_title">Help - I\'m confused!</string>
-  <string name="pref_notif_help_summary">Notifications Help</string>
-  <string name="pref_notif_help_message">SMS Popup now offers the ability to customize notifications on a per contact basis.  When a new message comes in, SMS Popup will first check if the contact has a customized notification.  If so, those settings are used, otherwise the default notifications are used.\n\nUsing this functionality, you could set things up so only a few contacts show a popup while the rest trigger a regular notification.  You could also ignore certain contacts by setting their notification to silent.</string>
+   <string name="pref_notif_help_title">Help - I\'m confused!</string>
+   <string name="pref_notif_help_summary">Notifications Help</string>
+   <string name="pref_notif_help_message">SMS Popup now offers the ability to customize notifications on a per contact basis.  When a new message comes in, SMS Popup will first check if the contact has a customized notification.  If so, those settings are used, otherwise the default notifications are used.\n\nUsing this functionality, you could set things up so only a few contacts show a popup while the rest trigger a regular notification.  You could also ignore certain contacts by setting their notification to silent.</string>
 
-  <string name="contact_customization_add">Add Custom Notifications</string>
-  <string name="contact_customization_edit">Edit Custom Notification</string>
-  <string name="contact_customization_remove">Remove Custom Notification</string>
-  <string name="contact_customization_removed_toast">Custom Notification Removed</string>
-  <string name="contact_customization_save">Save</string>
-  <string name="contact_customization_title">Notifications for %s</string>
-  <string name="contact_customization_enabled">Notifications are enabled for %s</string>
-  <string name="contact_customization_disabled">Notifications are disabled for %s</string>
-  <string name="contact_customization_add_hint">Add/Edit contact notifications...</string>
+   <string name="contact_customization_add">Add Custom Notifications</string>
+   <string name="contact_customization_edit">Edit Custom Notification</string>
+   <string name="contact_customization_remove">Remove Custom Notification</string>
+   <string name="contact_customization_removed_toast">Custom Notification Removed</string>
+   <string name="contact_customization_save">Save</string>
+   <string name="contact_customization_title">Notifications for %s</string>
+   <string name="contact_customization_enabled">Notifications are enabled for %s</string>
+   <string name="contact_customization_disabled">Notifications are disabled for %s</string>
+   <string name="contact_customization_add_hint">Add/Edit contact notifications...</string>
   
-  <string name="ringtone_silent">Silent</string>
+   <string name="ringtone_silent">Silent</string>
   
 <!-- Preset Quick Reply Message Strings -->
-  <string name="pref_message_presets_title">Preset Messages</string>
-  <string name="pref_message_presets_summary">Configure preset messages for quick replies</string>
+   <string name="pref_message_presets_title">Preset Messages</string>
+   <string name="pref_message_presets_summary">Configure preset messages for quick replies</string>
 
-  <string name="message_presets_add">Add Preset Message</string>
-  <string name="message_presets_edit">Edit Preset Message</string>
+   <string name="message_presets_add">Add Preset Message</string>
+   <string name="message_presets_edit">Edit Preset Message</string>
     
-  <string name="message_presets_add_text">Create</string>
-  <string name="message_presets_save_text">Save</string>
-  <string name="message_presets_delete_text">Remove</string>
-  <string name="message_presets_edit_text">Edit</string>
-  <string name="message_presets_reorder_text">Move to top</string>
-  <string name="message_presets_empty_text">No presets defined</string>
+   <string name="message_presets_add_text">Create</string>
+   <string name="message_presets_save_text">Save</string>
+   <string name="message_presets_delete_text">Remove</string>
+   <string name="message_presets_edit_text">Edit</string>
+   <string name="message_presets_reorder_text">Move to top</string>
+   <string name="message_presets_empty_text">No presets defined</string>
 
-  <string name="message_presets_add_toast">Message preset added</string>
-  <string name="message_presets_save_toast">Message preset updated</string>
-  <string name="message_presets_delete_toast">Message preset deleted</string>
-  <string name="message_presets_reorder_toast">Message preset moved to top</string>
-  <string name="message_presets_error_toast">Error - please try again</string>
+   <string name="message_presets_add_toast">Message preset added</string>
+   <string name="message_presets_save_toast">Message preset updated</string>
+   <string name="message_presets_delete_toast">Message preset deleted</string>
+   <string name="message_presets_reorder_toast">Message preset moved to top</string>
+   <string name="message_presets_error_toast">Error - please try again</string>
     
 <!-- Quick Reply Strings -->
-  <string name="message_counter">%d chars remaining</string>
-  <string name="message_counter_multiple">%d chars remaining, %d messages</string>
-    
-  <string name="quickreply_title">Quick Reply</string>
-  <string name="quickreply_from_text">To: %s</string>
-  <string name="quickreply_preset_button">Presets</string>
-  <string name="quickreply_send_button">Send</string>
-  <string name="quickreply_sending_toast">Sending message...</string>
-  <string name="quickreply_nomessage_toast">Send</string>
+   <string name="message_counter">%d chars remaining</string>
+   <string name="message_counter_multiple">%d chars remaining, %d messages</string>
+   
+   <string name="quickreply_title">Quick Reply</string>
+   <string name="quickreply_from_text">To: %s</string>
+   <string name="quickreply_preset_button">Presets</string>
+   <string name="quickreply_send_button">Send</string>
+   <string name="quickreply_sending_toast">Sending message...</string>
+   <string name="quickreply_nomessage_toast">Send</string>
     
 <!-- Text-To-Speech and Voice Transcription Strings -->
-  <string name="loading_message">Loading...</string>
-  <string name="error_message">Error</string>
-  <string name="error_no_voice_recognition">Voice recognition not available on this device</string> 
+   <string name="loading_message">Loading...</string>
+   <string name="error_message">Error</string>
+   <string name="error_no_voice_recognition">Voice recognition not available on this device</string> 
       
 <!-- Popup Button Configuration -->
-  <string name="pref_button_config_title">Button Configuration</string>
-  <string name="pref_button_config_summary">Popup button configuration</string>
-  <string name="pref_button_summary">Current Setting: %s</string>
+   <string name="pref_button_config_title">Button Configuration</string>
+   <string name="pref_button_config_summary">Popup button configuration</string>
+   <string name="pref_button_summary">Current Setting: %s</string>
 
-  <string name="pref_button1_title">Button 1 Configuration</string>
-  <string name="pref_button2_title">Button 2 Configuration</string>
-  <string name="pref_button3_title">Button 3 Configuration</string>
+   <string name="pref_button1_title">Button 1 Configuration</string>
+   <string name="pref_button2_title">Button 2 Configuration</string>
+   <string name="pref_button3_title">Button 3 Configuration</string>
     
 <!-- Donate Strings (not used right now) -->
-  <string name="pref_donate_title">Donate to SMS Popup</string>    
-  <string name="pref_donate_text">SMS Popup is a free application that I work on in my spare time.  If you find it useful, and can spare a few bucks, a donation would be much appreciated.\n\nThanks!</string>
-  <string name="pref_donate_market_button">Donate via Android Market</string>
-  <string name="pref_donate_paypal_button">Donate via PayPal</string>
+   <string name="pref_donate_title">Donate to SMS Popup</string>    
+   <string name="pref_donate_text">SMS Popup is a free application that I work on in my spare time.  If you find it useful, and can spare a few bucks, a donation would be much appreciated.\n\nThanks!</string>
+   <string name="pref_donate_market_button">Donate via Android Market</string>
+   <string name="pref_donate_paypal_button">Donate via PayPal</string>
 
 <!-- Misc missing string -->
    <string name="view_contact">View Contact</string>
@@ -280,60 +282,60 @@
    <string name="pref_notif_signature_summary">Appears at the end of every quick reply</string>
 
 <!-- Eula Strings -->
-    <string name="eula_title">SMS Popup License Agreement</string>
-    <string name="eula_accept">Accept</string>
-    <string name="eula_refuse">Uninstall</string>
+   <string name="eula_title">SMS Popup License Agreement</string>
+   <string name="eula_accept">Accept</string>
+   <string name="eula_refuse">Uninstall</string>
 
 <!-- Send message prefs -->
-    <string name="pref_delivery_report_title">Delivery Reports</string>
-    <string name="pref_delivery_report_summary">Request a delivery report for each message you send via quick reply</string>
+   <string name="pref_delivery_report_title">Delivery Reports</string>
+   <string name="pref_delivery_report_summary">Request a delivery report for each message you send via quick reply</string>
 
-    <string name="pref_split_message_title">Split Long Messages</string>
-    <string name="pref_split_message_summaryon">Long messages will be split up (only needed for some CDMA carriers)</string>
-    <string name="pref_split_message_summaryoff">Long messages will not be split up (only needed for some CDMA carriers)</string>
+   <string name="pref_split_message_title">Split Long Messages</string>
+   <string name="pref_split_message_summaryon">Long messages will be split up (only needed for some CDMA carriers)</string>
+   <string name="pref_split_message_summaryoff">Long messages will not be split up (only needed for some CDMA carriers)</string>
     
 <!-- Other new prefs -->
-    <string name="pref_autorotate_title">Autorotate Always On</string>
-    <string name="pref_autorotate_summaryon">Popup will always autorotate</string>
-    <string name="pref_autorotate_summaryoff">Popup will auto-rotate based on the screen behind it</string>
+   <string name="pref_autorotate_title">Autorotate Always On</string>
+   <string name="pref_autorotate_summaryon">Popup will always autorotate</string>
+   <string name="pref_autorotate_summaryoff">Popup will auto-rotate based on the screen behind it</string>
 
-    <string name="pref_screen_on_title">Screen On for Popup</string>
-    <string name="pref_screen_on_summaryon">Screen will turn on when popup shows</string>
-    <string name="pref_screen_on_summaryoff">Screen will not turn on when popup shows</string>
+   <string name="pref_screen_on_title">Screen On for Popup</string>
+   <string name="pref_screen_on_summaryon">Screen will turn on when popup shows</string>
+   <string name="pref_screen_on_summaryoff">Screen will not turn on when popup shows</string>
     
-    <string name="pref_screen_category">Screen Control</string>
+   <string name="pref_screen_category">Screen Control</string>
         
 <!-- Other new Quick Reply prefs -->    
-    <string name="quickreply_sent_toast">Message Sent</string>
-    <string name="quickreply_failed_send_later">Currently unable to send your message. It will be sent when the service becomes available.</string>
-    <string name="quickreply_failed">Message failed to send</string>
+   <string name="quickreply_sent_toast">Message Sent</string>
+   <string name="quickreply_failed_send_later">Currently unable to send your message. It will be sent when the service becomes available.</string>
+   <string name="quickreply_failed">Message failed to send</string>
 
 <!-- Arrays texts -->
-    <string name="pref_custom">Custom</string>
+   <string name="pref_custom">Custom</string>
 
-    <string name="pref_notif_repeat_times_entries_keep_repeting">Keep repeating</string>
+   <string name="pref_notif_repeat_times_entries_keep_repeting">Keep repeating</string>
     
-    <string name="pref_timeout_entries_10s">10 seconds</string>
-    <string name="pref_timeout_entries_20s">20 seconds</string>
-    <string name="pref_timeout_entries_30s">30 seconds</string>
-    <string name="pref_timeout_entries_1m">1 minute</string>
-    <string name="pref_timeout_entries_2m">2 minutes</string>
-    <string name="pref_timeout_entries_5m">5 minutes</string>
-    <string name="pref_timeout_entries_10m">10 minutes</string>
+   <string name="pref_timeout_entries_10s">10 seconds</string>
+   <string name="pref_timeout_entries_20s">20 seconds</string>
+   <string name="pref_timeout_entries_30s">30 seconds</string>
+   <string name="pref_timeout_entries_1m">1 minute</string>
+   <string name="pref_timeout_entries_2m">2 minutes</string>
+   <string name="pref_timeout_entries_5m">5 minutes</string>
+   <string name="pref_timeout_entries_10m">10 minutes</string>
 
-    <string name="pref_vibrate_pattern_entries_normal">Normal</string>
-    <string name="pref_vibrate_pattern_entries_long">Long Vibrate</string>
-    <string name="pref_vibrate_pattern_entries_multiple_short">Multiple Short</string>
-    <string name="pref_vibrate_pattern_entries_multiple_long">Multiple Long</string>
+   <string name="pref_vibrate_pattern_entries_normal">Normal</string>
+   <string name="pref_vibrate_pattern_entries_long">Long Vibrate</string>
+   <string name="pref_vibrate_pattern_entries_multiple_short">Multiple Short</string>
+   <string name="pref_vibrate_pattern_entries_multiple_long">Multiple Long</string>
 
-    <string name="pref_led_color_blue">Blue</string>
-    <string name="pref_led_color_green">Green</string>
-    <string name="pref_led_color_red">Red</string>
-    <string name="pref_led_color_yellow">Yellow</string>
-    <string name="pref_led_color_magenta">Magenta</string>
-    <string name="pref_led_color_cyan">Cyan</string>
+   <string name="pref_led_color_blue">Blue</string>
+   <string name="pref_led_color_green">Green</string>
+   <string name="pref_led_color_red">Red</string>
+   <string name="pref_led_color_yellow">Yellow</string>
+   <string name="pref_led_color_magenta">Magenta</string>
+   <string name="pref_led_color_cyan">Cyan</string>
 
-    <string name="pref_led_pattern_entries_fast">Fast</string>
-    <string name="pref_led_pattern_entries_normal">Normal</string>
-    <string name="pref_led_pattern_entries_slow">Slow</string>
+   <string name="pref_led_pattern_entries_fast">Fast</string>
+   <string name="pref_led_pattern_entries_normal">Normal</string>
+   <string name="pref_led_pattern_entries_slow">Slow</string>
 </resources>
