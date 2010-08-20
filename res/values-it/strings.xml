@@ -99,7 +99,6 @@
   <string name="pref_vibrate_pattern_ok">Imposta un intervallo personalizzato</string>
   <string name="pref_vibrate_pattern_bad">Intervallo personalizzato non valido, usa quello predefinito</string>
   <string name="pref_vibrate_pattern_help">Inserisci un valore personalizzato, nel formato:\nmillisOff, millisOn, etc.\n\nPer esempio:\n0,1000\n0,500,200,500,200,500</string>
-  <string name="pref_custom_val">personalizza</string>
   <string name="pref_flashled_title">Stato LED</string>
   <string name="pref_flashled_summaryon">Accendi il LED alla ricezione di un msg</string>
   <string name="pref_flashled_summaryoff">Non accendere il LED alla ricezione di un msg</string>

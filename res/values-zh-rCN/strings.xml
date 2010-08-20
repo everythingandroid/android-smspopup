@@ -99,7 +99,6 @@
   <string name="pref_vibrate_pattern_ok">自定义振动模式</string>
   <string name="pref_vibrate_pattern_bad">自定义振动模式不可用, 使用默认</string>
   <string name="pref_vibrate_pattern_help">输入自定义振动模式格式:\n停止振动毫秒数, 开始振动毫秒数, 等等.\n\n例如:\n0,1000\n0,500,200,500,200,500</string>
-  <string name="pref_custom_val">自定义</string>
   <string name="pref_flashled_title">LED灯闪烁</string>
   <string name="pref_flashled_summaryon">收到短信时LED灯闪烁</string>
   <string name="pref_flashled_summaryoff">收到短信时LED灯不闪烁</string>
