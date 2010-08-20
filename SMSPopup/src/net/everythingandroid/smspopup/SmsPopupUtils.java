@@ -583,10 +583,10 @@ public class SmsPopupUtils {
     // a few popular devices that received recent Froyo upgrades that means this is required
     // in order to refresh the system compose message UI
     int flags =
-      Intent.FLAG_ACTIVITY_NEW_TASK |
+      Intent.FLAG_ACTIVITY_NEW_TASK;
       //Intent.FLAG_ACTIVITY_SINGLE_TOP |
       //Intent.FLAG_ACTIVITY_CLEAR_TOP;
-      Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+      //| Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
 
     popup.setFlags(flags);
 
@@ -614,10 +614,10 @@ public class SmsPopupUtils {
     // a few popular devices that received recent Froyo upgrades that means this is required
     // in order to refresh the system compose message UI
     int flags =
-      Intent.FLAG_ACTIVITY_NEW_TASK |
+      Intent.FLAG_ACTIVITY_NEW_TASK;
       //Intent.FLAG_ACTIVITY_SINGLE_TOP |
       //Intent.FLAG_ACTIVITY_CLEAR_TOP;
-      Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+      //| Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
 
     popup.setFlags(flags);
 
