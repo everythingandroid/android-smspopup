@@ -585,8 +585,8 @@ public class SmsPopupUtils {
     int flags =
       Intent.FLAG_ACTIVITY_NEW_TASK |
       //Intent.FLAG_ACTIVITY_SINGLE_TOP |
-      //Intent.FLAG_ACTIVITY_CLEAR_TOP;
-      Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+      Intent.FLAG_ACTIVITY_CLEAR_TOP;
+      //Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
 
     popup.setFlags(flags);
 
@@ -616,8 +616,8 @@ public class SmsPopupUtils {
     int flags =
       Intent.FLAG_ACTIVITY_NEW_TASK |
       //Intent.FLAG_ACTIVITY_SINGLE_TOP |
-      //Intent.FLAG_ACTIVITY_CLEAR_TOP;
-      Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+      Intent.FLAG_ACTIVITY_CLEAR_TOP;
+      //Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
 
     popup.setFlags(flags);
 

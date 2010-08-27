@@ -1,8 +1,5 @@
 package net.everythingandroid.smspopup;
 
-import java.util.ArrayList;
-
-import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,9 +13,14 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+
+import net.everythingandroid.smspopup.ManagePreferences.Defaults;
+
+import java.util.ArrayList;
 
 /*
  * This class handles the Notifications (sounds/vibrate/LED)
@@ -150,6 +152,7 @@ public class ManageNotification {
         }
 
       } else {
+        
         scrollText =
           new SpannableString(context.getString(R.string.notification_scroll, contactName,
               messageBody));
@@ -157,6 +160,7 @@ public class ManageNotification {
         // Set contact name as bold
         scrollText.setSpan(new StyleSpan(Typeface.BOLD), 0, contactName.length(),
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        
       }
     }
 
@@ -186,18 +190,6 @@ public class ManageNotification {
     //  Notification notification =
     //  new Notification(R.drawable.stat_notify_sms, scrollText, timestamp);
 
-    // If in a call, start the media player
-    //    if (callState == TelephonyManager.CALL_STATE_OFFHOOK
-    //        && AM.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-    //
-    //      // TODO: make this an option
-    //      //          if (Log.DEBUG) Log.v("User on a call, running own mediaplayer");
-    //      //          MediaPlayer mMediaPlayer = MediaPlayer.create(context, alarmSoundURI);
-    //      //          mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-    //      //          mMediaPlayer.setLooping(false);
-    //      //          mMediaPlayer.start();
-    //    }
-
     // Set the PendingIntent if the status message is clicked
     PendingIntent notifIntent = PendingIntent.getActivity(context, 0, smsIntent, 0);
 
@@ -226,47 +218,66 @@ public class ManageNotification {
         R.string.pref_notif_enabled_key,
         Defaults.PREFS_NOTIF_ENABLED,
         SmsPopupDbAdapter.KEY_ENABLED_NUM)) {
+      
       return null;
+      
     }
 
     // Get some preferences: vibrate and vibrate_pattern prefs
     boolean vibrate =
-      mPrefs.getBoolean(R.string.pref_vibrate_key, Defaults.PREFS_VIBRATE_ENABLED,
+      mPrefs.getBoolean(
+          R.string.pref_vibrate_key, 
+          Defaults.PREFS_VIBRATE_ENABLED,
           SmsPopupDbAdapter.KEY_VIBRATE_ENABLED_NUM);
 
     String vibrate_pattern_raw =
-      mPrefs.getString(R.string.pref_vibrate_pattern_key,
-          Defaults.PREFS_VIBRATE_PATTERN, SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_NUM);
+      mPrefs.getString(
+          R.string.pref_vibrate_pattern_key,
+          Defaults.PREFS_VIBRATE_PATTERN, 
+          SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_NUM);
 
     String vibrate_pattern_custom_raw =
-      mPrefs.getString(R.string.pref_vibrate_pattern_custom_key,
+      mPrefs.getString(
+          R.string.pref_vibrate_pattern_custom_key,
           Defaults.PREFS_VIBRATE_PATTERN,
           SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM_NUM);
 
     // Get LED preferences
     boolean flashLed =
-      mPrefs.getBoolean(R.string.pref_flashled_key, Defaults.PREFS_LED_ENABLED,
+      mPrefs.getBoolean(
+          R.string.pref_flashled_key, 
+          Defaults.PREFS_LED_ENABLED,
           SmsPopupDbAdapter.KEY_LED_ENABLED_NUM);
 
     String flashLedCol =
-      mPrefs.getString(R.string.pref_flashled_color_key, Defaults.PREFS_LED_COLOR,
+      mPrefs.getString(
+          R.string.pref_flashled_color_key, 
+          Defaults.PREFS_LED_COLOR,
           SmsPopupDbAdapter.KEY_LED_COLOR_NUM);
 
     String flashLedColCustom =
-      mPrefs.getString(R.string.pref_flashled_color_custom_key,
-          Defaults.PREFS_LED_COLOR, SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM_NUM);
+      mPrefs.getString(
+          R.string.pref_flashled_color_custom_key,
+          Defaults.PREFS_LED_COLOR, 
+          SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM_NUM);
 
     String flashLedPattern =
-      mPrefs.getString(R.string.pref_flashled_pattern_key,
-          Defaults.PREFS_LED_PATTERN, SmsPopupDbAdapter.KEY_LED_PATTERN_NUM);
+      mPrefs.getString(
+          R.string.pref_flashled_pattern_key,
+          Defaults.PREFS_LED_PATTERN,
+          SmsPopupDbAdapter.KEY_LED_PATTERN_NUM);
 
     String flashLedPatternCustom =
-      mPrefs.getString(R.string.pref_flashled_pattern_custom_key,
-          Defaults.PREFS_LED_PATTERN, SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM_NUM);
+      mPrefs.getString(
+          R.string.pref_flashled_pattern_custom_key,
+          Defaults.PREFS_LED_PATTERN,
+          SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM_NUM);
 
     // Try and parse the user ringtone, use the default if it fails
     Uri alarmSoundURI =
-      Uri.parse(mPrefs.getString(R.string.pref_notif_sound_key, defaultRingtone,
+      Uri.parse(mPrefs.getString(
+          R.string.pref_notif_sound_key, 
+          defaultRingtone,
           SmsPopupDbAdapter.KEY_RINGTONE_NUM));
 
     if (Log.DEBUG) Log.v("Sounds URI = " + alarmSoundURI.toString());
@@ -274,10 +285,13 @@ public class ManageNotification {
     // Fetch privacy settings
     boolean privacyMode =
       mPrefs.getBoolean(R.string.pref_privacy_key, Defaults.PREFS_PRIVACY);
+    
     boolean privacySender =
       mPrefs.getBoolean(R.string.pref_privacy_sender_key, Defaults.PREFS_PRIVACY_SENDER);
+    
     boolean privacyAlways =
       mPrefs.getBoolean(R.string.pref_privacy_always_key, Defaults.PREFS_PRIVACY_ALWAYS);
+    
 
     // Fetch notification icon
     int notifIcon =
@@ -305,9 +319,10 @@ public class ManageNotification {
      * LED, vibrate and ringtone to fire
      */
     if (!onlyUpdate) {
-
+      
       // Set up LED pattern and color
       if (flashLed) {
+        
         notification.flags |= Notification.FLAG_SHOW_LIGHTS;
 
         /*
@@ -323,8 +338,7 @@ public class ManageNotification {
 
         // Set to default if there was a problem
         if (led_pattern == null) {
-          led_pattern =
-            parseLEDPattern(context.getString(R.string.pref_flashled_pattern_default));
+          led_pattern = parseLEDPattern(Defaults.PREFS_LED_PATTERN);
         }
 
         notification.ledOnMS = led_pattern[0];
@@ -339,7 +353,7 @@ public class ManageNotification {
         }
 
         // Default in case the parse fails
-        int col = Color.parseColor(context.getString(R.string.pref_flashled_color_default));
+        int col = Color.parseColor(Defaults.PREFS_LED_COLOR);
 
         // Try and parse the color
         if (flashLedCol != null) {
@@ -353,25 +367,41 @@ public class ManageNotification {
         notification.ledARGB = col;
       }
 
-      /*
-       * Set up vibrate pattern
-       */
-      // If vibrate is ON, or if phone is set to vibrate
-      if ((vibrate || AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode())) {
-        long[] vibrate_pattern = null;
-        if (context.getString(R.string.pref_custom_val).equals(vibrate_pattern_raw)) {
-          vibrate_pattern = parseVibratePattern(vibrate_pattern_custom_raw);
-        } else {
-          vibrate_pattern = parseVibratePattern(vibrate_pattern_raw);
+      
+      // Get phone state, if offhook then don't set vibrate or sound
+      TelephonyManager mTM = 
+        (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+      
+      if (mTM.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK) {
+        
+        /*
+         * Set up vibrate pattern
+         */
+        // If vibrate is ON, or if phone is set to vibrate
+        if ((vibrate || AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode())) {
+          
+          long[] vibrate_pattern = null;
+          
+          if (context.getString(R.string.pref_custom_val).equals(vibrate_pattern_raw)) {
+            vibrate_pattern = parseVibratePattern(vibrate_pattern_custom_raw);
+          } else {
+            vibrate_pattern = parseVibratePattern(vibrate_pattern_raw);
+          }
+          
+          if (vibrate_pattern != null) {
+            notification.vibrate = vibrate_pattern;
+          } else {
+            notification.defaults = Notification.DEFAULT_VIBRATE;
+          }
         }
-        if (vibrate_pattern != null) {
-          notification.vibrate = vibrate_pattern;
-        } else {
-          notification.defaults = Notification.DEFAULT_VIBRATE;
-        }
+        
+        /*
+         * Set up notification sound
+         */
+        notification.sound = alarmSoundURI;
+      
       }
-
-      notification.sound = alarmSoundURI;
+      
     }
 
     // Set intent to execute if the "clear all" notifications button is pressed -
@@ -417,11 +447,13 @@ public class ManageNotification {
     SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
     if (reply
-        || myPrefs.getBoolean(context.getString(R.string.pref_markread_key),
-            Boolean.parseBoolean(context.getString(R.string.pref_markread_default)))) {
+        || myPrefs.getBoolean(context.getString(R.string.pref_markread_key), 
+            Defaults.PREFS_MARK_READ)) {
+      
       NotificationManager myNM =
         (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
       myNM.cancelAll();
+      
     }
   }
 
@@ -476,7 +508,6 @@ public class ManageNotification {
    * @return
    */
   public static int[] parseLEDPattern(String stringPattern) {
-    int[] arrayPattern = new int[2];
     int on, off;
 
     if (stringPattern == null) return null;
@@ -485,8 +516,8 @@ public class ManageNotification {
 
     if (splitPattern.length != 2) return null;
 
-    int LED_PATTERN_MIN_SECONDS = 0;
-    int LED_PATTERN_MAX_SECONDS = 60000;
+    final int LED_PATTERN_MIN_SECONDS = 0;
+    final int LED_PATTERN_MAX_SECONDS = 60000;
 
     try {
       on = Integer.parseInt(splitPattern[0]);
@@ -502,9 +533,7 @@ public class ManageNotification {
 
     if (on >= LED_PATTERN_MIN_SECONDS && on <= LED_PATTERN_MAX_SECONDS
         && off >= LED_PATTERN_MIN_SECONDS && off <= LED_PATTERN_MAX_SECONDS) {
-      arrayPattern[0] = on;
-      arrayPattern[1] = off;
-      return arrayPattern;
+      return new int[] {on, off};
     }
 
     return null;
