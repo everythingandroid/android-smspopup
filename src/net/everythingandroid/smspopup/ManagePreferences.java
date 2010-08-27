@@ -32,6 +32,7 @@ public class ManagePreferences {
     public static final String PREFS_BUTTON3 = String.valueOf(ButtonListPreference.BUTTON_REPLY);
     public static final boolean PREFS_SHOW_POPUP = true;
     public static final boolean PREFS_ONLY_SHOW_ON_KEYGUARD = false;
+    public static final boolean PREFS_MARK_READ = true;
 
     public static final boolean PREFS_NOTIF_ENABLED = false;
     public static final String PREFS_NOTIF_ICON = "0";
