@@ -43,7 +43,7 @@
               android:showSilent="true"
               android:dependency="@string/pref_notif_enabled_key"
               android:defaultValue="content://settings/system/notification_sound" />
-            <ListPreference
+            <net.everythingandroid.smspopup.preferences.NotificationIconListPreference
               android:key="@string/pref_notif_icon_key"
               android:title="@string/pref_notif_icon_title"
               android:summary="@string/pref_notif_icon_summary"

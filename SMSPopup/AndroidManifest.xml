@@ -125,4 +125,6 @@
     android:name="android.permission.READ_LOGS" />
   <uses-permission
     android:name="android.permission.READ_PHONE_STATE" />
+  <uses-feature
+    android:name="android.hardware.telephony" />
 </manifest>
