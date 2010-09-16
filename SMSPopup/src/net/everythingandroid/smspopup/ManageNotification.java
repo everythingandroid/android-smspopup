@@ -1,5 +1,8 @@
 package net.everythingandroid.smspopup;
 
+import java.util.ArrayList;
+
+import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -18,10 +21,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 
-import net.everythingandroid.smspopup.ManagePreferences.Defaults;
-
-import java.util.ArrayList;
-
 /*
  * This class handles the Notifications (sounds/vibrate/LED)
  */
@@ -34,7 +33,7 @@ public class ManageNotification {
 
   private static final int NOTIFY = 0;
   private static final int FAILED = 1;
-  private static final int[][] NOTIF_ICON_RES = {
+  public static final int[][] NOTIF_ICON_RES = {
     {R.drawable.stat_notify_sms, R.drawable.stat_notify_sms_failed},
     {R.drawable.stat_notify_sms_htc, R.drawable.stat_notify_sms_failed_htc},
     {R.drawable.stat_notify_sms_blur, R.drawable.stat_notify_sms_failed},
@@ -152,7 +151,7 @@ public class ManageNotification {
         }
 
       } else {
-        
+
         scrollText =
           new SpannableString(context.getString(R.string.notification_scroll, contactName,
               messageBody));
@@ -160,7 +159,7 @@ public class ManageNotification {
         // Set contact name as bold
         scrollText.setSpan(new StyleSpan(Typeface.BOLD), 0, contactName.length(),
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        
+
       }
     }
 
@@ -218,22 +217,22 @@ public class ManageNotification {
         R.string.pref_notif_enabled_key,
         Defaults.PREFS_NOTIF_ENABLED,
         SmsPopupDbAdapter.KEY_ENABLED_NUM)) {
-      
+
       return null;
-      
+
     }
 
     // Get some preferences: vibrate and vibrate_pattern prefs
     boolean vibrate =
       mPrefs.getBoolean(
-          R.string.pref_vibrate_key, 
+          R.string.pref_vibrate_key,
           Defaults.PREFS_VIBRATE_ENABLED,
           SmsPopupDbAdapter.KEY_VIBRATE_ENABLED_NUM);
 
     String vibrate_pattern_raw =
       mPrefs.getString(
           R.string.pref_vibrate_pattern_key,
-          Defaults.PREFS_VIBRATE_PATTERN, 
+          Defaults.PREFS_VIBRATE_PATTERN,
           SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_NUM);
 
     String vibrate_pattern_custom_raw =
@@ -245,20 +244,20 @@ public class ManageNotification {
     // Get LED preferences
     boolean flashLed =
       mPrefs.getBoolean(
-          R.string.pref_flashled_key, 
+          R.string.pref_flashled_key,
           Defaults.PREFS_LED_ENABLED,
           SmsPopupDbAdapter.KEY_LED_ENABLED_NUM);
 
     String flashLedCol =
       mPrefs.getString(
-          R.string.pref_flashled_color_key, 
+          R.string.pref_flashled_color_key,
           Defaults.PREFS_LED_COLOR,
           SmsPopupDbAdapter.KEY_LED_COLOR_NUM);
 
     String flashLedColCustom =
       mPrefs.getString(
           R.string.pref_flashled_color_custom_key,
-          Defaults.PREFS_LED_COLOR, 
+          Defaults.PREFS_LED_COLOR,
           SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM_NUM);
 
     String flashLedPattern =
@@ -276,7 +275,7 @@ public class ManageNotification {
     // Try and parse the user ringtone, use the default if it fails
     Uri alarmSoundURI =
       Uri.parse(mPrefs.getString(
-          R.string.pref_notif_sound_key, 
+          R.string.pref_notif_sound_key,
           defaultRingtone,
           SmsPopupDbAdapter.KEY_RINGTONE_NUM));
 
@@ -285,13 +284,13 @@ public class ManageNotification {
     // Fetch privacy settings
     boolean privacyMode =
       mPrefs.getBoolean(R.string.pref_privacy_key, Defaults.PREFS_PRIVACY);
-    
+
     boolean privacySender =
       mPrefs.getBoolean(R.string.pref_privacy_sender_key, Defaults.PREFS_PRIVACY_SENDER);
-    
+
     boolean privacyAlways =
       mPrefs.getBoolean(R.string.pref_privacy_always_key, Defaults.PREFS_PRIVACY_ALWAYS);
-    
+
 
     // Fetch notification icon
     int notifIcon =
@@ -319,10 +318,10 @@ public class ManageNotification {
      * LED, vibrate and ringtone to fire
      */
     if (!onlyUpdate) {
-      
+
       // Set up LED pattern and color
       if (flashLed) {
-        
+
         notification.flags |= Notification.FLAG_SHOW_LIGHTS;
 
         /*
@@ -367,41 +366,41 @@ public class ManageNotification {
         notification.ledARGB = col;
       }
 
-      
+
       // Get phone state, if offhook then don't set vibrate or sound
-      TelephonyManager mTM = 
+      TelephonyManager mTM =
         (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-      
+
       if (mTM.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK) {
-        
+
         /*
          * Set up vibrate pattern
          */
         // If vibrate is ON, or if phone is set to vibrate
         if ((vibrate || AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode())) {
-          
+
           long[] vibrate_pattern = null;
-          
+
           if (context.getString(R.string.pref_custom_val).equals(vibrate_pattern_raw)) {
             vibrate_pattern = parseVibratePattern(vibrate_pattern_custom_raw);
           } else {
             vibrate_pattern = parseVibratePattern(vibrate_pattern_raw);
           }
-          
+
           if (vibrate_pattern != null) {
             notification.vibrate = vibrate_pattern;
           } else {
             notification.defaults = Notification.DEFAULT_VIBRATE;
           }
         }
-        
+
         /*
          * Set up notification sound
          */
         notification.sound = alarmSoundURI;
-      
+
       }
-      
+
     }
 
     // Set intent to execute if the "clear all" notifications button is pressed -
@@ -447,13 +446,13 @@ public class ManageNotification {
     SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
     if (reply
-        || myPrefs.getBoolean(context.getString(R.string.pref_markread_key), 
+        || myPrefs.getBoolean(context.getString(R.string.pref_markread_key),
             Defaults.PREFS_MARK_READ)) {
-      
+
       NotificationManager myNM =
         (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
       myNM.cancelAll();
-      
+
     }
   }
 
