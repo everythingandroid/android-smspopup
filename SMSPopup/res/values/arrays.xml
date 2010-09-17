@@ -154,13 +154,103 @@
     <item>0</item>
     <item>1</item>
     <item>2</item>
+    <item>3</item>
+    
+    <item>4</item>
+    <item>5</item>
+    <item>6</item>
+    <item>7</item>
+    <item>8</item>
+    <item>9</item>
+    <item>10</item>
+    <item>11</item>
+    <item>12</item>
+    <item>13</item>
+
+    <item>14</item>
+    <item>15</item>
+    <item>16</item>
+    <item>17</item>
+    <item>18</item>
+    <item>19</item>
+    <item>20</item>
+    <item>21</item>
+    <item>22</item>
+    <item>23</item>
+
+    <item>24</item>
+    <item>25</item>
+    <item>26</item>
+    <item>27</item>
+    <item>28</item>
+    <item>29</item>
+    <item>30</item>
+    <item>31</item>
+    <item>32</item>
+    <item>33</item>
+
+    <item>34</item>
+    <item>35</item>
+    <item>36</item>
+    <item>37</item>
+    <item>38</item>
+    <item>39</item>
+    <item>40</item>
+    <item>41</item>
+    <item>42</item>
+    <item>43</item>   
   </string-array>
   
   <string-array
     name="pref_notif_icon_entries">
     <item>Android</item>
+    <item>Android (Old)</item>
     <item>HTC</item>
     <item>Motorola</item>
+    
+    <item>Android Blue</item>
+    <item>Android Gray</item>
+    <item>Android Green</item>
+    <item>Android Light Blue</item>
+    <item>Android Orange</item>
+    <item>Android Pink</item>
+    <item>Android Purple</item>
+    <item>Android Red</item>
+    <item>Android White</item>
+    <item>Android Yellow</item>
+
+    <item>Android (Old) Blue</item>
+    <item>Android (Old) Gray</item>
+    <item>Android (Old) Green</item>
+    <item>Android (Old) Light Blue</item>
+    <item>Android (Old) Orange</item>
+    <item>Android (Old) Pink</item>
+    <item>Android (Old) Purple</item>
+    <item>Android (Old) Red</item>
+    <item>Android (Old) White</item>
+    <item>Android (Old) Yellow</item>
+        
+    <item>HTC Blue</item>
+    <item>HTC Gray</item>
+    <item>HTC Green</item>
+    <item>HTC Light Blue</item>
+    <item>HTC Orange</item>
+    <item>HTC Pink</item>
+    <item>HTC Purple</item>
+    <item>HTC Red</item>
+    <item>HTC White</item>
+    <item>HTC Yellow</item>
+        
+    <item>Motorola Blue</item>
+    <item>Motorola Gray</item>
+    <item>Motorola Green</item>
+    <item>Motorola Light Blue</item>
+    <item>Motorola Orange</item>
+    <item>Motorola Pink</item>
+    <item>Motorola Purple</item>
+    <item>Motorola Red</item>
+    <item>Motorola White</item>
+    <item>Motorola Yellow</item>
   </string-array>
   
 </resources>
