@@ -35,8 +35,53 @@ public class ManageNotification {
   private static final int FAILED = 1;
   public static final int[][] NOTIF_ICON_RES = {
     {R.drawable.stat_notify_sms, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_old, R.drawable.stat_notify_sms_failed},
     {R.drawable.stat_notify_sms_htc, R.drawable.stat_notify_sms_failed_htc},
     {R.drawable.stat_notify_sms_blur, R.drawable.stat_notify_sms_failed},
+
+    {R.drawable.stat_notify_sms_blue, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_gray, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_green, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_lb, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_orange, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_pink, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_purple, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_red, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_white, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_yellow, R.drawable.stat_notify_sms_failed},
+
+    {R.drawable.stat_notify_sms_old_blue, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_old_gray, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_old_green, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_old_lb, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_old_orange, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_old_pink, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_old_purple, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_old_red, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_old_white, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_old_yellow, R.drawable.stat_notify_sms_failed},
+
+    {R.drawable.stat_notify_sms_htc_blue, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_htc_gray, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_htc_green, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_htc_lb, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_htc_orange, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_htc_pink, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_htc_purple, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_htc_red, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_htc_white, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_htc_yellow, R.drawable.stat_notify_sms_failed},
+
+    {R.drawable.stat_notify_sms_blur_blue, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_blur_gray, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_blur_green, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_blur_lb, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_blur_orange, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_blur_pink, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_blur_purple, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_blur_red, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_blur_white, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_blur_yellow, R.drawable.stat_notify_sms_failed},
   };
 
   /*

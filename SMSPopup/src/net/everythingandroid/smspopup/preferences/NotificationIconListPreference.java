@@ -410,6 +410,8 @@ public class NotificationIconListPreference extends DialogPreference {
       // Set selected item
       if (position == selected) {
         holder.text.setChecked(true);
+      } else {
+        holder.text.setChecked(false);
       }
 
       return convertView;
