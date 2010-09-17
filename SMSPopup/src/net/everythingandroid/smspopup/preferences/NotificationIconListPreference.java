@@ -32,41 +32,18 @@ public class NotificationIconListPreference extends DialogPreference {
   private CharSequence[] mEntryValues;
   private String mValue;
   private String mSummary;
-  private int mClickedDialogEntryIndex;
+  private int selectedItemIndex;
   private Context context;
-  private MyObj[] listViewItems;
 
   public NotificationIconListPreference(Context _context, AttributeSet attrs) {
       super(_context, attrs);
 
       context = _context;
 
+      // Fetch entries, values and summary info for preference
       mEntries = context.getResources().getStringArray(R.array.pref_notif_icon_entries);
       mEntryValues = context.getResources().getStringArray(R.array.pref_notif_icon_values);
       mSummary = context.getResources().getString(R.string.pref_notif_icon_summary);
-
-      listViewItems = new MyObj[mEntries.length];
-      for (int i=0; i<mEntries.length; i++) {
-        listViewItems[i] = new MyObj(mEntries[i], ManageNotification.NOTIF_ICON_RES[i][0]);
-      }
-
-      //android.R.layout.simple_list_ite//single_choice
-//  simple_list_item_single_choice      TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ListPreference, 0, 0);
-//      a.gett
-
-//        TypedArray a = context.obtainStyledAttributes(attrs,
-//                com.android.internal.R.styleable.ListPreference, 0, 0);
-//        mEntries = a.getTextArray(com.android.internal.R.styleable.ListPreference_entries);
-//        mEntryValues = a.getTextArray(com.android.internal.R.styleable.ListPreference_entryValues);
-//        a.recycle();
-//
-//        /* Retrieve the Preference summary attribute since it's private
-//         * in the Preference class.
-//         */
-//        a = context.obtainStyledAttributes(attrs,
-//                com.android.internal.R.styleable.Preference, 0, 0);
-//        mSummary = a.getString(com.android.internal.R.styleable.Preference_summary);
-//        a.recycle();
   }
 
   public NotificationIconListPreference(Context context) {
@@ -242,7 +219,7 @@ public class NotificationIconListPreference extends DialogPreference {
                   "ListPreference requires an entries array and an entryValues array.");
       }
 
-      mClickedDialogEntryIndex = getValueIndex();
+      selectedItemIndex = getValueIndex();
 
 //        builder.setSingleChoiceItems(mEntries, mClickedDialogEntryIndex,
 //                new DialogInterface.OnClickListener() {
@@ -258,24 +235,31 @@ public class NotificationIconListPreference extends DialogPreference {
 //                    }
 //        });
 
+      AdapterItems[] listViewItems = new AdapterItems[mEntries.length];
+      for (int i=0; i<mEntries.length; i++) {
+        listViewItems[i] = new AdapterItems(mEntries[i], ManageNotification.NOTIF_ICON_RES[i][0]);
+      }
+
       builder.setSingleChoiceItems(
-          //new MyCustomAdapter(context, R.layout.notification_icon_listview_row, android.R.id.text1, (String[]) mEntries),
-          //new MyCustomAdapter(context, android.R.layout.simple_list_item_1, android.R.id.text1, (String[]) mEntries),
-          //new ArrayAdapter<CharSequence>(context, android.R.layout.simple_list_item_single_choice, android.R.id.text1, mEntries),
-          new MyCustomAdapter(context, R.layout.notification_icon_listview_row, listViewItems, mClickedDialogEntryIndex),
-          mClickedDialogEntryIndex,
-          new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-              mClickedDialogEntryIndex = which;
+        new NotificationIconAdapter(
+            context,
+            R.layout.notification_icon_listview_row,
+            listViewItems,
+            selectedItemIndex),
+        selectedItemIndex,
+        new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int which) {
+            selectedItemIndex = which;
 
               /*
                * Clicking on an item simulates the positive button
                * click, and dismisses the dialog.
                */
-              NotificationIconListPreference.this.onClick(dialog, DialogInterface.BUTTON_POSITIVE);
-              dialog.dismiss();
-            }
-      });
+            NotificationIconListPreference.this.onClick(dialog, DialogInterface.BUTTON_POSITIVE);
+            dialog.dismiss();
+          }
+        }
+      );
 
       /*
        * The typical interaction for list-based dialogs is to have
@@ -289,8 +273,8 @@ public class NotificationIconListPreference extends DialogPreference {
   protected void onDialogClosed(boolean positiveResult) {
       super.onDialogClosed(positiveResult);
 
-      if (positiveResult && mClickedDialogEntryIndex >= 0 && mEntryValues != null) {
-          String value = mEntryValues[mClickedDialogEntryIndex].toString();
+      if (positiveResult && selectedItemIndex >= 0 && mEntryValues != null) {
+          String value = mEntryValues[selectedItemIndex].toString();
           if (callChangeListener(value)) {
               setValue(value);
           }
@@ -363,54 +347,67 @@ public class NotificationIconListPreference extends DialogPreference {
       };
   }
 
-  private class MyObj {
+  // Class to hold the text and icon res id in the adapter
+  private class AdapterItems {
     public CharSequence text;
-    public int iconResId;
+    public int iconRes;
 
-    public MyObj(CharSequence t, int i) {
-     text = t;
-     iconResId = i;
+    public AdapterItems(CharSequence _text, int _iconRes) {
+     text = _text;
+     iconRes = _iconRes;
     }
   }
 
+  // View holder to references to the views
   private static class ViewHolder {
     CheckedTextView text;
     ImageView icon;
   }
 
-  public class MyCustomAdapter extends ArrayAdapter<MyObj> {
+  // Custom ArrayAdapter that inflates a custom view that has both text and an icon
+  public class NotificationIconAdapter extends ArrayAdapter<AdapterItems> {
     private Context context;
     private int selected;
+    private int viewResId;
 
-    //public MyCustomAdapter(Context _context, int resource, int textViewResourceId, MyObj[] objects) {
-    public MyCustomAdapter(Context _context, int textViewResourceId, MyObj[] objects, int s) {
-      //super( _context,  resource,  textViewResourceId, objects);
-      super(_context, textViewResourceId, objects);
+    public NotificationIconAdapter(Context _context, int _viewResId, AdapterItems[] objects, int _selected) {
+      super(_context, _viewResId, objects);
       context = _context;
-      selected = s;
+      viewResId = _viewResId;
+      selected = _selected;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
       ViewHolder holder;
 
+      // See if layout has already been inflated
       if (convertView == null) {
+
+        // Inflate layout
         LayoutInflater inflater =
           (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.notification_icon_listview_row, null);
+        convertView = inflater.inflate(viewResId, null);
 
+        // Locate views and store in view holder
         holder = new ViewHolder();
         holder.text = (CheckedTextView) convertView.findViewById(android.R.id.text1);
         holder.icon = (ImageView) convertView.findViewById(android.R.id.icon);
 
+        // Store in tag
         convertView.setTag(holder);
+
       } else {
+
+        // Otherwise layout has already been inflated, get views from view holder
         holder = (ViewHolder) convertView.getTag();
       }
 
+      // Set text and icon
       holder.text.setText(getItem(position).text);
-      holder.icon.setImageResource(getItem(position).iconResId);
+      holder.icon.setImageResource(getItem(position).iconRes);
 
+      // Set selected item
       if (position == selected) {
         holder.text.setChecked(true);
       }
