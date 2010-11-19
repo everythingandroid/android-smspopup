@@ -35,7 +35,8 @@
       android:layout_width="fill_parent"
       android:gravity="center"
       android:paddingRight="10dp"
-      android:paddingLeft="10dp" android:textColorLink="?android:attr/textColorPrimaryDisableOnly"/>
+      android:paddingLeft="10dp"
+      android:textColorLink="?android:attr/textColorPrimaryDisableOnly" />
   </ScrollView>
   <ViewStub
     android:id="@+id/MmsViewStub"
