@@ -120,7 +120,7 @@ public class SmsPopupDbAdapter {
       //                   + newVersion + ", which will destroy all old data");
       if (Log.DEBUG) Log.v("SMSPopupDbAdapter: Upgrading Database");
       db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_DB_TABLE);
-      db.execSQL("DROP TABLE IF EXISTS " + QUICKMESSAGES_DB_CREATE);
+      db.execSQL("DROP TABLE IF EXISTS " + QUICKMESSAGES_DB_TABLE);
       onCreate(db);
     }
   }
@@ -128,7 +128,7 @@ public class SmsPopupDbAdapter {
   /**
    * Constructor - takes the context to allow the database to be
    * opened/created
-   * 
+   *
    * @param _context the Context within which to work
    */
   public SmsPopupDbAdapter(Context _context) {
@@ -141,7 +141,7 @@ public class SmsPopupDbAdapter {
    * Open the contacts database. If it cannot be opened, try to create a new
    * instance of the database. If it cannot be created, throw an exception to
    * signal the failure
-   * 
+   *
    * @return this (self reference, allowing this to be chained in an
    *         initialization call)
    * @throws SQLException if the database could be neither opened or created
@@ -154,7 +154,7 @@ public class SmsPopupDbAdapter {
    * Open the contacts database. If it cannot be opened, try to create a new
    * instance of the database. If it cannot be created, throw an exception to
    * signal the failure
-   * 
+   *
    * @param readOnly if the database should be opened read only
    * @return this (self reference, allowing this to be chained in an
    *         initialization call)
@@ -241,7 +241,7 @@ public class SmsPopupDbAdapter {
 
   /**
    * Fetch all settings (basically all columns) for a contact
-   * 
+   *
    * @param contactId
    * @return
    * @throws SQLException
@@ -278,7 +278,7 @@ public class SmsPopupDbAdapter {
 
   /**
    * Update a specific database column for a contact
-   * 
+   *
    * @param contactId
    * @param columnName
    * @param data
@@ -367,7 +367,7 @@ public class SmsPopupDbAdapter {
 
   /**
    * Deletes a quick message from the database
-   * 
+   *
    * @param id
    *          the database id of the message to delete
    * @return true if success, false otherwise
@@ -382,7 +382,7 @@ public class SmsPopupDbAdapter {
 
   /**
    * Fetches a single quick message from the database
-   * 
+   *
    * @param id
    *          the database id of the message to fetch
    * @return a cursor to the data if success, null otherwise
@@ -410,7 +410,7 @@ public class SmsPopupDbAdapter {
 
   /**
    * Fetch all quick messages from the database
-   * 
+   *
    * @return a cursor to the data
    */
   public Cursor fetchAllQuickMessages() {
@@ -421,7 +421,7 @@ public class SmsPopupDbAdapter {
 
   /**
    * Updates a quick message in the database
-   * 
+   *
    * @param id
    *          the database id of the message to update
    * @param message
@@ -437,7 +437,7 @@ public class SmsPopupDbAdapter {
   /**
    * Reorders a quick message so it has the lowest value for the 'ordering'
    * column (moving it to the top in the list)
-   * 
+   *
    * @param id
    *          the database id of the message to update
    * @return true if success, false otherwise
