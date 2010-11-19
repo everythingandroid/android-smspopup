@@ -30,7 +30,8 @@
       android:layout_height="wrap_content"
       android:text="Text Here"
       android:ellipsize="end"
-      android:paddingBottom="2dp" android:textColorLink="?android:attr/textColorPrimaryDisableOnly"/>
+      android:paddingBottom="2dp"
+      android:textColorLink="?android:attr/textColorPrimaryDisableOnly" />
     <TextView
       android:id="@+id/HeaderTextView"
       android:textAppearance="?android:attr/textAppearanceSmall"
