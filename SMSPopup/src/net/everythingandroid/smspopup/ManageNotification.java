@@ -412,11 +412,12 @@ public class ManageNotification {
       }
 
 
-      // Get phone state, if offhook then don't set vibrate or sound
+      // Get system telephony manager
       TelephonyManager mTM =
         (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
-      if (mTM.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK) {
+      // Setup vibrate and notification sound only if call state is idle (not on a call)
+      if (mTM.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
 
         /*
          * Set up vibrate pattern
