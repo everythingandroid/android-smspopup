@@ -45,7 +45,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.MarginLayoutParams;
-import android.view.ViewStub;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -90,11 +89,9 @@ public class SmsPopupActivity extends Activity {
   private static int contactPhotoMargin = 3;
   private static int contactPhotoDefaultMargin = 10;
 
-  private ViewStub unreadCountViewStub;
   private View unreadCountView = null;
-  private ViewStub mmsViewStub;
+  private TextView unreadCountTV = null;
   private View mmsView = null;
-  private ViewStub privacyViewStub;
   private View privacyView = null;
   private View buttonsLL = null;
   private LinearLayout mainLL = null;
@@ -196,11 +193,30 @@ public class SmsPopupActivity extends Activity {
     // Enable long-press context menu
     registerForContextMenu(findViewById(R.id.MainLinearLayout));
 
-    // Assign view stubs
-    unreadCountViewStub = (ViewStub) findViewById(R.id.UnreadCountViewStub);
-    mmsViewStub = (ViewStub) findViewById(R.id.MmsViewStub);
-    privacyViewStub = (ViewStub) findViewById(R.id.PrivacyViewStub);
+    // Assign views
+    unreadCountView = findViewById(R.id.UnreadCountLayout);
+    mmsView = findViewById(R.id.MmsLinearLayout);
+    privacyView = findViewById(R.id.ViewButtonLinearLayout);
     buttonsLL = findViewById(R.id.ButtonLinearLayout);
+
+    mmsSubjectTV = (TextView) findViewById(R.id.MmsSubjectTextView);
+    unreadCountTV = (TextView) findViewById(R.id.UnreadCountTextView);
+
+    // The ViewMMS button
+    Button viewMmsButton = (Button) mmsView.findViewById(R.id.ViewMmsButton);
+    viewMmsButton.setOnClickListener(new OnClickListener() {
+      public void onClick(View v) {
+        replyToMessage();
+      }
+    });
+
+    // The view button (if in privacy mode)
+    Button viewButton = (Button) privacyView.findViewById(R.id.ViewButton);
+    viewButton.setOnClickListener(new OnClickListener() {
+      public void onClick(View v) {
+        viewMessage();
+      }
+    });
 
     // See if user wants to show buttons on the popup
     if (!mPrefs.getBoolean(
@@ -490,20 +506,8 @@ public class SmsPopupActivity extends Activity {
 
     // If it's a MMS message, just show the MMS layout
     if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
-      if (mmsView == null) {
-        mmsView = mmsViewStub.inflate();
-        mmsSubjectTV = (TextView) mmsView.findViewById(R.id.MmsSubjectTextView);
 
-        // The ViewMMS button
-        Button viewMmsButton = (Button) mmsView.findViewById(R.id.ViewMmsButton);
-        viewMmsButton.setOnClickListener(new OnClickListener() {
-          public void onClick(View v) {
-            replyToMessage();
-          }
-        });
-      }
       messageScrollView.setVisibility(View.GONE);
-      // privacyViewStub.setVisibility(View.GONE);
       mmsView.setVisibility(View.VISIBLE);
 
       // If no MMS subject, hide the subject text view
@@ -546,14 +550,10 @@ public class SmsPopupActivity extends Activity {
         unreadCountView.setVisibility(View.GONE);
       }
     } else { // More unread messages waiting, show the extra view
-      if (unreadCountView == null) {
-        unreadCountView = unreadCountViewStub.inflate();
-      }
       unreadCountView.setVisibility(View.VISIBLE);
-      TextView tv = (TextView) unreadCountView.findViewById(R.id.UnreadCountTextView);
 
       String textWaiting = getString(R.string.unread_text_waiting, message.getUnreadCount() - 1);
-      tv.setText(textWaiting);
+      unreadCountTV.setText(textWaiting);
 
       // The inbox button
       Button inboxButton = (Button) unreadCountView.findViewById(R.id.InboxButton);
@@ -602,18 +602,6 @@ public class SmsPopupActivity extends Activity {
       		|| privacyAlways == true) && forceView == false) {
 
         messageViewed = false;
-
-        if (privacyView == null) {
-          privacyView = privacyViewStub.inflate();
-
-          // The view button (if in privacy mode)
-          Button viewButton = (Button) privacyView.findViewById(R.id.ViewButton);
-          viewButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-              viewMessage();
-            }
-          });
-        }
 
         // set to privacy mode
         if (Log.DEBUG) Log.v("refreshPrivacy(): set to privacy mode.");

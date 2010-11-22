@@ -6,9 +6,6 @@
   android:minWidth="310dp"
   android:id="@+id/MainLinearLayout"
   android:layout_width="fill_parent">
-  <net.everythingandroid.smspopup.controls.SmsPopupView
-    android:layout_height="fill_parent"
-    android:layout_width="fill_parent" />  
   <RelativeLayout
     android:layout_width="wrap_content"
     android:layout_height="40dp"
