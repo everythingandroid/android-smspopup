@@ -7,6 +7,7 @@ import net.everythingandroid.smspopup.ManageKeyguard.LaunchOnKeyguardExit;
 import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.controls.SmsPopupView;
+import net.everythingandroid.smspopup.controls.SmsPopupView.OnReactToMessage;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper;
 import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper.OnInitListener;
@@ -82,9 +83,7 @@ public class SmsPopupActivity extends Activity {
   private boolean privacyMode = false;
   private boolean privacySender = false;
   private boolean privacyAlways = false;
-  private boolean messageViewed = false;
   private String signatureText;
-  private Uri contactLookupUri = null;
 
   private static final double WIDTH = 0.9;
   private static final int MAX_WIDTH = 640;
@@ -168,7 +167,24 @@ public class SmsPopupActivity extends Activity {
     buttonsLayout = findViewById(R.id.ButtonLinearLayout);
     headerLayout = findViewById(R.id.HeaderLayout);
     mSmsPopupView = (SmsPopupView) findViewById(R.id.Message);
+    
+    mSmsPopupView.setOnReactToMessage(new OnReactToMessage() {
 
+      @Override
+      public void onReplyToMessage() {
+        replyToMessage();
+      }
+
+      @Override
+      public void onViewMessage() {
+        viewMessage();
+      }
+      
+    });
+    
+    // Set privacy mode
+    SmsPopupView.setPrivacy(privacyMode, privacySender);
+    
     // See if user wants to show buttons on the popup
     if (!mPrefs.getBoolean(
         getString(R.string.pref_show_buttons_key), Defaults.PREFS_SHOW_BUTTONS)) {
@@ -893,7 +909,7 @@ public class SmsPopupActivity extends Activity {
    * Close the message window/popup, mark the message read if the user has this option on
    */
   private void closeMessage() {
-    if (messageViewed) {
+    if (mSmsPopupView.getMessageViewed()) {
       Intent i = new Intent(getApplicationContext(), SmsPopupUtilsService.class);
       /*
        * Switched back to mark messageId as read for >v1.0.6 (marking thread as read is slow
@@ -944,6 +960,8 @@ public class SmsPopupActivity extends Activity {
           public void run() {
         	// force message view this time!
             //refreshPrivacy(true);
+            
+            mSmsPopupView.refreshPrivacy(true);
           }
         });
       }

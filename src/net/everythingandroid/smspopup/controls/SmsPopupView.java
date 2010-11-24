@@ -22,7 +22,6 @@ import android.widget.TextView;
 public class SmsPopupView extends LinearLayout {
   private SmsMmsMessage message;
   private Context context;
-  private boolean messagePrivacy = false;
   private boolean messageViewed = false;
 
   protected OnReactToMessage mOnReactToMessage;
@@ -40,20 +39,14 @@ public class SmsPopupView extends LinearLayout {
   private static int contactPhotoMargin = 3;
   private static int contactPhotoDefaultMargin = 10;
 
-  private View mmsLL = null;
-  private View privacyLL = null;
-  private LinearLayout mainLL = null;
-
-  private boolean wasVisible = false;
-  private boolean replying = false;
-  private boolean inbox = false;
-  private boolean privacyMode = false;
-  private boolean privacySender = false;
-  private boolean privacyAlways = false;
-  // private boolean messageViewed = false;
-  private String signatureText;
+  private View mmsLayout = null;
+  private View privacyLayout = null;
   private Uri contactLookupUri = null;
 
+  public static final int PRIVACY_MODE_OFF = 0;
+  public static final int PRIVACY_MODE_HIDE_MESSAGE = 1;
+  public static final int PRIVACY_MODE_HIDE_ALL = 2;
+  private static int privacyMode = PRIVACY_MODE_OFF;
 
   public SmsPopupView(Context _context, SmsMmsMessage message) {
     super(_context);
@@ -72,126 +65,60 @@ public class SmsPopupView extends LinearLayout {
     mOnReactToMessage = r;
   }
 
-  public void setPrivacy(boolean mode) {
-    messagePrivacy = mode;
+  // Set privacy using mode
+  public static void setPrivacy(int mode) {
+    privacyMode = mode;
   }
-
-  public void setMessageViewed(boolean viewed) {
-    messageViewed = viewed;
-  }
-
-  public void setSmsMmsMessage(SmsMmsMessage newMessage) {
-
-    // Check if new message sender, if not, we can re-use the same contact photo
-    if (message != null && newMessage != null) {
-      if (!TextUtils.equals(message.getFromAddress(), newMessage.getFromAddress())) {
-        contactPhoto = null;
-      }
-    }
-
-    message = newMessage;
-    populateViews(message);
-  }
-
-  private void setupLayout(Context context) {
-    View.inflate(context, R.layout.message, this);
-
-    // Find the main textviews and layouts
-    fromTV = (TextView) findViewById(R.id.FromTextView);
-    messageTV = (TextView) findViewById(R.id.MessageTextView);
-    messageReceivedTV = (TextView) findViewById(R.id.HeaderTextView);
-    messageScrollView = (ScrollView) findViewById(R.id.MessageScrollView);
-    mmsLL = findViewById(R.id.MmsLinearLayout);
-    privacyLL = findViewById(R.id.ViewButtonLinearLayout);
-    mmsSubjectTV = (TextView) findViewById(R.id.MmsSubjectTextView);
-
-    // Find the ImageView that will show the contact photo
-    photoImageView = (ImageView) findViewById(R.id.FromImageView);
-    contactPhotoPlaceholderDrawable =
-        getResources().getDrawable(SmsPopupUtils.CONTACT_PHOTO_PLACEHOLDER);
-
-    // The ViewMMS button
-    Button viewMmsButton = (Button) mmsLL.findViewById(R.id.ViewMmsButton);
-    viewMmsButton.setOnClickListener(new OnClickListener() {
-      public void onClick(View v) {
-        mOnReactToMessage.replyToMessage();
-      }
-    });
-
-    // The view button (if in privacy mode)
-    Button viewButton = (Button) privacyLL.findViewById(R.id.ViewButton);
-    viewButton.setOnClickListener(new OnClickListener() {
-      public void onClick(View v) {
-        mOnReactToMessage.viewMessage();
-      }
-    });
-  }
-
-  /*
-   * Populate all the main SMS/MMS views with content from the actual SmsMmsMessage
-   */
-  private void populateViews(SmsMmsMessage message) {
-
-    // Fetch contact photo in background
-    if (contactPhoto == null) {
-      setContactPhotoToDefault(photoImageView);
-      new FetchContactPhotoTask().execute(message.getContactId());
-      addQuickContactOnClick();
-    }
-//    } else {
-//      setContactPhoto(photoImageView, contactPhoto);
-//    }
-
-
-    // If it's a MMS message, just show the MMS layout
-    if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
-
-      messageScrollView.setVisibility(View.GONE);
-      mmsLL.setVisibility(View.VISIBLE);
-
-      // If no MMS subject, hide the subject text view
-      if (TextUtils.isEmpty(message.getMessageBody())) {
-        mmsSubjectTV.setVisibility(View.GONE);
+  
+  // Set privacy from preference boolean values
+  public static void setPrivacy(boolean privacyMode, boolean privacySender) {
+    setPrivacy(SmsPopupView.PRIVACY_MODE_OFF);
+    if (privacyMode) {
+      if (privacySender) {
+        setPrivacy(SmsPopupView.PRIVACY_MODE_HIDE_ALL);
       } else {
-        mmsSubjectTV.setVisibility(View.VISIBLE);
+        setPrivacy(SmsPopupView.PRIVACY_MODE_HIDE_MESSAGE);
       }
-    } else {
-
-      // Otherwise hide MMS layout
-      mmsLL.setVisibility(View.GONE);
-
-      // Refresh privacy settings (hide/show message) depending on privacy
-      // setting
-      refreshPrivacy(false);
     }
-
-    // Update TextView that contains the timestamp for the incoming message
-    String headerText =
-        context.getString(R.string.new_text_at, message.getFormattedTimestamp().toString());
-
-    // Set the from, message and header views
-    fromTV.setText(message.getContactName());
-    if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_SMS) {
-      messageTV.setText(message.getMessageBody());
-    } else {
-      mmsSubjectTV.setText(
-          context.getString(R.string.mms_subject) + " " + message.getMessageBody());
-    }
-    messageReceivedTV.setText(headerText);
+  }  
+  
+  public void refreshPrivacy() {
+    refreshPrivacy(false);
   }
-
+  
   /*
-   * This handles hiding and showing various views depending on the privacy
-   * settings of the app and the current state of the phone (keyguard on or off)
+   * This handles hiding and showing various views depending on the user privacy settings
    */
-  final private void refreshPrivacy(boolean forceView) {
+  final public void refreshPrivacy(boolean forceView) {
 
     if (Log.DEBUG) Log.v("refreshPrivacy(): " + forceView);
 
-    if (message.getMessageType() != SmsMmsMessage.MESSAGE_TYPE_SMS) return;
+    //if (message.getMessageType() != SmsMmsMessage.MESSAGE_TYPE_SMS) return;
 
-    if (privacyMode) {
+    if (privacyMode == PRIVACY_MODE_OFF || forceView) {
 
+      // set public mode
+      if (Log.DEBUG) Log.v("refreshPrivacy(): set to public mode.");
+
+      privacyLayout.setVisibility(View.GONE);
+      messageScrollView.setVisibility(View.VISIBLE);
+      fromTV.setVisibility(View.VISIBLE);
+      messageViewed = true;
+      loadContactPhoto();
+      
+    } else {
+      
+      
+      privacyLayout.setVisibility(View.VISIBLE);
+      messageScrollView.setVisibility(View.GONE);
+      
+      if (privacyMode == PRIVACY_MODE_HIDE_ALL) {
+        fromTV.setVisibility(View.GONE);
+      } else {
+        loadContactPhoto();
+      }
+      
+      
       // // if message has been already shown, disable privacy mode
       // if (messageViewed == true) {
       // forceView = true;
@@ -233,17 +160,120 @@ public class SmsPopupView extends LinearLayout {
       // fromTV.setVisibility(View.VISIBLE);
       // messageViewed = true;
       // }
+    }
 
+  }  
+
+  public void setMessageViewed(boolean viewed) {
+    messageViewed = viewed;
+  }
+  
+  public boolean getMessageViewed() {
+    return messageViewed;
+  }
+
+  public void setSmsMmsMessage(SmsMmsMessage newMessage) {
+
+    // Check if new message sender, if not, we can re-use the same contact photo
+    if (message != null && newMessage != null) {
+      if (!TextUtils.equals(message.getFromAddress(), newMessage.getFromAddress())) {
+        contactPhoto = null;
+      }
+    }
+
+    messageViewed = false;
+    message = newMessage;
+    populateViews(message);
+  }
+
+  private void setupLayout(Context context) {
+    View.inflate(context, R.layout.message, this);
+
+    // Find the main textviews and layouts
+    fromTV = (TextView) findViewById(R.id.FromTextView);
+    messageTV = (TextView) findViewById(R.id.MessageTextView);
+    messageReceivedTV = (TextView) findViewById(R.id.HeaderTextView);
+    messageScrollView = (ScrollView) findViewById(R.id.MessageScrollView);
+    mmsLayout = findViewById(R.id.MmsLinearLayout);
+    privacyLayout = findViewById(R.id.ViewButtonLinearLayout);
+    mmsSubjectTV = (TextView) findViewById(R.id.MmsSubjectTextView);
+
+    // Find the ImageView that will show the contact photo
+    photoImageView = (ImageView) findViewById(R.id.FromImageView);
+    contactPhotoPlaceholderDrawable =
+        getResources().getDrawable(SmsPopupUtils.CONTACT_PHOTO_PLACEHOLDER);
+
+    // The ViewMMS button
+    Button viewMmsButton = (Button) mmsLayout.findViewById(R.id.ViewMmsButton);
+    viewMmsButton.setOnClickListener(new OnClickListener() {
+      public void onClick(View v) {
+        mOnReactToMessage.onReplyToMessage();
+      }
+    });
+
+    // The view button (if in privacy mode)
+    Button viewButton = (Button) privacyLayout.findViewById(R.id.ViewButton);
+    viewButton.setOnClickListener(new OnClickListener() {
+      public void onClick(View v) {
+        mOnReactToMessage.onViewMessage();
+      }
+    });
+  }
+
+  /*
+   * Populate all the main SMS/MMS views with content from the actual SmsMmsMessage
+   */
+  private void populateViews(SmsMmsMessage message) {
+    
+    // Refresh privacy settings (hide/show message) depending on privacy setting
+    refreshPrivacy(false);
+    
+
+    // If it's a MMS message, just show the MMS layout
+    if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
+
+      messageScrollView.setVisibility(View.GONE);
+      mmsLayout.setVisibility(View.VISIBLE);
+
+      // If no MMS subject, hide the subject text view
+      if (TextUtils.isEmpty(message.getMessageBody())) {
+        mmsSubjectTV.setVisibility(View.GONE);
+      } else {
+        mmsSubjectTV.setVisibility(View.VISIBLE);
+      }
+      
     } else {
 
-      // set public mode
-      if (Log.DEBUG) Log.v("refreshPrivacy(): set to public mode.");
-
-      privacyLL.setVisibility(View.GONE);
-      messageScrollView.setVisibility(View.VISIBLE);
-      fromTV.setVisibility(View.VISIBLE);
-      messageViewed = true;
+      // Otherwise hide MMS layout
+      mmsLayout.setVisibility(View.GONE);
+      
     }
+
+    // Update TextView that contains the timestamp for the incoming message
+    String headerText =
+        context.getString(R.string.new_text_at, message.getFormattedTimestamp());
+
+    // Set the from, message and header views
+    fromTV.setText(message.getContactName());
+    if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_SMS) {
+      messageTV.setText(message.getMessageBody());
+    } else {
+      mmsSubjectTV.setText(
+          context.getString(R.string.mms_subject) + " " + message.getMessageBody());
+    }
+    messageReceivedTV.setText(headerText);
+  }
+  
+  private void loadContactPhoto() {
+    // Fetch contact photo in background
+    if (contactPhoto == null) {
+      setContactPhotoToDefault(photoImageView);
+      new FetchContactPhotoTask().execute(message.getContactId());
+      addQuickContactOnClick();
+    }
+//    } else {
+//      setContactPhoto(photoImageView, contactPhoto);
+//    }
 
   }
 
@@ -323,7 +353,7 @@ public class SmsPopupView extends LinearLayout {
   }
 
   private void addQuickContactOnClick(boolean force) {
-    if (!SmsPopupUtils.PRE_ECLAIR && ((!privacyMode && !privacySender) || force)) {
+    if (!SmsPopupUtils.PRE_ECLAIR && ((privacyMode != PRIVACY_MODE_HIDE_ALL) || force)) {
 
       contactLookupUri = null;
       String contactId = message.getContactId();
@@ -344,9 +374,9 @@ public class SmsPopupView extends LinearLayout {
   }
 
   public static interface OnReactToMessage {
-    abstract void viewMessage();
+    abstract void onViewMessage();
 
-    abstract void replyToMessage();
+    abstract void onReplyToMessage();
   }
 
 }
