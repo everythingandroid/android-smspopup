@@ -44,6 +44,9 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -53,6 +56,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.google.tts.TTS;
 import com.google.tts.TTS.InitListener;
@@ -61,6 +65,9 @@ import com.google.tts.TTSVersionAlert;
 @SuppressWarnings("deprecation")
 public class SmsPopupActivity extends Activity {
   private SmsMmsMessage message;
+  private ArrayList<SmsMmsMessage> messages;
+  private int currentMessage = 0;
+  private int totalMessages = 1;
 
   private boolean exitingKeyguardSecurely = false;
   private Bundle bundle = null;
@@ -76,6 +83,7 @@ public class SmsPopupActivity extends Activity {
   private View buttonsLayout = null;
   private View headerLayout = null;
   private LinearLayout mainLayout = null;
+  private ViewFlipper mFlipper = null;
 
   private boolean wasVisible = false;
   private boolean replying = false;
@@ -162,11 +170,60 @@ public class SmsPopupActivity extends Activity {
 
     // Enable long-press context menu
     registerForContextMenu(findViewById(R.id.MainLinearLayout));
-
+    
     // Find views
+    mFlipper = (ViewFlipper) findViewById(R.id.flipper);
+    mainLayout = (LinearLayout) findViewById(R.id.MainLinearLayout);
     buttonsLayout = findViewById(R.id.ButtonLinearLayout);
     headerLayout = findViewById(R.id.HeaderLayout);
     mSmsPopupView = (SmsPopupView) findViewById(R.id.Message);
+    
+    final Button previousButton = (Button) findViewById(R.id.PreviousButton); 
+    final Button nextButton = (Button) findViewById(R.id.NextButton);
+    final Button inboxButton = (Button) findViewById(R.id.InboxButton);
+    
+    previousButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        
+        if (currentMessage > 0) {
+          mFlipper.setInAnimation(AnimationHelper.inFromLeftAnimation());
+          mFlipper.setOutAnimation(AnimationHelper.outToRightAnimation());        
+          mFlipper.showPrevious();
+          currentMessage -= 1;
+          setActiveMessage(currentMessage);
+          
+          if (currentMessage == 0) {
+            previousButton.setEnabled(false);
+          }
+          nextButton.setEnabled(true);
+          
+          inboxButton.setText((currentMessage+1) + " / " + totalMessages);
+          
+        }
+      }
+    });
+    
+    nextButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        
+        if (currentMessage < totalMessages-1) {
+          mFlipper.setInAnimation(AnimationHelper.inFromRightAnimation());
+          mFlipper.setOutAnimation(AnimationHelper.outToLeftAnimation());
+          mFlipper.showNext();
+          currentMessage += 1;
+          setActiveMessage(currentMessage);
+          
+          if (currentMessage == totalMessages-1) {
+            nextButton.setEnabled(false);
+          }
+          previousButton.setEnabled(true);
+          
+          inboxButton.setText((currentMessage+1) + "/" + totalMessages);
+        }
+      }
+    });
     
     mSmsPopupView.setOnReactToMessage(new OnReactToMessage() {
 
@@ -464,6 +521,27 @@ public class SmsPopupActivity extends Activity {
 
     // Set popup view to display message
     mSmsPopupView.setSmsMmsMessage(message);
+    
+    messages = SmsPopupUtils.getUnreadMessages(this, message.getMessageId());
+    if (messages != null) {
+      for (int i=0; i<messages.size(); i++) {
+        mFlipper.addView(new SmsPopupView(this, messages.get(i)));
+      }
+      messages.add(0, message);
+      totalMessages = messages.size();
+    } else {
+      messages = new ArrayList<SmsMmsMessage>(4);
+      messages.add(message);
+    }
+    
+  }
+  
+  private void setActiveMessage(int i) {
+    
+    if (i >= 0 && i <= totalMessages) {
+      Log.v("Setting active message to " + i);
+      message = messages.get(i);
+    }
   }
 
   /*
@@ -1085,12 +1163,12 @@ public class SmsPopupActivity extends Activity {
   }
 
   private void resizeLayout() {
+    
     // This sets the minimum width of the activity to a minimum of 80% of the screen
     // size only needed because the theme of this activity is "dialog" so it looks
     // like it's floating and doesn't seem to fill_parent like a regular activity
-    if (mainLayout == null) {
-      mainLayout = (LinearLayout) findViewById(R.id.MainLinearLayout);
-    }
+    mainLayout = (LinearLayout) findViewById(R.id.MainLinearLayout);
+    
     Display d = getWindowManager().getDefaultDisplay();
 
     int width = d.getWidth() > MAX_WIDTH ? MAX_WIDTH : (int) (d.getWidth() * WIDTH);
@@ -1124,5 +1202,50 @@ public class SmsPopupActivity extends Activity {
     inputView = null;
   }
 
+  public static class AnimationHelper {
+    public static Animation inFromRightAnimation() {
+      Animation inFromRight = new TranslateAnimation(
+      Animation.RELATIVE_TO_PARENT, +1.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f);
+      inFromRight.setDuration(350);
+      inFromRight.setInterpolator(new AccelerateInterpolator());
+      return inFromRight;
+    }
 
+    public static Animation outToLeftAnimation() {
+      Animation outtoLeft = new TranslateAnimation(
+      Animation.RELATIVE_TO_PARENT, 0.0f,
+      Animation.RELATIVE_TO_PARENT, -1.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f);
+      outtoLeft.setDuration(350);
+      outtoLeft.setInterpolator(new AccelerateInterpolator());
+      return outtoLeft;
+    }
+
+    public static Animation inFromLeftAnimation() {
+      Animation inFromLeft = new TranslateAnimation(
+      Animation.RELATIVE_TO_PARENT, -1.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f);
+      inFromLeft.setDuration(350);
+      inFromLeft.setInterpolator(new AccelerateInterpolator());
+      return inFromLeft;
+    }
+
+    public static Animation outToRightAnimation() {
+      Animation outtoRight = new TranslateAnimation(
+      Animation.RELATIVE_TO_PARENT, 0.0f,
+      Animation.RELATIVE_TO_PARENT, +1.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f,
+      Animation.RELATIVE_TO_PARENT, 0.0f);
+      outtoRight.setDuration(350);
+      outtoRight.setInterpolator(new AccelerateInterpolator());
+      return outtoRight;
+    }
+  }
+    
 }
