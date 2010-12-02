@@ -40,7 +40,7 @@ public class QmTextWatcher implements TextWatcher {
       }
     }
 
-    if (s.length() < (100 - CHARS_REMAINING_BEFORE_COUNTER_SHOWN)) {
+    if (s.length() < (80 - CHARS_REMAINING_BEFORE_COUNTER_SHOWN)) {
       mTextView.setVisibility(View.GONE);
       return;
     }
@@ -51,7 +51,7 @@ public class QmTextWatcher implements TextWatcher {
      * the number of code units remaining until the next message. int[3] is the
      * encoding type that should be used for the message.
      */
-    int[] params = SmsMessage.calculateLength(s, true);
+    int[] params = SmsMessage.calculateLength(s, false);
     int msgCount = params[0];
     int remainingInCurrentMessage = params[2];
 
