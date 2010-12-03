@@ -4,7 +4,6 @@
   android:layout_height="fill_parent"
   android:orientation="vertical"
   android:minWidth="310dp"
-  android:id="@+id/MainLinearLayout"
   android:layout_width="fill_parent">
   <LinearLayout
     android:id="@+id/FromLinearLayout"

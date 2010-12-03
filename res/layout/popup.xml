@@ -4,6 +4,7 @@
   android:layout_height="fill_parent"
   android:orientation="vertical"
   android:minWidth="310dp"
+  android:id="@+id/MainLinearLayout"
   android:layout_width="fill_parent">
   <RelativeLayout
     android:layout_width="wrap_content"
@@ -35,15 +36,11 @@
       android:layout_centerHorizontal="true"
       android:layout_width="100dp" />
   </RelativeLayout>
-  <ViewFlipper
+  <net.everythingandroid.smspopup.controls.SmsPopupViewFlipper
     android:id="@+id/flipper"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-      <net.everythingandroid.smspopup.controls.SmsPopupView
-        android:layout_width="fill_parent"
-        android:id="@+id/Message"
-        android:layout_height="wrap_content" />
-  </ViewFlipper>
+  </net.everythingandroid.smspopup.controls.SmsPopupViewFlipper>
   <LinearLayout
     android:id="@+id/ButtonLinearLayout"
     android:layout_width="fill_parent"

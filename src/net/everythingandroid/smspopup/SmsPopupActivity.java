@@ -7,7 +7,7 @@ import net.everythingandroid.smspopup.ManageKeyguard.LaunchOnKeyguardExit;
 import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.controls.SmsPopupView;
-import net.everythingandroid.smspopup.controls.SmsPopupView.OnReactToMessage;
+import net.everythingandroid.smspopup.controls.SmsPopupViewFlipper;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper;
 import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper.OnInitListener;
@@ -44,9 +44,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -56,7 +53,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
 import com.google.tts.TTS;
 import com.google.tts.TTS.InitListener;
@@ -64,10 +60,6 @@ import com.google.tts.TTSVersionAlert;
 
 @SuppressWarnings("deprecation")
 public class SmsPopupActivity extends Activity {
-  private SmsMmsMessage message;
-  private ArrayList<SmsMmsMessage> messages;
-  private int currentMessage = 0;
-  private int totalMessages = 1;
 
   private boolean exitingKeyguardSecurely = false;
   private Bundle bundle = null;
@@ -75,15 +67,13 @@ public class SmsPopupActivity extends Activity {
   private InputMethodManager inputManager = null;
   private View inputView = null;
 
-  private SmsPopupView mSmsPopupView;
-
   private EditText qrEditText = null;
   private ProgressDialog mProgressDialog = null;
 
   private View buttonsLayout = null;
   private View headerLayout = null;
   private LinearLayout mainLayout = null;
-  private ViewFlipper mFlipper = null;
+  private SmsPopupViewFlipper mSmsPopups = null;
 
   private boolean wasVisible = false;
   private boolean replying = false;
@@ -166,82 +156,52 @@ public class SmsPopupActivity extends Activity {
     signatureText = mPrefs.getString(getString(R.string.pref_notif_signature_key), "");
     if (signatureText.length() > 0) signatureText = " " + signatureText;
 
-    resizeLayout();
-
     // Enable long-press context menu
     registerForContextMenu(findViewById(R.id.MainLinearLayout));
-    
+
     // Find views
-    mFlipper = (ViewFlipper) findViewById(R.id.flipper);
+    mSmsPopups = (SmsPopupViewFlipper) findViewById(R.id.flipper);
     mainLayout = (LinearLayout) findViewById(R.id.MainLinearLayout);
     buttonsLayout = findViewById(R.id.ButtonLinearLayout);
     headerLayout = findViewById(R.id.HeaderLayout);
-    mSmsPopupView = (SmsPopupView) findViewById(R.id.Message);
-    
-    final Button previousButton = (Button) findViewById(R.id.PreviousButton); 
+
+    resizeLayout();
+
+    final Button previousButton = (Button) findViewById(R.id.PreviousButton);
     final Button nextButton = (Button) findViewById(R.id.NextButton);
     final Button inboxButton = (Button) findViewById(R.id.InboxButton);
-    
+
     previousButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        
-        if (currentMessage > 0) {
-          mFlipper.setInAnimation(AnimationHelper.inFromLeftAnimation());
-          mFlipper.setOutAnimation(AnimationHelper.outToRightAnimation());        
-          mFlipper.showPrevious();
-          currentMessage -= 1;
-          setActiveMessage(currentMessage);
-          
-          if (currentMessage == 0) {
-            previousButton.setEnabled(false);
-          }
-          nextButton.setEnabled(true);
-          
-          inboxButton.setText((currentMessage+1) + " / " + totalMessages);
-          
-        }
+        mSmsPopups.showPrevious();
       }
     });
-    
+
     nextButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        
-        if (currentMessage < totalMessages-1) {
-          mFlipper.setInAnimation(AnimationHelper.inFromRightAnimation());
-          mFlipper.setOutAnimation(AnimationHelper.outToLeftAnimation());
-          mFlipper.showNext();
-          currentMessage += 1;
-          setActiveMessage(currentMessage);
-          
-          if (currentMessage == totalMessages-1) {
-            nextButton.setEnabled(false);
-          }
-          previousButton.setEnabled(true);
-          
-          inboxButton.setText((currentMessage+1) + "/" + totalMessages);
-        }
+        mSmsPopups.showNext();
       }
     });
-    
-    mSmsPopupView.setOnReactToMessage(new OnReactToMessage() {
 
-      @Override
-      public void onReplyToMessage() {
-        replyToMessage();
-      }
+//    mSmsPopupView.setOnReactToMessage(new OnReactToMessage() {
+//
+//      @Override
+//      public void onReplyToMessage() {
+//        replyToMessage();
+//      }
+//
+//      @Override
+//      public void onViewMessage() {
+//        viewMessage();
+//      }
+//
+//    });
 
-      @Override
-      public void onViewMessage() {
-        viewMessage();
-      }
-      
-    });
-    
     // Set privacy mode
     SmsPopupView.setPrivacy(privacyMode, privacySender);
-    
+
     // See if user wants to show buttons on the popup
     if (!mPrefs.getBoolean(
         getString(R.string.pref_show_buttons_key), Defaults.PREFS_SHOW_BUTTONS)) {
@@ -297,9 +257,9 @@ public class SmsPopupActivity extends Activity {
     }
 
     if (bundle == null) { // new activity
-      setActiveMessage(getIntent().getExtras());
+      setupMessages(getIntent().getExtras());
     } else { // this activity was recreated after being destroyed
-      setActiveMessage(bundle);
+      setupMessages(bundle);
     }
 
     // init db adapter for preset quick reply messages
@@ -381,7 +341,7 @@ public class SmsPopupActivity extends Activity {
     setIntent(intent);
 
     // Update current message
-    setActiveMessage(intent.getExtras());
+    setupMessages(intent.getExtras());
 
     wakeApp();
   }
@@ -490,7 +450,7 @@ public class SmsPopupActivity extends Activity {
       i.setAction(SmsPopupUtilsService.ACTION_UPDATE_NOTIFICATION);
 
       // Convert current message to bundle
-      i.putExtras(message.toBundle());
+      i.putExtras(mSmsPopups.getActiveMessage().toBundle());
 
       // We need to know if the user is replying - if so, the entire thread id should
       // be ignored when working out the message tally in the notification bar.
@@ -511,37 +471,19 @@ public class SmsPopupActivity extends Activity {
   }
 
   // Set the active message
-  private void setActiveMessage(Bundle b) {
+  private void setupMessages(Bundle b) {
 
     // Store bundle
     bundle = b;
 
     // Create message from bundle
-    message = new SmsMmsMessage(getApplicationContext(), bundle);
+    SmsMmsMessage message = new SmsMmsMessage(getApplicationContext(), bundle);
 
-    // Set popup view to display message
-    mSmsPopupView.setSmsMmsMessage(message);
-    
-    messages = SmsPopupUtils.getUnreadMessages(this, message.getMessageId());
-    if (messages != null) {
-      for (int i=0; i<messages.size(); i++) {
-        mFlipper.addView(new SmsPopupView(this, messages.get(i)));
-      }
-      messages.add(0, message);
-      totalMessages = messages.size();
-    } else {
-      messages = new ArrayList<SmsMmsMessage>(4);
-      messages.add(message);
-    }
-    
-  }
-  
-  private void setActiveMessage(int i) {
-    
-    if (i >= 0 && i <= totalMessages) {
-      Log.v("Setting active message to " + i);
-      message = messages.get(i);
-    }
+    mSmsPopups.addMessage(message);
+
+    mSmsPopups.addMessages(
+        SmsPopupUtils.getUnreadMessages(this, message.getMessageId()));
+
   }
 
   /*
@@ -559,18 +501,18 @@ public class SmsPopupActivity extends Activity {
     inbox = false;
 
     // See if a notification has been played for this message...
-    if (message.getNotify()) {
+    if (mSmsPopups.getActiveMessage().getNotify()) {
       // Store extra to signify we have already notified for this message
       bundle.putBoolean(SmsMmsMessage.EXTRAS_NOTIFY, false);
 
       // Reset the reminderCount to 0 just to be sure
-      message.updateReminderCount(0);
+      mSmsPopups.getActiveMessage().updateReminderCount(0);
 
       // Schedule a reminder notification
-      ReminderReceiver.scheduleReminder(getApplicationContext(), message);
+      ReminderReceiver.scheduleReminder(getApplicationContext(), mSmsPopups.getActiveMessage());
 
       // Run the notification
-      ManageNotification.show(getApplicationContext(), message);
+      ManageNotification.show(getApplicationContext(), mSmsPopups.getActiveMessage());
     }
   }
 
@@ -931,7 +873,7 @@ public class SmsPopupActivity extends Activity {
       ReminderReceiver.cancelReminder(getApplicationContext());
 
       // We'll use update notification to stop the sound playing
-      ManageNotification.update(getApplicationContext(), message);
+      ManageNotification.update(getApplicationContext(), mSmsPopups.getActiveMessage());
 
       if (androidTextToSpeechAvailable) {
         // Android text-to-speech available (normally found on Android 1.6+, aka Donut)
@@ -976,9 +918,11 @@ public class SmsPopupActivity extends Activity {
 
       // Speak the message!
       if (androidTextToSpeechAvailable) {
-        androidTts.speak(message.getMessageBody(), TextToSpeechWrapper.QUEUE_FLUSH, null);
+        androidTts.speak(
+            mSmsPopups.getActiveMessage().getMessageBody(), TextToSpeechWrapper.QUEUE_FLUSH, null);
       } else {
-        eyesFreeTts.speak(message.getMessageBody(), 0 /* no queue mode */, null);
+        eyesFreeTts.speak(
+            mSmsPopups.getActiveMessage().getMessageBody(), 0 /* no queue mode */, null);
       }
     }
   }
@@ -987,7 +931,7 @@ public class SmsPopupActivity extends Activity {
    * Close the message window/popup, mark the message read if the user has this option on
    */
   private void closeMessage() {
-    if (mSmsPopupView.getMessageViewed()) {
+    //if (mSmsPopupView.getMessageViewed()) {
       Intent i = new Intent(getApplicationContext(), SmsPopupUtilsService.class);
       /*
        * Switched back to mark messageId as read for >v1.0.6 (marking thread as read is slow
@@ -995,12 +939,15 @@ public class SmsPopupActivity extends Activity {
        */
       i.setAction(SmsPopupUtilsService.ACTION_MARK_MESSAGE_READ);
       //i.setAction(SmsPopupUtilsService.ACTION_MARK_THREAD_READ);
-      i.putExtras(message.toBundle());
+      i.putExtras(mSmsPopups.getActiveMessage().toBundle());
       SmsPopupUtilsService.beginStartingService(getApplicationContext(), i);
+    //}
+
+    if (mSmsPopups.removeActiveMessage()) {
+      // Finish up this activity
+      myFinish();
     }
 
-    // Finish up this activity
-    myFinish();
   }
 
   /**
@@ -1010,7 +957,7 @@ public class SmsPopupActivity extends Activity {
     exitingKeyguardSecurely = true;
     ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
       public void LaunchOnKeyguardExitSuccess() {
-        Intent reply = message.getReplyIntent(replyToThread);
+        Intent reply = mSmsPopups.getActiveMessage().getReplyIntent(replyToThread);
         SmsPopupActivity.this.getApplicationContext().startActivity(reply);
         replying = true;
         myFinish();
@@ -1038,8 +985,8 @@ public class SmsPopupActivity extends Activity {
           public void run() {
         	// force message view this time!
             //refreshPrivacy(true);
-            
-            mSmsPopupView.refreshPrivacy(true);
+
+            //mSmsPopupView.refreshPrivacy(true);
           }
         });
       }
@@ -1068,7 +1015,7 @@ public class SmsPopupActivity extends Activity {
     Intent i =
       new Intent(SmsPopupActivity.this.getApplicationContext(), SmsPopupUtilsService.class);
     i.setAction(SmsPopupUtilsService.ACTION_DELETE_MESSAGE);
-    i.putExtras(message.toBundle());
+    i.putExtras(mSmsPopups.getActiveMessage().toBundle());
     SmsPopupUtilsService.beginStartingService(SmsPopupActivity.this.getApplicationContext(), i);
     myFinish();
   }
@@ -1111,11 +1058,11 @@ public class SmsPopupActivity extends Activity {
   private void quickReply(String text) {
 
     // If this is a MMS just use regular reply
-    if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
+    if (mSmsPopups.getActiveMessage().getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
       replyToMessage();
     } else { // Else show the quick reply dialog
       if (text == null || "".equals(text)) {
-        quickReplySmsMessage = message;
+        quickReplySmsMessage = mSmsPopups.getActiveMessage();
       }
       updateQuickReplyView(text);
       showDialog(DIALOG_QUICKREPLY);
@@ -1127,6 +1074,7 @@ public class SmsPopupActivity extends Activity {
    */
   private void viewContact() {
     Intent contactIntent = new Intent(Contacts.Intents.SHOW_OR_CREATE_CONTACT);
+    SmsMmsMessage message = mSmsPopups.getActiveMessage();
     if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS || message.isEmail()) {
       contactIntent.setData(Uri.fromParts("mailto", message.getAddress(), null));
     } else {
@@ -1147,7 +1095,7 @@ public class SmsPopupActivity extends Activity {
     if (quickreplyTextView != null) {
 
       if (quickReplySmsMessage == null) {
-        quickReplySmsMessage = message;
+        quickReplySmsMessage = mSmsPopups.getActiveMessage();
       }
 
       quickreplyTextView.setText(getString(R.string.quickreply_from_text,
@@ -1163,12 +1111,11 @@ public class SmsPopupActivity extends Activity {
   }
 
   private void resizeLayout() {
-    
+
     // This sets the minimum width of the activity to a minimum of 80% of the screen
     // size only needed because the theme of this activity is "dialog" so it looks
     // like it's floating and doesn't seem to fill_parent like a regular activity
-    mainLayout = (LinearLayout) findViewById(R.id.MainLinearLayout);
-    
+
     Display d = getWindowManager().getDefaultDisplay();
 
     int width = d.getWidth() > MAX_WIDTH ? MAX_WIDTH : (int) (d.getWidth() * WIDTH);
@@ -1202,50 +1149,4 @@ public class SmsPopupActivity extends Activity {
     inputView = null;
   }
 
-  public static class AnimationHelper {
-    public static Animation inFromRightAnimation() {
-      Animation inFromRight = new TranslateAnimation(
-      Animation.RELATIVE_TO_PARENT, +1.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f);
-      inFromRight.setDuration(350);
-      inFromRight.setInterpolator(new AccelerateInterpolator());
-      return inFromRight;
-    }
-
-    public static Animation outToLeftAnimation() {
-      Animation outtoLeft = new TranslateAnimation(
-      Animation.RELATIVE_TO_PARENT, 0.0f,
-      Animation.RELATIVE_TO_PARENT, -1.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f);
-      outtoLeft.setDuration(350);
-      outtoLeft.setInterpolator(new AccelerateInterpolator());
-      return outtoLeft;
-    }
-
-    public static Animation inFromLeftAnimation() {
-      Animation inFromLeft = new TranslateAnimation(
-      Animation.RELATIVE_TO_PARENT, -1.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f);
-      inFromLeft.setDuration(350);
-      inFromLeft.setInterpolator(new AccelerateInterpolator());
-      return inFromLeft;
-    }
-
-    public static Animation outToRightAnimation() {
-      Animation outtoRight = new TranslateAnimation(
-      Animation.RELATIVE_TO_PARENT, 0.0f,
-      Animation.RELATIVE_TO_PARENT, +1.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f,
-      Animation.RELATIVE_TO_PARENT, 0.0f);
-      outtoRight.setDuration(350);
-      outtoRight.setInterpolator(new AccelerateInterpolator());
-      return outtoRight;
-    }
-  }
-    
 }
