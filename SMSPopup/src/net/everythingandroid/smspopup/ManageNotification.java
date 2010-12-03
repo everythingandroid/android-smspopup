@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import net.everythingandroid.smspopup.ManagePreferences.Defaults;
@@ -13,6 +14,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -30,6 +32,8 @@ public class ManageNotification {
   public static final int NOTIFICATION_SEND_FAILED = 100;
   public static final String defaultRingtone = Settings.System.DEFAULT_NOTIFICATION_URI.toString();
   private static final Uri UNDELIVERED_URI = Uri.parse("content://mms-sms/undelivered");
+  
+  private static MediaPlayer mPlayer = null;
 
   private static final int NOTIFY = 0;
   private static final int FAILED = 1;
@@ -255,7 +259,7 @@ public class ManageNotification {
       boolean onlyUpdate, int notif) {
 
     ManagePreferences mPrefs = new ManagePreferences(context, contactId);
-    AudioManager AM = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    AudioManager mAM = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
     // Check if notifications are enabled - if not, we're done :)
     if (!mPrefs.getBoolean(
@@ -318,13 +322,13 @@ public class ManageNotification {
           SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM_NUM);
 
     // Try and parse the user ringtone, use the default if it fails
-    Uri alarmSoundURI =
+    Uri notifSoundUri =
       Uri.parse(mPrefs.getString(
           R.string.pref_notif_sound_key,
           defaultRingtone,
           SmsPopupDbAdapter.KEY_RINGTONE_NUM));
 
-    if (Log.DEBUG) Log.v("Sounds URI = " + alarmSoundURI.toString());
+    if (Log.DEBUG) Log.v("Sounds URI = " + notifSoundUri.toString());
 
     // Fetch privacy settings
     boolean privacyMode =
@@ -423,7 +427,7 @@ public class ManageNotification {
          * Set up vibrate pattern
          */
         // If vibrate is ON, or if phone is set to vibrate
-        if ((vibrate || AudioManager.RINGER_MODE_VIBRATE == AM.getRingerMode())) {
+        if ((vibrate || AudioManager.RINGER_MODE_VIBRATE == mAM.getRingerMode())) {
 
           long[] vibrate_pattern = null;
 
@@ -443,8 +447,18 @@ public class ManageNotification {
         /*
          * Set up notification sound
          */
-        notification.sound = alarmSoundURI;
+        notification.sound = notifSoundUri;
 
+      } else { // On a call or making a call
+        
+        // Use MediaPlayer to play so they can hear the notification over the ear piece
+        if (mPlayer == null) {
+          //mPlayer = MediaPlayer.create(context, R.raw.new_sms);
+          mPlayer = MediaPlayer.create(context, notifSoundUri);
+        } else {
+          mPlayer.start();
+        }
+        
       }
 
     }
