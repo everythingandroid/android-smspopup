@@ -20,6 +20,14 @@ public class SmsPopupViewFlipper extends ViewFlipper {
   private ArrayList<SmsMmsMessage> messages;
   private int currentMessage;
   private int totalMessages;
+  private MessageCountChanged messageCountChanged;
+
+  public static final int PRIVACY_MODE_OFF = 0;
+  public static final int PRIVACY_MODE_HIDE_MESSAGE = 1;
+  public static final int PRIVACY_MODE_HIDE_ALL = 2;
+
+  private static int privacyMode = PRIVACY_MODE_OFF;
+  private static boolean lockMode;
 
   float oldTouchValue;
 
@@ -40,10 +48,16 @@ public class SmsPopupViewFlipper extends ViewFlipper {
     currentMessage = 0;
   }
 
+  /**
+   * Add a message and its view to the end of the list of messages
+   *
+   * @param newMessage
+   */
   public void addMessage(SmsMmsMessage newMessage) {
     messages.add(newMessage);
     totalMessages = messages.size();
     addView(new SmsPopupView(context, newMessage));
+    UpdateMessageCount();
   }
 
   public void addMessages(ArrayList<SmsMmsMessage> newMessages) {
@@ -53,18 +67,48 @@ public class SmsPopupViewFlipper extends ViewFlipper {
       }
       messages.addAll(newMessages);
       totalMessages = messages.size();
+      UpdateMessageCount();
     }
   }
 
-  public boolean removeMessage() {
-      return removeMessage(0);
-  }
-
+  /**
+   * Remove the message and its view and the location numMessage
+   *
+   * @param numMessage
+   * @return true if there were no more messages to remove, false otherwise
+   */
   public boolean removeMessage(int numMessage) {
-    if (numMessage < totalMessages && numMessage >= 0) {
+
+    if (numMessage < totalMessages && numMessage >= 0 && totalMessages > 1) {
+
+      // Fadeout current message
+      setOutAnimation(context, android.R.anim.fade_out);
+
+      // If last message, slide in from left
+      if (numMessage == (totalMessages-1)) {
+        setInAnimation(AnimationHelper.inFromLeftAnimation());
+      } else{ // Else slide in from right
+        setInAnimation(AnimationHelper.inFromRightAnimation());
+      }
+
+      // Remove the view
       removeViewAt(numMessage);
+
+      // Remove message from arraylist
       messages.remove(numMessage);
+
+      // Update total messages count
       totalMessages = messages.size();
+
+      // If we removed the last message then set current message to last
+      if (currentMessage >= totalMessages) {
+        currentMessage = totalMessages-1;
+      }
+
+      // Run any other updates (as set by interface)
+      UpdateMessageCount();
+
+      // If more messages, return false
       if (totalMessages > 0) {
         return false;
       }
@@ -72,43 +116,65 @@ public class SmsPopupViewFlipper extends ViewFlipper {
     return true;
   }
 
+  /**
+   * Remove the currently active message, if there is only one message left then it will not
+   * be removed
+   *
+   * @return true if there were no more messages to remove, false otherwise
+   */
   public boolean removeActiveMessage() {
     return removeMessage(currentMessage);
   }
 
+  /**
+   * Return the currently active message
+   * @return
+   */
   public SmsMmsMessage getActiveMessage() {
     return messages.get(currentMessage);
   }
 
+  public void setOnMessageCountChanged(MessageCountChanged m) {
+    messageCountChanged = m;
+  }
+
+  public static interface MessageCountChanged {
+    abstract void onChange(int current, int total);
+  }
+
+  private void UpdateMessageCount() {
+    if (messageCountChanged != null) {
+      messageCountChanged.onChange(currentMessage, totalMessages);
+    }
+  }
 
   @Override
   public void showNext() {
-
     if (currentMessage < totalMessages-1) {
       currentMessage += 1;
       setInAnimation(AnimationHelper.inFromRightAnimation());
       setOutAnimation(AnimationHelper.outToLeftAnimation());
       super.showNext();
-
+      UpdateMessageCount();
       if (Log.DEBUG) Log.v("showNext() - " + currentMessage + ", " + getActiveMessage().getContactName());
     }
   }
 
   @Override
   public void showPrevious() {
-
     if (currentMessage > 0) {
       currentMessage -= 1;
       setInAnimation(AnimationHelper.inFromLeftAnimation());
       setOutAnimation(AnimationHelper.outToRightAnimation());
       super.showPrevious();
-
+      UpdateMessageCount();
       if (Log.DEBUG) Log.v("showPrevious() - " + currentMessage + ", " + getActiveMessage().getContactName());
     }
   }
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
+    if (lockMode) return true;
 
     switch (event.getAction()) {
       case MotionEvent.ACTION_MOVE:
@@ -121,6 +187,33 @@ public class SmsPopupViewFlipper extends ViewFlipper {
     }
 
     return super.onTouchEvent(event);
+  }
+
+  public void refreshPrivacy() {
+    for (int i=0; i<getChildCount(); i++) {
+      ((SmsPopupView) getChildAt(i)).refreshPrivacy(privacyMode);
+    }
+  }
+
+  // Set privacy using mode
+  public static void setPrivacy(int mode) {
+    privacyMode = mode;
+  }
+
+  // Set privacy from preference boolean values
+  public static void setPrivacy(boolean privacyMode, boolean privacySender) {
+    setPrivacy(SmsPopupView.PRIVACY_MODE_OFF);
+    if (privacyMode) {
+      if (privacySender) {
+        setPrivacy(SmsPopupView.PRIVACY_MODE_HIDE_ALL);
+      } else {
+        setPrivacy(SmsPopupView.PRIVACY_MODE_HIDE_MESSAGE);
+      }
+    }
+  }
+
+  public static void setLockMode(boolean mode) {
+    lockMode = mode;
   }
 
   private static class AnimationHelper {

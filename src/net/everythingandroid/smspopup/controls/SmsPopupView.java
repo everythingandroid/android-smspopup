@@ -69,7 +69,7 @@ public class SmsPopupView extends LinearLayout {
   public static void setPrivacy(int mode) {
     privacyMode = mode;
   }
-  
+
   // Set privacy from preference boolean values
   public static void setPrivacy(boolean privacyMode, boolean privacySender) {
     setPrivacy(SmsPopupView.PRIVACY_MODE_OFF);
@@ -80,12 +80,37 @@ public class SmsPopupView extends LinearLayout {
         setPrivacy(SmsPopupView.PRIVACY_MODE_HIDE_MESSAGE);
       }
     }
-  }  
-  
+  }
+
+  public void refreshPrivacy(int privacyMode) {
+
+    if (privacyMode == PRIVACY_MODE_OFF) {
+      // set public mode
+      if (Log.DEBUG) Log.v("refreshPrivacy(): set to public mode.");
+
+      privacyLayout.setVisibility(View.GONE);
+      messageScrollView.setVisibility(View.VISIBLE);
+      fromTV.setVisibility(View.VISIBLE);
+      //messageViewed = true;
+      loadContactPhoto();
+
+    } else {
+
+      privacyLayout.setVisibility(View.VISIBLE);
+      messageScrollView.setVisibility(View.GONE);
+
+      if (privacyMode == PRIVACY_MODE_HIDE_ALL) {
+        fromTV.setVisibility(View.GONE);
+      } else {
+        loadContactPhoto();
+      }
+    }
+  }
+
   public void refreshPrivacy() {
     refreshPrivacy(false);
   }
-  
+
   /*
    * This handles hiding and showing various views depending on the user privacy settings
    */
@@ -105,20 +130,20 @@ public class SmsPopupView extends LinearLayout {
       fromTV.setVisibility(View.VISIBLE);
       messageViewed = true;
       loadContactPhoto();
-      
+
     } else {
-      
-      
+
+
       privacyLayout.setVisibility(View.VISIBLE);
       messageScrollView.setVisibility(View.GONE);
-      
+
       if (privacyMode == PRIVACY_MODE_HIDE_ALL) {
         fromTV.setVisibility(View.GONE);
       } else {
         loadContactPhoto();
       }
-      
-      
+
+
       // // if message has been already shown, disable privacy mode
       // if (messageViewed == true) {
       // forceView = true;
@@ -162,12 +187,12 @@ public class SmsPopupView extends LinearLayout {
       // }
     }
 
-  }  
+  }
 
   public void setMessageViewed(boolean viewed) {
     messageViewed = viewed;
   }
-  
+
   public boolean getMessageViewed() {
     return messageViewed;
   }
@@ -224,10 +249,10 @@ public class SmsPopupView extends LinearLayout {
    * Populate all the main SMS/MMS views with content from the actual SmsMmsMessage
    */
   private void populateViews(SmsMmsMessage message) {
-    
+
     // Refresh privacy settings (hide/show message) depending on privacy setting
     refreshPrivacy(false);
-    
+
 
     // If it's a MMS message, just show the MMS layout
     if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
@@ -241,12 +266,12 @@ public class SmsPopupView extends LinearLayout {
       } else {
         mmsSubjectTV.setVisibility(View.VISIBLE);
       }
-      
+
     } else {
 
       // Otherwise hide MMS layout
       mmsLayout.setVisibility(View.GONE);
-      
+
     }
 
     // Update TextView that contains the timestamp for the incoming message
@@ -263,7 +288,7 @@ public class SmsPopupView extends LinearLayout {
     }
     messageReceivedTV.setText(headerText);
   }
-  
+
   private void loadContactPhoto() {
     // Fetch contact photo in background
     if (contactPhoto == null) {

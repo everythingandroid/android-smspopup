@@ -6,8 +6,8 @@ import java.util.List;
 import net.everythingandroid.smspopup.ManageKeyguard.LaunchOnKeyguardExit;
 import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
-import net.everythingandroid.smspopup.controls.SmsPopupView;
 import net.everythingandroid.smspopup.controls.SmsPopupViewFlipper;
+import net.everythingandroid.smspopup.controls.SmsPopupViewFlipper.MessageCountChanged;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper;
 import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper.OnInitListener;
@@ -53,6 +53,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.google.tts.TTS;
 import com.google.tts.TTS.InitListener;
@@ -70,9 +71,8 @@ public class SmsPopupActivity extends Activity {
   private EditText qrEditText = null;
   private ProgressDialog mProgressDialog = null;
 
-  private View buttonsLayout = null;
-  private View headerLayout = null;
   private LinearLayout mainLayout = null;
+  private ViewSwitcher buttonSwitcher = null;
   private SmsPopupViewFlipper mSmsPopups = null;
 
   private boolean wasVisible = false;
@@ -100,6 +100,9 @@ public class SmsPopupActivity extends Activity {
 
   private static final int VOICE_RECOGNITION_REQUEST_CODE = 8888;
 
+  private static final int BUTTON_SWITCHER_MAIN_BUTTONS = 0;
+  private static final int BUTTON_SWITCHER_UNLOCK_BUTTON = 1;
+
   private TextView quickreplyTextView;
   private SmsMmsMessage quickReplySmsMessage;
 
@@ -122,18 +125,45 @@ public class SmsPopupActivity extends Activity {
     }
   }
 
+/*
+ ******************************************************************************
+ * Main onCreate override
+ ******************************************************************************
+ */
+
   @Override
   protected void onCreate(Bundle bundle) {
     super.onCreate(bundle);
     if (Log.DEBUG) Log.v("SMSPopupActivity: onCreate()");
 
-    // First things first, acquire wakelock, otherwise the phone may sleep
-    //ManageWakeLock.acquirePartial(getApplicationContext());
-
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-
     setContentView(R.layout.popup);
 
+    setupPreferences();
+    setupViews();
+
+    if (bundle == null) { // new activity
+      setupMessages(getIntent().getExtras());
+    } else { // this activity was recreated after being destroyed
+      setupMessages(bundle);
+    }
+
+    // init db adapter for preset quick reply messages
+    mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
+
+    // wake up app (turn on screen and run notification)
+    wakeApp();
+
+    // Eula.show(this);
+  }
+
+/*
+ ******************************************************************************
+ * Setup methods - these will mostly be run one time only
+ ******************************************************************************
+ */
+
+  private void setupPreferences() {
     // Get shared prefs
     mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -156,16 +186,34 @@ public class SmsPopupActivity extends Activity {
     signatureText = mPrefs.getString(getString(R.string.pref_notif_signature_key), "");
     if (signatureText.length() > 0) signatureText = " " + signatureText;
 
-    // Enable long-press context menu
-    registerForContextMenu(findViewById(R.id.MainLinearLayout));
+    // Set privacy mode
+    // SmsPopupView.setPrivacy(privacyMode, privacySender);
+  }
 
-    // Find views
-    mSmsPopups = (SmsPopupViewFlipper) findViewById(R.id.flipper);
-    mainLayout = (LinearLayout) findViewById(R.id.MainLinearLayout);
-    buttonsLayout = findViewById(R.id.ButtonLinearLayout);
-    headerLayout = findViewById(R.id.HeaderLayout);
+  private void setupViews() {
 
-    resizeLayout();
+    // Find main views
+    mSmsPopups = (SmsPopupViewFlipper) findViewById(R.id.SmsPopupsLayout);
+    mainLayout = (LinearLayout) findViewById(R.id.MainLayout);
+    buttonSwitcher = (ViewSwitcher) findViewById(R.id.ButtonViewSwitcher);
+//    buttonLayout = findViewById(R.id.ButtonLayout);
+//    unlockButtonLayout = findViewById(R.id.UnlockButtonLayout);
+//    headerLayout = findViewById(R.id.HeaderLayout);
+
+    SmsPopupViewFlipper.setPrivacy(privacyMode, privacySender);
+
+    Button unlockButton = (Button) findViewById(R.id.unlockButton);
+    unlockButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        exitingKeyguardSecurely = true;
+
+        ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
+          @Override
+          public void LaunchOnKeyguardExitSuccess() {}
+        });
+      }
+    });
 
     final Button previousButton = (Button) findViewById(R.id.PreviousButton);
     final Button nextButton = (Button) findViewById(R.id.NextButton);
@@ -185,29 +233,38 @@ public class SmsPopupActivity extends Activity {
       }
     });
 
-//    mSmsPopupView.setOnReactToMessage(new OnReactToMessage() {
-//
-//      @Override
-//      public void onReplyToMessage() {
-//        replyToMessage();
-//      }
-//
-//      @Override
-//      public void onViewMessage() {
-//        viewMessage();
-//      }
-//
-//    });
+    inboxButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        gotoInbox();
+      }
+    });
 
-    // Set privacy mode
-    SmsPopupView.setPrivacy(privacyMode, privacySender);
+    mSmsPopups.setOnMessageCountChanged(new MessageCountChanged() {
+
+      @Override
+      public void onChange(int current, int total) {
+
+        // Set middle button text
+        inboxButton.setText((current+1) + "/" + total);
+
+        // Set next/previous buttons to enabled/disabled based on message being viewed
+        boolean previous = true;
+        boolean next = true;
+        if (current == 0) previous = false;
+        if (current == (total-1)) next = false;
+        previousButton.setEnabled(previous);
+        nextButton.setEnabled(next);
+
+      }
+    });
 
     // See if user wants to show buttons on the popup
     if (!mPrefs.getBoolean(
         getString(R.string.pref_show_buttons_key), Defaults.PREFS_SHOW_BUTTONS)) {
 
       // Hide button layout
-      buttonsLayout.setVisibility(View.GONE);
+      buttonSwitcher.setVisibility(View.GONE);
 
     } else {
 
@@ -256,77 +313,153 @@ public class SmsPopupActivity extends Activity {
       }
     }
 
-    if (bundle == null) { // new activity
-      setupMessages(getIntent().getExtras());
-    } else { // this activity was recreated after being destroyed
-      setupMessages(bundle);
-    }
-
-    // init db adapter for preset quick reply messages
-    mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
-
-    // wake up app (turn on screen and run notification)
-    wakeApp();
-
-    // Eula.show(this);
+    refreshViews();
+    resizeLayout();
   }
 
-  /*
-   * Class to handle dynamic button functions on popup
+  private void setupMessages(Bundle b) {
+    setupMessages(b, false);
+  }
+
+  /**
+   * Setup messages within the popup given an intent bundle
+   *
+   * @param b the incoming intent bundle
+   * @param newIntent if this is from onNewIntent or not
    */
-  class PopupButton implements OnClickListener {
-    private int buttonId;
-    public boolean isReplyButton;
-    public String buttonText;
-    public int buttonVisibility = View.VISIBLE;
+  private void setupMessages(Bundle b, boolean newIntent) {
 
-    public PopupButton(Context mContext, int id) {
-      buttonId = id;
-      isReplyButton = false;
-      if (buttonId == ButtonListPreference.BUTTON_REPLY
-          || buttonId == ButtonListPreference.BUTTON_QUICKREPLY
-          || buttonId == ButtonListPreference.BUTTON_REPLY_BY_ADDRESS) {
-        isReplyButton = true;
-      }
-      String[] buttonTextArray = mContext.getResources().getStringArray(R.array.buttons_text);
-      buttonText = buttonTextArray[buttonId];
+    // Store bundle
+    bundle = b;
 
-      if (buttonId == ButtonListPreference.BUTTON_DISABLED) { // Disabled
-        buttonVisibility = View.GONE;
-      }
+    // Create message from bundle
+    SmsMmsMessage message = new SmsMmsMessage(getApplicationContext(), bundle);
+
+    mSmsPopups.addMessage(message);
+
+    if (!newIntent) {
+      // TODO: move off UI thread
+      mSmsPopups.addMessages(
+          SmsPopupUtils.getUnreadMessages(this, message.getMessageId()));
     }
 
-    public void onClick(View v) {
-      switch (buttonId) {
-        case ButtonListPreference.BUTTON_DISABLED: // Disabled
-          break;
-        case ButtonListPreference.BUTTON_CLOSE: // Close
-          closeMessage();
-          break;
-        case ButtonListPreference.BUTTON_DELETE: // Delete
-          showDialog(DIALOG_DELETE);
-          break;
-        case ButtonListPreference.BUTTON_DELETE_NO_CONFIRM: // Delete no confirmation
-          deleteMessage();
-          break;
-        case ButtonListPreference.BUTTON_REPLY: // Reply
-          replyToMessage(true);
-          break;
-        case ButtonListPreference.BUTTON_QUICKREPLY: // Quick Reply
-          quickReply();
-          break;
-        case ButtonListPreference.BUTTON_REPLY_BY_ADDRESS: // Quick Reply
-          replyToMessage(false);
-          break;
-        case ButtonListPreference.BUTTON_INBOX: // Inbox
-          gotoInbox();
-          break;
-        case ButtonListPreference.BUTTON_TTS: // Text-to-Speech
-          speakMessage();
-          break;
-      }
+    mSmsPopups.refreshPrivacy();
+  }
+
+/*
+ ******************************************************************************
+ * Methods that will be called several times throughout the life of the activity
+ ******************************************************************************
+ */
+
+  private void refreshViews() {
+
+    ManageKeyguard.initialize(this);
+    if (ManageKeyguard.inKeyguardRestrictedInputMode()) {
+      // Show unlock button
+      buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_UNLOCK_BUTTON);
+
+      // Disable long-press context menu
+      unregisterForContextMenu(mSmsPopups);
+
+      SmsPopupViewFlipper.setLockMode(true);
+
+    } else {
+      // Show main popup buttons
+      buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_MAIN_BUTTONS);
+
+      // Enable long-press context menu
+      registerForContextMenu(mSmsPopups);
+
+      SmsPopupViewFlipper.setLockMode(false);
     }
   }
+
+  private void resizeLayout() {
+
+    // This sets the minimum width of the activity to a minimum of 80% of the screen
+    // size only needed because the theme of this activity is "dialog" so it looks
+    // like it's floating and doesn't seem to fill_parent like a regular activity
+
+    Display d = getWindowManager().getDefaultDisplay();
+    int width = d.getWidth() > MAX_WIDTH ? MAX_WIDTH : (int) (d.getWidth() * WIDTH);
+    mainLayout.setMinimumWidth(width);
+    mainLayout.invalidate();
+  }
+
+  /**
+   * Wake up the activity, this will acquire the wakelock (turn on the screen)
+   * and sound the notification if needed. This is called once all preparation
+   * is done for this activity (end of onCreate()).
+   */
+  private void wakeApp() {
+
+    // Time to acquire a full WakeLock (turn on screen)
+    ManageWakeLock.acquireFull(getApplicationContext());
+    ManageWakeLock.releasePartial();
+
+    replying = false;
+    inbox = false;
+
+    // See if a notification has been played for this message...
+    if (mSmsPopups.getActiveMessage().getNotify()) {
+      // Store extra to signify we have already notified for this message
+      bundle.putBoolean(SmsMmsMessage.EXTRAS_NOTIFY, false);
+
+      // Reset the reminderCount to 0 just to be sure
+      mSmsPopups.getActiveMessage().updateReminderCount(0);
+
+      // Schedule a reminder notification
+      ReminderReceiver.scheduleReminder(getApplicationContext(), mSmsPopups.getActiveMessage());
+
+      // Run the notification
+      ManageNotification.show(getApplicationContext(), mSmsPopups.getActiveMessage());
+    }
+  }
+
+  /**
+   * Customized activity finish. Ensures the notification is in sync and cancels
+   * any scheduled reminders (as the user has interrupted the app.
+   */
+  private void myFinish() {
+    if (Log.DEBUG) Log.v("myFinish()");
+
+    if (inbox) {
+      ManageNotification.clearAll(getApplicationContext());
+    } else {
+
+      // Start a service that will update the notification in the status bar
+      Intent i = new Intent(getApplicationContext(), SmsPopupUtilsService.class);
+      i.setAction(SmsPopupUtilsService.ACTION_UPDATE_NOTIFICATION);
+
+      if (replying) {
+        // Convert current message to bundle
+        i.putExtras(mSmsPopups.getActiveMessage().toBundle());
+
+        // We need to know if the user is replying - if so, the entire thread id should
+        // be ignored when working out the message tally in the notification bar.
+        // We can't rely on the system database as it may take a little while for the
+        // reply intent to fire and load up the messaging up (after which the messages
+        // will be marked read in the database).
+        i.putExtra(SmsMmsMessage.EXTRAS_REPLYING, replying);
+      }
+
+      // Start the service
+      SmsPopupUtilsService.beginStartingService(SmsPopupActivity.this.getApplicationContext(), i);
+    }
+
+    // Cancel any reminder notifications
+    ReminderReceiver.cancelReminder(getApplicationContext());
+
+    // Finish up the activity
+    finish();
+  }
+
+/*
+ ******************************************************************************
+ * Method overrides from Activity class
+ ******************************************************************************
+ */
 
   @Override
   protected void onNewIntent(Intent intent) {
@@ -334,14 +467,11 @@ public class SmsPopupActivity extends Activity {
     super.onNewIntent(intent);
     if (Log.DEBUG) Log.v("SMSPopupActivity: onNewIntent()");
 
-    // First things first, acquire wakelock, otherwise the phone may sleep
-    //ManageWakeLock.acquirePartial(getApplicationContext());
-
     // Update intent held by activity
     setIntent(intent);
 
-    // Update current message
-    setupMessages(intent.getExtras());
+    // Setup messages
+    setupMessages(intent.getExtras(), true);
 
     wakeApp();
   }
@@ -411,112 +541,7 @@ public class SmsPopupActivity extends Activity {
     super.onDestroy();
   }
 
-  @Override
-  public void onWindowFocusChanged(boolean hasFocus) {
-    super.onWindowFocusChanged(hasFocus);
-    if (Log.DEBUG) Log.v("SMSPopupActivity: onWindowFocusChanged(" + hasFocus + ")");
-    if (hasFocus) {
-      // This is really hacky, basically a flag that is set if the message
-      // was at some point visible. I tried using onResume() or other methods
-      // to prevent doing some things 2 times but this seemed to be the only
-      // reliable way (?)
-      wasVisible = true;
-      //refreshPrivacy(false);
-    }
-  }
-
-  @Override
-  public void onSaveInstanceState(Bundle outState) {
-    super.onSaveInstanceState(outState);
-    if (Log.DEBUG) Log.v("SMSPopupActivity: onSaveInstanceState()");
-
-    // Save values from most recent bundle (ie. most recent message)
-    outState.putAll(bundle);
-  }
-
-  /*
-   * Customized activity finish. Ensures the notification is in sync and cancels
-   * any scheduled reminders (as the user has interrupted the app.
-   */
-  private void myFinish() {
-    if (Log.DEBUG) Log.v("myFinish()");
-
-    if (inbox) {
-      ManageNotification.clearAll(getApplicationContext());
-    } else {
-
-      // Start a service that will update the notification in the status bar
-      Intent i = new Intent(getApplicationContext(), SmsPopupUtilsService.class);
-      i.setAction(SmsPopupUtilsService.ACTION_UPDATE_NOTIFICATION);
-
-      // Convert current message to bundle
-      i.putExtras(mSmsPopups.getActiveMessage().toBundle());
-
-      // We need to know if the user is replying - if so, the entire thread id should
-      // be ignored when working out the message tally in the notification bar.
-      // We can't rely on the system database as it may take a little while for the
-      // reply intent to fire and load up the messaging up (after which the messages
-      // will be marked read in the database).
-      i.putExtra(SmsMmsMessage.EXTRAS_REPLYING, replying);
-
-      // Start the service
-      SmsPopupUtilsService.beginStartingService(SmsPopupActivity.this.getApplicationContext(), i);
-    }
-
-    // Cancel any reminder notifications
-    ReminderReceiver.cancelReminder(getApplicationContext());
-
-    // Finish up the activity
-    finish();
-  }
-
-  // Set the active message
-  private void setupMessages(Bundle b) {
-
-    // Store bundle
-    bundle = b;
-
-    // Create message from bundle
-    SmsMmsMessage message = new SmsMmsMessage(getApplicationContext(), bundle);
-
-    mSmsPopups.addMessage(message);
-
-    mSmsPopups.addMessages(
-        SmsPopupUtils.getUnreadMessages(this, message.getMessageId()));
-
-  }
-
-  /*
-   * Wake up the activity, this will acquire the wakelock (turn on the screen)
-   * and sound the notification if needed. This is called once all preparation
-   * is done for this activity (end of onCreate()).
-   */
-  private void wakeApp() {
-
-    // Time to acquire a full WakeLock (turn on screen)
-    ManageWakeLock.acquireFull(getApplicationContext());
-    ManageWakeLock.releasePartial();
-
-    replying = false;
-    inbox = false;
-
-    // See if a notification has been played for this message...
-    if (mSmsPopups.getActiveMessage().getNotify()) {
-      // Store extra to signify we have already notified for this message
-      bundle.putBoolean(SmsMmsMessage.EXTRAS_NOTIFY, false);
-
-      // Reset the reminderCount to 0 just to be sure
-      mSmsPopups.getActiveMessage().updateReminderCount(0);
-
-      // Schedule a reminder notification
-      ReminderReceiver.scheduleReminder(getApplicationContext(), mSmsPopups.getActiveMessage());
-
-      // Run the notification
-      ManageNotification.show(getApplicationContext(), mSmsPopups.getActiveMessage());
-    }
-  }
-
-  /*
+  /**
    * Create Dialog
    */
   @Override
@@ -767,7 +792,52 @@ public class SmsPopupActivity extends Activity {
     }
   }
 
-  /*
+  /**
+   * Handle the results from the recognition activity.
+   */
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (Log.DEBUG) Log.v("onActivityResult");
+    if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
+      ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+      if (Log.DEBUG) Log.v("Voice recog text: " + matches.get(0));
+      quickReply(matches.get(0));
+    }
+  }
+
+  @Override
+  public void onWindowFocusChanged(boolean hasFocus) {
+    super.onWindowFocusChanged(hasFocus);
+    if (Log.DEBUG) Log.v("SMSPopupActivity: onWindowFocusChanged(" + hasFocus + ")");
+    if (hasFocus) {
+      // This is really hacky, basically a flag that is set if the message
+      // was at some point visible. I tried using onResume() or other methods
+      // to prevent doing some things 2 times but this seemed to be the only
+      // reliable way (?)
+      wasVisible = true;
+      refreshViews();
+      //refreshPrivacy(false);
+    }
+  }
+
+  @Override
+  public void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    if (Log.DEBUG) Log.v("SMSPopupActivity: onSaveInstanceState()");
+
+    // Save values from most recent bundle (ie. most recent message)
+    outState.putAll(bundle);
+  }
+
+  @Override
+  public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    if (Log.DEBUG) Log.v("SMSPopupActivity: onConfigurationChanged()");
+    resizeLayout();
+  }
+
+  /**
    * Create Context Menu (Long-press menu)
    */
   @Override
@@ -783,7 +853,7 @@ public class SmsPopupActivity extends Activity {
     menu.add(Menu.NONE, CONTEXT_INBOX_ID, Menu.NONE, getString(R.string.button_inbox));
   }
 
-  /*
+  /**
    * Context Menu Item Selected
    */
   @Override
@@ -814,20 +884,6 @@ public class SmsPopupActivity extends Activity {
     return super.onContextItemSelected(item);
   }
 
-  /*
-   * Handle the results from the recognition activity.
-   */
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if (Log.DEBUG) Log.v("onActivityResult");
-    if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
-      ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-      if (Log.DEBUG) Log.v("Voice recog text: " + matches.get(0));
-      quickReply(matches.get(0));
-    }
-  }
-
   // The eyes-free text-to-speech library InitListener
   private final TTS.InitListener eyesFreeTtsListener = new InitListener() {
     public void onInit(int version) {
@@ -854,7 +910,13 @@ public class SmsPopupActivity extends Activity {
     }
   };
 
-  /*
+/*
+ ******************************************************************************
+ * Methods to handle messages (speak, close, reply, quick reply etc.)
+ ******************************************************************************
+ */
+
+  /**
    * Speak the message out loud using text-to-speech (either via Android text-to-speech or
    * via the free eyes-free text-to-speech library)
    */
@@ -943,11 +1005,7 @@ public class SmsPopupActivity extends Activity {
       SmsPopupUtilsService.beginStartingService(getApplicationContext(), i);
     //}
 
-    if (mSmsPopups.removeActiveMessage()) {
-      // Finish up this activity
-      myFinish();
-    }
-
+    removeActiveMessage();
   }
 
   /**
@@ -1017,7 +1075,8 @@ public class SmsPopupActivity extends Activity {
     i.setAction(SmsPopupUtilsService.ACTION_DELETE_MESSAGE);
     i.putExtras(mSmsPopups.getActiveMessage().toBundle());
     SmsPopupUtilsService.beginStartingService(SmsPopupActivity.this.getApplicationContext(), i);
-    myFinish();
+
+    removeActiveMessage();
   }
 
   /**
@@ -1036,7 +1095,8 @@ public class SmsPopupActivity extends Activity {
         SmsPopupUtilsService.beginStartingService(SmsPopupActivity.this.getApplicationContext(), i);
         ManageNotification.clearAll(this);
         Toast.makeText(this, R.string.quickreply_sending_toast, Toast.LENGTH_LONG).show();
-        myFinish();
+        removeActiveMessage();
+        dismissDialog(DIALOG_QUICKREPLY);
       } else {
         Toast.makeText(this, R.string.quickreply_nomessage_toast, Toast.LENGTH_LONG).show();
       }
@@ -1103,26 +1163,22 @@ public class SmsPopupActivity extends Activity {
     }
   }
 
-  @Override
-  public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    if (Log.DEBUG) Log.v("SMSPopupActivity: onConfigurationChanged()");
-    resizeLayout();
+  /**
+   * Removes the active message
+   */
+  private void removeActiveMessage() {
+    if (mSmsPopups.removeActiveMessage()) {
+      myFinish();
+    } else {
+      ManageNotification.update(this, mSmsPopups.getActiveMessage());
+    }
   }
 
-  private void resizeLayout() {
-
-    // This sets the minimum width of the activity to a minimum of 80% of the screen
-    // size only needed because the theme of this activity is "dialog" so it looks
-    // like it's floating and doesn't seem to fill_parent like a regular activity
-
-    Display d = getWindowManager().getDefaultDisplay();
-
-    int width = d.getWidth() > MAX_WIDTH ? MAX_WIDTH : (int) (d.getWidth() * WIDTH);
-
-    mainLayout.setMinimumWidth(width);
-    mainLayout.invalidate();
-  }
+/*
+ ******************************************************************************
+ * Misc methods
+ ******************************************************************************
+ */
 
   /**
    * Show the soft keyboard and store the view that triggered it
@@ -1147,6 +1203,70 @@ public class SmsPopupActivity extends Activity {
     }
     inputManager.hideSoftInputFromWindow(inputView.getApplicationWindowToken(), 0);
     inputView = null;
+  }
+
+
+/*
+ ******************************************************************************
+ * Inner classes
+ ******************************************************************************
+ */
+
+  /*
+   * Inner class to handle dynamic button functions on popup
+   */
+  private class PopupButton implements OnClickListener {
+    private int buttonId;
+    public boolean isReplyButton;
+    public String buttonText;
+    public int buttonVisibility = View.VISIBLE;
+
+    public PopupButton(Context mContext, int id) {
+      buttonId = id;
+      isReplyButton = false;
+      if (buttonId == ButtonListPreference.BUTTON_REPLY
+          || buttonId == ButtonListPreference.BUTTON_QUICKREPLY
+          || buttonId == ButtonListPreference.BUTTON_REPLY_BY_ADDRESS) {
+        isReplyButton = true;
+      }
+      String[] buttonTextArray = mContext.getResources().getStringArray(R.array.buttons_text);
+      buttonText = buttonTextArray[buttonId];
+
+      if (buttonId == ButtonListPreference.BUTTON_DISABLED) { // Disabled
+        buttonVisibility = View.GONE;
+      }
+    }
+
+    public void onClick(View v) {
+      switch (buttonId) {
+        case ButtonListPreference.BUTTON_DISABLED: // Disabled
+          break;
+        case ButtonListPreference.BUTTON_CLOSE: // Close
+          closeMessage();
+          break;
+        case ButtonListPreference.BUTTON_DELETE: // Delete
+          showDialog(DIALOG_DELETE);
+          break;
+        case ButtonListPreference.BUTTON_DELETE_NO_CONFIRM: // Delete no confirmation
+          deleteMessage();
+          break;
+        case ButtonListPreference.BUTTON_REPLY: // Reply
+          replyToMessage(true);
+          break;
+        case ButtonListPreference.BUTTON_QUICKREPLY: // Quick Reply
+          quickReply();
+          break;
+        case ButtonListPreference.BUTTON_REPLY_BY_ADDRESS: // Quick Reply
+          replyToMessage(false);
+          break;
+        case ButtonListPreference.BUTTON_INBOX: // Inbox
+          gotoInbox();
+          break;
+        case ButtonListPreference.BUTTON_TTS: // Text-to-Speech
+          speakMessage();
+          break;
+      }
+    }
   }
 
 }
