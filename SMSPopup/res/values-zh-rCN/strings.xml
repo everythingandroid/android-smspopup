@@ -6,7 +6,7 @@
   <string name="mms_subject">主题:</string>
   <string name="notification_multiple_title">新短信</string>
   <string name="notification_multiple_text">%d 个未读短信。</string>
-  <string name="notification_scroll">%s: %s</string>
+  <string name="notification_scroll" formatted="false">%s: %s</string>
   <string name="notification_scroll_privacy">新短信来源: %s</string>
   <string name="button_close">关闭</string>
   <string name="button_reply">回复</string>
@@ -161,7 +161,7 @@
   <string name="message_presets_reorder_toast">预设信息已移动到顶部</string>
   <string name="message_presets_error_toast">错误 - 请重试</string>
   <string name="message_counter">%d 个字符剩余</string>
-  <string name="message_counter_multiple">%d 个字符剩余，%d 条信息</string>
+  <string name="message_counter_multiple" formatted="false">%d 个字符剩余，%d 条信息</string>
   <string name="quickreply_title">快速回复</string>
   <string name="quickreply_from_text">到: %s</string>
   <string name="quickreply_preset_button">预设</string>

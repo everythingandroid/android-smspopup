@@ -6,7 +6,7 @@
   <string name="mms_subject">Aihe:</string>
   <string name="notification_multiple_title">Uudet viestit</string>
   <string name="notification_multiple_text">%d lukematonta viestiä.</string>
-  <string name="notification_scroll">%s: %s</string>
+  <string name="notification_scroll" formatted="false">%s: %s</string>
   <string name="notification_scroll_privacy">Uusi viesti lähettäjältä %s</string>
   <string name="button_close">Sulje</string>
   <string name="button_reply">Vastaa</string>

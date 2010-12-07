@@ -154,7 +154,7 @@
   <string name="message_presets_reorder_toast">預設資訊已移動到頂部</string>
   <string name="message_presets_error_toast">錯誤 - 請重試</string>
   <string name="message_counter">%d 個字元剩餘</string>
-  <string name="message_counter_multiple">%d 個字元剩餘，%d 條資訊</string>
+  <string name="message_counter_multiple" formatted="false">%d 個字元剩餘，%d 條資訊</string>
   <string name="quickreply_title">快速回覆</string>
   <string name="quickreply_from_text">到: %s</string>
   <string name="quickreply_preset_button">預設</string>
