@@ -7,7 +7,7 @@
   <string name="mms_subject">Onderwerp:</string>
   <string name="notification_multiple_title">Nieuwe berichten</string>
   <string name="notification_multiple_text">%d ongelezen berichten.</string>
-  <string name="notification_scroll">%s: %s</string>
+  <string name="notification_scroll" formatted="false">%s: %s</string>
   <string name="notification_scroll_privacy">Nieuw bericht van: %s</string>
   <string name="button_close">Sluiten</string>
   <string name="button_reply">Antwoorden</string>
@@ -162,7 +162,7 @@
   <string name="message_presets_reorder_toast">Voorgedefinieerd bericht naar boven verplaatst</string>
   <string name="message_presets_error_toast">Error - Probeer opnieuw</string>
   <string name="message_counter">Nog %d karakters</string>
-  <string name="message_counter_multiple">Nog %d karakters, %d berichten</string>
+  <string name="message_counter_multiple" formatted="false">Nog %d karakters, %d berichten</string>
   <string name="quickreply_title">Snel antwoorden</string>
   <string name="quickreply_from_text">Aan: %s</string>
   <string name="quickreply_preset_button">Voorgedefinieerde berichten</string>

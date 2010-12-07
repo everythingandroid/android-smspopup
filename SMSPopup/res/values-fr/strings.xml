@@ -6,7 +6,7 @@
   <string name="mms_subject">Sujet:</string>
   <string name="notification_multiple_title">Nouveaux messages</string>
   <string name="notification_multiple_text">%d Message(s) non-lus.</string>
-  <string name="notification_scroll">%s : %s</string>
+  <string name="notification_scroll" formatted="false">%s : %s</string>
   <string name="notification_scroll_privacy">Nouveau message de: %s</string>
   <string name="button_close">Fermer</string>
   <string name="button_reply">Répondre</string>
@@ -162,7 +162,7 @@
   <string name="message_presets_reorder_toast">Modèle de Message ajouté placé en tête</string>
   <string name="message_presets_error_toast">Erreur - veuillez ré-essayer</string>
   <string name="message_counter">%d caractères restant</string>
-  <string name="message_counter_multiple">%d caractères restant, %d messages</string>
+  <string name="message_counter_multiple" formatted="false">%d caractères restant, %d messages</string>
   <string name="quickreply_title">Réponse-rapide</string>
   <string name="quickreply_from_text">À: %s</string>
   <string name="quickreply_preset_button">Modèles</string>

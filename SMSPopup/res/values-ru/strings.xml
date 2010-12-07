@@ -6,7 +6,7 @@
   <string name="mms_subject">Тема:</string>
   <string name="notification_multiple_title">Новые сообщения</string>
   <string name="notification_multiple_text">%d непрочитанное(ых) сообщение(й).</string>
-  <string name="notification_scroll">%s: %s</string>
+  <string name="notification_scroll" formatted="false">%s: %s</string>
   <string name="notification_scroll_privacy">Новое сообщение от: %s</string>
   <string name="button_close">Закрыть</string>
   <string name="button_reply">Ответить</string>
@@ -161,7 +161,7 @@
   <string name="message_presets_reorder_toast">Шаблон перемещен наверх</string>
   <string name="message_presets_error_toast">Ошибка - Попробуйте еще раз</string>
   <string name="message_counter">%d символов</string>
-  <string name="message_counter_multiple">%d символов, %d сообщений</string>
+  <string name="message_counter_multiple" formatted="false">%d символов, %d сообщений</string>
   <string name="quickreply_title">Быстрый ответ</string>
   <string name="quickreply_from_text">Кому: %s</string>
   <string name="quickreply_preset_button">Шаблоны</string>
