@@ -9,7 +9,7 @@
 <!-- Notification Strings -->
    <string name="notification_multiple_title">New messages</string>
    <string name="notification_multiple_text">%d unread messages.</string>
-   <string name="notification_scroll">%s: %s</string>
+   <string name="notification_scroll" formatted="false">%s: %s</string>
    <string name="notification_scroll_privacy">New message from: %s</string>
    <string name="notification_scroll_privacy_no_name">New message</string>
 
@@ -235,7 +235,7 @@
     
 <!-- Quick Reply Strings -->
    <string name="message_counter">%d chars remaining</string>
-   <string name="message_counter_multiple">%d chars remaining, %d messages</string>
+   <string name="message_counter_multiple" formatted="false">%d chars remaining, %d messages</string>
    
    <string name="quickreply_title">Quick Reply</string>
    <string name="quickreply_from_text">To: %s</string>

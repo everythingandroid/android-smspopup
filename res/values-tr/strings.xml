@@ -4,7 +4,7 @@
   <string name="unread_text_waiting">%d diğer okunmamış mesaj</string>
   <string name="mms_subject">Konu:</string>
   <string name="notification_multiple_text">%d okunmamış mesaj.</string>
-  <string name="notification_scroll">%s: %s</string>
+  <string name="notification_scroll" formatted="false">%s: %s</string>
   <string name="notification_scroll_privacy">Yeni mesaj gönderen: %s</string>
   <string name="button_close">Kapat</string>
   <string name="button_reply">Yanıtla</string>
@@ -176,7 +176,7 @@
   <string name="message_presets_reorder_toast">Mesaj öntanımını en üste taşı</string>
   <string name="message_presets_error_toast">Hata - lütfen tekrar deneyin</string>
   <string name="message_counter">%d karakter kaldı</string>
-  <string name="message_counter_multiple">%d karakter kaldı, %d mesaj</string>
+  <string name="message_counter_multiple" formatted="false">%d karakter kaldı, %d mesaj</string>
   <string name="quickreply_title">Hızlı Yanıt</string>
   <string name="quickreply_from_text">Kime: %s</string>
   <string name="quickreply_preset_button">Öntanımlar</string>

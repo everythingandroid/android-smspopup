@@ -6,7 +6,7 @@
   <string name="mms_subject">Ämne:</string>
   <string name="notification_multiple_title">Nya meddelanden</string>
   <string name="notification_multiple_text">%d oläst(a) meddelande(n).</string>
-  <string name="notification_scroll">%s: %s</string>
+  <string name="notification_scroll" formatted="false">%s: %s</string>
   <string name="notification_scroll_privacy">Nytt meddelande från: %s</string>
   <string name="button_close">Stäng</string>
   <string name="button_reply">Svara</string>
@@ -162,7 +162,7 @@
   <string name="message_presets_reorder_toast">Meddelandemall flyttad längst upp</string>
   <string name="message_presets_error_toast">Fel - vänligen försök igen</string>
   <string name="message_counter">%d tecken kvar</string>
-  <string name="message_counter_multiple">%d tecken kvar. %d meddelanden</string>
+  <string name="message_counter_multiple" formatted="false">%d tecken kvar. %d meddelanden</string>
   <string name="quickreply_title">Snabbsvar</string>
   <string name="quickreply_from_text">Till: %s</string>
   <string name="quickreply_preset_button">Mallar</string>

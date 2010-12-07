@@ -6,7 +6,7 @@
   <string name="mms_subject">Betreff:</string>
   <string name="notification_multiple_title">Neue Nachrichten</string>
   <string name="notification_multiple_text">%d ungelesene Nachrichten.</string>
-  <string name="notification_scroll">%s: %s</string>
+  <string name="notification_scroll" formatted="false">%s: %s</string>
   <string name="notification_scroll_privacy">Neue Nachricht von: %s</string>
   <string name="button_close">Beenden</string>
   <string name="button_reply">Antworten</string>
@@ -162,7 +162,7 @@
   <string name="message_presets_reorder_toast">voreingestellte Nachricht an erste Stelle setzen</string>
   <string name="message_presets_error_toast">Fehler - bitte nochmal versuchen</string>
   <string name="message_counter">%d Zeichen fehlend</string>
-  <string name="message_counter_multiple">%d Zeichen ausstehend, %d Nachrichten</string>
+  <string name="message_counter_multiple" formatted="false">%d Zeichen ausstehend, %d Nachrichten</string>
   <string name="quickreply_title">Schnelle Reaktion</string>
   <string name="quickreply_from_text">Zu %s</string>
   <string name="quickreply_preset_button">Voreinstellungen</string>

@@ -6,7 +6,7 @@
   <string name="mms_subject">Assumpte:</string>
   <string name="notification_multiple_title">Missatges nous</string>
   <string name="notification_multiple_text">%d missatge(s) pendent(s) de llegir</string>
-  <string name="notification_scroll">%s: %s</string>
+  <string name="notification_scroll" formatted="false">%s: %s</string>
   <string name="notification_scroll_privacy">Missatge nou de: %s</string>
   <string name="button_close">Tanca</string>
   <string name="button_reply">Respon</string>

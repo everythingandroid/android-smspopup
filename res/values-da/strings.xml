@@ -6,7 +6,7 @@
   <string name="mms_subject">Emne:</string>
   <string name="notification_multiple_title">Nye beskeder</string>
   <string name="notification_multiple_text">%d ulæste beskeder.</string>
-  <string name="notification_scroll">%s: %s</string>
+  <string name="notification_scroll" formatted="false">%s: %s</string>
   <string name="notification_scroll_privacy">Ny besked fra: %s</string>
   <string name="button_close">Luk</string>
   <string name="button_reply">Svar</string>
@@ -162,7 +162,7 @@
   <string name="message_presets_reorder_toast">Beskedskabelon flyttet til top</string>
   <string name="message_presets_error_toast">Fejl - prøv igen</string>
   <string name="message_counter">%d tegn tilbage</string>
-  <string name="message_counter_multiple">%d tegn tilbage, %d beskeder</string>
+  <string name="message_counter_multiple" formatted="false">%d tegn tilbage, %d beskeder</string>
   <string name="quickreply_title">Hurtigsvar</string>
   <string name="quickreply_from_text">Til: %s</string>
   <string name="quickreply_preset_button">Skabeloner</string>

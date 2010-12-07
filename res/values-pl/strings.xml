@@ -6,7 +6,7 @@
   <string name="mms_subject">Temat:</string>
   <string name="notification_multiple_title">Nowe wiadomości</string>
   <string name="notification_multiple_text">%d nieprzeczytanych wiadomości</string>
-  <string name="notification_scroll">%s: %s</string>
+  <string name="notification_scroll" formatted="false">%s: %s</string>
   <string name="notification_scroll_privacy">Nowa wiadomość od: %s</string>
   <string name="button_close">Zamknij</string>
   <string name="button_reply">Odpowiedz</string>
@@ -162,7 +162,7 @@
   <string name="message_presets_reorder_toast">Wiadomość predefiniowana została przesunięta na szczyt listy.</string>
   <string name="message_presets_error_toast">Błąd - spróbuj jeszcze raz</string>
   <string name="message_counter">%d znaków jeszcze pozostało</string>
-  <string name="message_counter_multiple">%d znaków zostało, %d wiadomości.</string>
+  <string name="message_counter_multiple" formatted="false">%d znaków zostało, %d wiadomości.</string>
   <string name="quickreply_title">Szybka odpowiedź</string>
   <string name="quickreply_from_text">Do: %s</string>
   <string name="quickreply_preset_button">Gotowe ustawienia</string>

@@ -155,7 +155,7 @@
   <string name="message_presets_reorder_toast">Zpráva pro odpověď přesunuta nahoru</string>
   <string name="message_presets_error_toast">Chyba - prosím zkuste to znovu</string>
   <string name="message_counter">%d znaků zbývá</string>
-  <string name="message_counter_multiple">%d znaků zbývá, %d zpráv</string>
+  <string name="message_counter_multiple" formatted="false">%d znaků zbývá, %d zpráv</string>
   <string name="quickreply_title">Rychlá odpověď</string>
   <string name="quickreply_from_text">Komu: %s</string>
   <string name="quickreply_preset_button">Odpovědi</string>
