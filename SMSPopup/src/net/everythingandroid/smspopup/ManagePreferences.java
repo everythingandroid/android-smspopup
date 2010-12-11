@@ -36,12 +36,18 @@ public class ManagePreferences {
 
     public static final boolean PREFS_NOTIF_ENABLED = false;
     public static final String PREFS_NOTIF_ICON = "0";
+    public static final boolean PREFS_NOTIFY_ON_CALL = false;
     public static final boolean PREFS_VIBRATE_ENABLED = true;
     public static final String PREFS_VIBRATE_PATTERN = "0,1200";
     public static final boolean PREFS_LED_ENABLED = true;
     public static final String PREFS_LED_PATTERN = "1000,1000";
     public static final String PREFS_LED_COLOR = "Yellow";
     public static final boolean PREFS_REPLY_TO_THREAD = true;
+    public static final boolean PREFS_NOTIF_REPEAT = false;
+    public static final String PREFS_NOTIF_REPEAT_INTERVAL = "5";
+    public static final String PREFS_NOTIF_REPEAT_TIMES = "2";
+    public static final Boolean PREFS_NOTIF_REPEAT_SCREEN_ON = false; 
+    
   }
 
   public ManagePreferences(Context _context, String _contactId) {

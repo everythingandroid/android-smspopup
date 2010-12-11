@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup;
 
+import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -34,13 +35,13 @@ public class ReminderReceiver extends BroadcastReceiver {
 
     boolean reminder_notifications =
       myPrefs.getBoolean(context.getString(R.string.pref_notif_repeat_key),
-          Boolean.valueOf(context.getString(R.string.pref_notif_repeat_default)));
+              Defaults.PREFS_NOTIF_REPEAT);
 
     if (reminder_notifications) {
       int reminder_interval =
         Integer.parseInt(myPrefs.getString(
             context.getString(R.string.pref_notif_repeat_interval_key),
-            context.getString(R.string.pref_notif_repeat_interval_default)));
+            Defaults.PREFS_NOTIF_REPEAT_INTERVAL));
 
       reminder_interval *= 60;
 

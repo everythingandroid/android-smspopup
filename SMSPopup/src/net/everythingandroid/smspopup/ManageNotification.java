@@ -340,13 +340,15 @@ public class ManageNotification {
     boolean privacyAlways =
       mPrefs.getBoolean(R.string.pref_privacy_always_key, Defaults.PREFS_PRIVACY_ALWAYS);
 
-
     // Fetch notification icon
     int notifIcon =
       Integer.valueOf(mPrefs.getString(R.string.pref_notif_icon_key, Defaults.PREFS_NOTIF_ICON));
 
     boolean replyToThread =
       mPrefs.getBoolean(R.string.pref_reply_to_thread_key, Defaults.PREFS_REPLY_TO_THREAD);
+    
+    boolean notifyOnCall = 
+      mPrefs.getBoolean(R.string.pref_notifyOnCall_key, Defaults.PREFS_NOTIFY_ON_CALL);
 
     // All done with prefs, close it up
     mPrefs.close();
@@ -415,7 +417,6 @@ public class ManageNotification {
         notification.ledARGB = col;
       }
 
-
       // Get system telephony manager
       TelephonyManager mTM =
         (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -449,16 +450,23 @@ public class ManageNotification {
          */
         notification.sound = notifSoundUri;
 
-      } else { // On a call or making a call
-        
-        // Use MediaPlayer to play so they can hear the notification over the ear piece
-        if (mPlayer == null) {
-          //mPlayer = MediaPlayer.create(context, R.raw.new_sms);
-          mPlayer = MediaPlayer.create(context, notifSoundUri);
-        } else {
-          mPlayer.start();
+      } else if (notifyOnCall) { // On a call or making a call
+
+        try {
+          // Use MediaPlayer to play so they can hear the notification over the ear piece
+          if (mPlayer == null) {
+            mPlayer = MediaPlayer.create(context, notifSoundUri);
+            mPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+            mPlayer.prepare();
+          } else {
+            mPlayer.start();
+          }
+        } catch (IllegalStateException e) {
+          if (Log.DEBUG) Log.v("MediaPlayer, IllegalStateException - " + e);
+        } catch (IOException e) {
+          if (Log.DEBUG) Log.v("MediaPlayer, IOException - " + e);
         }
-        
+                
       }
 
     }
