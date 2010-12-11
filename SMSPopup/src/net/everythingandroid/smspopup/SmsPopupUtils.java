@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import net.everythingandroid.smspopup.wrappers.ContactWrapper;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
@@ -409,7 +410,7 @@ public class SmsPopupUtils {
     SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     boolean markRead = myPrefs.getBoolean(
         context.getString(R.string.pref_markread_key),
-        Boolean.valueOf(context.getString(R.string.pref_markread_default)));
+        Defaults.PREFS_MARK_READ);
     if (!markRead) return;
 
     if (messageId > 0) {

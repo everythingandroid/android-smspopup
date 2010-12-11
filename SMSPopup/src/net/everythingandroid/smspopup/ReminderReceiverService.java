@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup;
 
+import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -96,7 +97,7 @@ public class ReminderReceiverService extends Service {
       int repeat_times =
         Integer.parseInt(myPrefs.getString(
             context.getString(R.string.pref_notif_repeat_times_key),
-            context.getString(R.string.pref_notif_repeat_times_default)));
+            Defaults.PREFS_NOTIF_REPEAT_TIMES));
 
       // values of repeat_times as follows:
       // -1 repeat indefinitely
@@ -105,8 +106,7 @@ public class ReminderReceiverService extends Service {
         ManageNotification.show(context, message);
         ReminderReceiver.scheduleReminder(context, message);
         if (myPrefs.getBoolean(context.getString(R.string.pref_notif_repeat_screen_on_key),
-            Boolean.parseBoolean(
-                context.getString(R.string.pref_notif_repeat_screen_on_default)))) {
+                Defaults.PREFS_NOTIF_REPEAT_SCREEN_ON)) {
           ManageWakeLock.acquireFull(context);
         }
 

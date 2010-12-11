@@ -43,6 +43,13 @@
               android:showSilent="true"
               android:dependency="@string/pref_notif_enabled_key"
               android:defaultValue="content://settings/system/notification_sound" />
+            <CheckBoxPreference
+              android:key="@string/pref_notifyOnCall_key"
+              android:title="@string/pref_notifyOnCall_title"
+              android:summaryOn="@string/pref_notifyOnCall_summaryon"
+              android:summaryOff="@string/pref_notifyOnCall_summaryoff"
+              android:defaultValue="@string/pref_notifyOnCall_default"
+              android:dependency="@string/pref_notif_enabled_key" />
             <net.everythingandroid.smspopup.preferences.NotificationIconListPreference
               android:key="@string/pref_notif_icon_key"
               android:title="@string/pref_notif_icon_title"
@@ -50,7 +57,7 @@
               android:entries="@array/pref_notif_icon_entries"
               android:entryValues="@array/pref_notif_icon_values"
               android:defaultValue="@string/pref_notif_icon_default"
-              android:dependency="@string/pref_notif_enabled_key" />              
+              android:dependency="@string/pref_notif_enabled_key" />
             <net.everythingandroid.smspopup.preferences.TestNotificationDialogPreference
               android:key="@string/pref_notif_test_key"
               android:dialogIcon="@drawable/android:ic_dialog_alert"
