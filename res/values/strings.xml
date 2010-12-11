@@ -129,7 +129,7 @@
 
    <string name="pref_popup_enabled_title">Show a Popup</string>
    <string name="pref_popup_enabled_summaryon">Message will open in a popup</string>
-   <string name="pref_popup_enabled_summaryoff">Message will only show in notification area (if enabled)</string>
+   <string name="pref_popup_enabled_summaryoff">Message will only show in notification area</string>
 
    <string name="pref_notif_test_title">Test Notification</string>
    <string name="pref_notif_test_summary">Test out your notification</string>
@@ -137,7 +137,11 @@
    
    <string name="pref_notif_sound_title">Notification Sound</string>
    <string name="pref_notif_sound_summary">This sound will play when a message is received</string>
-   
+
+   <string name="pref_notifyOnCall_title">Notify On Call</string>
+   <string name="pref_notifyOnCall_summaryon">Sound will play while on a call</string>
+   <string name="pref_notifyOnCall_summaryoff">Sound will not play while on a call</string>
+      
    <string name="pref_notif_icon_title">Notification Icon</string>
    <string name="pref_notif_icon_summary">Change the notification area icon</string>
   

@@ -22,6 +22,7 @@
    <string name="pref_popup_enabled_key">popup</string>
    <string name="pref_notif_test_key">notiftest</string>
    <string name="pref_notif_sound_key">notifsound</string>
+   <string name="pref_notifyOnCall_key">notifyoncall</string>
    <string name="pref_notif_icon_key">notificon</string>
    <string name="pref_vibrate_key">vibrate</string>
    <string name="pref_vibrate_pattern_key">vibrate_pattern</string>
