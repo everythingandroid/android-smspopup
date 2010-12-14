@@ -155,8 +155,8 @@
     <item>1</item>
     <item>2</item>
     <item>3</item>
-    
     <item>4</item>
+    
     <item>5</item>
     <item>6</item>
     <item>7</item>
@@ -166,8 +166,8 @@
     <item>11</item>
     <item>12</item>
     <item>13</item>
-
     <item>14</item>
+    
     <item>15</item>
     <item>16</item>
     <item>17</item>
@@ -177,8 +177,8 @@
     <item>21</item>
     <item>22</item>
     <item>23</item>
-
     <item>24</item>
+    
     <item>25</item>
     <item>26</item>
     <item>27</item>
@@ -188,8 +188,8 @@
     <item>31</item>
     <item>32</item>
     <item>33</item>
-
     <item>34</item>
+    
     <item>35</item>
     <item>36</item>
     <item>37</item>
@@ -198,12 +198,14 @@
     <item>40</item>
     <item>41</item>
     <item>42</item>
-    <item>43</item>   
+    <item>43</item>
+    <item>44</item>
   </string-array>
   
   <string-array
     name="pref_notif_icon_entries">
     <item>Android</item>
+    <item>Android (Gingerbread)</item>
     <item>Android (Old)</item>
     <item>HTC</item>
     <item>Motorola</item>
