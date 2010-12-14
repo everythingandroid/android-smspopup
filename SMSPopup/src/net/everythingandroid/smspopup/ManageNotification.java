@@ -1,6 +1,5 @@
 package net.everythingandroid.smspopup;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import net.everythingandroid.smspopup.ManagePreferences.Defaults;
@@ -39,6 +38,7 @@ public class ManageNotification {
   private static final int FAILED = 1;
   public static final int[][] NOTIF_ICON_RES = {
     {R.drawable.stat_notify_sms, R.drawable.stat_notify_sms_failed},
+    {R.drawable.stat_notify_sms_gb, R.drawable.stat_notify_sms_failed_gb},
     {R.drawable.stat_notify_sms_old, R.drawable.stat_notify_sms_failed},
     {R.drawable.stat_notify_sms_htc, R.drawable.stat_notify_sms_failed_htc},
     {R.drawable.stat_notify_sms_blur, R.drawable.stat_notify_sms_failed},
@@ -456,19 +456,12 @@ public class ManageNotification {
           // Use MediaPlayer to play so they can hear the notification over the ear piece
           if (mPlayer == null) {
             mPlayer = MediaPlayer.create(context, notifSoundUri);
-            mPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-            mPlayer.prepare();
-          } else {
-            mPlayer.start();
           }
+          mPlayer.start();
         } catch (IllegalStateException e) {
           if (Log.DEBUG) Log.v("MediaPlayer, IllegalStateException - " + e);
-        } catch (IOException e) {
-          if (Log.DEBUG) Log.v("MediaPlayer, IOException - " + e);
         }
-                
       }
-
     }
 
     // Set intent to execute if the "clear all" notifications button is pressed -
