@@ -32,6 +32,7 @@
   <string name="pref_about_text">Автор: Adam K\nEmail: adam\@everythingandroid.net\nБлог: http://www.everythingandroid.net\n\nПеревод Перевод на Русский: Artem Kavalerov\nEmail: artem.kavalerov\@gmail.com\n\nSMS Popup простое приложение, которое выводит входящее SMS сообщение в виде всплывающего диалогового окна, подобно iPhone – включает экран и снимает блокировку при необходимости. Отображает последнее сообщение, от кого оно получено и фото контакта при его налчии.\n\nПишите мне свои любые комментарии, предложения или сообщения об ошибках.\n\nОтдельное спасибо Min Tran за иконку приложения.\n(http://min.frexy.com)\n</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Часто Задаваемые Вопросы (FAQ)</string>
+  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
   <string name="pref_releasenotes_title">Что нового?</string>
   <string name="pref_releasenotes_summary">Посмотреть что нового в этой версии</string>
   <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>
@@ -99,6 +100,7 @@
   <string name="pref_vibrate_pattern_ok">Установка собственного шаблона вибро</string>
   <string name="pref_vibrate_pattern_bad">Шаблон вибро задан некорректно, включен шаблон по умолчанию</string>
   <string name="pref_vibrate_pattern_help">Введите собственный шаблон, в формате:\nмсекВыкл, мсекВкл, и т.д..\n\nПример:\n0,1000\n0,500,200,500,200,500</string>
+  <string name="pref_custom_val">другое</string>
   <string name="pref_flashled_title">Мигание светодиодом</string>
   <string name="pref_flashled_summaryon">Мигать светодиодом при входящем сообщении</string>
   <string name="pref_flashled_summaryoff">Не использовать светодиод для оповещения</string>

@@ -32,6 +32,7 @@
   <string name="pref_about_text">Portuguese Translation by: Daniel Rodrigues\nEmail:naotodigo\@gmail.com\n</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Perguntas mais frequentes (FAQ)</string>
+  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
   <string name="pref_releasenotes_title">Novidades</string>
   <string name="pref_releasenotes_summary">Ver Novidades Desta Versão</string>
   <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>

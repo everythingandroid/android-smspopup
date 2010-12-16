@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="app_name">SMS Popup</string>
-  <string name="new_text_at">Nowa wiadomość na %s</string>
+  <string name="new_text_at">Nowa wiadomość z %s</string>
   <string name="unread_text_waiting">%d innych nie przeczytanych wiadomości</string>
   <string name="mms_subject">Temat:</string>
   <string name="notification_multiple_title">Nowe wiadomości</string>
@@ -17,8 +17,8 @@
   <string name="button_next">Następna</string>
   <string name="button_previous">Poprzednia</string>
   <string name="button_unlock">Odblokuj</string>
-  <string name="button_tts">Tekst-do-powiedzenia</string>
-  <string name="button_speak">Mów</string>
+  <string name="button_tts">Tekst-na-mowę</string>
+  <string name="button_speak">Powiedz</string>
   <string name="button_delete_noconfirm">Usuń (bez potwierdzenia)</string>
   <string name="button_quickreply">Szybka odpowiedź</string>
   <string name="button_disabled">Wyłączone</string>
@@ -32,6 +32,7 @@
   <string name="pref_about_text">Autor programu: Adam K\nEmail: adam\@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup jest prostą aplikacją, która pokazuje wyskakujące okienko gdy otrzymasz SMS - w razie potrzeby włącza ekran oraz odblokowuje telefon. Pokazuje ostatnią otrzymaną wiadomość, jej nadawcę oraz zdjęcie.\n\nWszelkie komentarze, sugestie i informacje o błędach mile widziane.\n\nTłumaczenie na niemiecki: Feyyaz A.\nEmail: f_alingan\@hotmail.com\nWWW: http://www.yenio.com\n\nTłumaczenie na holenderski: mellie\@xs4all.nl\n\nTłumaczenie na hiszpański: Diego Fernández\nEmail: profediego\@gmail.com\n\nTłumaczenie na rosyjski: Artem Kavalerov\nEmail: artem.kavalerov\@gmail.com\n\nTłumaczenie na polski: Chris aka KreCi\nEmail: kreci\@kreci.net\nWWW: http://www.kreci.net\n\nPodziękowania dla Min Tran za ikonę aplikacji.\n(http://min.frexy.com)\n</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Najczęściej zadawane pytania</string>
+  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
   <string name="pref_releasenotes_title">Co nowego?</string>
   <string name="pref_releasenotes_summary">Sprawdź co nowego w tej wersji</string>
   <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>

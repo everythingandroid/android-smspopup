@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="app_name">SMS Popup</string>
+  <string name="new_text_at">Novo sporočilo ob %s</string>
+  <string name="unread_text_waiting">Še %d neprebranih sporočil</string>
+  <string name="mms_subject">Zadeva:</string>
+  <string name="notification_multiple_title">Nova sporočila</string>
+  <string name="notification_scroll" formatted="false">%s: %s</string>
+  <string name="notification_scroll_privacy">Novo sporočilo: %s</string>
+  <string name="button_close">Zapri</string>
+  <string name="button_reply">Odgovori</string>
+  <string name="button_inbox">Prejeto</string>
+  <string name="button_view">Poglej</string>
+  <string name="button_view_mms">Poglej MMS</string>
+  <string name="button_delete">Zbriši</string>
+  <string name="button_next">Naslednje</string>
+  <string name="button_previous">Prejšnje</string>
+  <string name="button_unlock">Odkleni</string>
+  <string name="button_speak">Izgovori</string>
+  <string name="button_delete_noconfirm">Zbriši (brez potrditve)</string>
+  <string name="button_quickreply">Hitri odgovor</string>
+  <string name="button_disabled">Onemogočeno</string>
+  <string name="pref_config_title">SMS Popup nastavitve</string>
+  <string name="pref_other_title">Ostalo</string>
+  <string name="pref_enabled_title">Omogoči SMS Popup</string>
+  <string name="pref_enabled_summaryon">SMS Popup je omogočen</string>
+  <string name="pref_enabled_summaryoff">SMS Popup je onemogočen</string>
+  <string name="pref_about_title">Vizitka</string>
+  <string name="pref_about_summary">O programu SMS Popup</string>
+  <string name="pref_faq_title">Pogosto zastavljena vprašanja</string>
+  <string name="pref_faq_summary">Pogosto zastavljena vprašanja</string>
+  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
+  <string name="pref_releasenotes_title">Novosti</string>
+  <string name="pref_releasenotes_summary">Pregled novosti v tej različici</string>
+  <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>
+  <string name="pref_sendemail_title">Piši avtorju</string>
+</resources>
