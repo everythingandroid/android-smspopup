@@ -32,6 +32,7 @@
   <string name="pref_about_text">Creado por: Adam K\nEmail: adam\@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nAgradecimientos a Diego Fernández por la traducción a Español.\n(profediego\@gmail.com)\n\nSMS Popup es una aplicación simple que muestra un diálogo cuando un SMS es recibido, similar al iPhone - encendiendo la pantalla y desbloqueando el teclado si es necesario. Muestra el mensaje más reciente, de quién es y la foto del contacto, si está disponible.\n\nSiéntase libre de enviarme un email con cualquier comentario, sugerencia o fallo. \n\nAgradecimientos a Min Tran por el ícono de la aplicación.\n(http://min.frexy.com)\n</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Preguntas más frecuentes (FAQ)</string>
+  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
   <string name="pref_releasenotes_title">¿Qué hay nuevo?</string>
   <string name="pref_releasenotes_summary">Ver qué hay nuevo en esta versión</string>
   <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>
@@ -99,6 +100,7 @@
   <string name="pref_vibrate_pattern_ok">Patrón de vibración personalizado establecido</string>
   <string name="pref_vibrate_pattern_bad">Patrón de vibración personalizado inválido, utilizando el predeterminado</string>
   <string name="pref_vibrate_pattern_help">Ingrese un patrón de vibración personalizado, con el formato:\nmillisOff, millisOn, etc.\n\nPor ejemplo:\n0,1000\n0,500,200,500,200,500</string>
+  <string name="pref_custom_val">custom</string>
   <string name="pref_flashled_title">Parpadeo del LED</string>
   <string name="pref_flashled_summaryon">Parpadear el LED cuando un mensaje es recibido</string>
   <string name="pref_flashled_summaryoff">No parpadear el LED cuando un mensaje es recibido</string>
@@ -139,7 +141,7 @@
   <string name="contact_customization_edit">Editar notificación customizada</string>
   <string name="contact_customization_remove">Remover notificación customizada</string>
   <string name="contact_customization_removed_toast">Notificación customizada removida</string>
-  <string name="contact_customization_save">Grabar</string>
+  <string name="contact_customization_save">Guardar</string>
   <string name="contact_customization_title">Notificaciones para %s</string>
   <string name="contact_customization_enabled">Las notificaciones para %s están habilitadas</string>
   <string name="contact_customization_disabled">Las notificaciones para %s están deshabilitadas</string>

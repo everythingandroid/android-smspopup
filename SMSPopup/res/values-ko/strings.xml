@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="app_name">SMS 팝업</string>
+  <string name="mms_subject">제목:</string>
+  <string name="notification_multiple_title">새로운 메시지</string>
+  <string name="notification_scroll" formatted="false">%s: %s</string>
+  <string name="button_close">닫기</string>
+  <string name="button_reply">답장</string>
+  <string name="button_inbox">받은 편지함</string>
+  <string name="button_view">보기</string>
+  <string name="button_view_mms">문자 보기</string>
+  <string name="button_delete">삭제</string>
+  <string name="button_next">다음</string>
+  <string name="button_previous">이전</string>
+  <string name="button_unlock">잠금 해제</string>
+  <string name="button_disabled">사용안함</string>
+  <string name="pref_config_title">SMS 팝업 환경설정</string>
+  <string name="pref_other_title">기타</string>
+  <string name="pref_enabled_title">SMS 팝업 설정</string>
+  <string name="pref_enabled_summaryon">SMS 팝업이 설정되었습니다</string>
+  <string name="pref_enabled_summaryoff">SMS 팝업이 해제되었습니다</string>
+  <string name="pref_about_title">프로그램 정보</string>
+  <string name="pref_about_summary">SMS 팝업 이야기</string>
+</resources>

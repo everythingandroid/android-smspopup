@@ -32,6 +32,7 @@
   <string name="pref_about_summary">Over SMS Popup</string>
   <string name="pref_faq_title">Veelgestelde vragen</string>
   <string name="pref_faq_summary">Veelgestelde vragen</string>
+  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
   <string name="pref_releasenotes_title">Wat is er nieuw?</string>
   <string name="pref_releasenotes_summary">Zie wat er nieuw is in deze versie</string>
   <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>

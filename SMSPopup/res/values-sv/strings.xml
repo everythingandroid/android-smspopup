@@ -32,6 +32,7 @@
   <string name="pref_about_text">Skapat av: Adam K\nE-post: adam\@everythingandroid.net\nBlogg: http://www.everythingandroid.net\n\nSMS Popup är en enkel applikation som visar en dialogruta när ett SMS tas emot - även aktiverar skärmen och låser upp knapplåset om det behövs. Dialogrutan visar det senaste meddelandet, vem det är ifrån och kontaktbilden om den är tillgänglig.\n\nKänn dig välkommen att maila mig kommentarer, förslag och buggar.\n\nTysk översättning av: Feyyaz A.\nE-post: f_alingan\@hotmail.com\nHemsida: http://www.yenio.com\n\nHolländsk översättning av: mellie\@xs4all.nl\n\nSpansk översättning av: Diego Fernández\nE-post: profediego\@gmail.com\n\nRysk översättning av: Artem Kavalerov\nE-post: artem.kavalerov\@gmail.com\n\nAppens ikon är gjord av Min Tran.\n(http://min.frexy.com)\n</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Vanliga frågor</string>
+  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
   <string name="pref_releasenotes_title">Vad är nytt?</string>
   <string name="pref_releasenotes_summary">Se vad som är nytt i denna version</string>
   <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>
@@ -163,7 +164,7 @@
   <string name="message_presets_error_toast">Fel - vänligen försök igen</string>
   <string name="message_counter">%d tecken kvar</string>
   <string name="message_counter_multiple" formatted="false">%d tecken kvar. %d meddelanden</string>
-  <string name="quickreply_title">Snabbsvar</string>
+  <string name="quickreply_title" formatted="false">Snabbsvar</string>
   <string name="quickreply_from_text">Till: %s</string>
   <string name="quickreply_preset_button">Mallar</string>
   <string name="quickreply_send_button">Skicka</string>

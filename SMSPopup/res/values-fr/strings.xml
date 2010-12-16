@@ -29,16 +29,17 @@
   <string name="pref_enabled_summaryoff">SMS Popup est désactivé</string>
   <string name="pref_about_title">À propos</string>
   <string name="pref_about_summary">À propose de SMS Popup</string>
-  <string name="pref_about_text">Créé par: Adam K\nEmail: adam\@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup est une application simple qui a pour but de faire apparaitre un pop-up de dialogue quand un SMS arrive sur votre Android, allumant ainsi l\'écran et débloquant le schéma de blocage si nécesaire. Il montre le message le plus récent, son destinataire et la photo du contact si elle existe.\n\nVous pouvez m\'envoyer vos remarques, suggestions ou bugs par mail.\n\nTraduction Française par: Norman Obry nEmail: norman.obry\@free.fr\n\nTraduction Allemande par: Feyyaz A.\nEmail: f_alingan\@hotmail.com\nSite: http://www.yenio.com\n\nTraduction Hollandaise par: mellie\@xs4all.nl\n\nTraduction Espagnole par: Diego Fernández\nEmail: profediego\@gmail.com\n\nTraduction Russe par: Artem Kavalerov\nEmail: artem.kavalerov\@gmail.com\n\nCredits à Min Tran pour l\'icône de l\'application.\n(http://min.frexy.com)\n</string>
+  <string name="pref_about_text">Email: adam\@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup est une application qui a simplement pour but de faire apparaître une pop-up quand un SMS arrive sur votre smartphone Android, allumant ainsi l\'écran, pouvant débloquer le schéma de blocage si nécessaire. Il montre le message le plus récent, son destinataire et la photo du contact si elle existe.\n\nVous pouvez m\'envoyer vos remarques, suggestions ou bugs par mail.\n\nTraduction Française par: Norman Obry\n\nTraduction Allemande par: Feyyaz A.\nEmail: f_alingan\@hotmail.com\nSite: http://www.yenio.com\n\nTraduction Hollandaise par: mellie\@xs4all.nl\n\nTraduction Espagnole par: Diego Fernández\nEmail: profediego\@gmail.com\n\nTraduction Russe par: Artem Kavalerov\nEmail: artem.kavalerov\@gmail.com\n\nCredits à Min Tran pour l\'icône de l\'application.\n(http://min.frexy.com)\n</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Questions fréquentes</string>
+  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
   <string name="pref_releasenotes_title">Quoi de neuf ?</string>
   <string name="pref_releasenotes_summary">Voir les nouveautés dans cette version</string>
   <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>
   <string name="pref_sendemail_title">Envoyer un e-mail au développeur</string>
   <string name="pref_sendemail_summary">Mailer des commentaires ou bugs au développeur</string>
   <string name="pref_sendemail_dialog">Puis-je inclure les informations de votre système dans le mail (cela m\'aidera à analyser les bugs plus facilement) ?</string>
-  <string name="pref_sendemail_buttonok">Bien-Sûr</string>
+  <string name="pref_sendemail_buttonok">Bien-sûr</string>
   <string name="pref_sendemail_buttoncancel">Pas question</string>
   <string name="pref_additional_title">Réglages Additionnels</string>
   <string name="pref_additional_summary">Configuration Additionnelle de SMS Popup</string>
@@ -139,17 +140,17 @@
   <string name="contact_customization_add">Ajout de notification personnalisée</string>
   <string name="contact_customization_edit">Editer une notification personnalisée</string>
   <string name="contact_customization_remove">Retirer une notification personnalisée</string>
-  <string name="contact_customization_removed_toast">Notification personnalisée Retirée</string>
+  <string name="contact_customization_removed_toast">Notification personnalisée retirée</string>
   <string name="contact_customization_save">Sauvegarder</string>
-  <string name="contact_customization_title">Notification pour %s</string>
+  <string name="contact_customization_title">Notifications pour %s</string>
   <string name="contact_customization_enabled">Notifications activées pour %s</string>
-  <string name="contact_customization_disabled">Notifications désactivées for %s</string>
-  <string name="contact_customization_add_hint">Ajout/Edition de notification contact...</string>
+  <string name="contact_customization_disabled">Notifications désactivées pour %s</string>
+  <string name="contact_customization_add_hint">Ajout/Edition de notification de contact...</string>
   <string name="ringtone_silent">Silencieux</string>
   <string name="pref_message_presets_title">Modèles de Messages</string>
-  <string name="pref_message_presets_summary">Configurer des Modèles de Messages pour la réponse-rapide</string>
+  <string name="pref_message_presets_summary">Configurer des modèles de messages pour la réponse-rapide</string>
   <string name="message_presets_add">Ajouter modèle de message</string>
-  <string name="message_presets_edit">Editer modèle de message</string>
+  <string name="message_presets_edit">Editer modèle de message</string>
   <string name="message_presets_add_text">Créer</string>
   <string name="message_presets_save_text">Sauvegarder</string>
   <string name="message_presets_delete_text">Retirer</string>
@@ -160,9 +161,9 @@
   <string name="message_presets_save_toast">Modèle de Message modifié</string>
   <string name="message_presets_delete_toast">Modèle de Message effacé</string>
   <string name="message_presets_reorder_toast">Modèle de Message ajouté placé en tête</string>
-  <string name="message_presets_error_toast">Erreur - veuillez ré-essayer</string>
+  <string name="message_presets_error_toast">Erreur - veuillez réessayer</string>
   <string name="message_counter">%d caractères restant</string>
-  <string name="message_counter_multiple" formatted="false">%d caractères restant, %d messages</string>
+  <string name="message_counter_multiple" formatted="false">%d caractères restant, %d messages</string>
   <string name="quickreply_title">Réponse-rapide</string>
   <string name="quickreply_from_text">À: %s</string>
   <string name="quickreply_preset_button">Modèles</string>
@@ -187,8 +188,8 @@
   <string name="pref_quickreply_summaryon">Réponse rapide est activée</string>
   <string name="pref_quickreply_summaryoff">Réponse rapide est désactivé</string>
   <string name="pref_quickreply_bothreplybuttons">Les deux boutons de réponse sont déjà actifs, pour les configurer aller dans le paneau Configuration de boutons</string>
-  <string name="pref_quickreply_noreplybuttons">Les deux boutons de réponse ne sont pas actifs, pour les configurer aller dans le paneau Configuration de boutons</string>
-  <string name="button_replybyaddress">Réponse (au téléphone)</string>
+  <string name="pref_quickreply_noreplybuttons">Les deux boutons de réponse ne sont pas actifs, pour les configurer, aller dans le panneau Configuration de boutons</string>
+  <string name="button_replybyaddress">Répondre (par téléphone)</string>
   <string name="pref_notif_signature_title">Signature de réponse rapide</string>
   <string name="pref_notif_signature_summary">Apparaît à la fin de chaque réponse rapide</string>
   <string name="eula_title">Contrat de licence pour SMS Popup</string>
@@ -209,7 +210,7 @@
   <string name="quickreply_sent_toast">Message envoyé</string>
   <string name="quickreply_failed_send_later">Actuellement dans l\'impossibilité d\'envoyer votre message. Il sera envoyé lorsque le service devient disponible.</string>
   <string name="quickreply_failed">Impossible d\'envoyer le message</string>
-  <string name="pref_custom">Personnalisation</string>
+  <string name="pref_custom">Personnalisé</string>
   <string name="pref_notif_repeat_times_entries_keep_repeting">Répétition continue</string>
   <string name="pref_timeout_entries_10s">10 secondes</string>
   <string name="pref_timeout_entries_20s">20 secondes</string>
