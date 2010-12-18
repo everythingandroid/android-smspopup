@@ -4,74 +4,49 @@
   android:layout_height="fill_parent"
   android:orientation="vertical"
   android:minWidth="310dp"
-  android:id="@+id/MainLinearLayout"
+  android:id="@+id/MainLayout"
   android:layout_width="fill_parent">
-  <ViewStub
-    android:id="@+id/UnreadCountViewStub"
-    android:layout="@layout/popup_unreadcount"
-    android:layout_width="fill_parent"
-    android:layout_height="41dp" />
-  <include
-    layout="@layout/popup_header"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" />
-  <include
-    layout="@layout/popup_divider" />
-  <ScrollView
-    android:layout_width="fill_parent"
-    android:layout_height="0dip"
-    android:id="@+id/MessageScrollView"
-    android:visibility="gone"
-    android:layout_weight="1"
-    android:paddingBottom="10dp"
-    android:paddingTop="6dp">
-    <TextView
-      android:text="Text here"
-      android:id="@+id/MessageTextView"
-      android:autoLink="all"
-      android:textAppearance="?android:attr/textAppearanceMedium"
-      android:textColor="?android:attr/textColorPrimaryDisableOnly"
-      android:layout_height="wrap_content"
-      android:layout_width="fill_parent"
-      android:gravity="center"
-      android:paddingRight="10dp"
-      android:paddingLeft="10dp"
-      android:textColorLink="?android:attr/textColorPrimaryDisableOnly" />
-  </ScrollView>
-  <ViewStub
-    android:id="@+id/MmsViewStub"
-    android:layout="@layout/popup_mms"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" />
-  <ViewStub
-    android:id="@+id/PrivacyViewStub"
-    android:layout="@layout/popup_privacy"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" />
-  <LinearLayout
-    android:id="@+id/ButtonLinearLayout"
-    android:layout_width="fill_parent"
+  <RelativeLayout
+    android:layout_width="wrap_content"
+    android:background="@android:color/darker_gray"
     android:layout_height="wrap_content"
-    android:gravity="center"
     android:padding="2dp"
-    android:background="@android:color/darker_gray">
+    android:id="@+id/HeaderLayout">
     <Button
-      android:id="@+id/button1"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:text="@string/button_close"
-      android:layout_width="fill_parent" />
+      android:background="@android:drawable/btn_default_small"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentTop="true"
+      android:text="&lt;--"
+      android:id="@+id/PreviousButton"
+      android:layout_width="50dip" />
     <Button
-      android:id="@+id/button2"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:text="@string/button_delete"
-      android:layout_width="fill_parent" />
+      android:background="@android:drawable/btn_default_small"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentTop="true"
+      android:text="--&gt;"
+      android:id="@+id/NextButton"
+      android:layout_width="50dip" />
     <Button
-      android:id="@+id/button3"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:text="@string/button_reply"
-      android:layout_width="fill_parent" />
-  </LinearLayout>
+      android:background="@android:drawable/btn_default_small"
+      android:text="Inbox"
+      android:id="@+id/InboxButton"
+      android:layout_centerHorizontal="true"
+      android:layout_width="100dp" />
+  </RelativeLayout>
+  <net.everythingandroid.smspopup.controls.SmsPopupViewFlipper
+    android:id="@+id/SmsPopupsLayout"
+    android:layout_width="fill_parent" android:layout_height="wrap_content">
+  </net.everythingandroid.smspopup.controls.SmsPopupViewFlipper>
+  
+<ViewSwitcher android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/ButtonViewSwitcher"><LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="center" android:padding="2dp" android:background="@android:color/darker_gray" android:id="@+id/ButtonLayout">
+    <Button android:id="@+id/button1" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/button_close" android:layout_width="fill_parent" />
+    <Button android:id="@+id/button2" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/button_delete" android:layout_width="fill_parent" />
+    <Button android:id="@+id/button3" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/button_reply" android:layout_width="fill_parent" />
+    
+  </LinearLayout><RelativeLayout android:id="@+id/UnlockButtonLayout" android:layout_width="fill_parent" android:layout_height="wrap_content" android:background="@android:color/darker_gray" android:padding="2dp">
+      <Button android:id="@+id/unlockButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:paddingLeft="30dp" android:paddingRight="30dp" android:minWidth="100dp" android:text="@string/button_unlock" />
+    </RelativeLayout></ViewSwitcher>
 </LinearLayout>
