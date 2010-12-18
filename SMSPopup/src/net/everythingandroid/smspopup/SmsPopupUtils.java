@@ -554,6 +554,81 @@ public class SmsPopupUtils {
   }
 
   /**
+   * Fetches a list of unread messages from the system database
+   *
+   * @param context app context
+   * @param ignoreMessageId message id to ignore (the one being displayed), setting this to 0
+   * will return all unread messages
+   * 
+   * @return ArrayList of SmsMmsMessage
+   */
+
+  public static ArrayList<SmsMmsMessage> getUnreadMessages(Context context, long ignoreMessageId) {
+
+    if (Log.DEBUG) Log.v("getUnreadMessages(): " + ignoreMessageId);
+    
+    ArrayList<SmsMmsMessage> messages = null;
+    
+    final String[] projection =
+      new String[] { "_id", "thread_id", "address", "date", "body" };
+    String selection = UNREAD_CONDITION;
+    String[] selectionArgs = null;
+    final String sortOrder = "date DESC";
+    
+    // Ignore message id if set
+    if (ignoreMessageId > 0) {
+      selection += " and _id != ?";
+      selectionArgs = new String[] { String.valueOf(ignoreMessageId) };
+    }   
+
+    // Create cursor
+    Cursor cursor = context.getContentResolver().query(
+        SMS_INBOX_CONTENT_URI,
+        projection,
+        selection,
+        selectionArgs,
+        sortOrder);
+
+    long messageId;
+    long threadId;
+    String address;
+    long timestamp;
+    String body;
+    
+    if (cursor != null) {
+      
+      try {
+        
+        int count = cursor.getCount();
+        
+        if (count > 0) {
+          
+          messages = new ArrayList<SmsMmsMessage>(count);
+          
+          while (cursor.moveToNext()) {
+
+            messageId = cursor.getLong(0);
+            threadId = cursor.getLong(1);
+            address = cursor.getString(2);
+            timestamp = cursor.getLong(3);
+            body = cursor.getString(4);
+  
+            messages.add( new SmsMmsMessage(
+                context, address, body, timestamp, threadId,
+                count, messageId, SmsMmsMessage.MESSAGE_TYPE_SMS));
+          }
+        }
+        
+      } finally {
+        
+        cursor.close();
+      }
+    }
+          
+    return messages;
+  }
+
+  /**
    *
    */
   public static Intent getSmsInboxIntent() {

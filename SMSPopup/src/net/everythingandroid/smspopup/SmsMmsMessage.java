@@ -335,6 +335,10 @@ public class SmsMmsMessage {
     return DateUtils.formatDateTime(context, timestamp, DateUtils.FORMAT_SHOW_TIME);
   }
 
+  public String getFromAddress() {
+    return fromAddress;
+  }
+
   public String getContactName() {
     if (contactName == null) {
       contactName = context.getString(android.R.string.unknownName);
