@@ -32,7 +32,6 @@
   <string name="pref_about_text">SMS Popup zeigt neu eingegangene Kurzmitteilungen unmittelbar in einem Popup auf dem Display an. Wenn nötig wird der Bildschirm hierfür eingeschaltet und automatisch entsperrt.\n\nEntwickelt von: Adam K\nEmail: adam\@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nIch freue mich über Emails mit Kritik, Anregungen und Lob - oder gerne auch gefundenen Fehlern.\n\nMein Dank gilt der Launchpad-Community (https://translations.launchpad.net/smspopup) für die Übersetzungen und Min Tran (http://min.frexy.com) für das App-Icon.\n</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Häufig gestellte Fragen</string>
-  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
   <string name="pref_releasenotes_title">Was gibt\'s Neues?</string>
   <string name="pref_releasenotes_summary">Was gibt es Neues in dieser Version</string>
   <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>

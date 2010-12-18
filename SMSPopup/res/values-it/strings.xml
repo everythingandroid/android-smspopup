@@ -32,7 +32,6 @@
   <string name="pref_about_text">Creato da: Adam K\nEmail: adam\@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup è una semplice applicazione che mostra una finestra di dialogo quando si riceve un SMS - Attivando lo schermo e sbloccando la tastiera se necessario. Mostra il più recente messaggio, il mittente e una foto del contatto se disponibile.\n\nMandami una e-mail con commenti, suggerimenti o bugs.\n\nTraduzione in tedesco di: Feyyaz A.\nEmail: f_alingan\@hotmail.com\nSito web: http://www.yenio.com\n\nTraduzione in olandese di: mellie\@xs4all.nl\n\nTraduzione in spagnolo di: Diego Fernández\nEmail: profediego\@gmail.com\n\nTraduzione in russo di: Artem Kavalerov\nEmail: artem.kavalerov\@gmail.com\n\nTraduzione in italiano di: Giuseppe Ferro\nEmail: peppens1\@gmail.com\nSito web: http://www.peppens1.eu\n\nTraduzione in italiano di: Diego Pierotto\n\nCrediti a Min Tran per l\'icona.\n(http://min.frexy.com)\n</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Domande frequenti</string>
-  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
   <string name="pref_releasenotes_title">Novità</string>
   <string name="pref_releasenotes_summary">Mostra le novità di questa versione</string>
   <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>

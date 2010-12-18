@@ -30,7 +30,6 @@
   <string name="pref_about_summary">Quant a SMS Popup</string>
   <string name="pref_faq_title">Preguntes més freqüents</string>
   <string name="pref_faq_summary">Preguntes més freqüents</string>
-  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
   <string name="pref_releasenotes_title">Novetats</string>
   <string name="pref_releasenotes_summary">Mostra les novetats d\'aquesta versió</string>
   <string name="pref_sendemail_title">Envia un e-mail al desenvolupador</string>
