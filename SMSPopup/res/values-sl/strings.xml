@@ -29,7 +29,6 @@
   <string name="pref_about_summary">O programu SMS Popup</string>
   <string name="pref_faq_title">Pogosto zastavljena vprašanja</string>
   <string name="pref_faq_summary">Pogosto zastavljena vprašanja</string>
-  <string name="pref_faq_url">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
   <string name="pref_releasenotes_title">Novosti</string>
   <string name="pref_releasenotes_summary">Pregled novosti v tej različici</string>
   <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>
