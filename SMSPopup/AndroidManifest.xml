@@ -1,130 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  package="net.everythingandroid.smspopup"
-  android:versionCode="115"
-  android:versionName="1.1.0">
-  <uses-sdk
-    android:minSdkVersion="3"
-    android:targetSdkVersion="4" />
-  <application
-    android:label="@string/app_name"
-    android:icon="@drawable/smspopup_icon">
-    <activity
-      android:name=".SmsPopupConfigActivity"
-      android:label="@string/app_name"
-      android:launchMode="singleTask"
-      android:configChanges="keyboardHidden|orientation">
-      <intent-filter>
-        <action
-          android:name="android.intent.action.MAIN" />
-        <category
-          android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
-    <activity
-      android:name=".ConfigContactsActivity"
-      android:label="@string/pref_contacts_title"
-      android:launchMode="singleTop"
-      android:configChanges="keyboardHidden|orientation">
-    </activity>
-    <activity
-      android:name=".ConfigPerContactActivity"
-      android:label="@string/pref_contacts_title"
-      android:launchMode="singleTop"
-      android:configChanges="keyboardHidden|orientation">
-    </activity>
-    <activity
-      android:name=".ConfigPresetMessagesActivity"
-      android:label="@string/pref_message_presets_title"
-      android:launchMode="singleTop"
-      android:configChanges="keyboardHidden|orientation">
-    </activity>
-    <activity
-      android:name=".SmsPopupActivity"
-      android:theme="@android:style/Theme.Dialog"
-      android:launchMode="singleTask"
-      android:configChanges="keyboardHidden|orientation"
-      android:screenOrientation="user"
-      android:taskAffinity="net.everythingandroid.smspopup.popup">
-    </activity>
-    <receiver
-      android:name=".SmsReceiver">
-      <intent-filter>
-        <action
-          android:name="android.provider.Telephony.SMS_RECEIVED" />
-      </intent-filter>
-      <intent-filter>
-        <action
-          android:name="android.provider.Telephony.WAP_PUSH_RECEIVED" />
-        <data
-          android:mimeType="application/vnd.wap.mms-message" />
-      </intent-filter>
-      <intent-filter>
-        <action
-          android:name="net.everythingandroid.smspopup.MESSAGE_RECEIVED" />
-      </intent-filter>
-      <intent-filter>
-        <action
-          android:name="com.android.mms.transaction.MESSAGE_SENT" />
-      </intent-filter>
-    </receiver>
-    <receiver
-      android:name=".ExternalEventReceiver">
-      <intent-filter>
-        <action
-          android:name="net.everythingandroid.smspopup.ENABLE" />
-      </intent-filter>
-      <intent-filter>
-        <action
-          android:name="net.everythingandroid.smspopup.DISABLE" />
-      </intent-filter>
-      <intent-filter>
-        <action
-          android:name="net.everythingandroid.smspopup.DONATED" />
-      </intent-filter>
-      <intent-filter>
-        <action
-          android:name="android.intent.action.DOCK_EVENT" />
-      </intent-filter>
-    </receiver>
-    <receiver
-      android:name=".ClearAllReceiver" />
-    <receiver
-      android:name=".ReminderReceiver" />
-    <service
-      android:name=".SmsPopupUtilsService" />
-    <service
-      android:name=".SmsReceiverService" />
-    <service
-      android:name=".ReminderReceiverService" />
-    <service
-      android:name=".SmsMonitorService" />
-  </application>
-  <uses-permission
-    android:name="android.permission.READ_SMS" />
-  <uses-permission
-    android:name="android.permission.WRITE_SMS" />
-  <uses-permission
-    android:name="android.permission.SEND_SMS" />
-  <uses-permission
-    android:name="android.permission.RECEIVE_SMS" />
-  <uses-permission
-    android:name="android.permission.RECEIVE_MMS" />
-  <uses-permission
-    android:name="android.permission.READ_CONTACTS" />
-  <uses-permission
-    android:name="android.permission.WAKE_LOCK" />
-  <uses-permission
-    android:name="android.permission.DISABLE_KEYGUARD" />
-  <uses-permission
-    android:name="android.permission.VIBRATE" />
-  <uses-permission
-    android:name="android.permission.GET_TASKS" />
-  <uses-permission
-    android:name="android.permission.READ_LOGS" />
-  <uses-permission
-    android:name="android.permission.READ_PHONE_STATE" />
-  <uses-feature
-    android:name="android.hardware.telephony" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="net.everythingandroid.smspopup" android:versionName="1.1.0"
+	android:versionCode="116">
+	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
+	<application android:label="@string/app_name" android:icon="@drawable/smspopup_icon">
+		<activity android:name=".SmsPopupConfigActivity"
+			android:label="@string/app_name" android:launchMode="singleTask"
+			android:configChanges="keyboardHidden|orientation">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".ConfigContactsActivity"
+			android:label="@string/pref_contacts_title" android:launchMode="singleTop"
+			android:configChanges="keyboardHidden|orientation">
+		</activity>
+		<activity android:name=".ConfigPerContactActivity"
+			android:label="@string/pref_contacts_title" android:launchMode="singleTop"
+			android:configChanges="keyboardHidden|orientation">
+		</activity>
+		<activity android:name=".ConfigPresetMessagesActivity"
+			android:label="@string/pref_message_presets_title"
+			android:launchMode="singleTop" android:configChanges="keyboardHidden|orientation">
+		</activity>
+		<activity android:name=".SmsPopupActivity" android:theme="@android:style/Theme.Dialog"
+			android:launchMode="singleTask" android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="user" android:taskAffinity="net.everythingandroid.smspopup.popup">
+		</activity>
+		<receiver android:name=".SmsReceiver">
+			<intent-filter>
+				<action android:name="android.provider.Telephony.SMS_RECEIVED" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.provider.Telephony.WAP_PUSH_RECEIVED" />
+				<data android:mimeType="application/vnd.wap.mms-message" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="net.everythingandroid.smspopup.MESSAGE_RECEIVED" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="com.android.mms.transaction.MESSAGE_SENT" />
+			</intent-filter>
+		</receiver>
+		<receiver android:name=".ExternalEventReceiver">
+			<intent-filter>
+				<action android:name="net.everythingandroid.smspopup.ENABLE" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="net.everythingandroid.smspopup.DISABLE" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="net.everythingandroid.smspopup.DONATED" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.DOCK_EVENT" />
+			</intent-filter>
+		</receiver>
+		<receiver android:name=".ClearAllReceiver" />
+		<receiver android:name=".ReminderReceiver" />
+		<service android:name=".SmsPopupUtilsService" />
+		<service android:name=".SmsReceiverService" />
+		<service android:name=".ReminderReceiverService" />
+		<service android:name=".SmsMonitorService" />
+	</application>
+	<uses-permission android:name="android.permission.READ_SMS" />
+	<uses-permission android:name="android.permission.WRITE_SMS" />
+	<uses-permission android:name="android.permission.SEND_SMS" />
+	<uses-permission android:name="android.permission.RECEIVE_SMS" />
+	<uses-permission android:name="android.permission.RECEIVE_MMS" />
+	<uses-permission android:name="android.permission.READ_CONTACTS" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.GET_TASKS" />
+	<uses-permission android:name="android.permission.READ_LOGS" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-feature android:name="android.hardware.telephony" />
 </manifest>
