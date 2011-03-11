@@ -154,7 +154,7 @@ public class SmsPopupActivity extends Activity {
     // wake up app (turn on screen and run notification)
     wakeApp();
 
-    // Eula.show(this);
+    Eula.show(this);
   }
 
 /*
