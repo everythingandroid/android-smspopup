@@ -15,12 +15,12 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -223,7 +223,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     mDbAdapter.open(true); // Open database read-only
     mDbAdapter.close();
 
-    // Eula.show(this);
+    Eula.show(this);
 
     //    for (int i=0; i<1000; i++) {
     //      new SmsMessageSender(this, new String[] {"12345"}, "message " + i, 10).sendMessage();
