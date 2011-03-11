@@ -457,7 +457,12 @@ public class ManageNotification {
           if (mPlayer == null) {
             mPlayer = MediaPlayer.create(context, notifSoundUri);
           }
-          mPlayer.start();
+          
+          // Check null again in case mediaplayer couldn't be created
+          if (mPlayer != null) {
+            mPlayer.start();
+          }
+          
         } catch (IllegalStateException e) {
           if (Log.DEBUG) Log.v("MediaPlayer, IllegalStateException - " + e);
         }
