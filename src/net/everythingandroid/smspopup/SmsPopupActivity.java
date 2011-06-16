@@ -6,8 +6,8 @@ import java.util.List;
 import net.everythingandroid.smspopup.ManageKeyguard.LaunchOnKeyguardExit;
 import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
-import net.everythingandroid.smspopup.controls.SmsPopupViewFlipper;
-import net.everythingandroid.smspopup.controls.SmsPopupViewFlipper.MessageCountChanged;
+import net.everythingandroid.smspopup.controls.SmsPopupSwipeView;
+import net.everythingandroid.smspopup.controls.SmsPopupSwipeView.MessageCountChanged;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper;
 import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper.OnInitListener;
@@ -73,7 +73,7 @@ public class SmsPopupActivity extends Activity {
 
   private LinearLayout mainLayout = null;
   private ViewSwitcher buttonSwitcher = null;
-  private SmsPopupViewFlipper mSmsPopups = null;
+  private SmsPopupSwipeView mSmsPopups = null;
 
   private boolean wasVisible = false;
   private boolean replying = false;
@@ -193,14 +193,14 @@ public class SmsPopupActivity extends Activity {
   private void setupViews() {
 
     // Find main views
-    mSmsPopups = (SmsPopupViewFlipper) findViewById(R.id.SmsPopupsLayout);
+    mSmsPopups = (SmsPopupSwipeView) findViewById(R.id.SmsPopupsLayout);
     mainLayout = (LinearLayout) findViewById(R.id.MainLayout);
     buttonSwitcher = (ViewSwitcher) findViewById(R.id.ButtonViewSwitcher);
 //    buttonLayout = findViewById(R.id.ButtonLayout);
 //    unlockButtonLayout = findViewById(R.id.UnlockButtonLayout);
 //    headerLayout = findViewById(R.id.HeaderLayout);
 
-    SmsPopupViewFlipper.setPrivacy(privacyMode, privacySender);
+    SmsPopupSwipeView.setPrivacy(privacyMode, privacySender);
 
     Button unlockButton = (Button) findViewById(R.id.unlockButton);
     unlockButton.setOnClickListener(new OnClickListener() {
@@ -362,7 +362,7 @@ public class SmsPopupActivity extends Activity {
       // Disable long-press context menu
       unregisterForContextMenu(mSmsPopups);
 
-      SmsPopupViewFlipper.setLockMode(true);
+      SmsPopupSwipeView.setLockMode(true);
 
     } else {
       // Show main popup buttons
@@ -371,7 +371,7 @@ public class SmsPopupActivity extends Activity {
       // Enable long-press context menu
       registerForContextMenu(mSmsPopups);
 
-      SmsPopupViewFlipper.setLockMode(false);
+      SmsPopupSwipeView.setLockMode(false);
     }
   }
 
