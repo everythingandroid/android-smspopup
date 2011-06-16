@@ -224,10 +224,6 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     mDbAdapter.close();
 
     Eula.show(this);
-
-    //    for (int i=0; i<1000; i++) {
-    //      new SmsMessageSender(this, new String[] {"12345"}, "message " + i, 10).sendMessage();
-    //    }
   }
 
   @Override
