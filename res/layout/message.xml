@@ -10,14 +10,10 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="left">
-    <ImageView
-      android:src="@android:drawable/ic_dialog_info"
-      android:id="@+id/FromImageView"
-      android:layout_width="wrap_content"
-      android:layout_gravity="center"
-      android:scaleType="center"
-      android:layout_height="wrap_content"
-      android:layout_margin="4dp" />
+    <ImageView android:src="@android:drawable/ic_dialog_info"
+	android:id="@+id/FromImageView" android:layout_gravity="center"
+	android:scaleType="center" android:layout_width="@dimen/contact_thumbnail_size"
+	android:layout_height="@dimen/contact_thumbnail_size" android:layout_margin="5dp"/>
     <LinearLayout
       android:orientation="vertical"
       android:layout_width="fill_parent"
@@ -51,6 +47,7 @@
     layout="@layout/popup_divider" />
   <ScrollView
     android:layout_width="fill_parent"
+    android:fillViewport="true"
     android:layout_height="0dip"
     android:id="@+id/MessageScrollView"
     android:visibility="gone"
@@ -63,7 +60,7 @@
       android:autoLink="all"
       android:textAppearance="?android:attr/textAppearanceMedium"
       android:textColor="?android:attr/textColorPrimaryDisableOnly"
-      android:layout_height="wrap_content"
+      android:layout_height="fill_parent"
       android:layout_width="fill_parent"
       android:gravity="center"
       android:paddingRight="10dp"
