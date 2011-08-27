@@ -309,16 +309,16 @@ public class SmsPopupView extends LinearLayout {
 
     // Reset background and padding
     photoImageView.setBackgroundResource(0);
-    photoImageView.setPadding(0, 0, 0, 0);
+		// photoImageView.setPadding(0, 0, 0, 0);
 
     // Set margins for placeholder image
-    MarginLayoutParams mLP = (MarginLayoutParams) photoImageView.getLayoutParams();
-    final int scaledMargin =
-        (int) (contactPhotoDefaultMargin * this.getResources().getDisplayMetrics().density);
-
-    mLP.setMargins(scaledMargin, scaledMargin, scaledMargin, scaledMargin);
-    photoImageView.setLayoutParams(mLP);
-
+		/*
+		 * MarginLayoutParams mLP = (MarginLayoutParams) photoImageView.getLayoutParams();
+		 * final int scaledMargin =
+		 *   (int) (contactPhotoDefaultMargin * this.getResources().getDisplayMetrics().density);
+		 * mLP.setMargins(scaledMargin, scaledMargin, scaledMargin, scaledMargin);
+		 * photoImageView.setLayoutParams(mLP);
+		 */
     // Set placeholder image
     photoImageView.setImageDrawable(contactPhotoPlaceholderDrawable);
   }
@@ -341,12 +341,13 @@ public class SmsPopupView extends LinearLayout {
     }
 
     // Set margins for image
-    MarginLayoutParams mLP = (MarginLayoutParams) photoImageView.getLayoutParams();
-    final int scaledMargin =
-        (int) (contactPhotoMargin * this.getResources().getDisplayMetrics().density);
-    mLP.setMargins(scaledMargin, scaledMargin, scaledMargin, scaledMargin);
-    photoImageView.setLayoutParams(mLP);
-
+		/*
+		 * MarginLayoutParams mLP = (MarginLayoutParams) photoImageView.getLayoutParams();
+		 * final int scaledMargin = 
+		 *   (int) (contactPhotoMargin * this.getResources().getDisplayMetrics().density);
+		 * mLP.setMargins(scaledMargin, scaledMargin, scaledMargin, scaledMargin);
+		 * photoImageView.setLayoutParams(mLP);
+		 */
     // Set contact photo image
     photoImageView.setImageBitmap(contactPhoto);
   }
@@ -358,8 +359,7 @@ public class SmsPopupView extends LinearLayout {
     @Override
     protected Bitmap doInBackground(String... params) {
       if (Log.DEBUG) Log.v("Loading contact photo in background...");
-      // try { Thread.sleep(2000); } catch (InterruptedException e) {}
-      return SmsPopupUtils.getPersonPhoto(context, params[0]);
+			return SmsPopupUtils.getPersonPhoto(context, params[0]);
     }
 
     @Override

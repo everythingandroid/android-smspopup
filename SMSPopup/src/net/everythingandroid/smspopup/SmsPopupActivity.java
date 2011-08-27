@@ -6,8 +6,8 @@ import java.util.List;
 import net.everythingandroid.smspopup.ManageKeyguard.LaunchOnKeyguardExit;
 import net.everythingandroid.smspopup.ManagePreferences.Defaults;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
-import net.everythingandroid.smspopup.controls.SmsPopupSwipeView;
-import net.everythingandroid.smspopup.controls.SmsPopupSwipeView.MessageCountChanged;
+import net.everythingandroid.smspopup.controls.SmsPopupPager;
+import net.everythingandroid.smspopup.controls.SmsPopupPager.MessageCountChanged;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper;
 import net.everythingandroid.smspopup.wrappers.TextToSpeechWrapper.OnInitListener;
@@ -17,10 +17,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -33,16 +33,16 @@ import android.preference.PreferenceManager;
 import android.provider.Contacts;
 import android.speech.RecognizerIntent;
 import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -51,13 +51,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.google.tts.TTS;
-import com.google.tts.TTS.InitListener;
 import com.google.tts.TTSVersionAlert;
+import com.google.tts.TTS.InitListener;
 
 @SuppressWarnings("deprecation")
 public class SmsPopupActivity extends Activity {
@@ -73,7 +73,7 @@ public class SmsPopupActivity extends Activity {
 
   private LinearLayout mainLayout = null;
   private ViewSwitcher buttonSwitcher = null;
-  private SmsPopupSwipeView mSmsPopups = null;
+	private SmsPopupPager mSmsPopups = null;
 
   private boolean wasVisible = false;
   private boolean replying = false;
@@ -193,14 +193,14 @@ public class SmsPopupActivity extends Activity {
   private void setupViews() {
 
     // Find main views
-    mSmsPopups = (SmsPopupSwipeView) findViewById(R.id.SmsPopupsLayout);
+		mSmsPopups = (SmsPopupPager) findViewById(R.id.SmsPopupsLayout);
     mainLayout = (LinearLayout) findViewById(R.id.MainLayout);
     buttonSwitcher = (ViewSwitcher) findViewById(R.id.ButtonViewSwitcher);
 //    buttonLayout = findViewById(R.id.ButtonLayout);
 //    unlockButtonLayout = findViewById(R.id.UnlockButtonLayout);
 //    headerLayout = findViewById(R.id.HeaderLayout);
 
-    SmsPopupSwipeView.setPrivacy(privacyMode, privacySender);
+		// SmsPopupSwipeView.setPrivacy(privacyMode, privacySender);
 
     Button unlockButton = (Button) findViewById(R.id.unlockButton);
     unlockButton.setOnClickListener(new OnClickListener() {
@@ -343,7 +343,7 @@ public class SmsPopupActivity extends Activity {
           SmsPopupUtils.getUnreadMessages(this, message.getMessageId()));
     }
 
-    mSmsPopups.refreshPrivacy();
+		// mSmsPopups.refreshPrivacy();
   }
 
 /*
@@ -362,7 +362,7 @@ public class SmsPopupActivity extends Activity {
       // Disable long-press context menu
       unregisterForContextMenu(mSmsPopups);
 
-      SmsPopupSwipeView.setLockMode(true);
+			// SmsPopupSwipeView.setLockMode(true);
 
     } else {
       // Show main popup buttons
@@ -371,7 +371,7 @@ public class SmsPopupActivity extends Activity {
       // Enable long-press context menu
       registerForContextMenu(mSmsPopups);
 
-      SmsPopupSwipeView.setLockMode(false);
+			// SmsPopupSwipeView.setLockMode(false);
     }
   }
 
@@ -392,7 +392,7 @@ public class SmsPopupActivity extends Activity {
    * and sound the notification if needed. This is called once all preparation
    * is done for this activity (end of onCreate()).
    */
-  private void wakeApp() {
+	private void wakeApp() {
 
     // Time to acquire a full WakeLock (turn on screen)
     ManageWakeLock.acquireFull(getApplicationContext());

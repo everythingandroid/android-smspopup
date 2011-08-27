@@ -21,10 +21,9 @@
 			android:text="Inbox" android:id="@+id/InboxButton"
 			android:layout_centerHorizontal="true" android:layout_width="100dp" />
 	</RelativeLayout>
-	<net.everythingandroid.smspopup.controls.SmsPopupSwipeView
-		android:id="@+id/SmsPopupsLayout" android:layout_width="fill_parent"
-		android:layout_height="wrap_content">
-	</net.everythingandroid.smspopup.controls.SmsPopupSwipeView>
+	<net.everythingandroid.smspopup.controls.SmsPopupPager
+		android:id="@+id/SmsPopupsLayout" android:layout_width="fill_parent" android:layout_height="180dp">
+	</net.everythingandroid.smspopup.controls.SmsPopupPager>
 	<ViewSwitcher android:layout_height="wrap_content"
 		android:layout_width="fill_parent" android:id="@+id/ButtonViewSwitcher">
 		<LinearLayout android:layout_width="fill_parent"

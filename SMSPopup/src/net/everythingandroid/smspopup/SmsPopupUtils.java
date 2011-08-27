@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
@@ -57,9 +58,6 @@ public class SmsPopupUtils {
   public static final int MESSAGE_TYPE_MMS = 2;
 
   public static final int CONTACT_PHOTO_PLACEHOLDER = android.R.drawable.ic_dialog_info;
-
-  // The size of the contact photo thumbnail on the popup
-  public static final int CONTACT_PHOTO_THUMBSIZE = 96;
 
   // The max size of either the width or height of the contact photo
   public static final int CONTACT_PHOTO_MAXSIZE = 1024;
@@ -243,21 +241,22 @@ public class SmsPopupUtils {
     return null;
   }
 
-  /**
-   *
-   * Looks up a contats photo by their contact id, returns a Bitmap array
-   * that represents their photo (or null if not found or there was an error.
-   *
-   * I do my own scaling and validation of sizes - Android OS supports any size
-   * for contact photos and some apps are adding huge photos to contacts.  Doing
-   * the scaling myself allows me more control over how things play out in those
-   * cases.
-   *
-   * @param context
-   * @param id contact id
-   * @return Bitmap of the contacts photo (null if none or an error)
-   */
-  public static Bitmap getPersonPhoto(Context context, String id) {
+	/**
+	 * 
+	 * Looks up a contact photo by contact id, returns a Bitmap array that
+	 * represents their photo (or null if not found or there was an error.
+	 * 
+	 * I do my own scaling and validation of sizes - Android supports any size for
+	 * contact photos and some apps are adding huge photos to contacts. Doing the
+	 * scaling myself allows me more control over how things play out in those
+	 * cases.
+	 * 
+	 * @param context the context
+	 * @param id contact id
+	 * @param maxThumbSize the max size the thumbnail can be
+	 * @return Bitmap of the contacts photo (null if none or an error)
+	 */
+	public static Bitmap getPersonPhoto(Context context, final String id, final int thumbSize) {
 
     if (id == null) return null;
     if ("0".equals(id)) return null;
@@ -267,8 +266,6 @@ public class SmsPopupUtils {
     options.inJustDecodeBounds = true;
 
     // The height and width are stored in 'options' but the photo itself is not loaded
-    //    Contacts.People.loadContactPhoto(
-    //        context, Uri.withAppendedPath(Contacts.People.CONTENT_URI, id), 0, options);
     loadContactPhoto(context, id, 0, options);
 
     // Raw height and width of contact photo
@@ -284,35 +281,27 @@ public class SmsPopupUtils {
     // This time we're going to do it for real
     options.inJustDecodeBounds = false;
 
-    // Calculate new thumbnail size based on screen density
-    final float scale = context.getResources().getDisplayMetrics().density;
-    int thumbsize = CONTACT_PHOTO_THUMBSIZE;
-    if (scale != 1.0) {
-      if (Log.DEBUG) Log.v("Screen density is not 1.0, adjusting contact photo");
-      thumbsize = Math.round(thumbsize * scale);
-    }
-
-    int newHeight = thumbsize;
-    int newWidth = thumbsize;
+		int newHeight = thumbSize;
+		int newWidth = thumbSize;
 
     // If we have an abnormal photo size that's larger than thumbsize then sample it down
     boolean sampleDown = false;
 
-    if (height > thumbsize || width > thumbsize) {
+		if (height > thumbSize || width > thumbSize) {
       sampleDown = true;
     }
 
     // If the dimensions are not the same then calculate new scaled dimenions
     if (height < width) {
       if (sampleDown) {
-        options.inSampleSize = Math.round(height / thumbsize);
+				options.inSampleSize = Math.round(height / thumbSize);
       }
-      newHeight = Math.round(thumbsize * height / width);
+			newHeight = Math.round(thumbSize * height / width);
     } else {
       if (sampleDown) {
-        options.inSampleSize = Math.round(width / thumbsize);
+				options.inSampleSize = Math.round(width / thumbSize);
       }
-      newWidth = Math.round(thumbsize * width / height);
+			newWidth = Math.round(thumbSize * width / height);
     }
 
     // Fetch the real contact photo (sampled down if needed)
@@ -331,6 +320,13 @@ public class SmsPopupUtils {
     // Return bitmap scaled to new height and width
     return Bitmap.createScaledBitmap(contactBitmap, newWidth, newHeight, true);
   }
+
+	public static Bitmap getPersonPhoto(Context context, String id) {
+		Resources res = context.getResources();
+		int thumbSize = (int) res.getDimension(R.dimen.contact_thumbnail_size);
+		int thumbBorder = (int) res.getDimension(R.dimen.contact_thumbnail_border);
+		return getPersonPhoto(context, id, thumbSize - thumbBorder);
+	}
 
   /**
    * Opens an InputStream for the person's photo and returns the photo as a Bitmap.
