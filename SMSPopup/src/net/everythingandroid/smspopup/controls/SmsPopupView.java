@@ -4,12 +4,13 @@ import net.everythingandroid.smspopup.Log;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.SmsMmsMessage;
 import net.everythingandroid.smspopup.SmsPopupUtils;
-import net.everythingandroid.smspopup.wrappers.ContactWrapper;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.QuickContact;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -36,8 +37,8 @@ public class SmsPopupView extends LinearLayout {
   private ImageView photoImageView = null;
   private Drawable contactPhotoPlaceholderDrawable = null;
   private Bitmap contactPhoto = null;
-  private static int contactPhotoMargin = 3;
-  private static int contactPhotoDefaultMargin = 10;
+  // private static int contactPhotoMargin = 3;
+  // private static int contactPhotoDefaultMargin = 10;
 
   private View mmsLayout = null;
   private View privacyLayout = null;
@@ -293,7 +294,7 @@ public class SmsPopupView extends LinearLayout {
     // Fetch contact photo in background
     if (contactPhoto == null) {
       setContactPhotoToDefault(photoImageView);
-      new FetchContactPhotoTask().execute(message.getContactId());
+      new FetchContactPhotoTask().execute(message.getContactLookupUri());
       addQuickContactOnClick();
     }
 //    } else {
@@ -334,11 +335,7 @@ public class SmsPopupView extends LinearLayout {
     }
 
     // Update background and padding
-    if (SmsPopupUtils.PRE_ECLAIR) {
-      photoImageView.setBackgroundResource(android.R.drawable.picture_frame);
-    } else {
-      photoImageView.setBackgroundResource(R.drawable.quickcontact_badge_small);
-    }
+    photoImageView.setBackgroundResource(R.drawable.quickcontact_badge_small);
 
     // Set margins for image
 		/*
@@ -355,9 +352,9 @@ public class SmsPopupView extends LinearLayout {
   /**
    * AsyncTask to fetch contact photo in background
    */
-  private class FetchContactPhotoTask extends AsyncTask<String, Integer, Bitmap> {
+  private class FetchContactPhotoTask extends AsyncTask<Uri, Integer, Bitmap> {
     @Override
-    protected Bitmap doInBackground(String... params) {
+    protected Bitmap doInBackground(Uri... params) {
       if (Log.DEBUG) Log.v("Loading contact photo in background...");
 			return SmsPopupUtils.getPersonPhoto(context, params[0]);
     }
@@ -378,20 +375,20 @@ public class SmsPopupView extends LinearLayout {
   }
 
   private void addQuickContactOnClick(boolean force) {
-    if (!SmsPopupUtils.PRE_ECLAIR && ((privacyMode != PRIVACY_MODE_HIDE_ALL) || force)) {
+    if ((privacyMode != PRIVACY_MODE_HIDE_ALL) || force) {
 
       contactLookupUri = null;
       String contactId = message.getContactId();
       if (contactId != null) {
-        contactLookupUri =
-            ContactWrapper.getLookupUri(Long.valueOf(contactId), message.getContactLookupKey());
+        contactLookupUri = Contacts.getLookupUri(Long.valueOf(contactId),
+            message.getContactLookupKey());
       }
 
       photoImageView.setOnClickListener(new OnClickListener() {
         public void onClick(View v) {
           if (contactLookupUri != null) {
-            ContactWrapper.showQuickContact(context, v, contactLookupUri,
-                ContactWrapper.QUICKCONTACT_MODE_MEDIUM, null);
+            QuickContact.showQuickContact(context, v, contactLookupUri, QuickContact.MODE_MEDIUM,
+                null);
           }
         }
       });

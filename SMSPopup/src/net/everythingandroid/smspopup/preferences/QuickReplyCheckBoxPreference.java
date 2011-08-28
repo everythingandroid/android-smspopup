@@ -6,21 +6,17 @@ import android.preference.CheckBoxPreference;
 import android.util.AttributeSet;
 
 public class QuickReplyCheckBoxPreference extends CheckBoxPreference {
-  private Context mContext;
 
   public QuickReplyCheckBoxPreference(Context context) {
     super(context);
-    mContext = context;
   }
 
   public QuickReplyCheckBoxPreference(Context context, AttributeSet attrs) {
     super(context, attrs);
-    mContext = context;
   }
 
   public QuickReplyCheckBoxPreference(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
-    mContext = context;
   }
 
   @Override

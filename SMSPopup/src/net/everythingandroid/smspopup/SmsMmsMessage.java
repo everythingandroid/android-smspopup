@@ -3,11 +3,13 @@ package net.everythingandroid.smspopup;
 import net.everythingandroid.smspopup.SmsPopupUtils.ContactIdentification;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract.Contacts;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.gsm.SmsMessage;
-import android.telephony.gsm.SmsMessage.MessageClass;
+import android.telephony.SmsMessage;
+import android.telephony.SmsMessage.MessageClass;
 import android.text.format.DateUtils;
 
 public class SmsMmsMessage {
@@ -410,6 +412,17 @@ public class SmsMmsMessage {
 
   public String getContactLookupKey() {
     return contactLookupKey;
+  }
+
+  public Uri getContactLookupUri() {
+    if (contactId == null) {
+      return null;
+    }
+
+    return Uri.withAppendedPath(Contacts.CONTENT_URI, contactId);
+
+    // This seems to fail even though the docs say to use it.
+    // return Contacts.getLookupUri(Long.valueOf(contactId), contactLookupKey);
   }
 
   public String getAddress() {

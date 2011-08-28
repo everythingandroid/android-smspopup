@@ -20,10 +20,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.Process;
+import android.telephony.SmsManager;
+import android.telephony.SmsMessage;
+import android.telephony.SmsMessage.MessageClass;
 import android.telephony.TelephonyManager;
-import android.telephony.gsm.SmsManager;
-import android.telephony.gsm.SmsMessage;
-import android.telephony.gsm.SmsMessage.MessageClass;
 import android.widget.Toast;
 
 public class SmsReceiverService extends Service {
