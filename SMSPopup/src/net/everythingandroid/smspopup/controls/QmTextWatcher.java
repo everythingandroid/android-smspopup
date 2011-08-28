@@ -1,7 +1,7 @@
 package net.everythingandroid.smspopup.controls;
 
 import android.content.Context;
-import android.telephony.gsm.SmsMessage;
+import android.telephony.SmsMessage;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;

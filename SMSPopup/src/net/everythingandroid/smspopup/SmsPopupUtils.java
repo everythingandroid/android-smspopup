@@ -12,7 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.everythingandroid.smspopup.ManagePreferences.Defaults;
-import net.everythingandroid.smspopup.wrappers.ContactWrapper;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.ComponentName;
@@ -31,8 +30,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract.CommonDataKinds.Email;
+import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.PhoneLookup;
+import android.support.v4.util.LruCache;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.gsm.SmsMessage;
+import android.telephony.SmsMessage;
 import android.text.TextUtils;
 
 public class SmsPopupUtils {
@@ -62,6 +65,10 @@ public class SmsPopupUtils {
   // The max size of either the width or height of the contact photo
   public static final int CONTACT_PHOTO_MAXSIZE = 1024;
 
+  // Bitmap cache
+  private static final int bitmapCacheSize = 5;
+  private static LruCache<Uri, Bitmap> bitmapCache = null;
+
   private static final String[] AUTHOR_CONTACT_INFO = { "Adam K <smspopup@everythingandroid.net>" };
   private static final String[] AUTHOR_CONTACT_INFO_DONATE = { "Adam K <smspopup+donate@everythingandroid.net>" };
 
@@ -69,39 +76,6 @@ public class SmsPopupUtils {
     Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8246419");
   public static final Uri DONATE_MARKET_URI =
     Uri.parse("market://search?q=pname:net.everythingandroid.smspopupdonate");
-
-  // Platform detection
-  public static final int SDK_VERSION_ECLAIR = 5;
-  //public static final int SDK_VERSION_DONUT = 4;
-
-  public static boolean PRE_ECLAIR =
-    SmsPopupUtils.getSDKVersionNumber() < SmsPopupUtils.SDK_VERSION_ECLAIR ? true : false;
-
-  // This is just a bad, bad idea, commenting out for now
-  /*
-  public static final ArrayList<Map<String, String>> TESTING = new ArrayList<Map<String, String>>() {
-    private static final long serialVersionUID = 1L;
-    {
-       add(new HashMap<String,String>() {
-        private static final long serialVersionUID = 1L;
-        {
-           put("key1", "value1");
-           put("key2", "value2");
-         }
-       });
-       add(new HashMap<String,String>() {
-        private static final long serialVersionUID = 1L;
-        {
-          put("","com.motorola.blur.conversations");
-          put("","com.motorola.blur.conversations.transaction.SmsReceiver");
-          put("","com.motorola.blur.conversations.transaction.MESSAGE_SENT");
-          put("","com.motorola.blur.conversations.transaction.MessageStatusReceiver");
-          put("","com.motorola.blur.conversations.transaction.MessageStatusReceiver.MESSAGE_STATUS_RECEIVED");
-         }
-       });
-    }
-  };
-  */
 
   /**
    * Looks up a contacts display name by contact id - if not found, the address
@@ -119,8 +93,8 @@ public class SmsPopupUtils {
     }
 
     Cursor cursor = context.getContentResolver().query(
-        Uri.withAppendedPath(ContactWrapper.getContentUri(), id),
-        new String[] { ContactWrapper.getColumn(ContactWrapper.COL_DISPLAY_NAME) },
+        Uri.withAppendedPath(Contacts.CONTENT_URI, id),
+        new String[] { Contacts.DISPLAY_NAME },
         null, null, null);
 
     if (cursor != null) {
@@ -156,11 +130,6 @@ public class SmsPopupUtils {
       contactLookup = _contactLookup;
       contactName = _contactName;
     }
-
-    public ContactIdentification(String _contactId, String _contactName) {
-      contactId = _contactId;
-      contactName = _contactName;
-    }
   }
 
   /**
@@ -171,8 +140,8 @@ public class SmsPopupUtils {
     if (address == null) return null;
 
     Cursor cursor = context.getContentResolver().query(
-        Uri.withAppendedPath(ContactWrapper.getPhoneLookupContentFilterUri(), Uri.encode(address)),
-        ContactWrapper.getPhoneLookupProjection(),
+        Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address)),
+        new String[] { PhoneLookup._ID, PhoneLookup.DISPLAY_NAME, PhoneLookup.LOOKUP_KEY },
         null, null, null);
 
     if (cursor != null) {
@@ -181,12 +150,7 @@ public class SmsPopupUtils {
           cursor.moveToFirst();
           String contactId = String.valueOf(cursor.getLong(0));
           String contactName = cursor.getString(1);
-
-          String contactLookup = null;
-
-          if (!PRE_ECLAIR) {
-            contactLookup = cursor.getString(2);
-          }
+          String contactLookup = cursor.getString(2);
 
           if (Log.DEBUG) Log.v("Found person: " + contactId + ", " + contactName + ", " + contactLookup);
           return new ContactIdentification(contactId, contactLookup, contactName);
@@ -210,9 +174,9 @@ public class SmsPopupUtils {
     try {
       cursor = context.getContentResolver().query(
           Uri.withAppendedPath(
-              ContactWrapper.getEmailLookupContentFilterUri(),
+              Email.CONTENT_LOOKUP_URI,
               Uri.encode(extractAddrSpec(email))),
-              ContactWrapper.getEmailLookupProjection(),
+              new String[] { Email.CONTACT_ID, Email.DISPLAY_NAME, Email.LOOKUP_KEY },
               null, null, null);
     } catch (Exception e) {
       Log.v("getPersonIdFromEmail(): " + e.toString());
@@ -225,11 +189,7 @@ public class SmsPopupUtils {
 
           String contactId = String.valueOf(cursor.getLong(0));
           String contactName = cursor.getString(1);
-          String contactLookup = null;
-
-          if (!PRE_ECLAIR) {
-            contactLookup = cursor.getString(2);
-          }
+          String contactLookup = cursor.getString(2);
 
           if (Log.DEBUG) Log.v("Found person: " + contactId + ", " + contactName + ", " + contactLookup);
           return new ContactIdentification(contactId, contactLookup, contactName);
@@ -256,17 +216,33 @@ public class SmsPopupUtils {
 	 * @param maxThumbSize the max size the thumbnail can be
 	 * @return Bitmap of the contacts photo (null if none or an error)
 	 */
-	public static Bitmap getPersonPhoto(Context context, final String id, final int thumbSize) {
+  public static Bitmap getPersonPhoto(Context context, final Uri contactUri, final int thumbSize) {
 
-    if (id == null) return null;
-    if ("0".equals(id)) return null;
+    if (contactUri == null) return null;
+    
+    // Init cache
+    if (bitmapCache == null) {
+      int cacheSize = bitmapCacheSize * thumbSize * thumbSize;
+      bitmapCache = new LruCache<Uri, Bitmap>(cacheSize) {
+        protected int sizeOf(Uri key, Bitmap value) {
+          return thumbSize * thumbSize;
+        }
+      };
+    }
+
+    // Check bitmap cache
+    synchronized (bitmapCache) {
+      if (bitmapCache.get(contactUri) != null) {
+        return bitmapCache.get(contactUri);
+      }
+    }
 
     // First let's just check the dimensions of the contact photo
     BitmapFactory.Options options = new BitmapFactory.Options();
     options.inJustDecodeBounds = true;
 
     // The height and width are stored in 'options' but the photo itself is not loaded
-    loadContactPhoto(context, id, 0, options);
+    loadContactPhoto(context, contactUri, 0, options);
 
     // Raw height and width of contact photo
     int height = options.outHeight;
@@ -307,9 +283,7 @@ public class SmsPopupUtils {
     // Fetch the real contact photo (sampled down if needed)
     Bitmap contactBitmap = null;
     try {
-      //contactBitmap = Contacts.People.loadContactPhoto(
-      //    context, Uri.withAppendedPath(Contacts.People.CONTENT_URI, id), 0, options);
-      contactBitmap = loadContactPhoto(context, id, 0, options);
+      contactBitmap = loadContactPhoto(context, contactUri, 0, options);
     } catch (OutOfMemoryError e) {
       Log.e("Out of memory when loading contact photo");
     }
@@ -317,16 +291,25 @@ public class SmsPopupUtils {
     // Not found or error, get out
     if (contactBitmap == null) return null;
 
-    // Return bitmap scaled to new height and width
-    return Bitmap.createScaledBitmap(contactBitmap, newWidth, newHeight, true);
+    // Bitmap scaled to new height and width
+    Bitmap finalBitmap = Bitmap.createScaledBitmap(contactBitmap, newWidth, newHeight, true);
+
+    // Add to bitmap cache
+    synchronized (bitmapCache) {
+      if (bitmapCache.get(contactUri) == null) {
+        bitmapCache.put(contactUri, finalBitmap);
+      }
+    }
+
+    return finalBitmap;
   }
 
-	public static Bitmap getPersonPhoto(Context context, String id) {
-		Resources res = context.getResources();
-		int thumbSize = (int) res.getDimension(R.dimen.contact_thumbnail_size);
-		int thumbBorder = (int) res.getDimension(R.dimen.contact_thumbnail_border);
-		return getPersonPhoto(context, id, thumbSize - thumbBorder);
-	}
+  public static Bitmap getPersonPhoto(Context context, Uri contactUri) {
+    Resources res = context.getResources();
+    int thumbSize = (int) res.getDimension(R.dimen.contact_thumbnail_size);
+    int thumbBorder = (int) res.getDimension(R.dimen.contact_thumbnail_border);
+    return getPersonPhoto(context, contactUri, thumbSize - thumbBorder);
+  }
 
   /**
    * Opens an InputStream for the person's photo and returns the photo as a Bitmap.
@@ -337,19 +320,21 @@ public class SmsPopupUtils {
    *   have a photo
    * @param options the decoding options, can be set to null
    */
-  public static Bitmap loadContactPhoto(Context context, String id,
+  public static Bitmap loadContactPhoto(Context context, Uri contactUri,
       int placeholderImageResource, BitmapFactory.Options options) {
-    if (id == null) {
+
+    if (contactUri == null) {
       return loadPlaceholderPhoto(placeholderImageResource, context, options);
     }
 
-    InputStream stream =
-      ContactWrapper.openContactPhotoInputStream(context.getContentResolver(), id);
+    InputStream stream = Contacts.openContactPhotoInputStream(context.getContentResolver(),
+        contactUri);
 
     Bitmap bm = stream != null ? BitmapFactory.decodeStream(stream, null, options) : null;
     if (bm == null) {
       bm = loadPlaceholderPhoto(placeholderImageResource, context, options);
     }
+
     return bm;
   }
 
@@ -383,7 +368,7 @@ public class SmsPopupUtils {
 
     Cursor cursor = context.getContentResolver().query(
         uriBuilder.build(),
-        new String[] { ContactWrapper.getColumn(ContactWrapper.COL_CONTACT_ID) },
+        new String[] { Contacts._ID },
         null, null, null);
 
     if (cursor != null) {
@@ -1152,8 +1137,8 @@ public class SmsPopupUtils {
     //        Contacts.ContactMethods.DATA + " = ?",
     //        new String[] { email }, null);
     Cursor cursor = context.getContentResolver().query(
-        Uri.withAppendedPath(ContactWrapper.getEmailLookupContentFilterUri(), Uri.encode(email)),
-        new String[] { ContactWrapper.getColumn(ContactWrapper.COL_DISPLAY_NAME) },
+        Uri.withAppendedPath(Email.CONTENT_LOOKUP_URI, Uri.encode(email)),
+        new String[] { Contacts.DISPLAY_NAME },
         null, null, null);
 
     if (cursor != null) {
