@@ -77,56 +77,21 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
   public boolean removeMessage(int numMessage) {
     final int totalMessages = getPageCount();
 
-    if (totalMessages <= 1)
-      return false;
-
-    if (numMessage >= totalMessages || numMessage < 0)
-      return false;
+    if (totalMessages <= 1) return false;
+    if (numMessage >= totalMessages || numMessage < 0) return false;
     
-    // messageToDelete = currentPage;
-
     if (currentPage == numMessage) {
       // If removing last page, go to previous
       if (currentPage == (totalMessages - 1)) {
         showPrevious();
       } else {
-        showNext();
+        // showNext();
       }
     }
 
-    // messages.remove(numMessage);
-    //
-    // // if (showNext) {
-    // // showPrevious();
-    // // }
-    //
-    // messageToDelete
-    // mAdapter.notifyDataSetChanged();
-
-    // invalidate();
-
-    // if (savedCurrentPage == numMessage) {
-    // // If removing last page, go to previous
-    // if (savedCurrentPage == (totalMessages - 1)) {
-    // showPrevious();
-    // } else {
-    // showNext();
-    // }
-    // }
-    //
-    // // Remove message from list
-    // messages.remove(numMessage);
-    //
-    // if (numMessage <= savedCurrentPage) {
-    // currentPage--;
-    // }
-    //
-    // setCurrentItem(savedCurrentPage);
-    //
-    // mAdapter.notifyDataSetChanged();
-    //
-    // // Run any other updates (as set by interface)
-    // UpdateMessageCount();
+    messages.remove(numMessage);
+    mAdapter.notifyDataSetChanged();
+    UpdateMessageCount();
 
     return true;
   }
