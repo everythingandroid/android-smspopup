@@ -2,7 +2,6 @@ package net.everythingandroid.smspopup;
 
 import java.util.List;
 
-import net.everythingandroid.smspopup.wrappers.ContactWrapper;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -14,24 +13,25 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract.Contacts;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.CursorAdapter;
 import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class ConfigContactsActivity extends ListActivity {
   private SmsPopupDbAdapter mDbAdapter;
@@ -55,11 +55,11 @@ public class ConfigContactsActivity extends ListActivity {
     ContentResolver content = getContentResolver();
     Cursor cursor =
       content.query(
-          ContactWrapper.getContentUri(),
-          ContactWrapper.getBasePeopleProjection(),
+          Contacts.CONTENT_URI,
+          new String[] { Contacts._ID, Contacts.DISPLAY_NAME },
           null,
           null,
-          ContactWrapper.getDefaultSortOrder());
+          null);
     ContactListAdapter adapter = new ContactListAdapter(this, cursor);
 
     final AutoCompleteTextView contactsAutoComplete =
@@ -171,7 +171,7 @@ public class ConfigContactsActivity extends ListActivity {
     //    startActivityForResult(i, REQ_CODE_CHOOSE_CONTACT);
 
     startActivityForResult(
-        new Intent(Intent.ACTION_PICK, ContactWrapper.getContentUri()), REQ_CODE_CHOOSE_CONTACT);
+        new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI), REQ_CODE_CHOOSE_CONTACT);
   }
 
   @Override
@@ -326,8 +326,8 @@ public class ConfigContactsActivity extends ListActivity {
           // fetch the system db contact name
           sysContactCursor =
             mContentResolver.query(
-                Uri.withAppendedPath(ContactWrapper.getContentUri(), String.valueOf(contactId)),
-                new String[] {ContactWrapper.getColumn(ContactWrapper.COL_DISPLAY_NAME)},
+                Uri.withAppendedPath(Contacts.CONTENT_URI, String.valueOf(contactId)),
+                new String[] { Contacts.DISPLAY_NAME },
                 null, null, null);
 
           if (sysContactCursor != null) {
@@ -427,14 +427,14 @@ public class ConfigContactsActivity extends ListActivity {
       if (constraint != null) {
         buffer = new StringBuilder();
         buffer.append("UPPER(");
-        buffer.append(ContactWrapper.getColumn(ContactWrapper.COL_DISPLAY_NAME));
+        buffer.append(Contacts.DISPLAY_NAME);
         buffer.append(") GLOB ?");
         args = new String[] {"*" + constraint.toString().toUpperCase() + "*"};
       }
 
-      return mContent.query(ContactWrapper.getContentUri(),
-          ContactWrapper.getBasePeopleProjection(),
-          buffer == null ? null : buffer.toString(), args, ContactWrapper.getDefaultSortOrder());
+      return mContent.query(Contacts.CONTENT_URI,
+          new String[] { Contacts._ID, Contacts.DISPLAY_NAME },
+          buffer == null ? null : buffer.toString(), args, null);
     }
   }
 }

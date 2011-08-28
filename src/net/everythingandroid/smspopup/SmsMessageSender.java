@@ -28,7 +28,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.telephony.gsm.SmsManager;
+import android.telephony.SmsManager;
 
 public class SmsMessageSender {
   private final Context mContext;
@@ -201,7 +201,6 @@ public class SmsMessageSender {
           mContext.getString(R.string.pref_delivery_report_key), DEFAULT_DELIVERY_REPORT_MODE);
   }
 
-  @SuppressWarnings("deprecation")
   public boolean sendMessage() {
     if (!(mThreadId > 0)) {
       return false;
