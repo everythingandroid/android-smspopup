@@ -22,7 +22,7 @@
 			android:layout_centerHorizontal="true" android:layout_width="100dp" />
 	</RelativeLayout>
 	<net.everythingandroid.smspopup.controls.SmsPopupPager
-		android:id="@+id/SmsPopupsLayout" android:layout_width="fill_parent" android:layout_height="180dp">
+		android:id="@+id/SmsPopupPager" android:layout_width="fill_parent" android:layout_height="180dp">
 	</net.everythingandroid.smspopup.controls.SmsPopupPager>
 	<ViewSwitcher android:layout_height="wrap_content"
 		android:layout_width="fill_parent" android:id="@+id/ButtonViewSwitcher">
