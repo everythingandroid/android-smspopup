@@ -199,13 +199,11 @@
     <item>41</item>
     <item>42</item>
     <item>43</item>
-    <item>44</item>
   </string-array>
   
   <string-array
     name="pref_notif_icon_entries">
     <item>Android</item>
-    <item>Android (Gingerbread)</item>
     <item>Android (Old)</item>
     <item>HTC</item>
     <item>Motorola</item>

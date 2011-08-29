@@ -49,11 +49,12 @@ public class SmsPopupView extends LinearLayout {
   public static final int PRIVACY_MODE_HIDE_ALL = 2;
   private static int privacyMode = PRIVACY_MODE_OFF;
 
-  public SmsPopupView(Context _context, SmsMmsMessage message) {
+  public SmsPopupView(Context _context, SmsMmsMessage newMessage) {
     super(_context);
     context = _context;
     setupLayout(context);
-    setSmsMmsMessage(message);
+    message = newMessage;
+    populateViews(message);
   }
 
   public SmsPopupView(Context _context, AttributeSet attrs) {
@@ -196,20 +197,6 @@ public class SmsPopupView extends LinearLayout {
 
   public boolean getMessageViewed() {
     return messageViewed;
-  }
-
-  public void setSmsMmsMessage(SmsMmsMessage newMessage) {
-
-    // Check if new message sender, if not, we can re-use the same contact photo
-    if (message != null && newMessage != null) {
-      if (!TextUtils.equals(message.getFromAddress(), newMessage.getFromAddress())) {
-        contactPhoto = null;
-      }
-    }
-
-    messageViewed = false;
-    message = newMessage;
-    populateViews(message);
   }
 
   private void setupLayout(Context context) {

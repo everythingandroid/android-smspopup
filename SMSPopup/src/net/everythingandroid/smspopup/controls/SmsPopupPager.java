@@ -74,23 +74,29 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
    * @param numMessage
    * @return true if a message was removed, false otherwise.
    */
-  public boolean removeMessage(int numMessage) {
+  public synchronized boolean removeMessage(int numMessage) {
     final int totalMessages = getPageCount();
+    final int initialCurrentPage = currentPage;
 
     if (totalMessages <= 1) return false;
     if (numMessage >= totalMessages || numMessage < 0) return false;
     
-    if (currentPage == numMessage) {
+    if (initialCurrentPage == numMessage) {
       // If removing last page, go to previous
-      if (currentPage == (totalMessages - 1)) {
+      if (initialCurrentPage == (totalMessages - 1)) {
         showPrevious();
       } else {
-        // showNext();
+        showNext();
       }
+    }
+
+    if (numMessage <= initialCurrentPage && initialCurrentPage != (totalMessages - 1)) {
+      currentPage--;
     }
 
     messages.remove(numMessage);
     mAdapter.notifyDataSetChanged();
+    setCurrentItem(currentPage);
     UpdateMessageCount();
 
     return true;
@@ -111,7 +117,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
    * 
    * @return
    */
-  public SmsMmsMessage getActiveMessage() {
+  public synchronized SmsMmsMessage getActiveMessage() {
     return messages.get(currentPage);
   }
 
@@ -148,6 +154,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
   @Override
   public void setCurrentItem(int num) {
     super.setCurrentItem(num);
+    currentPage = num;
     UpdateMessageCount();
   }
 
@@ -186,7 +193,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
 
     @Override
     public void destroyItem(View container, int position, Object object) {
-      ((ViewPager) container).removeView((SmsPopupView) object);
+      //((ViewPager) container).removeView((SmsPopupView) object);
     }
 
     @Override

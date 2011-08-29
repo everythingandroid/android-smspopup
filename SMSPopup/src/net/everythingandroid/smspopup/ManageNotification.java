@@ -38,7 +38,6 @@ public class ManageNotification {
   private static final int FAILED = 1;
   public static final int[][] NOTIF_ICON_RES = {
     {R.drawable.stat_notify_sms, R.drawable.stat_notify_sms_failed},
-    {R.drawable.stat_notify_sms_gb, R.drawable.stat_notify_sms_failed_gb},
     {R.drawable.stat_notify_sms_old, R.drawable.stat_notify_sms_failed},
     {R.drawable.stat_notify_sms_htc, R.drawable.stat_notify_sms_failed_htc},
     {R.drawable.stat_notify_sms_blur, R.drawable.stat_notify_sms_failed},
