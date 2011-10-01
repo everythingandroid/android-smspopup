@@ -3,27 +3,36 @@
 	android:layout_height="fill_parent" android:orientation="vertical"
 	android:minWidth="310dp" android:id="@+id/MainLayout"
 	android:layout_width="fill_parent">
+	<!-- 
 	<RelativeLayout android:layout_width="wrap_content"
 		android:background="@android:color/darker_gray" android:layout_height="wrap_content"
 		android:padding="2dp" android:id="@+id/HeaderLayout">
 		<Button android:layout_height="wrap_content"
 			android:background="@android:drawable/btn_default_small"
 			android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
-			android:text="&lt;--" android:id="@+id/PreviousButton"
+			android:text="&lt;-" android:id="@+id/PreviousButton"
 			android:layout_width="50dip" />
 		<Button android:layout_height="wrap_content"
 			android:background="@android:drawable/btn_default_small"
 			android:layout_alignParentRight="true" android:layout_alignParentTop="true"
-			android:text="--&gt;" android:id="@+id/NextButton"
+			android:text="-&gt;" android:id="@+id/NextButton"
 			android:layout_width="50dip" />
 		<Button android:layout_height="wrap_content"
 			android:background="@android:drawable/btn_default_small"
 			android:text="Inbox" android:id="@+id/InboxButton"
 			android:layout_centerHorizontal="true" android:layout_width="100dp" />
 	</RelativeLayout>
+	 -->
 	<net.everythingandroid.smspopup.controls.SmsPopupPager
-		android:id="@+id/SmsPopupPager" android:layout_width="fill_parent" android:layout_height="180dp">
+		android:id="@+id/SmsPopupPager" android:layout_width="fill_parent"
+		android:layout_height="200dp">
 	</net.everythingandroid.smspopup.controls.SmsPopupPager>
+  <com.jakewharton.android.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/indicator"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp" />	
 	<ViewSwitcher android:layout_height="wrap_content"
 		android:layout_width="fill_parent" android:id="@+id/ButtonViewSwitcher">
 		<LinearLayout android:layout_width="fill_parent"

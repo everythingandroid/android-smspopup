@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="net.everythingandroid.smspopup" android:versionName="1.1.0"
 	android:versionCode="116">
-	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="7" />
+	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="7"/>
 	<application android:label="@string/app_name" android:icon="@drawable/smspopup_icon">
 		<activity android:name=".SmsPopupConfigActivity"
 			android:label="@string/app_name" android:launchMode="singleTask"
