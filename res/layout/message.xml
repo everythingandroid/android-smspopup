@@ -52,7 +52,7 @@
     android:id="@+id/MessageScrollView"
     android:visibility="gone"
     android:layout_weight="1"
-    android:paddingBottom="10dp"
+    android:paddingBottom="8dp"
     android:paddingTop="6dp">
     <TextView
       android:text="Text here"

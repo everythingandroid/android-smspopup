@@ -12,6 +12,8 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.jakewharton.android.viewpagerindicator.CirclePageIndicator;
+
 public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
 
   private ArrayList<SmsMmsMessage> messages;
@@ -19,6 +21,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
   private MessageCountChanged messageCountChanged;
   private Context mContext;
   private SmsPopupPagerAdapter mAdapter;
+  private CirclePageIndicator mPagerIndicator;
 
   public SmsPopupPager(Context context) {
     super(context);
@@ -36,7 +39,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     mAdapter = new SmsPopupPagerAdapter();
     setAdapter(mAdapter);
     currentPage = 0;
-    setOnPageChangeListener(this);
+    // setOnPageChangeListener(this);
   }
 
   public int getPageCount() {
@@ -119,6 +122,9 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
   }
 
   private void UpdateMessageCount() {
+    if (mPagerIndicator != null) {
+      mPagerIndicator.invalidate();
+    }
     if (messageCountChanged != null) {
       messageCountChanged.onChange(currentPage, getPageCount());
     }
@@ -209,6 +215,14 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         return PagerAdapter.POSITION_NONE;
       }
       return idx;
+    }
+
+  }
+
+  public void setIndicator(CirclePageIndicator pagerIndicator) {
+    if (pagerIndicator != null) {
+      mPagerIndicator = pagerIndicator;
+      mPagerIndicator.setOnPageChangeListener(this);
     }
   }
 }
