@@ -55,6 +55,8 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.jakewharton.android.viewpagerindicator.CirclePageIndicator;
+
 public class SmsPopupActivity extends Activity {
 
   private boolean exitingKeyguardSecurely = false;
@@ -69,6 +71,7 @@ public class SmsPopupActivity extends Activity {
   private LinearLayout mainLayout = null;
   private ViewSwitcher buttonSwitcher = null;
   private SmsPopupPager smsPopupPager = null;
+  private CirclePageIndicator pagerIndicator = null;
 
   private boolean wasVisible = false;
   private boolean replying = false;
@@ -176,6 +179,9 @@ public class SmsPopupActivity extends Activity {
 
     // Find main views
     smsPopupPager = (SmsPopupPager) findViewById(R.id.SmsPopupPager);
+    pagerIndicator = (CirclePageIndicator) findViewById( R.id.indicator );
+    pagerIndicator.setViewPager(smsPopupPager);
+    smsPopupPager.setIndicator(pagerIndicator);
     mainLayout = (LinearLayout) findViewById(R.id.MainLayout);
     buttonSwitcher = (ViewSwitcher) findViewById(R.id.ButtonViewSwitcher);
     // buttonLayout = findViewById(R.id.ButtonLayout);
@@ -198,6 +204,7 @@ public class SmsPopupActivity extends Activity {
       }
     });
 
+    /*
     final Button previousButton = (Button) findViewById(R.id.PreviousButton);
     final Button nextButton = (Button) findViewById(R.id.NextButton);
     final Button inboxButton = (Button) findViewById(R.id.InboxButton);
@@ -222,28 +229,36 @@ public class SmsPopupActivity extends Activity {
         gotoInbox();
       }
     });
+        */
 
     smsPopupPager.setOnMessageCountChanged(new MessageCountChanged() {
 
       @Override
       public void onChange(int current, int total) {
-
-        // Set middle button text
-        inboxButton.setText((current + 1) + "/" + total);
-
-        // Set next/previous buttons to enabled/disabled based on
-        // message being viewed
-        boolean previous = true;
-        boolean next = true;
-        if (current == 0)
-          previous = false;
-        if (current == (total - 1))
-          next = false;
-        previousButton.setEnabled(previous);
-        nextButton.setEnabled(next);
+        if (total == 1) {
+          pagerIndicator.setVisibility(View.GONE);
+        } else if (total == 2) {
+          pagerIndicator.setVisibility(View.VISIBLE);
+        }
+        
+        
+//        // Set middle button text
+//        inboxButton.setText((current + 1) + "/" + total);
+//
+//        // Set next/previous buttons to enabled/disabled based on
+//        // message being viewed
+//        boolean previous = true;
+//        boolean next = true;
+//        if (current == 0)
+//          previous = false;
+//        if (current == (total - 1))
+//          next = false;
+//        previousButton.setEnabled(previous);
+//        nextButton.setEnabled(next);
 
       }
     });
+
 
     // See if user wants to show buttons on the popup
     if (!mPrefs.getBoolean(getString(R.string.pref_show_buttons_key), Defaults.PREFS_SHOW_BUTTONS)) {
