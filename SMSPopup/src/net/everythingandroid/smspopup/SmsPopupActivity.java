@@ -55,7 +55,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import com.jakewharton.android.viewpagerindicator.CirclePageIndicator;
+import com.viewpagerindicator.CirclePageIndicator;
 
 public class SmsPopupActivity extends Activity {
 

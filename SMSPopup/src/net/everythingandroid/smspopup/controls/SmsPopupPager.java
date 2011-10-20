@@ -12,7 +12,7 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.jakewharton.android.viewpagerindicator.CirclePageIndicator;
+import com.viewpagerindicator.CirclePageIndicator;
 
 public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
 

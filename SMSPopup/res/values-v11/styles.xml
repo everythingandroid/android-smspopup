@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<style name="DialogTheme" parent="android:Theme.Holo.Dialog">
+</style>
+<style name="ButtonBar" parent="android:style/Holo.ButtonBar.AlertDialog">
+</style>
+</resources>

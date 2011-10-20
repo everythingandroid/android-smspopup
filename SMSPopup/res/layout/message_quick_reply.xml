@@ -37,8 +37,7 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1.0"
-      android:addStatesFromChildren="true"
-      android:background="@android:drawable/edit_text">
+>
       <EditText
         android:id="@+id/QuickReplyEditText"
         android:layout_width="fill_parent"
@@ -46,7 +45,6 @@
         android:nextFocusRight="@+id/send_button"
         android:maxLines="3"
         android:inputType="textShortMessage|textAutoCorrect|textCapSentences|textMultiLine"
-        android:background="@null"
         android:maxLength="1000"
         android:imeOptions="actionSend|flagNoEnterAction" />
       <TextView
@@ -77,10 +75,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingTop="4dp"
-    android:paddingLeft="2dp"
-    android:background="@android:color/darker_gray"
-    android:paddingRight="2dp">
+    style="@style/ButtonBar">
     <ImageButton
       android:src="@android:drawable/ic_btn_speak_now"
       android:id="@+id/SpeechRecogButton"

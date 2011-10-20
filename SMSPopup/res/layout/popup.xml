@@ -27,7 +27,7 @@
 		android:id="@+id/SmsPopupPager" android:layout_width="fill_parent"
 		android:layout_height="200dp">
 	</net.everythingandroid.smspopup.controls.SmsPopupPager>
-  <com.jakewharton.android.viewpagerindicator.CirclePageIndicator
+  <com.viewpagerindicator.CirclePageIndicator
         android:id="@+id/indicator"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
 		android:layout_width="fill_parent" android:id="@+id/ButtonViewSwitcher">
 		<LinearLayout android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:gravity="center"
-			android:padding="2dp" android:background="@android:color/darker_gray"
+			style="@style/ButtonBar"
 			android:id="@+id/ButtonLayout">
 			<Button android:id="@+id/button1" android:layout_height="wrap_content"
 				android:layout_weight="1" android:text="@string/button_close"
@@ -49,9 +49,8 @@
 				android:layout_weight="1" android:text="@string/button_reply"
 				android:layout_width="fill_parent" />
 		</LinearLayout>
-		<RelativeLayout android:id="@+id/UnlockButtonLayout"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:background="@android:color/darker_gray" android:padding="2dp">
+		<RelativeLayout android:id="@+id/UnlockButtonLayout" style="@style/ButtonBar"
+			android:layout_width="fill_parent" android:layout_height="wrap_content" >
 			<Button android:id="@+id/unlockButton" android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_centerHorizontal="true" android:paddingLeft="30dp"
