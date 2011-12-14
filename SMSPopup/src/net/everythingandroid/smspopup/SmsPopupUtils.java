@@ -201,21 +201,21 @@ public class SmsPopupUtils {
     return null;
   }
 
-	/**
-	 * 
-	 * Looks up a contact photo by contact id, returns a Bitmap array that
-	 * represents their photo (or null if not found or there was an error.
-	 * 
-	 * I do my own scaling and validation of sizes - Android supports any size for
-	 * contact photos and some apps are adding huge photos to contacts. Doing the
-	 * scaling myself allows me more control over how things play out in those
-	 * cases.
-	 * 
-	 * @param context the context
-	 * @param id contact id
-	 * @param maxThumbSize the max size the thumbnail can be
-	 * @return Bitmap of the contacts photo (null if none or an error)
-	 */
+  /**
+   * 
+   * Looks up a contact photo by contact id, returns a Bitmap array that
+   * represents their photo (or null if not found or there was an error.
+   * 
+   * I do my own scaling and validation of sizes - Android supports any size for
+   * contact photos and some apps are adding huge photos to contacts. Doing the
+   * scaling myself allows me more control over how things play out in those
+   * cases.
+   * 
+   * @param context the context
+   * @param id contact id
+   * @param maxThumbSize the max size the thumbnail can be
+   * @return Bitmap of the contacts photo (null if none or an error)
+   */
   public static Bitmap getPersonPhoto(Context context, final Uri contactUri, final int thumbSize) {
 
     if (contactUri == null) return null;
@@ -257,27 +257,27 @@ public class SmsPopupUtils {
     // This time we're going to do it for real
     options.inJustDecodeBounds = false;
 
-		int newHeight = thumbSize;
-		int newWidth = thumbSize;
+    int newHeight = thumbSize;
+    int newWidth = thumbSize;
 
     // If we have an abnormal photo size that's larger than thumbsize then sample it down
     boolean sampleDown = false;
 
-		if (height > thumbSize || width > thumbSize) {
+    if (height > thumbSize || width > thumbSize) {
       sampleDown = true;
     }
 
     // If the dimensions are not the same then calculate new scaled dimenions
     if (height < width) {
       if (sampleDown) {
-				options.inSampleSize = Math.round(height / thumbSize);
+        options.inSampleSize = Math.round(height / thumbSize);
       }
-			newHeight = Math.round(thumbSize * height / width);
+      newHeight = Math.round(thumbSize * height / width);
     } else {
       if (sampleDown) {
-				options.inSampleSize = Math.round(width / thumbSize);
+        options.inSampleSize = Math.round(width / thumbSize);
       }
-			newWidth = Math.round(thumbSize * width / height);
+      newWidth = Math.round(thumbSize * width / height);
     }
 
     // Fetch the real contact photo (sampled down if needed)
@@ -971,11 +971,11 @@ public class SmsPopupUtils {
         if (count > 0) {
           cursor.moveToFirst();
 
-          //					String[] columns = cursor.getColumnNames();
-          //					for (int i=0; i<columns.length; i++) {
-          //						Log.v("columns " + i + ": " + columns[i] + ": "
-          //								+ cursor.getString(i));
-          //					}
+          //          String[] columns = cursor.getColumnNames();
+          //          for (int i=0; i<columns.length; i++) {
+          //            Log.v("columns " + i + ": " + columns[i] + ": "
+          //                + cursor.getString(i));
+          //          }
 
           long messageId = cursor.getLong(0);
           long threadId = cursor.getLong(1);
@@ -1262,8 +1262,8 @@ public class SmsPopupUtils {
       if (mRunningTask != null) {
         ComponentName runningTaskComponent = mRunningTask.baseActivity;
 
-        //				Log.v("baseActivity = " + mRunningTask.baseActivity.toString());
-        //				Log.v("topActivity = " + mRunningTask.topActivity.toString());
+        //        Log.v("baseActivity = " + mRunningTask.baseActivity.toString());
+        //        Log.v("topActivity = " + mRunningTask.topActivity.toString());
 
         if (SmsMessageSender.MESSAGING_PACKAGE_NAME.equals(runningTaskComponent.getPackageName()) &&
             (SmsMessageSender.MESSAGING_CONVO_CLASS_NAME.equals(runningTaskComponent.getClassName())) ||
