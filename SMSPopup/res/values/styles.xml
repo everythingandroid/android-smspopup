@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<style name="DialogTheme" parent="android:Theme.Dialog">
-</style>
-<style name="ButtonBar" parent="android:style/DeviceDefault.ButtonBar.AlertDialog">
-</style>
+    <style name="DialogTheme" parent="android:Theme.Dialog"></style>
+    <style name="ButtonBar" parent="android:style/DeviceDefault.ButtonBar.AlertDialog"></style>
 </resources>
