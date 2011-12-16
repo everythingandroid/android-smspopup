@@ -17,14 +17,13 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class ConfigPerContactActivity extends PreferenceActivity {
   private long contactId = 0;
   private String contactIdString = null;
   private SmsPopupDbAdapter mDbAdapter;
-  private static final int MENU_SAVE_ID = Menu.FIRST;
-  private static final int MENU_DELETE_ID = Menu.FIRST + 1;
   public static final String EXTRA_CONTACT_ID =
     "net.everythingandroid.smspopuppro.EXTRA_CONTACT_ID";
 
@@ -291,25 +290,18 @@ public class ConfigPerContactActivity extends PreferenceActivity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-
-    MenuItem saveItem = menu.add(
-        Menu.NONE, MENU_SAVE_ID, Menu.NONE, R.string.contact_customization_save);
-    MenuItem deleteItem = menu.add(
-        Menu.NONE, MENU_DELETE_ID, Menu.NONE, R.string.contact_customization_remove);
-
-    saveItem.setIcon(android.R.drawable.ic_menu_save);
-    deleteItem.setIcon(android.R.drawable.ic_menu_delete);
-
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.config_contact_menu, menu);
     return true;
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      case MENU_SAVE_ID:
+      case R.id.save_menu_item:
         finish();
         return true;
-      case MENU_DELETE_ID:
+      case R.id.remove_menu_item:
         mDbAdapter.deleteContact(contactId);
         finish();
         return true;
