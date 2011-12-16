@@ -18,6 +18,7 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
@@ -36,7 +37,6 @@ import android.widget.TextView;
 public class ConfigContactsActivity extends ListActivity {
   private SmsPopupDbAdapter mDbAdapter;
 
-  private static final int DIALOG_MENU_ADD_ID = Menu.FIRST;
   private static final int CONTEXT_MENU_DELETE_ID = Menu.FIRST;
   private static final int CONTEXT_MENU_EDIT_ID = Menu.FIRST + 1;
 
@@ -67,6 +67,7 @@ public class ConfigContactsActivity extends ListActivity {
     contactsAutoComplete.setAdapter(adapter);
 
     contactsAutoComplete.setOnItemClickListener(new OnItemClickListener() {
+      @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         startActivity(getConfigPerContactIntent(id));
         contactsAutoComplete.setText("");
@@ -75,6 +76,7 @@ public class ConfigContactsActivity extends ListActivity {
 
     mListView = getListView();
     mListView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+      @Override
       public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         menu.add(0, CONTEXT_MENU_EDIT_ID, 0, R.string.contact_customization_edit);
         menu.add(0, CONTEXT_MENU_DELETE_ID, 0, R.string.contact_customization_remove);
@@ -123,7 +125,7 @@ public class ConfigContactsActivity extends ListActivity {
 
       // Now create an array adapter and set it to display using our row
       SimpleCursorAdapter contacts =
-        new SimpleCursorAdapter(this, R.layout.simple_list_item_2, c, from, to);
+        new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, c, from, to);
       setListAdapter(contacts);
     }
   }
@@ -146,46 +148,21 @@ public class ConfigContactsActivity extends ListActivity {
   }
 
   private void selectContact() {
-    // Intent i = new Intent(Intent.ACTION_PICK,
-    // Uri.parse("content://contacts/people/with_phones_filter/*"));
-    // Intent i = new Intent(Intent.ACTION_PICK,
-    // Contacts.People.CONTENT_URI.buildUpon().appendEncodedPath("with_phones_filter").build());
-    // Contacts.Groups.
-    // new Intent(Intent.ACTION_PICK, Contacts.Phones.CONTENT_URI)
-    // new Intent(Intent.ACTION_PICK,
-    // Uri.withAppendedPath(Contacts.People.CONTENT_URI,"with_phones_filter"))
-    // new Intent(Intent.ACTION_PICK,
-    // Uri.withAppendedPath(Contacts.Phones.CONTENT_FILTER_URL, "m"))
-    // .setType("vnd.android.cursor.dir/phone")
-    // .setType("vnd.android.cursor.dir/person")
-
-    // TODO: So ideally we just want to show contacts with phone numbers here
-    // but I couldn't
-    // work out a way to filter the results using an ACTION_PICK intent
-
-    //final Uri CONTENT_URI = Uri.parse("content://contacts/people_with_phones");
-
-    //    Intent i = new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI);
-    //
-    //    //i.putExtra(PHONE, "mobile");
-    //    startActivityForResult(i, REQ_CODE_CHOOSE_CONTACT);
-
     startActivityForResult(
         new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI), REQ_CODE_CHOOSE_CONTACT);
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    MenuItem m =
-      menu.add(Menu.NONE, DIALOG_MENU_ADD_ID, Menu.NONE, R.string.contact_customization_add);
-    m.setIcon(android.R.drawable.ic_menu_add);
-    return super.onCreateOptionsMenu(menu);
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.config_contacts_menu, menu);
+    return true;
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      case DIALOG_MENU_ADD_ID:
+      case R.id.add_menu_item:
         //startActivity(getConfigPerContactIntent());
         selectContact();
         break;
@@ -218,21 +195,6 @@ public class ConfigContactsActivity extends ListActivity {
     return i;
   }
 
-  // Changed to add context menu only to Activity ListView
-  /*
-  @Override
-  public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-    super.onCreateContextMenu(menu, v, menuInfo);
-    if (Log.DEBUG) Log.v("onCreateContextMenu()");
-
-    // Create menu if top item is not selected
-    if (((AdapterContextMenuInfo) menuInfo).id != -1) {
-      menu.add(0, CONTEXT_MENU_EDIT_ID, 0, R.string.contact_customization_edit);
-      menu.add(0, CONTEXT_MENU_DELETE_ID, 0, R.string.contact_customization_remove);
-    }
-  }
-   */
-
   @Override
   public boolean onContextItemSelected(MenuItem item) {
     AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
@@ -260,12 +222,7 @@ public class ConfigContactsActivity extends ListActivity {
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
     super.onListItemClick(l, v, position, id);
-    //    if (position == 0) { // Top item = Add
-    //      //startActivity(getConfigPerContactIntent());
-    //      showDialog(DIALOG_ADD);
-    //    } else {
     startActivity(getConfigPerContactIntent(id));
-    //    }
   }
 
   @Override
@@ -287,16 +244,16 @@ public class ConfigContactsActivity extends ListActivity {
    * 
    */
   private class SynchronizeContactNames extends AsyncTask<Object, Integer, Object> {
-    private SmsPopupDbAdapter mDbAdapter;
+    private SmsPopupDbAdapter mSyncDbAdapter;
     private Cursor mCursor, sysContactCursor;
     private ContentResolver mContentResolver;
     private int totalCount;
 
     @Override
     protected void onPreExecute() {
-      mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
-      mDbAdapter.open(true);
-      mCursor = mDbAdapter.fetchAllContacts();
+      mSyncDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
+      mSyncDbAdapter.open(true);
+      mCursor = mSyncDbAdapter.fetchAllContacts();
       if (mCursor == null) {
         totalCount = 0;
       } else {
@@ -338,14 +295,14 @@ public class ConfigContactsActivity extends ListActivity {
                 sysContactName = rawSysContactName.trim();
                 if (!contactName.equals(sysContactName)) {
                   // if different, update the local db
-                  mDbAdapter.updateContact(contactId, SmsPopupDbAdapter.KEY_CONTACT_NAME,
+                  mSyncDbAdapter.updateContact(contactId, SmsPopupDbAdapter.KEY_CONTACT_NAME,
                       sysContactName);
                 }
               }
             } else {
               // if this contact has been removed from the system db then delete
               // from the local db
-              mDbAdapter.deleteContact(contactId, false);
+              mSyncDbAdapter.deleteContact(contactId, false);
             }
             sysContactCursor.close();
           }
@@ -359,6 +316,7 @@ public class ConfigContactsActivity extends ListActivity {
 
       // fill (refresh) the listview with latest data (must run on UI thread)
       runOnUiThread(new Runnable() {
+        @Override
         public void run() {
           fillData();
         }
@@ -377,13 +335,13 @@ public class ConfigContactsActivity extends ListActivity {
     protected void onPostExecute(Object result) {
       getWindow().setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_END);
       if (mCursor != null) mCursor.close();
-      if (mDbAdapter != null) mDbAdapter.close();
+      if (mSyncDbAdapter != null) mSyncDbAdapter.close();
     }
 
     @Override
     protected void onCancelled() {
       if (mCursor != null) mCursor.close();
-      if (mDbAdapter != null) mDbAdapter.close();
+      if (mSyncDbAdapter != null) mSyncDbAdapter.close();
     }
   }
 
