@@ -3,6 +3,7 @@ package net.everythingandroid.smspopup;
 import java.util.ArrayList;
 
 import net.everythingandroid.smspopup.ManagePreferences.Defaults;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -264,7 +265,7 @@ public class ManageNotification {
     if (!mPrefs.getBoolean(
         R.string.pref_notif_enabled_key,
         Defaults.PREFS_NOTIF_ENABLED,
-        SmsPopupDbAdapter.KEY_ENABLED_NUM)) {
+        ContactNotifications.ENABLED)) {
 
       return null;
 
@@ -275,57 +276,57 @@ public class ManageNotification {
       mPrefs.getBoolean(
           R.string.pref_vibrate_key,
           Defaults.PREFS_VIBRATE_ENABLED,
-          SmsPopupDbAdapter.KEY_VIBRATE_ENABLED_NUM);
+          ContactNotifications.VIBRATE_ENABLED);
 
     String vibrate_pattern_raw =
       mPrefs.getString(
           R.string.pref_vibrate_pattern_key,
           Defaults.PREFS_VIBRATE_PATTERN,
-          SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_NUM);
+          ContactNotifications.VIBRATE_PATTERN);
 
     String vibrate_pattern_custom_raw =
       mPrefs.getString(
           R.string.pref_vibrate_pattern_custom_key,
           Defaults.PREFS_VIBRATE_PATTERN,
-          SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM_NUM);
+          ContactNotifications.VIBRATE_PATTERN_CUSTOM);
 
     // Get LED preferences
     boolean flashLed =
       mPrefs.getBoolean(
           R.string.pref_flashled_key,
           Defaults.PREFS_LED_ENABLED,
-          SmsPopupDbAdapter.KEY_LED_ENABLED_NUM);
+          ContactNotifications.LED_ENABLED);
 
     String flashLedCol =
       mPrefs.getString(
           R.string.pref_flashled_color_key,
           Defaults.PREFS_LED_COLOR,
-          SmsPopupDbAdapter.KEY_LED_COLOR_NUM);
+          ContactNotifications.LED_COLOR);
 
     String flashLedColCustom =
       mPrefs.getString(
           R.string.pref_flashled_color_custom_key,
           Defaults.PREFS_LED_COLOR,
-          SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM_NUM);
+          ContactNotifications.LED_COLOR_CUSTOM);
 
     String flashLedPattern =
       mPrefs.getString(
           R.string.pref_flashled_pattern_key,
           Defaults.PREFS_LED_PATTERN,
-          SmsPopupDbAdapter.KEY_LED_PATTERN_NUM);
+          ContactNotifications.LED_PATTERN);
 
     String flashLedPatternCustom =
       mPrefs.getString(
           R.string.pref_flashled_pattern_custom_key,
           Defaults.PREFS_LED_PATTERN,
-          SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM_NUM);
+          ContactNotifications.LED_PATTERN_CUSTOM);
 
     // Try and parse the user ringtone, use the default if it fails
     Uri notifSoundUri =
       Uri.parse(mPrefs.getString(
           R.string.pref_notif_sound_key,
           defaultRingtone,
-          SmsPopupDbAdapter.KEY_RINGTONE_NUM));
+          ContactNotifications.RINGTONE));
 
     if (Log.DEBUG) Log.v("Sounds URI = " + notifSoundUri.toString());
 

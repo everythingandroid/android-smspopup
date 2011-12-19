@@ -3,7 +3,7 @@ package net.everythingandroid.smspopup.preferences;
 import net.everythingandroid.smspopup.ManageNotification;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.SmsMmsMessage;
-import net.everythingandroid.smspopup.SmsPopupDbAdapter;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -44,19 +44,15 @@ public class TestNotificationDialogPreference extends DialogPreference {
 
     // Create a test SmsMmsMessage
     String testPhone = "123-456-7890";
-    SmsPopupDbAdapter mDbAdapter = new SmsPopupDbAdapter(context);
 
     // If contactId is set, use it's phone else just use a default.
     if ( contactId != null ) {
-      mDbAdapter.open(true); // Open database read-only
-
-      Cursor contactCursor = mDbAdapter.fetchContact(Long.valueOf(contactId));
-      if (contactCursor != null) {
-        testPhone = contactCursor.getString(SmsPopupDbAdapter.KEY_CONTACT_NAME_NUM);
+      //Cursor contactCursor = mDbAdapter.fetchContact(Long.valueOf(contactId));
+      Cursor contactCursor = context.getContentResolver().query(ContactNotifications.buildContactUri(contactId), null, null, null, null);
+      if (contactCursor != null && contactCursor.moveToFirst()) {
+        testPhone = contactCursor.getString(contactCursor.getColumnIndexOrThrow(ContactNotifications.CONTACT_NAME));
         contactCursor.close();
       }
-
-      mDbAdapter.close();
     }
 
     SmsMmsMessage message =

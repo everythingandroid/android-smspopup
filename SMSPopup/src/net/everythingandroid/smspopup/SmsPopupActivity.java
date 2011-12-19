@@ -9,6 +9,7 @@ import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.controls.SmsPopupPager;
 import net.everythingandroid.smspopup.controls.SmsPopupPager.MessageCountChanged;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -104,7 +105,7 @@ public class SmsPopupActivity extends Activity {
   private TextView quickreplyTextView;
   private SmsMmsMessage quickReplySmsMessage;
 
-  private SmsPopupDbAdapter mDbAdapter;
+//  private SmsPopupDbAdapter mDbAdapter;
   private Cursor mCursor = null;
 
   private TextToSpeech androidTts = null;
@@ -131,9 +132,6 @@ public class SmsPopupActivity extends Activity {
     } else { // this activity was recreated after being destroyed
       setupMessages(bundle);
     }
-
-    // init db adapter for preset quick reply messages
-    mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
 
     // wake up app (turn on screen and run notification)
     wakeApp();
@@ -521,8 +519,6 @@ public class SmsPopupActivity extends Activity {
       ClearAllReceiver.removeCancel(getApplicationContext());
       ClearAllReceiver.clearAll(!exitingKeyguardSecurely);
     }
-
-    mDbAdapter.close();
   }
 
   @Override
@@ -710,8 +706,7 @@ public class SmsPopupActivity extends Activity {
        * Preset messages dialog
        */
     case DIALOG_PRESET_MSG:
-      mDbAdapter.open(true);
-      mCursor = mDbAdapter.fetchAllQuickMessages();
+      mCursor = getContentResolver().query(QuickMessages.CONTENT_URI, null, null, null, null);
       startManagingCursor(mCursor);
 
       AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(this)
@@ -731,15 +726,12 @@ public class SmsPopupActivity extends Activity {
             if (Log.DEBUG)
               Log.v("Item clicked = " + item);
             mCursor.moveToPosition(item);
-            if (Log.DEBUG)
-              Log.v("Item text = " + mCursor.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM));
-
-            quickReply(mCursor.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM));
+            quickReply(mCursor.getString(mCursor.getColumnIndexOrThrow(QuickMessages.QUICKMESSAGE)));
           }
-        }, SmsPopupDbAdapter.KEY_QUICKMESSAGE);
+        }, QuickMessages.QUICKMESSAGE);
       } else { // Otherwise display a placeholder as user has no presets
-        MatrixCursor emptyCursor = new MatrixCursor(new String[] { SmsPopupDbAdapter.KEY_ROWID,
-            SmsPopupDbAdapter.KEY_QUICKMESSAGE });
+        MatrixCursor emptyCursor = 
+                new MatrixCursor(new String[] { QuickMessages._ID, QuickMessages.QUICKMESSAGE });
         emptyCursor.addRow(new String[] { "0", getString(R.string.message_presets_empty_text) });
         mDialogBuilder.setCursor(emptyCursor, new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int item) {
@@ -747,7 +739,7 @@ public class SmsPopupActivity extends Activity {
             // SmsPopupActivity.this.getApplicationContext(),
             // net.everythingandroid.smspopup.ConfigPresetMessagesActivity.class));
           }
-        }, SmsPopupDbAdapter.KEY_QUICKMESSAGE);
+        }, QuickMessages.QUICKMESSAGE);
       }
 
       return mDialogBuilder.create();

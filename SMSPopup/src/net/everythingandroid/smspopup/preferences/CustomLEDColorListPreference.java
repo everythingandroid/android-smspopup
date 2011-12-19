@@ -2,7 +2,7 @@ package net.everythingandroid.smspopup.preferences;
 
 import net.everythingandroid.smspopup.ManagePreferences;
 import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.SmsPopupDbAdapter;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,9 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class CustomLEDColorListPreference extends ListPreference implements OnSeekBarChangeListener {
   private Context context;
@@ -76,12 +76,12 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
       led_color = mPrefs.getString(
           R.string.c_pref_flashled_color_key,
           R.string.pref_flashled_color_default,
-          SmsPopupDbAdapter.KEY_LED_COLOR_NUM);
+          ContactNotifications.LED_COLOR);
 
       led_color_custom = mPrefs.getString(
           R.string.c_pref_flashled_color_custom_key,
           R.string.pref_flashled_color_default,
-          SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM_NUM);
+          ContactNotifications.LED_COLOR_CUSTOM);
     }
 
     if (mPrefs != null) {
@@ -152,12 +152,12 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
           mPrefs.putString(
               R.string.pref_flashled_color_custom_key,
               "#" + Integer.toHexString(color),
-              SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM);
+              ContactNotifications.LED_COLOR_CUSTOM);
         } else { // Contact specific notifications
           mPrefs.putString(
               R.string.c_pref_flashled_color_custom_key,
               "#" + Integer.toHexString(color),
-              SmsPopupDbAdapter.KEY_LED_COLOR_CUSTOM);
+              ContactNotifications.LED_COLOR_CUSTOM);
         }
 
         if (mPrefs != null) {

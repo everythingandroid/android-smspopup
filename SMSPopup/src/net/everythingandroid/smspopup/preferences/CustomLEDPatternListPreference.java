@@ -3,7 +3,7 @@ package net.everythingandroid.smspopup.preferences;
 import net.everythingandroid.smspopup.ManageNotification;
 import net.everythingandroid.smspopup.ManagePreferences;
 import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.SmsPopupDbAdapter;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -64,11 +64,11 @@ public class CustomLEDPatternListPreference extends ListPreference {
       flashLedPattern = mPrefs.getString(
           R.string.c_pref_flashled_pattern_key,
           R.string.pref_flashled_pattern_default,
-          SmsPopupDbAdapter.KEY_LED_PATTERN_NUM);
+          ContactNotifications.LED_PATTERN);
       flashLedPatternCustom = mPrefs.getString(
           R.string.c_pref_flashled_pattern_custom_key,
           R.string.pref_flashled_pattern_default,
-          SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM_NUM);
+          ContactNotifications.LED_PATTERN_CUSTOM);
     }
 
     led_pattern = null;
@@ -122,13 +122,13 @@ public class CustomLEDPatternListPreference extends ListPreference {
             mPrefs.putString(
                 R.string.pref_flashled_pattern_custom_key,
                 stringPattern,
-                SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
+                ContactNotifications.LED_PATTERN_CUSTOM);
 
           } else { // Contact specific notifications
             mPrefs.putString(
                 R.string.c_pref_flashled_pattern_custom_key,
                 stringPattern,
-                SmsPopupDbAdapter.KEY_LED_PATTERN_CUSTOM);
+                ContactNotifications.LED_PATTERN_CUSTOM);
           }
 
           Toast.makeText(context, context.getString(R.string.pref_flashled_pattern_ok),
