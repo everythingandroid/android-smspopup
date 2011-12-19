@@ -3,7 +3,7 @@ package net.everythingandroid.smspopup.preferences;
 import net.everythingandroid.smspopup.ManageNotification;
 import net.everythingandroid.smspopup.ManagePreferences;
 import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.SmsPopupDbAdapter;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -64,11 +64,11 @@ public class CustomVibrateListPreference extends ListPreference {
       vibrate_pattern = mPrefs.getString(
           R.string.c_pref_vibrate_pattern_key,
           R.string.pref_vibrate_pattern_default,
-          SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_NUM);
+          ContactNotifications.VIBRATE_PATTERN);
       vibrate_pattern_custom = mPrefs.getString(
           R.string.c_pref_vibrate_pattern_custom_key,
           R.string.pref_vibrate_pattern_default,
-          SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM_NUM);
+          ContactNotifications.VIBRATE_PATTERN_CUSTOM);
     }
 
     if (vibrate_pattern_custom == null) {
@@ -111,12 +111,12 @@ public class CustomVibrateListPreference extends ListPreference {
             mPrefs.putString(
                 R.string.pref_vibrate_pattern_custom_key,
                 new_pattern,
-                SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM);
+                ContactNotifications.VIBRATE_PATTERN_CUSTOM);
           } else { // Contact specific notifications
             mPrefs.putString(
                 R.string.c_pref_vibrate_pattern_custom_key,
                 new_pattern,
-                SmsPopupDbAdapter.KEY_VIBRATE_PATTERN_CUSTOM);
+                ContactNotifications.VIBRATE_PATTERN_CUSTOM);
           }
 
           Toast.makeText(context, context.getString(R.string.pref_vibrate_pattern_ok),

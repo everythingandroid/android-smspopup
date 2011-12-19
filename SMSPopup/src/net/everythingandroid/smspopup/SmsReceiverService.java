@@ -3,6 +3,7 @@ package net.everythingandroid.smspopup;
 import java.util.List;
 
 import net.everythingandroid.smspopup.ManagePreferences.Defaults;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
@@ -156,13 +157,13 @@ public class SmsReceiverService extends Service {
     boolean showPopup =
       mPrefs.getBoolean(R.string.pref_popup_enabled_key,
           Defaults.PREFS_SHOW_POPUP,
-          SmsPopupDbAdapter.KEY_POPUP_ENABLED_NUM);
+          ContactNotifications.POPUP_ENABLED);
 
     // check if notifications are on for this contact
     boolean notifEnabled =
       mPrefs.getBoolean(R.string.pref_notif_enabled_key,
           Defaults.PREFS_NOTIF_ENABLED,
-          SmsPopupDbAdapter.KEY_ENABLED_NUM);
+          ContactNotifications.ENABLED);
 
     // get docked state of phone
     int docked_state =

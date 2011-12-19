@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.everythingandroid.smspopup.ManagePreferences.Defaults;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.ComponentName;
@@ -76,6 +77,12 @@ public class SmsPopupUtils {
     Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8246419");
   public static final Uri DONATE_MARKET_URI =
     Uri.parse("market://search?q=pname:net.everythingandroid.smspopupdonate");
+  
+  public static boolean isHoneycomb() {
+    // Can use static final constants like HONEYCOMB, declared in later versions
+    // of the OS since they are inlined at compile time. This is guaranteed behavior.
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+  }
 
   /**
    * Looks up a contacts display name by contact id - if not found, the address
@@ -744,15 +751,12 @@ public class SmsPopupUtils {
         }
       }
 
-      // Fetch number of db rows (=custom contact notifications)
-      SmsPopupDbAdapter mDbAdapter = new SmsPopupDbAdapter(context);
-      mDbAdapter.open(true);
-      Cursor c = mDbAdapter.fetchAllContacts();
+      Cursor c = context.getContentResolver().query(
+              ContactNotifications.CONTENT_URI, null, null, null, null);
       int dbRowCount = 0;
       if (c != null) {
         dbRowCount = c.getCount();
       }
-      mDbAdapter.close();
       body.append("Db Rows: " + dbRowCount + "\n");
 
       // Add locale info

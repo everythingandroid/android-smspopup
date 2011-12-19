@@ -75,7 +75,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     final PreferenceScreen quickMessagePS =
       (PreferenceScreen) findPreference(getString(R.string.quickmessages_key));
     quickMessagePS.setIntent(
-        new Intent(this, net.everythingandroid.smspopup.ConfigPresetMessagesActivity.class));
+        new Intent(this, net.everythingandroid.smspopup.ConfigQuickMessagesActivity.class));
 
     // Button 1 preference
     button1 =
@@ -216,12 +216,6 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
         splitLongMessagesPref = null;
       }
     }
-
-    // Opening and closing the database will trigger the update or create
-    // TODO: this should be done on a separate thread to prevent "not responding" messages
-    SmsPopupDbAdapter mDbAdapter = new SmsPopupDbAdapter(this);
-    mDbAdapter.open(true); // Open database read-only
-    mDbAdapter.close();
 
     Eula.show(this);
   }
