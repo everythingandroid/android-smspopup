@@ -1,30 +1,31 @@
 package net.everythingandroid.smspopup;
 
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
-public class ConfigPresetMessagesActivity extends ListActivity implements OnEditorActionListener {
-  private SmsPopupDbAdapter mDbAdapter;
-
+public class ConfigQuickMessagesActivity extends ListActivity implements OnEditorActionListener {
   private static final int ADD_DIALOG = Menu.FIRST;
   private static final int EDIT_DIALOG = Menu.FIRST + 1;
 
@@ -35,7 +36,7 @@ public class ConfigPresetMessagesActivity extends ListActivity implements OnEdit
   private static final int CONTEXT_MENU_REORDER_ID = Menu.FIRST + 2;
   private static ListView mListView;
 
-  private static long editId;
+  private static String editId;
   private EditText addQMEditText;
   private EditText editQMEditText;
   private View addQMLayout;
@@ -58,8 +59,6 @@ public class ConfigPresetMessagesActivity extends ListActivity implements OnEdit
     tv.setPadding(10, 10, 10, 10);
 
     mListView.addHeaderView(tv, null, true);
-    mDbAdapter = new SmsPopupDbAdapter(getApplicationContext());
-    mDbAdapter.open(true);
 
     LayoutInflater factory = LayoutInflater.from(this);
 
@@ -86,28 +85,12 @@ public class ConfigPresetMessagesActivity extends ListActivity implements OnEdit
   }
 
   @Override
-  protected void onPause() {
-    super.onPause();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-  }
-
-  @Override
-  protected void onDestroy() {
-    mDbAdapter.close();
-    super.onDestroy();
-  }
-
-  @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
     super.onListItemClick(l, v, position, id);
     if (position == 0) { // Top item = Add
       showDialog(ADD_DIALOG);
     } else {
-      editId = id;
+      editId = String.valueOf(id);
       showDialog(EDIT_DIALOG);
     }
   }
@@ -156,22 +139,23 @@ public class ConfigPresetMessagesActivity extends ListActivity implements OnEdit
    */
   @Override
   public boolean onContextItemSelected(MenuItem item) {
-    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+    final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
     if (Log.DEBUG) Log.v("onContextItemSelected()");
     if (info.id != -1) {
+      final String id = String.valueOf(info.id);
       switch (item.getItemId()) {
         case CONTEXT_MENU_EDIT_ID:
-          if (Log.DEBUG) Log.v("Editing quick message " + info.id);
-          editId = info.id;
+          if (Log.DEBUG) Log.v("Editing quick message " + id);
+          editId = id;
           showDialog(EDIT_DIALOG);
           return true;
         case CONTEXT_MENU_DELETE_ID:
-          if (Log.DEBUG) Log.v("Deleting quickmessage " + info.id);
-          deleteQuickMessage(info.id);
+          if (Log.DEBUG) Log.v("Deleting quickmessage " + id);
+          deleteQuickMessage(id);
           return true;
         case CONTEXT_MENU_REORDER_ID:
-          if (Log.DEBUG) Log.v("Reordering quickmessage " + info.id);
-          reorderQuickMessage(info.id);
+          if (Log.DEBUG) Log.v("Reordering quickmessage " + id);
+          reorderQuickMessage(id);
           return true;
         default:
           return super.onContextItemSelected(item);
@@ -239,29 +223,25 @@ public class ConfigPresetMessagesActivity extends ListActivity implements OnEdit
   }
 
   private void fillData() {
-    Cursor c = mDbAdapter.fetchAllQuickMessages();
+    Cursor c = getContentResolver().query(QuickMessages.CONTENT_URI, null, null, null, null);
     startManagingCursor(c);
     if (c != null) {
-      String[] from =
-        new String[] {SmsPopupDbAdapter.KEY_QUICKMESSAGE, SmsPopupDbAdapter.KEY_ROWID};
+      String[] from = new String[] {QuickMessages.QUICKMESSAGE, QuickMessages._ID};
       int[] to = new int[] {android.R.id.text1};
-      // int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
-
 
       // Now create an array adapter and set it to display using our row
       SimpleCursorAdapter mCursorAdapter =
         new SimpleCursorAdapter(this, R.layout.list_view, c, from, to);
-      //new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, c, from, to);
-      //android.R.layout.simple_list_item_1
 
       setListAdapter(mCursorAdapter);
     }
   }
 
-  private void updateEditText(long id) {
-    Cursor c = mDbAdapter.fetchQuickMessage(id);
+  private void updateEditText(String id) {
+    Cursor c = getContentResolver().query(
+            QuickMessages.buildQuickMessageUri(id), null, null, null, null);
     if (c != null) {
-      CharSequence message = c.getString(SmsPopupDbAdapter.KEY_QUICKMESSAGE_NUM);
+      CharSequence message = c.getString(c.getColumnIndexOrThrow(QuickMessages.QUICKMESSAGE));
       editQMEditText.setText(message);
       editQMEditText.setSelection(message.length());
       c.close();
@@ -270,10 +250,13 @@ public class ConfigPresetMessagesActivity extends ListActivity implements OnEdit
     }
   }
 
-  private boolean updateQuickMessage(long id, String message) {
+  private boolean updateQuickMessage(String id, String message) {
     if (message.trim().length() == 0) return false;
 
-    boolean result = mDbAdapter.updateQuickMessage(id, message);
+    final ContentValues vals = new ContentValues();
+    vals.put(QuickMessages.QUICKMESSAGE, message);
+    final int rows = getContentResolver().update(QuickMessages.buildQuickMessageUri(id), vals, null, null);
+    final boolean result = rows == 1 ? true : false;
     fillData();
     if (result) {
       myToast(R.string.message_presets_save_toast);
@@ -283,8 +266,9 @@ public class ConfigPresetMessagesActivity extends ListActivity implements OnEdit
     return result;
   }
 
-  private boolean deleteQuickMessage(long id) {
-    boolean result = mDbAdapter.deleteQuickMessage(id);
+  private boolean deleteQuickMessage(String id) {
+    final int rows = getContentResolver().delete(QuickMessages.buildQuickMessageUri(id), null, null);
+    final boolean result = rows == 1 ? true : false;
     fillData();
     if (result) {
       myToast(R.string.message_presets_delete_toast);
@@ -294,20 +278,24 @@ public class ConfigPresetMessagesActivity extends ListActivity implements OnEdit
     return result;
   }
 
-  private long createQuickMessage(String message) {
-    if (message.trim().length() == 0) return -1;
+  private String createQuickMessage(String message) {
+    if (message.trim().length() == 0) return null;
 
-    long result = mDbAdapter.createQuickMessage(message);
+    final ContentValues vals = new ContentValues();
+    vals.put(QuickMessages.QUICKMESSAGE, message);
+    final Uri resultUri = getContentResolver().insert(QuickMessages.CONTENT_URI, vals);
     fillData();
-    if (result == -1) {
+    if (resultUri == null) {
       myToast(R.string.message_presets_error_toast);
+      return null;
     } else {
       myToast(R.string.message_presets_add_toast);
     }
-    return result;
+    return QuickMessages.getQuickMessageId(resultUri);
   }
 
-  private boolean reorderQuickMessage(long id) {
+  private boolean reorderQuickMessage(String id) {
+      /*
     boolean result = mDbAdapter.reorderQuickMessage(id);
     fillData();
     if (result) {
@@ -316,6 +304,8 @@ public class ConfigPresetMessagesActivity extends ListActivity implements OnEdit
       myToast(R.string.message_presets_error_toast);
     }
     return result;
+    */
+      return true;
   }
 
   private void myToast(int resId) {

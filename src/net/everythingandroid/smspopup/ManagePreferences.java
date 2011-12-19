@@ -1,10 +1,11 @@
 package net.everythingandroid.smspopup;
 
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.preference.PreferenceManager;
 
 public class ManagePreferences {
@@ -14,7 +15,6 @@ public class ManagePreferences {
   private boolean useDatabase;
   private SharedPreferences mPrefs;
   private static final String one = "1";
-  private SmsPopupDbAdapter mDbAdapter;
 
   /*
    * Define all default preferences in this static class.  Unfortunately these are also
@@ -64,17 +64,13 @@ public class ManagePreferences {
     }
 
     if (contactIdLong > 0) {
-      mDbAdapter = new SmsPopupDbAdapter(context);
-      try {
-        mDbAdapter.open(true); // Open database read-only
-        contactCursor = mDbAdapter.fetchContactSettings(contactIdLong);
-        if (contactCursor != null) {
-          if (Log.DEBUG) Log.v("Contact found - using database");
-          useDatabase = true;
-        }
-        mDbAdapter.close();
-      } catch (SQLException e) {
-        if (Log.DEBUG) Log.v("Error opening or creating database");
+      contactCursor = context.getContentResolver().query(
+              ContactNotifications.buildContactUri(contactId), null, null, null, null);
+      if (contactCursor != null && contactCursor.moveToFirst()) {
+        if (Log.DEBUG) Log.v("Contact found - using database");
+        useDatabase = true;
+      } else {
+        contactCursor = null;
         useDatabase = false;
       }
     } else {
@@ -84,17 +80,17 @@ public class ManagePreferences {
     mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
   }
 
-  public boolean getBoolean(int resPrefId, int resDefaultId, int dbColumnNum) {
+  public boolean getBoolean(int resPrefId, int resDefaultId, String dbColumnName) {
     if (useDatabase) {
-      return one.equals(contactCursor.getString(dbColumnNum));
+      return one.equals(contactCursor.getString(contactCursor.getColumnIndexOrThrow(dbColumnName)));
     } else {
       return getBoolean(resPrefId, resDefaultId);
     }
   }
 
-  public boolean getBoolean(int resPrefId, boolean prefDefault, int dbColumnNum) {
+  public boolean getBoolean(int resPrefId, boolean prefDefault, String dbColumnName) {
     if (useDatabase) {
-      return one.equals(contactCursor.getString(dbColumnNum));
+      return one.equals(contactCursor.getString(contactCursor.getColumnIndexOrThrow(dbColumnName)));
     } else {
       return getBoolean(resPrefId, prefDefault);
     }
@@ -109,17 +105,17 @@ public class ManagePreferences {
     return mPrefs.getBoolean(context.getString(resPrefId), prefDefault);
   }
 
-  public String getString(int resPrefId, int resDefaultId, int dbColumnNum) {
+  public String getString(int resPrefId, int resDefaultId, String dbColumnName) {
     if (useDatabase) {
-      return contactCursor.getString(dbColumnNum);
+      return contactCursor.getString(contactCursor.getColumnIndexOrThrow(dbColumnName));
     } else {
       return getString(resPrefId, resDefaultId);
     }
   }
 
-  public String getString(int resPrefId, String defaultVal, int dbColumnNum) {
+  public String getString(int resPrefId, String defaultVal, String dbColumnName) {
     if (useDatabase) {
-      return contactCursor.getString(dbColumnNum);
+      return contactCursor.getString(contactCursor.getColumnIndexOrThrow(dbColumnName));
     } else {
       return mPrefs.getString(context.getString(resPrefId), defaultVal);
     }
@@ -133,11 +129,12 @@ public class ManagePreferences {
     return mPrefs.getString(context.getString(resPrefId), defaultVal);
   }
 
-  public void putString(int resPrefId, String newVal, String dbColumnNum) {
+  public void putString(int resPrefId, String newVal, String dbColumnName) {
     if (useDatabase) {
-      mDbAdapter.open(); // Open write
-      mDbAdapter.updateContact(Long.valueOf(contactId), dbColumnNum, newVal);
-      mDbAdapter.close();
+      ContentValues vals = new ContentValues();
+      vals.put(dbColumnName, newVal);
+      context.getContentResolver().update(
+              ContactNotifications.buildContactUri(contactId), vals, null, null);
     } else {
       SharedPreferences.Editor settings = mPrefs.edit();
       settings.putString(context.getString(resPrefId), newVal);
@@ -157,9 +154,6 @@ public class ManagePreferences {
   public void close() {
     if (contactCursor != null) {
       contactCursor.close();
-    }
-    if (mDbAdapter != null) {
-      mDbAdapter.close();
     }
   }
 }
