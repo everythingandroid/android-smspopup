@@ -1,10 +1,19 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.ui;
 
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.R.id;
+import net.everythingandroid.smspopup.R.menu;
+import net.everythingandroid.smspopup.R.string;
+import net.everythingandroid.smspopup.R.xml;
 import net.everythingandroid.smspopup.preferences.CustomLEDColorListPreference;
 import net.everythingandroid.smspopup.preferences.CustomLEDPatternListPreference;
 import net.everythingandroid.smspopup.preferences.CustomVibrateListPreference;
 import net.everythingandroid.smspopup.preferences.TestNotificationDialogPreference;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.ManageNotification;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
+
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;

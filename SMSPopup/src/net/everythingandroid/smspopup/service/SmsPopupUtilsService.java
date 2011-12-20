@@ -1,4 +1,4 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.service;
 
 import android.app.Service;
 import android.content.Context;
@@ -10,6 +10,11 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.Process;
+
+import net.everythingandroid.smspopup.provider.SmsMmsMessage;
+import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.ManageNotification;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
 
 public class SmsPopupUtilsService extends Service {
   public static final String ACTION_MARK_THREAD_READ =

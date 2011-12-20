@@ -1,8 +1,9 @@
 package net.everythingandroid.smspopup.provider;
 
-import net.everythingandroid.smspopup.Log;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
+import net.everythingandroid.smspopup.util.Log;
+
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;

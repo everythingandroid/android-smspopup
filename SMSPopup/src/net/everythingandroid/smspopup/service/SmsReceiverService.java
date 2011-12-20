@@ -1,9 +1,22 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.service;
 
 import java.util.List;
 
-import net.everythingandroid.smspopup.ManagePreferences.Defaults;
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.R.string;
+import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+import net.everythingandroid.smspopup.receiver.ExternalEventReceiver;
+import net.everythingandroid.smspopup.receiver.ReminderReceiver;
+import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.ManageKeyguard;
+import net.everythingandroid.smspopup.util.ManageNotification;
+import net.everythingandroid.smspopup.util.ManagePreferences;
+import net.everythingandroid.smspopup.util.ManageWakeLock;
+import net.everythingandroid.smspopup.util.SmsMessageSender;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
+import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;

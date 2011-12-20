@@ -1,6 +1,11 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.provider;
 
-import net.everythingandroid.smspopup.SmsPopupUtils.ContactIdentification;
+import net.everythingandroid.smspopup.ui.SmsPopupActivity;
+import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.SmsMessageSender;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
+import net.everythingandroid.smspopup.util.SmsPopupUtils.ContactIdentification;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;

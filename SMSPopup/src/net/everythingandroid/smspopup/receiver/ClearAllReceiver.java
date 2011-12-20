@@ -1,10 +1,14 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.receiver;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.ManageKeyguard;
+import net.everythingandroid.smspopup.util.ManageWakeLock;
 
 /*
  * This class provides an easy way to clear held WakeLocks and re-enable the

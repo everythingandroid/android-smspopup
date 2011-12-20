@@ -3,7 +3,12 @@
 
     <style name="DialogTheme" parent="android:Theme.Dialog"></style>
 
-    <style name="ButtonBar" parent="android:style/DeviceDefault.ButtonBar.AlertDialog"></style>
+    <style name="ButtonBar">
+        <item name="android:background">@android:color/darker_gray</item>
+        <item name="android:paddingTop">4dp</item>
+    </style>
+
+    <style name="ButtonBarButton"></style>
 
     <style name="NotificationIconPreferenceListItem" parent="@android:style/TextAppearance.Large.Inverse"></style>
 

@@ -1,8 +1,9 @@
 package net.everythingandroid.smspopup.provider;
 
-import net.everythingandroid.smspopup.Log;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
+import net.everythingandroid.smspopup.util.Log;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
