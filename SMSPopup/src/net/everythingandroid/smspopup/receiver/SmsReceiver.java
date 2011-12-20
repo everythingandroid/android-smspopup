@@ -1,8 +1,11 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import net.everythingandroid.smspopup.service.SmsReceiverService;
+import net.everythingandroid.smspopup.util.Log;
 
 public class SmsReceiver extends BroadcastReceiver {
 

@@ -1,9 +1,13 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.R.string;
+import net.everythingandroid.smspopup.receiver.ClearAllReceiver;
 
 
 public class ManageWakeLock {

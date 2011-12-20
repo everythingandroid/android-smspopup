@@ -1,112 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_height="fill_parent"
-  android:orientation="vertical"
-  android:minWidth="310dp"
-  android:layout_width="fill_parent">
-  <LinearLayout
-    android:id="@+id/FromLinearLayout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="left">
-    <ImageView android:src="@android:drawable/ic_dialog_info"
-	android:id="@+id/FromImageView" android:layout_gravity="center"
-	android:scaleType="center" android:layout_width="@dimen/contact_thumbnail_size"
-	android:layout_height="@dimen/contact_thumbnail_size" android:layout_margin="5dp"/>
+    android:layout_height="fill_parent"
+    android:minWidth="310dp"
+    android:orientation="vertical" >
+
     <LinearLayout
-      android:orientation="vertical"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center_vertical"
-      android:id="@+id/FromTextLinearLayout"
-      android:padding="4dp">
-      <TextView
-        android:id="@+id/FromTextView"
-        android:layout_width="fill_parent"
-        android:gravity="center_vertical"
-        android:autoLink="phone"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:maxLines="2"
-        android:layout_height="wrap_content"
-        android:text="Text Here"
-        android:ellipsize="end"
-        android:paddingBottom="2dp"
-        android:textColorLink="?android:attr/textColorPrimaryDisableOnly" />
-      <TextView
-        android:id="@+id/HeaderTextView"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="?android:attr/textColorPrimaryDisableOnly"
-        android:text="@string/new_text_at"
+        android:id="@+id/FromLinearLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="2dp" />
+        android:layout_gravity="left" >
+
+        <ImageView
+            android:id="@+id/FromImageView"
+            android:layout_width="@dimen/contact_thumbnail_size"
+            android:layout_height="@dimen/contact_thumbnail_size"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:scaleType="center"
+            android:src="@android:drawable/ic_dialog_info" />
+
+        <LinearLayout
+            android:id="@+id/FromTextLinearLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="4dp" >
+
+            <TextView
+                android:id="@+id/FromTextView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="phone"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:paddingBottom="2dp"
+                android:text="Text Here"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColorLink="?android:attr/textColorPrimaryDisableOnly" />
+
+            <TextView
+                android:id="@+id/HeaderTextView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp"
+                android:text="@string/new_text_at"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?android:attr/textColorPrimaryDisableOnly" />
+        </LinearLayout>
     </LinearLayout>
-  </LinearLayout>
-  <include
-    layout="@layout/popup_divider" />
-  <ScrollView
-    android:layout_width="fill_parent"
-    android:fillViewport="true"
-    android:layout_height="0dip"
-    android:id="@+id/MessageScrollView"
-    android:visibility="gone"
-    android:layout_weight="1"
-    android:paddingBottom="8dp"
-    android:paddingTop="6dp">
-    <TextView
-      android:text="Text here"
-      android:id="@+id/MessageTextView"
-      android:autoLink="all"
-      android:textAppearance="?android:attr/textAppearanceMedium"
-      android:textColor="?android:attr/textColorPrimaryDisableOnly"
-      android:layout_height="fill_parent"
-      android:layout_width="fill_parent"
-      android:gravity="center"
-      android:paddingRight="10dp"
-      android:paddingLeft="10dp"
-      android:textColorLink="?android:attr/textColorPrimaryDisableOnly" />
-  </ScrollView>
-  <LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:id="@+id/MmsLinearLayout"
-    android:orientation="vertical"
-    android:layout_weight="1"
-    android:paddingBottom="12dp"
-    android:paddingTop="12dp">
-    <TextView
-      android:autoLink="all"
-      android:layout_width="fill_parent"
-      android:paddingRight="5dp"
-      android:paddingLeft="5dp"
-      android:gravity="center"
-      android:id="@+id/MmsSubjectTextView"
-      android:layout_height="wrap_content"
-      android:paddingBottom="12dp"
-      android:textAppearance="?android:attr/textAppearanceMedium"
-      android:text="@string/mms_subject" />
-    <Button
-      android:layout_width="wrap_content"
-      android:text="@string/button_view_mms"
-      android:id="@+id/ViewMmsButton"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:minWidth="140dp" />
-  </LinearLayout>
-  <LinearLayout
-    android:layout_width="fill_parent"
-    android:gravity="center"
-    android:id="@+id/ViewButtonLinearLayout"
-    android:layout_height="fill_parent"
-    android:paddingTop="12dp"
-    android:paddingBottom="12dp"
-    android:layout_weight="1">
-    <Button
-      android:layout_height="wrap_content"
-      android:layout_width="wrap_content"
-      android:id="@+id/ViewButton"
-      android:text="@string/button_view"
-      android:minWidth="140dp" />
-  </LinearLayout>
+
+    <include layout="@layout/popup_divider" />
+
+    <ScrollView
+        android:id="@+id/MessageScrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:paddingBottom="8dp"
+        android:paddingTop="6dp"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/MessageTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:autoLink="all"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Text here"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?android:attr/textColorPrimaryDisableOnly"
+            android:textColorLink="?android:attr/textColorPrimaryDisableOnly" />
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/MmsLinearLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp" >
+
+        <TextView
+            android:id="@+id/MmsSubjectTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="all"
+            android:gravity="center"
+            android:paddingBottom="12dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/mms_subject"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/ViewMmsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:minWidth="140dp"
+            android:text="@string/button_view_mms" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ViewButtonLinearLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp" >
+
+        <Button
+            android:id="@+id/ViewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="140dp"
+            android:text="@string/button_view" />
+    </LinearLayout>
+
 </LinearLayout>

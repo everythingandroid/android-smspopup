@@ -1,4 +1,4 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.service;
 
 import android.app.Service;
 import android.content.ContentResolver;
@@ -8,6 +8,10 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
+
+import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.ManageNotification;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
 
 public class SmsMonitorService extends Service {
   private static Uri uriSMS = Uri.parse("content://mms-sms/conversations/");

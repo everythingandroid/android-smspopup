@@ -1,6 +1,7 @@
 package net.everythingandroid.smspopup.preferences;
 
-import net.everythingandroid.smspopup.Log;
+import net.everythingandroid.smspopup.util.Log;
+
 import android.content.Context;
 import android.preference.CheckBoxPreference;
 import android.util.AttributeSet;

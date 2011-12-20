@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.util;
 
 import java.util.ArrayList;
 
@@ -29,6 +29,11 @@ import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
+
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.R.string;
+import net.everythingandroid.smspopup.receiver.SmsReceiver;
+import net.everythingandroid.smspopup.service.SmsReceiverService;
 
 public class SmsMessageSender {
   private final Context mContext;

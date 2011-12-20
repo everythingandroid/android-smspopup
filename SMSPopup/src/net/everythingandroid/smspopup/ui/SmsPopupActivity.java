@@ -1,15 +1,31 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.ui;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.everythingandroid.smspopup.ManageKeyguard.LaunchOnKeyguardExit;
-import net.everythingandroid.smspopup.ManagePreferences.Defaults;
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.R.array;
+import net.everythingandroid.smspopup.R.id;
+import net.everythingandroid.smspopup.R.layout;
+import net.everythingandroid.smspopup.R.string;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.controls.SmsPopupPager;
 import net.everythingandroid.smspopup.controls.SmsPopupPager.MessageCountChanged;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
+import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
+import net.everythingandroid.smspopup.receiver.ClearAllReceiver;
+import net.everythingandroid.smspopup.receiver.ReminderReceiver;
+import net.everythingandroid.smspopup.service.SmsPopupUtilsService;
+import net.everythingandroid.smspopup.util.Eula;
+import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.ManageKeyguard;
+import net.everythingandroid.smspopup.util.ManageNotification;
+import net.everythingandroid.smspopup.util.ManageWakeLock;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
+import net.everythingandroid.smspopup.util.ManageKeyguard.LaunchOnKeyguardExit;
+import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;

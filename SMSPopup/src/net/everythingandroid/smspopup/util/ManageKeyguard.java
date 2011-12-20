@@ -1,9 +1,10 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.util;
 
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.app.KeyguardManager.OnKeyguardExitResult;
 import android.content.Context;
+
 
 public class ManageKeyguard {
   private static KeyguardManager myKM = null;

@@ -1,9 +1,10 @@
 package net.everythingandroid.smspopup.preferences;
 
-import net.everythingandroid.smspopup.ManageNotification;
 import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.SmsMmsMessage;
+import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+import net.everythingandroid.smspopup.util.ManageNotification;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
