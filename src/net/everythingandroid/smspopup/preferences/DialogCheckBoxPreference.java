@@ -1,8 +1,9 @@
 package net.everythingandroid.smspopup.preferences;
 
-import net.everythingandroid.smspopup.ManageNotification;
 import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.ReminderReceiver;
+import net.everythingandroid.smspopup.receiver.ReminderReceiver;
+import net.everythingandroid.smspopup.util.ManageNotification;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.preference.CheckBoxPreference;

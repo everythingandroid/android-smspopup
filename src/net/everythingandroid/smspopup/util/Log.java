@@ -1,4 +1,4 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.util;
 
 public class Log {
   public final static String LOGTAG = "SMSPopup";

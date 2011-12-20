@@ -1,6 +1,15 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.service;
 
-import net.everythingandroid.smspopup.ManagePreferences.Defaults;
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.R.string;
+import net.everythingandroid.smspopup.provider.SmsMmsMessage;
+import net.everythingandroid.smspopup.receiver.ReminderReceiver;
+import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
+import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.ManageNotification;
+import net.everythingandroid.smspopup.util.ManageWakeLock;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;

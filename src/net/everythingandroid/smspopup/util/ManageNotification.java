@@ -1,9 +1,16 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.util;
 
 import java.util.ArrayList;
 
-import net.everythingandroid.smspopup.ManagePreferences.Defaults;
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.R.drawable;
+import net.everythingandroid.smspopup.R.string;
+import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+import net.everythingandroid.smspopup.receiver.ReminderReceiver;
+import net.everythingandroid.smspopup.service.SmsMonitorService;
+import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

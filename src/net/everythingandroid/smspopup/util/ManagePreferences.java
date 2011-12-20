@@ -1,7 +1,8 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.util;
 
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;

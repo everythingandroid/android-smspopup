@@ -1,10 +1,19 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.ui;
 
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.R.drawable;
+import net.everythingandroid.smspopup.R.id;
+import net.everythingandroid.smspopup.R.layout;
+import net.everythingandroid.smspopup.R.string;
+import net.everythingandroid.smspopup.R.xml;
 import net.everythingandroid.smspopup.preferences.AppEnabledCheckBoxPreference;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.preferences.DialogPreference;
 import net.everythingandroid.smspopup.preferences.EmailDialogPreference;
 import net.everythingandroid.smspopup.preferences.QuickReplyCheckBoxPreference;
+import net.everythingandroid.smspopup.util.Eula;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -69,13 +78,13 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
     final PreferenceScreen contactsPS =
       (PreferenceScreen) findPreference(getString(R.string.contacts_key));
     contactsPS.setIntent(
-        new Intent(this, net.everythingandroid.smspopup.ConfigContactsActivity.class));
+        new Intent(this, net.everythingandroid.smspopup.ui.ConfigContactsActivity.class));
 
     // Set intent for quick message option
     final PreferenceScreen quickMessagePS =
       (PreferenceScreen) findPreference(getString(R.string.quickmessages_key));
     quickMessagePS.setIntent(
-        new Intent(this, net.everythingandroid.smspopup.ConfigQuickMessagesActivity.class));
+        new Intent(this, net.everythingandroid.smspopup.ui.ConfigQuickMessagesActivity.class));
 
     // Button 1 preference
     button1 =

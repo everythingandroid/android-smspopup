@@ -1,8 +1,15 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.ui;
 
 import java.util.List;
 
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.R.id;
+import net.everythingandroid.smspopup.R.layout;
+import net.everythingandroid.smspopup.R.menu;
+import net.everythingandroid.smspopup.R.string;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+import net.everythingandroid.smspopup.util.Log;
+
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;

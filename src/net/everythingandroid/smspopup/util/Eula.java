@@ -1,4 +1,4 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.util;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -12,6 +12,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.R.string;
+
 /**
  * Displays an EULA ("End User License Agreement") that the user has to accept before
  * using the application. Your application should call {@link Eula#show(android.app.Activity)}
@@ -19,7 +22,7 @@ import android.net.Uri;
  * be shown again. If the user refuses, {@link android.app.Activity#finish()} is invoked
  * on your activity.
  */
-class Eula {
+public class Eula {
   private static final String ASSET_EULA = "eula.txt";
   private static final String PREFERENCE_EULA_ACCEPTED = "eula.accepted";
   private static final String PREFERENCES_EULA = "eula";
@@ -53,7 +56,7 @@ class Eula {
    * @param activity The Activity to finish if the user rejects the EULA.
    * @return Whether the user has agreed already.
    */
-  static boolean show(final Activity activity) {
+  public static boolean show(final Activity activity) {
     final SharedPreferences preferences = activity.getSharedPreferences(PREFERENCES_EULA,
         Activity.MODE_PRIVATE);
     if (!preferences.getBoolean(PREFERENCE_EULA_ACCEPTED, false)) {

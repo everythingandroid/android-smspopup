@@ -1,4 +1,4 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -11,8 +11,15 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.everythingandroid.smspopup.ManagePreferences.Defaults;
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.R.dimen;
+import net.everythingandroid.smspopup.R.string;
+import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+import net.everythingandroid.smspopup.receiver.ExternalEventReceiver;
+import net.everythingandroid.smspopup.receiver.SmsReceiver;
+import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
+
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.ComponentName;
@@ -128,9 +135,9 @@ public class SmsPopupUtils {
    * Class to hold contact lookup info (as of Android 2.0+ we need the id and lookup key)
    */
   public static class ContactIdentification {
-    String contactId = null;
-    String contactLookup = null;
-    String contactName = null;
+    public String contactId = null;
+    public String contactLookup = null;
+    public String contactName = null;
 
     public ContactIdentification(String _contactId, String _contactLookup, String _contactName) {
       contactId = _contactId;

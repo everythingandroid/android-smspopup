@@ -1,7 +1,13 @@
-package net.everythingandroid.smspopup;
+package net.everythingandroid.smspopup.ui;
 
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.R.id;
+import net.everythingandroid.smspopup.R.layout;
+import net.everythingandroid.smspopup.R.string;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
+import net.everythingandroid.smspopup.util.Log;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -231,7 +237,7 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
 
       // Now create an array adapter and set it to display using our row
       SimpleCursorAdapter mCursorAdapter =
-        new SimpleCursorAdapter(this, R.layout.list_view, c, from, to);
+        new SimpleCursorAdapter(this, R.layout.simple_list_item_1_medium, c, from, to);
 
       setListAdapter(mCursorAdapter);
     }

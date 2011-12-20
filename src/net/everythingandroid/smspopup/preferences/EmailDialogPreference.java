@@ -1,7 +1,8 @@
 package net.everythingandroid.smspopup.preferences;
 
 import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.SmsPopupUtils;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.preference.DialogPreference;
