@@ -1,7 +1,7 @@
 package net.everythingandroid.smspopup.preferences;
 
 import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.receiver.ReminderReceiver;
+import net.everythingandroid.smspopup.service.ReminderService;
 import net.everythingandroid.smspopup.util.ManageNotification;
 
 import android.app.AlertDialog;
@@ -39,7 +39,7 @@ public class DialogCheckBoxPreference extends CheckBoxPreference {
         .show();
     } else {
       ManageNotification.clearAll(context);
-      ReminderReceiver.cancelReminder(context);
+      ReminderService.cancelReminder(context);
     }
   }
 }

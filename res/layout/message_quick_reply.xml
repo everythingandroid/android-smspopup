@@ -18,7 +18,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="5dp"
-            android:layout_weight="1"
             android:ellipsize="marquee"
             android:lines="1"
             android:text="@string/quickreply_from_text"
@@ -78,40 +77,50 @@
     </LinearLayout>
 
     <LinearLayout
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="fill_parent"
+        android:id="@+id/buttonPanel"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:divider="?android:attr/dividerHorizontal"
+        android:dividerPadding="0dip"
+        android:orientation="vertical"
+        android:showDividers="beginning" >
 
-        <ImageButton
-            android:id="@+id/SpeechRecogButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
+        <LinearLayout
+            style="@style/ButtonBar"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_weight="1"
-            android:scaleType="center"
-            android:src="@android:drawable/ic_btn_speak_now" />
+            android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/PresetMessagesButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_weight="1"
-            android:maxLines="2"
-            android:text="@string/quickreply_preset_button" />
+            <ImageButton
+                android:id="@+id/SpeechRecogButton"
+                style="@style/ButtonBarButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:scaleType="center"
+                android:src="@android:drawable/ic_btn_speak_now" />
 
-        <Button
-            android:id="@+id/CancelButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:maxLines="2"
-            android:text="@android:string/cancel" />
+            <Button
+                android:id="@+id/PresetMessagesButton"
+                style="@style/ButtonBarButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:maxLines="2"
+                android:text="@string/quickreply_preset_button" />
+
+            <Button
+                android:id="@+id/CancelButton"
+                style="@style/ButtonBarButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:maxLines="2"
+                android:text="@android:string/cancel" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

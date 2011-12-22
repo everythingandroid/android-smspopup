@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.R.array;
-import net.everythingandroid.smspopup.R.id;
-import net.everythingandroid.smspopup.R.layout;
-import net.everythingandroid.smspopup.R.string;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.controls.SmsPopupPager;
 import net.everythingandroid.smspopup.controls.SmsPopupPager.MessageCountChanged;
@@ -15,7 +11,7 @@ import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
 import net.everythingandroid.smspopup.receiver.ClearAllReceiver;
-import net.everythingandroid.smspopup.receiver.ReminderReceiver;
+import net.everythingandroid.smspopup.service.ReminderService;
 import net.everythingandroid.smspopup.service.SmsPopupUtilsService;
 import net.everythingandroid.smspopup.util.Eula;
 import net.everythingandroid.smspopup.util.Log;
@@ -72,6 +68,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.viewpagerindicator.CirclePageIndicator;
 
 public class SmsPopupActivity extends Activity {
@@ -426,7 +423,7 @@ public class SmsPopupActivity extends Activity {
       smsPopupPager.getActiveMessage().updateReminderCount(0);
 
       // Schedule a reminder notification
-      ReminderReceiver.scheduleReminder(getApplicationContext(), smsPopupPager.getActiveMessage());
+      ReminderService.scheduleReminder(getApplicationContext(), smsPopupPager.getActiveMessage());
 
       // Run the notification
       ManageNotification.show(getApplicationContext(), smsPopupPager.getActiveMessage());
@@ -462,11 +459,11 @@ public class SmsPopupActivity extends Activity {
       }
 
       // Start the service
-      SmsPopupUtilsService.beginStartingService(SmsPopupActivity.this.getApplicationContext(), i);
+      WakefulIntentService.sendWakefulWork(getApplicationContext(), i);
     }
 
     // Cancel any reminder notifications
-    ReminderReceiver.cancelReminder(getApplicationContext());
+    ReminderService.cancelReminder(getApplicationContext());
 
     // Finish up the activity
     finish();
@@ -571,6 +568,7 @@ public class SmsPopupActivity extends Activity {
           .setTitle(getString(R.string.pref_show_delete_button_dialog_title))
           .setMessage(getString(R.string.pref_show_delete_button_dialog_text))
           .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialog, int whichButton) {
               deleteMessage();
             }
@@ -591,6 +589,7 @@ public class SmsPopupActivity extends Activity {
           .findViewById(R.id.SpeechRecogButton);
 
       voiceRecognitionButton.setOnClickListener(new OnClickListener() {
+        @Override
         public void onClick(View view) {
           final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
           intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -607,7 +606,8 @@ public class SmsPopupActivity extends Activity {
             // quick replies without unlock anyway)
             exitingKeyguardSecurely = true;
             ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
-              public void LaunchOnKeyguardExitSuccess() {
+              @Override
+            public void LaunchOnKeyguardExitSuccess() {
                 SmsPopupActivity.this
                     .startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
               }
@@ -622,6 +622,7 @@ public class SmsPopupActivity extends Activity {
 
       qrEditText.addTextChangedListener(new QmTextWatcher(this, qrCounterTextView, qrSendButton));
       qrEditText.setOnEditorActionListener(new OnEditorActionListener() {
+        @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
           // event != null means enter key pressed
@@ -659,6 +660,7 @@ public class SmsPopupActivity extends Activity {
           qrSendButton);
 
       qrSendButton.setOnClickListener(new OnClickListener() {
+        @Override
         public void onClick(View v) {
           sendQuickReply(qrEditText.getText().toString());
         }
@@ -674,6 +676,7 @@ public class SmsPopupActivity extends Activity {
       // Preset messages button
       Button presetButton = (Button) qrLayout.findViewById(R.id.PresetMessagesButton);
       presetButton.setOnClickListener(new OnClickListener() {
+        @Override
         public void onClick(View v) {
           showDialog(DIALOG_PRESET_MSG);
         }
@@ -682,6 +685,7 @@ public class SmsPopupActivity extends Activity {
       // Cancel button
       Button cancelButton = (Button) qrLayout.findViewById(R.id.CancelButton);
       cancelButton.setOnClickListener(new OnClickListener() {
+        @Override
         public void onClick(View v) {
           if (qrAlertDialog != null) {
             hideSoftKeyboard();
@@ -695,6 +699,7 @@ public class SmsPopupActivity extends Activity {
       qrAlertDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
       qrAlertDialog.setOnDismissListener(new OnDismissListener() {
+        @Override
         public void onDismiss(DialogInterface dialog) {
           if (Log.DEBUG)
             Log.v("Quick Reply Dialog: onDissmiss()");
@@ -729,6 +734,7 @@ public class SmsPopupActivity extends Activity {
           .setIcon(android.R.drawable.ic_dialog_email)
           .setTitle(R.string.pref_message_presets_title)
           .setOnCancelListener(new OnCancelListener() {
+            @Override
             public void onCancel(DialogInterface dialog) {
               showDialog(DIALOG_QUICKREPLY);
             }
@@ -738,7 +744,8 @@ public class SmsPopupActivity extends Activity {
       if (mCursor != null && mCursor.getCount() > 0) {
 
         mDialogBuilder.setCursor(mCursor, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int item) {
+          @Override
+        public void onClick(DialogInterface dialog, int item) {
             if (Log.DEBUG)
               Log.v("Item clicked = " + item);
             mCursor.moveToPosition(item);
@@ -750,7 +757,8 @@ public class SmsPopupActivity extends Activity {
                 new MatrixCursor(new String[] { QuickMessages._ID, QuickMessages.QUICKMESSAGE });
         emptyCursor.addRow(new String[] { "0", getString(R.string.message_presets_empty_text) });
         mDialogBuilder.setCursor(emptyCursor, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int item) {
+          @Override
+        public void onClick(DialogInterface dialog, int item) {
             // startActivity(new Intent(
             // SmsPopupActivity.this.getApplicationContext(),
             // net.everythingandroid.smspopup.ConfigPresetMessagesActivity.class));
@@ -783,7 +791,7 @@ public class SmsPopupActivity extends Activity {
     // User interacted so remove all locks and cancel reminders
     ClearAllReceiver.removeCancel(getApplicationContext());
     ClearAllReceiver.clearAll(false);
-    ReminderReceiver.cancelReminder(getApplicationContext());
+    ReminderService.cancelReminder(getApplicationContext());
 
     switch (id) {
     case DIALOG_QUICKREPLY:
@@ -903,6 +911,7 @@ public class SmsPopupActivity extends Activity {
 
   // The Android text-to-speech library OnInitListener (via wrapper class)
   private final OnInitListener androidTtsListener = new OnInitListener() {
+    @Override
     public void onInit(int status) {
       if (mProgressDialog != null) {
         mProgressDialog.dismiss();
@@ -938,7 +947,7 @@ public class SmsPopupActivity extends Activity {
       // User interacted so remove all locks and cancel reminders
       ClearAllReceiver.removeCancel(getApplicationContext());
       ClearAllReceiver.clearAll(false);
-      ReminderReceiver.cancelReminder(getApplicationContext());
+      ReminderService.cancelReminder(getApplicationContext());
 
       // We'll use update notification to stop the sound playing
       ManageNotification.update(getApplicationContext(), smsPopupPager.getActiveMessage());
@@ -965,7 +974,7 @@ public class SmsPopupActivity extends Activity {
     i.setAction(SmsPopupUtilsService.ACTION_MARK_MESSAGE_READ);
     // i.setAction(SmsPopupUtilsService.ACTION_MARK_THREAD_READ);
     i.putExtras(smsPopupPager.getActiveMessage().toBundle());
-    SmsPopupUtilsService.beginStartingService(getApplicationContext(), i);
+    WakefulIntentService.sendWakefulWork(getApplicationContext(), i);
     // }
 
     removeActiveMessage();
@@ -977,7 +986,8 @@ public class SmsPopupActivity extends Activity {
   private void replyToMessage(final boolean replyToThread) {
     exitingKeyguardSecurely = true;
     ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
-      public void LaunchOnKeyguardExitSuccess() {
+      @Override
+    public void LaunchOnKeyguardExitSuccess() {
         Intent reply = smsPopupPager.getActiveMessage().getReplyIntent(replyToThread);
         SmsPopupActivity.this.getApplicationContext().startActivity(reply);
         replying = true;
@@ -997,7 +1007,8 @@ public class SmsPopupActivity extends Activity {
   private void viewMessage() {
     exitingKeyguardSecurely = true;
     ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
-      public void LaunchOnKeyguardExitSuccess() {
+      @Override
+    public void LaunchOnKeyguardExitSuccess() {
         // Yet another fix for the View button in privacy mode :(
         // This will remotely call refreshPrivacy in case the user
         // doesn't have
@@ -1005,7 +1016,8 @@ public class SmsPopupActivity extends Activity {
         // therefore
         // the popup will not come out of privacy mode)
         runOnUiThread(new Runnable() {
-          public void run() {
+          @Override
+        public void run() {
             // force message view this time!
             // refreshPrivacy(true);
 
@@ -1022,7 +1034,8 @@ public class SmsPopupActivity extends Activity {
   private void gotoInbox() {
     exitingKeyguardSecurely = true;
     ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
-      public void LaunchOnKeyguardExitSuccess() {
+      @Override
+    public void LaunchOnKeyguardExitSuccess() {
         Intent i = SmsPopupUtils.getSmsInboxIntent();
         SmsPopupActivity.this.getApplicationContext().startActivity(i);
         inbox = true;
@@ -1038,8 +1051,7 @@ public class SmsPopupActivity extends Activity {
     Intent i = new Intent(SmsPopupActivity.this.getApplicationContext(), SmsPopupUtilsService.class);
     i.setAction(SmsPopupUtilsService.ACTION_DELETE_MESSAGE);
     i.putExtras(smsPopupPager.getActiveMessage().toBundle());
-    SmsPopupUtilsService.beginStartingService(SmsPopupActivity.this.getApplicationContext(), i);
-
+    WakefulIntentService.sendWakefulWork(getApplicationContext(), i);
     removeActiveMessage();
   }
 
@@ -1057,7 +1069,7 @@ public class SmsPopupActivity extends Activity {
         i.putExtra(SmsMmsMessage.EXTRAS_QUICKREPLY, quickReplyMessage);
         if (Log.DEBUG)
           Log.v("Sending message to " + quickReplySmsMessage.getContactName());
-        SmsPopupUtilsService.beginStartingService(SmsPopupActivity.this.getApplicationContext(), i);
+        WakefulIntentService.sendWakefulWork(getApplicationContext(), i);        
         ManageNotification.clearAll(this);
         Toast.makeText(this, R.string.quickreply_sending_toast, Toast.LENGTH_LONG).show();
         removeActiveMessage();
@@ -1206,6 +1218,7 @@ public class SmsPopupActivity extends Activity {
       }
     }
 
+    @Override
     public void onClick(View v) {
       switch (buttonId) {
       case ButtonListPreference.BUTTON_DISABLED: // Disabled
