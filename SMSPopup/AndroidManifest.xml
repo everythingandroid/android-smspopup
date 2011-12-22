@@ -99,7 +99,7 @@
 
         <service android:name=".service.SmsPopupUtilsService" />
         <service android:name=".service.SmsReceiverService" />
-        <service android:name=".service.ReminderReceiverService" />
+        <service android:name=".service.ReminderService" />
         <service android:name=".service.SmsMonitorService" />
 
         <provider

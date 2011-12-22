@@ -3,11 +3,9 @@ package net.everythingandroid.smspopup.service;
 import java.util.List;
 
 import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.R.string;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.receiver.ExternalEventReceiver;
-import net.everythingandroid.smspopup.receiver.ReminderReceiver;
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageKeyguard;
 import net.everythingandroid.smspopup.util.ManageNotification;
@@ -212,7 +210,7 @@ public class SmsReceiverService extends Service {
 
       if (Log.DEBUG) Log.v("^^^^^^Not showing SMS Popup, using notifications");
       ManageNotification.show(context, message);
-      ReminderReceiver.scheduleReminder(context, message);
+      ReminderService.scheduleReminder(context, message);
 
     }
   }
