@@ -5,7 +5,7 @@
 
     <style name="ButtonBar" parent="@android:style/Holo.ButtonBar.AlertDialog"></style>
 
-    <style name="ButtonBarButton" parent="@android:style/Widget.Holo.Button.Borderless"></style>
+    <style name="ButtonBarButton" parent="@android:style/Widget.Holo.Button.Borderless.Small"></style>
 
     <style name="NotificationIconPreferenceListItem" parent="@android:style/TextAppearance.Large"></style>
 

@@ -4,8 +4,11 @@
     <style name="DialogTheme" parent="android:Theme.Dialog"></style>
 
     <style name="ButtonBar">
-        <item name="android:background">@android:color/darker_gray</item>
-        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingTop">5dip</item>
+        <item name="android:paddingLeft">4dip</item>
+        <item name="android:paddingRight">4dip</item>
+        <item name="android:paddingBottom">1dip</item>
+        <item name="android:background">@android:drawable/bottom_bar</item>
     </style>
 
     <style name="ButtonBarButton"></style>
