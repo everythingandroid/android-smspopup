@@ -3,7 +3,6 @@ package net.everythingandroid.smspopup.provider;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
 import net.everythingandroid.smspopup.util.Log;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -20,7 +19,8 @@ public class SmsPopupDatabase extends SQLiteOpenHelper {
     // Table creation sql statement
     private static final String CONTACTS_DB_CREATE =
         "create table " + CONTACTS_DB_TABLE + " (" +
-        ContactNotifications._ID                    + " integer primary key, " +
+        ContactNotifications._ID                    + " integer primary key autoincrement, " +
+        ContactNotifications.CONTACT_LOOKUPKEY      + " text, " +
         ContactNotifications.CONTACT_NAME           + " text default 'Unknown', " +
         ContactNotifications.ENABLED                + " integer default 1, " +
         ContactNotifications.POPUP_ENABLED          + " integer default 1, " +
@@ -35,8 +35,13 @@ public class SmsPopupDatabase extends SQLiteOpenHelper {
         ContactNotifications.LED_PATTERN_CUSTOM     + " text null, " +
         ContactNotifications.LED_COLOR              + " text default 'Yellow', " +
         ContactNotifications.LED_COLOR_CUSTOM       + " text null, " +
-        ContactNotifications.SUMMARY                + " text default 'Default notifications' " +
+        ContactNotifications.SUMMARY                + " text default 'Default notifications', " +
+        "UNIQUE (" + ContactNotifications.CONTACT_LOOKUPKEY + ") ON CONFLICT IGNORE" +
         ");";
+    
+    private static final String CONTACTS_DB_INDEX_CREATE = 
+            "create index lookup_idx ON " + CONTACTS_DB_TABLE + 
+            "(" + ContactNotifications.CONTACT_LOOKUPKEY + ");";
 
     // Table creation sql statement
     private static final String QUICKMESSAGES_DB_CREATE =
@@ -54,6 +59,7 @@ public class SmsPopupDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         if (Log.DEBUG) Log.v("SmsPopupDatabase: Creating Database");
         db.execSQL(CONTACTS_DB_CREATE);
+        db.execSQL(CONTACTS_DB_INDEX_CREATE);
         db.execSQL(QUICKMESSAGES_DB_CREATE);
     }
 
