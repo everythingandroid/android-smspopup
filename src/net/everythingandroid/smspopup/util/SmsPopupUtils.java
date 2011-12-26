@@ -12,14 +12,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.R.dimen;
-import net.everythingandroid.smspopup.R.string;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.receiver.ExternalEventReceiver;
 import net.everythingandroid.smspopup.receiver.SmsReceiver;
 import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
-
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.ComponentName;
@@ -130,6 +127,47 @@ public class SmsPopupUtils {
 
     return null;
   }
+  
+  /**
+   * Looks up a contacts display name by contact id - if not found, the address
+   * (phone number) will be formatted and returned instead.
+   */
+  public static String getPersonNameByLookup(Context context, String lookupKey, String address) {
+
+    // Check for id, if null return the formatting phone number as the name
+    if (lookupKey == null) {
+      if (address != null) {
+        return PhoneNumberUtils.formatNumber(address);
+      } else {
+        return null;
+      }
+    }
+
+    Cursor cursor = context.getContentResolver().query(
+        Uri.withAppendedPath(Contacts.CONTENT_LOOKUP_URI, lookupKey),
+        new String[] { Contacts.DISPLAY_NAME },
+        null, null, null);
+
+    if (cursor != null) {
+      try {
+        if (cursor.getCount() > 0) {
+          cursor.moveToFirst();
+          String name = cursor.getString(0);
+          if (Log.DEBUG) Log.v("Contact Display Name: " + name);
+          return name;
+        }
+      } finally {
+        cursor.close();
+      }
+    }
+
+    if (address != null) {
+      return PhoneNumberUtils.formatNumber(address);
+    }
+
+    return null;
+  }
+
 
   /*
    * Class to hold contact lookup info (as of Android 2.0+ we need the id and lookup key)
@@ -150,7 +188,7 @@ public class SmsPopupUtils {
    * Looks up a contacts id, given their address (phone number in this case).
    * Returns null if not found
    */
-  synchronized public static ContactIdentification getPersonIdFromPhoneNumber(Context context, String address) {
+  public static ContactIdentification getPersonIdFromPhoneNumber(Context context, String address) {
     if (address == null) return null;
 
     Cursor cursor = context.getContentResolver().query(
@@ -181,7 +219,7 @@ public class SmsPopupUtils {
    * Looks up a contacts id, given their email address.
    * Returns null if not found
    */
-  synchronized public static ContactIdentification getPersonIdFromEmail(Context context, String email) {
+  public static ContactIdentification getPersonIdFromEmail(Context context, String email) {
     if (email == null) return null;
 
     Cursor cursor = null;

@@ -3,7 +3,6 @@ package net.everythingandroid.smspopup.provider;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
 import net.everythingandroid.smspopup.util.Log;
-
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,6 +16,7 @@ public class SmsPopupContentProvider extends ContentProvider {
 
     private static final int CONTACTS = 100;
     private static final int CONTACTS_ID = 101;
+    private static final int CONTACTS_LOOKUP = 102;
     private static final int QUICKMESSAGES = 200;
     private static final int QUICKMESSAGES_ID = 201;
 
@@ -28,9 +28,11 @@ public class SmsPopupContentProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = SmsPopupContract.CONTENT_AUTHORITY;
         final String contactsPath = SmsPopupContract.PATH_CONTACTS;
+        final String contactsLookupPath = SmsPopupContract.PATH_CONTACTS_LOOKUP;
         final String quickMessagesPath = SmsPopupContract.PATH_QUICKMESSAGES;
         matcher.addURI(authority, contactsPath, CONTACTS);
         matcher.addURI(authority, contactsPath + "/*", CONTACTS_ID);
+        matcher.addURI(authority, contactsLookupPath + "/*", CONTACTS_LOOKUP);
         matcher.addURI(authority, quickMessagesPath, QUICKMESSAGES);
         matcher.addURI(authority, quickMessagesPath + "/*", QUICKMESSAGES_ID);
 
@@ -49,9 +51,8 @@ public class SmsPopupContentProvider extends ContentProvider {
         case CONTACTS_ID:
             final String contactSelection = ContactNotifications._ID + " = ?";
             final String[] contactSelectionArgs = { ContactNotifications.getContactId(uri) };
-            count =
-                    db.delete(SmsPopupDatabase.CONTACTS_DB_TABLE, contactSelection,
-                            contactSelectionArgs);
+            count = db.delete(
+                    SmsPopupDatabase.CONTACTS_DB_TABLE, contactSelection, contactSelectionArgs);
             break;
         case QUICKMESSAGES:
             count = db.delete(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, selection, selectionArgs);
@@ -59,8 +60,8 @@ public class SmsPopupContentProvider extends ContentProvider {
         case QUICKMESSAGES_ID:
             final String qmSelection = QuickMessages._ID + " = ?";
             final String[] qmSelectionArgs = { QuickMessages.getQuickMessageId(uri) };
-            count =
-                    db.delete(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, qmSelection, qmSelectionArgs);
+            count = db.delete(
+                    SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, qmSelection, qmSelectionArgs);
             break;
         default:
             throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -93,22 +94,25 @@ public class SmsPopupContentProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = uriMatcher.match(uri);
         Uri newUri = null;
+        final long id;
         switch (match) {
         case CONTACTS:
-            db.insertOrThrow(SmsPopupDatabase.CONTACTS_DB_TABLE, null, values);
-            newUri =
-                    ContactNotifications.buildContactUri(values
-                            .getAsString(ContactNotifications._ID));
+            id = db.insertOrThrow(SmsPopupDatabase.CONTACTS_DB_TABLE, null, values);
+            newUri = ContactNotifications.buildContactUri(String.valueOf(id));
             updateContactNotificationSummary(newUri);
             break;
         case QUICKMESSAGES:
-            db.insertOrThrow(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, null, values);
-            newUri = QuickMessages.buildQuickMessageUri(QuickMessages._ID);
+            id = db.insertOrThrow(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, null, values);
+            newUri = QuickMessages.buildQuickMessageUri(String.valueOf(id));
             break;
         default:
             throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-
+        
+        if (id == -1) {
+            return null;
+        }
+        
         getContext().getContentResolver().notifyChange(newUri, null);
 
         return newUri;
@@ -135,6 +139,12 @@ public class SmsPopupContentProvider extends ContentProvider {
             sqlBuilder.setTables(SmsPopupDatabase.CONTACTS_DB_TABLE);
             sqlBuilder.appendWhere(
                     ContactNotifications._ID + " = " + ContactNotifications.getContactId(uri));
+            break;
+        case CONTACTS_LOOKUP:
+            sqlBuilder.setTables(SmsPopupDatabase.CONTACTS_DB_TABLE);
+            sqlBuilder.appendWhere(
+                    ContactNotifications.CONTACT_LOOKUPKEY + " = '" + 
+                            ContactNotifications.getLookupKey(uri) + "'");
             break;
         case QUICKMESSAGES:
             sqlBuilder.setTables(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE);

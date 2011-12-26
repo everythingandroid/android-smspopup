@@ -1,10 +1,6 @@
 package net.everythingandroid.smspopup.ui;
 
 import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.R.id;
-import net.everythingandroid.smspopup.R.menu;
-import net.everythingandroid.smspopup.R.string;
-import net.everythingandroid.smspopup.R.xml;
 import net.everythingandroid.smspopup.preferences.CustomLEDColorListPreference;
 import net.everythingandroid.smspopup.preferences.CustomLEDPatternListPreference;
 import net.everythingandroid.smspopup.preferences.CustomVibrateListPreference;
@@ -13,7 +9,6 @@ import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotificat
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageNotification;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
-
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -32,10 +27,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class ConfigContactActivity extends PreferenceActivity {
-    private String contactId;
+    private String rowId;
     private RingtonePreference ringtonePref;
     public static final String EXTRA_CONTACT_ID =
             "net.everythingandroid.smspopuppro.EXTRA_CONTACT_ID";
+    public static final String EXTRA_CONTACT_URI =
+            "net.everythingandroid.smspopuppro.EXTRA_CONTACT_URI";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +41,7 @@ public class ConfigContactActivity extends PreferenceActivity {
             Log.v("SMSPopupConfigPerContactActivity: onCreate()");
 
         // Create and setup preferences
-        createOrFetchPreferences();
+        createOrFetchContactPreferences();
     }
 
     @Override
@@ -64,53 +61,36 @@ public class ConfigContactActivity extends PreferenceActivity {
         }
     }
 
-    private void createOrFetchPreferences() {
-        // Ensure contactId was passed, if not, fire up an intent to choose a contact (add)
-        contactId = String.valueOf(getIntent().getLongExtra(EXTRA_CONTACT_ID, 0));
+    private void createOrFetchContactPreferences() {
 
-        if ("0".equals(contactId)) {
-            if (Log.DEBUG)
-                Log.v("contactId passed to intent is bad");
-            finish();
+        // This Uri can be built by either ContactNotifications.buildContactUri() or
+        // ContactNotifications.buildLookupUri().
+        final Uri contactNotificationsUri = getIntent().getParcelableExtra(EXTRA_CONTACT_URI);
+
+        Cursor c = getContentResolver().query(contactNotificationsUri, null, null, null, null);
+
+        if (c == null || c.getCount() == 0) {
+            c = createContact(contactNotificationsUri);
         }
 
-        if (Log.DEBUG)
-            Log.v("contactId = " + contactId);
-
-        // Fetch the current user settings from the database
-        Cursor contact = getContentResolver().query(
-                ContactNotifications.buildContactUri(contactId), null, null, null, null);
-
-        if (contact == null) {
-            if (Log.DEBUG)
-                Log.v("Error fetching contact");
+        if (c == null || c.getCount() != 1) {
             finish();
-        }
-
-        // If the contact is not yet in our db ...
-        if (contact.getCount() == 0) {
-            createContact(contactId);
-            contact = getContentResolver().query(
-                    ContactNotifications.buildContactUri(contactId), null, null, null, null);
-            if (contact == null) {
-                if (Log.DEBUG)
-                    Log.v("Error creating contact");
-                finish();
-            }
+            return;
         }
 
         // Let Activity manage the cursor
-        startManagingCursor(contact);
+        startManagingCursor(c);
 
         // Retrieve preferences from database
-        retrievePreferences(contact);
+        retrievePreferences(c);
 
         // Add preference layout from XML
         addPreferencesFromResource(R.xml.configcontact);
 
         // Customize Activity title + main notif enabled preference summaries
-        String contactName = 
-                contact.getString(contact.getColumnIndex(ContactNotifications.CONTACT_NAME));
+        String contactName =
+                c.getString(c.getColumnIndex(ContactNotifications.CONTACT_NAME));
+
         if (SmsPopupUtils.isHoneycomb()) {
             setTitle(contactName);
         } else {
@@ -135,14 +115,11 @@ public class ConfigContactActivity extends PreferenceActivity {
         ringtonePref =
                 (RingtonePreference) findPreference(getString(R.string.c_pref_notif_sound_key));
         ringtonePref.setOnPreferenceChangeListener(onPrefChangeListener);
-        // Uri ringtoneUri = Uri.parse(contact.getString(SmsPopupDbAdapter.KEY_RINGTONE_NUM));
-        // Ringtone mRingtone = RingtoneManager.getRingtone(this, ringtoneUri);
-        // ringtonePref.setSummary(mRingtone.getTitle(this));
 
         TestNotificationDialogPreference testPref =
                 (TestNotificationDialogPreference) findPreference(
-                        getString(R.string.c_pref_notif_test_key));
-        testPref.setContactId(contact.getLong(contact.getColumnIndex(ContactNotifications._ID)));
+                getString(R.string.c_pref_notif_test_key));
+        testPref.setContactId(c.getLong(c.getColumnIndex(ContactNotifications._ID)));
 
         /*
          * Vibrate Prefs
@@ -153,9 +130,9 @@ public class ConfigContactActivity extends PreferenceActivity {
 
         CustomVibrateListPreference vibratePatternPref =
                 (CustomVibrateListPreference) findPreference(
-                        getString(R.string.c_pref_vibrate_pattern_key));
+                getString(R.string.c_pref_vibrate_pattern_key));
         vibratePatternPref.setOnPreferenceChangeListener(onPrefChangeListener);
-        vibratePatternPref.setContactId(contactId);
+        vibratePatternPref.setContactId(rowId);
 
         /*
          * LED Prefs
@@ -166,16 +143,15 @@ public class ConfigContactActivity extends PreferenceActivity {
 
         CustomLEDColorListPreference ledColorPref =
                 (CustomLEDColorListPreference) findPreference(
-                        getString(R.string.c_pref_flashled_color_key));
+                getString(R.string.c_pref_flashled_color_key));
         ledColorPref.setOnPreferenceChangeListener(onPrefChangeListener);
-        ledColorPref.setContactId(contactId);
+        ledColorPref.setContactId(rowId);
 
         CustomLEDPatternListPreference ledPatternPref =
                 (CustomLEDPatternListPreference) findPreference(
-                        getString(R.string.c_pref_flashled_pattern_key));
+                getString(R.string.c_pref_flashled_pattern_key));
         ledPatternPref.setOnPreferenceChangeListener(onPrefChangeListener);
-        ledPatternPref.setContactId(contactId);
-
+        ledPatternPref.setContactId(rowId);
     }
 
     /*
@@ -232,7 +208,7 @@ public class ConfigContactActivity extends PreferenceActivity {
         }
 
         int rows = getContentResolver().update(
-                ContactNotifications.buildContactUri(contactId), vals, null, null);
+                ContactNotifications.buildContactUri(rowId), vals, null, null);
         return rows == 1 ? true : false;
     }
 
@@ -240,15 +216,13 @@ public class ConfigContactActivity extends PreferenceActivity {
      * Retrieve all preferences from the database into preferences
      */
     private void retrievePreferences(Cursor c) {
-        if (c == null) {
-            return;
-        }
-
-        if (c.getCount() == 0) {
+        if (c == null || c.getCount() != 1) {
             return;
         }
 
         c.moveToFirst();
+
+        rowId = String.valueOf(c.getLong(c.getColumnIndexOrThrow(ContactNotifications._ID)));
 
         final String one = "1";
         if (Log.DEBUG)
@@ -311,28 +285,42 @@ public class ConfigContactActivity extends PreferenceActivity {
             finish();
             return true;
         case R.id.remove_menu_item:
-            getContentResolver()
-                    .delete(ContactNotifications.buildContactUri(contactId), null, null);
-            // mDbAdapter.deleteContact(contactId);
+            getContentResolver().delete(
+                    ContactNotifications.buildContactUri(rowId), null, null);
             finish();
             return true;
         }
         return false;
     }
 
-    private void createContact(String contactId) {
-        getIntent().putExtra(EXTRA_CONTACT_ID, contactId);
+    private Cursor createContact(String contactLookupKey) {
+        // getIntent().putExtra(EXTRA_CONTACT_ID, contactId);
 
-        String contactName = SmsPopupUtils.getPersonName(this, String.valueOf(contactId), null);
+        final String contactName =
+                SmsPopupUtils.getPersonNameByLookup(this, contactLookupKey, null);
         if (contactName == null) {
-            return;
+            return null;
         }
 
-        ContentValues vals = new ContentValues();
-        vals.put(ContactNotifications._ID, contactId);
+        final ContentValues vals = new ContentValues();
         vals.put(ContactNotifications.CONTACT_NAME, contactName.trim());
+        vals.put(ContactNotifications.CONTACT_LOOKUPKEY, contactLookupKey);
 
-        getContentResolver().insert(ContactNotifications.CONTENT_URI, vals);
+        final Uri contactUri = getContentResolver().insert(ContactNotifications.CONTENT_URI, vals);
+
+        final Cursor c = getContentResolver().query(contactUri, null, null, null, null);
+        if (c == null || c.getCount() == 0) {
+            if (Log.DEBUG)
+                Log.v("Error creating contact");
+            finish();
+        }
+
+        return c;
+
+    }
+
+    private Cursor createContact(Uri contactUri) {
+        return createContact(ContactNotifications.getLookupKey(contactUri));
     }
 
 }
