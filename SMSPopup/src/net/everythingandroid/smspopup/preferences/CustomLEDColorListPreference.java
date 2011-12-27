@@ -3,7 +3,6 @@ package net.everythingandroid.smspopup.preferences;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.util.ManagePreferences;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,7 +20,7 @@ import android.widget.Toast;
 public class CustomLEDColorListPreference extends ListPreference implements OnSeekBarChangeListener {
   private Context context;
   private ManagePreferences mPrefs = null;
-  private String contactId = null;
+  private long mRowId = 0;
   private String led_color;
   private String led_color_custom;
   private SeekBar redSeekBar;
@@ -43,8 +42,8 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
     context = c;
   }
 
-  public void setContactId(String _contactId) {
-    contactId = _contactId;
+  public void setRowId(long rowId) {
+    mRowId = rowId;
   }
 
   @Override
@@ -61,10 +60,10 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
 
   private void getPrefs() {
     if (mPrefs == null) {
-      mPrefs = new ManagePreferences(context, contactId);
+      mPrefs = new ManagePreferences(context, mRowId);
     }
 
-    if (contactId == null) { // Default notifications
+    if (mRowId == 0) { // Default notifications
       led_color = mPrefs.getString(
           R.string.pref_flashled_color_key,
           R.string.pref_flashled_color_default);
@@ -146,10 +145,10 @@ public class CustomLEDColorListPreference extends ListPreference implements OnSe
         int color = Color.rgb(red, green, blue);
 
         if (mPrefs == null) {
-          mPrefs = new ManagePreferences(context, contactId);
+          mPrefs = new ManagePreferences(context, mRowId);
         }
 
-        if (contactId == null) { // Default notifications
+        if (mRowId == 0) { // Default notifications
           mPrefs.putString(
               R.string.pref_flashled_color_custom_key,
               "#" + Integer.toHexString(color),
