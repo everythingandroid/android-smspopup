@@ -4,7 +4,6 @@ import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.util.ManageNotification;
 import net.everythingandroid.smspopup.util.ManagePreferences;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,7 +17,7 @@ import android.widget.Toast;
 public class CustomLEDPatternListPreference extends ListPreference {
   private Context context;
   private ManagePreferences mPrefs = null;
-  private String contactId = null;
+  private long mRowId = 0;
   private String flashLedPattern;
   private String flashLedPatternCustom;
   private int[] led_pattern;
@@ -33,8 +32,8 @@ public class CustomLEDPatternListPreference extends ListPreference {
     context = c;
   }
 
-  public void setContactId(String _contactId) {
-    contactId = _contactId;
+  public void setRowId(long rowId) {
+    mRowId = rowId;
   }
 
   @Override
@@ -51,10 +50,10 @@ public class CustomLEDPatternListPreference extends ListPreference {
 
   private void getPrefs() {
     if (mPrefs == null) {
-      mPrefs = new ManagePreferences(context, contactId);
+      mPrefs = new ManagePreferences(context, mRowId);
     }
 
-    if (contactId == null) { // Default notifications
+    if (mRowId == 0) { // Default notifications
       flashLedPattern = mPrefs.getString(
           R.string.pref_flashled_pattern_key,
           R.string.pref_flashled_pattern_default);
@@ -114,12 +113,12 @@ public class CustomLEDPatternListPreference extends ListPreference {
         String stringPattern = onEditText.getText() + "," + offEditText.getText();
 
         if (mPrefs == null) {
-          mPrefs = new ManagePreferences(context, contactId);
+          mPrefs = new ManagePreferences(context, mRowId);
         }
 
         if (ManageNotification.parseLEDPattern(stringPattern) != null) {
 
-          if (contactId == null) { // Default notifications
+          if (mRowId == 0) { // Default notifications
             mPrefs.putString(
                 R.string.pref_flashled_pattern_custom_key,
                 stringPattern,

@@ -98,7 +98,7 @@ public class SmsPopupContentProvider extends ContentProvider {
         switch (match) {
         case CONTACTS:
             id = db.insertOrThrow(SmsPopupDatabase.CONTACTS_DB_TABLE, null, values);
-            newUri = ContactNotifications.buildContactUri(String.valueOf(id));
+            newUri = ContactNotifications.buildContactUri(id);
             updateContactNotificationSummary(newUri);
             break;
         case QUICKMESSAGES:

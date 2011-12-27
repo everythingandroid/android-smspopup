@@ -4,6 +4,7 @@ import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
 import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -17,6 +18,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -31,12 +33,9 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
     private static final int ADD_DIALOG = Menu.FIRST;
     private static final int EDIT_DIALOG = Menu.FIRST + 1;
 
-    private static final int DIALOG_MENU_ADD_ID = Menu.FIRST;
-
     private static final int CONTEXT_MENU_DELETE_ID = Menu.FIRST;
     private static final int CONTEXT_MENU_EDIT_ID = Menu.FIRST + 1;
     private static final int CONTEXT_MENU_REORDER_ID = Menu.FIRST + 2;
-    private static ListView mListView;
 
     private static String editId;
     private EditText addQMEditText;
@@ -50,17 +49,18 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mListView = getListView();
-        registerForContextMenu(mListView);
+        registerForContextMenu(getListView());
 
-        TextView tv = new TextView(getApplicationContext());
+        TextView tv = new TextView(this);
 
         // TODO: make this look better
         tv.setText(R.string.message_presets_add);
         tv.setTextSize(22);
         tv.setPadding(10, 10, 10, 10);
 
-        mListView.addHeaderView(tv, null, true);
+        if (!SmsPopupUtils.isICS()) {
+            getListView().addHeaderView(tv, null, true);
+        }
 
         LayoutInflater factory = LayoutInflater.from(this);
 
@@ -89,7 +89,7 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        if (position == 0) { // Top item = Add
+        if (position == 0 && !SmsPopupUtils.isICS()) { // Top item = Add
             showDialog(ADD_DIALOG);
         } else {
             editId = String.valueOf(id);
@@ -102,10 +102,9 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuItem m =
-                menu.add(Menu.NONE, DIALOG_MENU_ADD_ID, Menu.NONE, R.string.message_presets_add);
-        m.setIcon(android.R.drawable.ic_menu_add);
-        return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.config_contacts, menu);
+        return true;
     }
 
     /*
@@ -114,7 +113,7 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case DIALOG_MENU_ADD_ID:
+        case R.id.add_menu_item:
             showDialog(ADD_DIALOG);
             break;
         }
@@ -248,7 +247,7 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
     private void updateEditText(String id) {
         Cursor c = getContentResolver().query(
                 QuickMessages.buildQuickMessageUri(id), null, null, null, null);
-        if (c != null) {
+        if (c != null && c.moveToFirst()) {
             CharSequence message = c.getString(c.getColumnIndexOrThrow(QuickMessages.QUICKMESSAGE));
             editQMEditText.setText(message);
             editQMEditText.setSelection(message.length());

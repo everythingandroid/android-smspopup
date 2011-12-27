@@ -52,6 +52,10 @@ public class SmsPopupContract {
         public static Uri buildContactUri(String id) {
             return CONTENT_URI.buildUpon().appendPath(id).build();
         }
+        
+        public static Uri buildContactUri(long id) {
+            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
+        }        
 
         public static String getContactId(Uri uri) {
             if (uri.getPathSegments().size() == 2) {

@@ -27,7 +27,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class ConfigContactActivity extends PreferenceActivity {
-    private String rowId;
+    private long rowId;
     private RingtonePreference ringtonePref;
     public static final String EXTRA_CONTACT_ID =
             "net.everythingandroid.smspopuppro.EXTRA_CONTACT_ID";
@@ -132,7 +132,7 @@ public class ConfigContactActivity extends PreferenceActivity {
                 (CustomVibrateListPreference) findPreference(
                 getString(R.string.c_pref_vibrate_pattern_key));
         vibratePatternPref.setOnPreferenceChangeListener(onPrefChangeListener);
-        vibratePatternPref.setContactId(rowId);
+        vibratePatternPref.setRowId(rowId);
 
         /*
          * LED Prefs
@@ -145,13 +145,13 @@ public class ConfigContactActivity extends PreferenceActivity {
                 (CustomLEDColorListPreference) findPreference(
                 getString(R.string.c_pref_flashled_color_key));
         ledColorPref.setOnPreferenceChangeListener(onPrefChangeListener);
-        ledColorPref.setContactId(rowId);
+        ledColorPref.setRowId(rowId);
 
         CustomLEDPatternListPreference ledPatternPref =
                 (CustomLEDPatternListPreference) findPreference(
                 getString(R.string.c_pref_flashled_pattern_key));
         ledPatternPref.setOnPreferenceChangeListener(onPrefChangeListener);
-        ledPatternPref.setContactId(rowId);
+        ledPatternPref.setRowId(rowId);
     }
 
     /*
@@ -222,7 +222,7 @@ public class ConfigContactActivity extends PreferenceActivity {
 
         c.moveToFirst();
 
-        rowId = String.valueOf(c.getLong(c.getColumnIndexOrThrow(ContactNotifications._ID)));
+        rowId = c.getLong(c.getColumnIndexOrThrow(ContactNotifications._ID));
 
         final String one = "1";
         if (Log.DEBUG)
@@ -274,7 +274,7 @@ public class ConfigContactActivity extends PreferenceActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.config_contact_menu, menu);
+        inflater.inflate(R.menu.config_contact, menu);
         return true;
     }
 

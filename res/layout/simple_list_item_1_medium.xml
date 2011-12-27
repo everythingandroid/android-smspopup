@@ -6,5 +6,5 @@
     android:ellipsize="marquee"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:paddingLeft="6dp"
+    android:paddingLeft="10dp"
     android:textAppearance="?android:attr/textAppearanceMedium" />

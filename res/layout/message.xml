@@ -11,20 +11,23 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left" >
 
-        <ImageView
-            android:id="@+id/FromImageView"
+        <QuickContactBadge
+            android:id="@+id/ContactBadge"
             android:layout_width="@dimen/contact_thumbnail_size"
             android:layout_height="@dimen/contact_thumbnail_size"
             android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:scaleType="center"
-            android:src="@android:drawable/ic_dialog_info" />
+            android:layout_margin="@dimen/contact_thumbnail_margin"
+            android:clickable="false"
+            android:scaleType="fitCenter"
+            android:background="@drawable/quickcontact_badge_small"
+            android:src="@drawable/ic_contact_picture" />
 
         <LinearLayout
             android:id="@+id/FromTextLinearLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="4dp"
             android:orientation="vertical"
             android:padding="4dp" >
 
@@ -42,11 +45,11 @@
                 android:textColorLink="?android:attr/textColorPrimaryDisableOnly" />
 
             <TextView
-                android:id="@+id/HeaderTextView"
+                android:id="@+id/TimestampTextView"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="2dp"
-                android:text="@string/new_text_at"
+                android:text="Timestamp here"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?android:attr/textColorPrimaryDisableOnly" />
         </LinearLayout>
