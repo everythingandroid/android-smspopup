@@ -78,6 +78,23 @@ public class ConfigContactsActivity extends FragmentActivity {
             break;
         }
     }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.config_contacts, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.add_menu_item:
+            startContactPicker();
+            break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void startContactPicker() {
         startActivityForResult(
@@ -101,16 +118,16 @@ public class ConfigContactsActivity extends FragmentActivity {
      * 
      * @return the intent that can be started
      */
-    private static Intent getConfigPerContactIntent(Context context, long contactId) {
+    private static Intent getConfigPerContactIntent(Context context, long rowId) {
         Intent i = getConfigPerContactIntent(context);
         i.putExtra(ConfigContactActivity.EXTRA_CONTACT_URI, 
-                ContactNotifications.buildContactUri(String.valueOf(contactId)));
+                ContactNotifications.buildContactUri(rowId));
         return i;
     }
     
-    private static Intent getConfigPerContactIntent(Context context, Uri contactUri) {
+    private static Intent getConfigPerContactIntent(Context context, Uri uri) {
         Intent i = getConfigPerContactIntent(context);
-        i.putExtra(ConfigContactActivity.EXTRA_CONTACT_URI, contactUri);
+        i.putExtra(ConfigContactActivity.EXTRA_CONTACT_URI, uri);
         return i;
     }    
 
@@ -282,8 +299,6 @@ public class ConfigContactsActivity extends FragmentActivity {
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
-            setHasOptionsMenu(true);
-
             final String[] from =
                     new String[] { ContactNotifications.CONTACT_NAME, ContactNotifications.SUMMARY };
             final int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
@@ -301,8 +316,7 @@ public class ConfigContactsActivity extends FragmentActivity {
         public boolean onContextItemSelected(MenuItem item) {
             AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 
-            if (Log.DEBUG)
-                Log.v("onContextItemSelected()");
+            if (Log.DEBUG) Log.v("onContextItemSelected()");
 
             if (info.id != -1) {
                 switch (item.getItemId()) {
@@ -315,7 +329,7 @@ public class ConfigContactsActivity extends FragmentActivity {
                     if (Log.DEBUG)
                         Log.v("Deleting contact " + info.id);
                     getActivity().getContentResolver().delete(
-                            ContactNotifications.buildContactUri(String.valueOf(info.id)), null,
+                            ContactNotifications.buildContactUri(info.id), null,
                             null);
                     return true;
                 default:
@@ -368,22 +382,6 @@ public class ConfigContactsActivity extends FragmentActivity {
             super.onCreateContextMenu(menu, v, menuInfo);
             menu.add(0, CONTEXT_MENU_EDIT_ID, 0, R.string.contact_customization_edit);
             menu.add(0, CONTEXT_MENU_DELETE_ID, 0, R.string.contact_customization_remove);
-        }
-
-        @Override
-        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-            super.onCreateOptionsMenu(menu, inflater);
-            inflater.inflate(R.menu.config_contacts_menu, menu);            
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            switch (item.getItemId()) {
-            case R.id.add_menu_item:
-                ((ConfigContactsActivity) getActivity()).startContactPicker();
-                break;
-            }
-            return super.onOptionsItemSelected(item);
         }
 
         @Override

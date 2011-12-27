@@ -5,7 +5,6 @@ import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.SmsMessageSender;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import net.everythingandroid.smspopup.util.SmsPopupUtils.ContactIdentification;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -343,10 +342,6 @@ public class SmsMmsMessage {
 
     public CharSequence getFormattedTimestamp() {
         return DateUtils.formatDateTime(context, timestamp, DateUtils.FORMAT_SHOW_TIME);
-    }
-
-    public String getFromAddress() {
-        return fromAddress;
     }
 
     public String getContactName() {

@@ -2,4 +2,5 @@
 <resources>
     <dimen name="contact_thumbnail_size">80dp</dimen>
     <dimen name="contact_thumbnail_border">10dp</dimen>
+    <dimen name="contact_thumbnail_margin">3dp</dimen>
 </resources>

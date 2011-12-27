@@ -87,6 +87,13 @@ public class SmsPopupUtils {
     // of the OS since they are inlined at compile time. This is guaranteed behavior.
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
   }
+  
+  public static boolean isICS() {
+    // Can use static final constants like ICS, declared in later versions
+    // of the OS since they are inlined at compile time. This is guaranteed behavior.
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+  }
+  
 
   /**
    * Looks up a contacts display name by contact id - if not found, the address
@@ -274,7 +281,7 @@ public class SmsPopupUtils {
     
     // Init cache
     if (bitmapCache == null) {
-      int cacheSize = bitmapCacheSize * thumbSize * thumbSize;
+      final int cacheSize = bitmapCacheSize * thumbSize * thumbSize;
       bitmapCache = new LruCache<Uri, Bitmap>(cacheSize) {
         protected int sizeOf(Uri key, Bitmap value) {
           return thumbSize * thumbSize;
@@ -297,8 +304,8 @@ public class SmsPopupUtils {
     loadContactPhoto(context, contactUri, 0, options);
 
     // Raw height and width of contact photo
-    int height = options.outHeight;
-    int width = options.outWidth;
+    final int height = options.outHeight;
+    final int width = options.outWidth;
 
     if (Log.DEBUG) Log.v("Contact photo size = " + height + "x" + width);
 
@@ -344,7 +351,7 @@ public class SmsPopupUtils {
     if (contactBitmap == null) return null;
 
     // Bitmap scaled to new height and width
-    Bitmap finalBitmap = Bitmap.createScaledBitmap(contactBitmap, newWidth, newHeight, true);
+    final Bitmap finalBitmap = Bitmap.createScaledBitmap(contactBitmap, newWidth, newHeight, true);
 
     // Add to bitmap cache
     synchronized (bitmapCache) {
@@ -357,9 +364,9 @@ public class SmsPopupUtils {
   }
 
   public static Bitmap getPersonPhoto(Context context, Uri contactUri) {
-    Resources res = context.getResources();
-    int thumbSize = (int) res.getDimension(R.dimen.contact_thumbnail_size);
-    int thumbBorder = (int) res.getDimension(R.dimen.contact_thumbnail_border);
+    final Resources res = context.getResources();
+    final int thumbSize = (int) res.getDimension(R.dimen.contact_thumbnail_size);
+    final int thumbBorder = (int) res.getDimension(R.dimen.contact_thumbnail_border);
     return getPersonPhoto(context, contactUri, thumbSize - thumbBorder);
   }
 
@@ -379,8 +386,14 @@ public class SmsPopupUtils {
       return loadPlaceholderPhoto(placeholderImageResource, context, options);
     }
 
-    InputStream stream = Contacts.openContactPhotoInputStream(context.getContentResolver(),
-        contactUri);
+    final InputStream stream;
+    if (SmsPopupUtils.isICS()) {
+        stream = Contacts.openContactPhotoInputStream(context.getContentResolver(),
+                contactUri, true);
+    } else {
+        stream = Contacts.openContactPhotoInputStream(context.getContentResolver(),
+                contactUri);
+    }
 
     Bitmap bm = stream != null ? BitmapFactory.decodeStream(stream, null, options) : null;
     if (bm == null) {
