@@ -29,7 +29,6 @@
   <string name="pref_enabled_summaryoff">SMS Popup isključen</string>
   <string name="pref_about_title">Info</string>
   <string name="pref_about_summary">O programu</string>
-  <string name="pref_about_text">Created by: Adam K\nEmail: adam\@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup is a simple application that shows a dialog when an SMS is received - turning on the screen and unlocking the keyguard if needed. It shows the most recent message, who it\'s from and the contact picture if available.\n\nFeel free to email me any comments, suggestions or bugs.\n\nGerman translation by: Feyyaz A.\nEmail: f_alingan\@hotmail.com\nWebsite: http://www.yenio.com\n\nDutch translation by: mellie\@xs4all.nl\n\nSpanish translation by: Diego Fernández\nEmail: profediego\@gmail.com\n\nRussian translation by: Artem Kavalerov\nEmail: artem.kavalerov\@gmail.com\n\nSerbian translation by: Marko Kostic\nEmail: markostic\@yahoo.com\n\nCredits to Min Tran for the app icon.\n(http://min.frexy.com)\n</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Često postavljana pitanja</string>
   <string name="pref_releasenotes_title">Šta je novo?</string>

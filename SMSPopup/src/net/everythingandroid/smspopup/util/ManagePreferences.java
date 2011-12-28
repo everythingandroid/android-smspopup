@@ -69,8 +69,7 @@ public class ManagePreferences {
             mCursor = mContext.getContentResolver().query(
                     ContactNotifications.buildContactUri(mRowId), null, null, null, null);
             if (mCursor != null && mCursor.moveToFirst()) {
-                if (Log.DEBUG)
-                    Log.v("Contact found - using database");
+                if (Log.DEBUG) Log.v("Contact found - using database");
                 useDatabase = true;
             } else {
                 mCursor = null;
@@ -98,8 +97,7 @@ public class ManagePreferences {
             mCursor = mContext.getContentResolver().query(
                     ContactNotifications.buildLookupUri(contactLookupKey), null, null, null, null);
             if (mCursor != null && mCursor.moveToFirst()) {
-                if (Log.DEBUG)
-                    Log.v("Contact found - using database");
+                if (Log.DEBUG) Log.v("Contact found - using database");
                 mRowId = mCursor.getLong(mCursor.getColumnIndexOrThrow(ContactNotifications._ID));
                 useDatabase = true;
             } else {

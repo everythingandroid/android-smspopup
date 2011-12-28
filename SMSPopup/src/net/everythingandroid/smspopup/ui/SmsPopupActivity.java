@@ -7,6 +7,7 @@ import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.controls.SmsPopupPager;
 import net.everythingandroid.smspopup.controls.SmsPopupPager.MessageCountChanged;
+import net.everythingandroid.smspopup.controls.SmsPopupView.OnReactToMessage;
 import net.everythingandroid.smspopup.controls.SmsPopupView;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
@@ -36,8 +37,10 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -203,6 +206,20 @@ public class SmsPopupActivity extends Activity {
 
         // Set privacy mode
         smsPopupPager.setPrivacy(privacyMode);
+        
+        smsPopupPager.setOnReactToMessage(new OnReactToMessage() {
+
+            @Override
+            public void onViewMessage(SmsMmsMessage message) {
+                smsPopupPager.setPrivacy(SmsPopupView.PRIVACY_MODE_OFF);
+            }
+
+            @Override
+            public void onReplyToMessage(SmsMmsMessage message) {
+                replyToMessage(message);
+            }
+            
+        });
 
         Button unlockButton = (Button) findViewById(R.id.unlockButton);
         unlockButton.setOnClickListener(new OnClickListener() {
@@ -241,24 +258,9 @@ public class SmsPopupActivity extends Activity {
             public void onChange(int current, int total) {
                 if (total == 1) {
                     pagerIndicator.setVisibility(View.GONE);
-                } else if (total == 2) {
+                } else if (total >= 2) {
                     pagerIndicator.setVisibility(View.VISIBLE);
                 }
-
-                // // Set middle button text
-                // inboxButton.setText((current + 1) + "/" + total);
-                //
-                // // Set next/previous buttons to enabled/disabled based on
-                // // message being viewed
-                // boolean previous = true;
-                // boolean next = true;
-                // if (current == 0)
-                // previous = false;
-                // if (current == (total - 1))
-                // next = false;
-                // previousButton.setEnabled(previous);
-                // nextButton.setEnabled(next);
-
             }
         });
 
@@ -973,17 +975,14 @@ public class SmsPopupActivity extends Activity {
      * Close the message window/popup, mark the message read if the user has this option on
      */
     private void closeMessage() {
-        // if (mSmsPopupView.getMessageViewed()) {
         Intent i = new Intent(getApplicationContext(), SmsPopupUtilsService.class);
         /*
          * Switched back to mark messageId as read for >v1.0.6 (marking thread as read is slow for
          * really large threads)
          */
         i.setAction(SmsPopupUtilsService.ACTION_MARK_MESSAGE_READ);
-        // i.setAction(SmsPopupUtilsService.ACTION_MARK_THREAD_READ);
         i.putExtras(smsPopupPager.getActiveMessage().toBundle());
         WakefulIntentService.sendWakefulWork(getApplicationContext(), i);
-        // }
 
         removeActiveMessage();
     }
@@ -991,21 +990,28 @@ public class SmsPopupActivity extends Activity {
     /**
      * Reply to the current message, start the reply intent
      */
-    private void replyToMessage(final boolean replyToThread) {
+    private void replyToMessage(final SmsMmsMessage message, final boolean replyToThread) {
         exitingKeyguardSecurely = true;
         ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
             @Override
             public void LaunchOnKeyguardExitSuccess() {
-                Intent reply = smsPopupPager.getActiveMessage().getReplyIntent(replyToThread);
-                SmsPopupActivity.this.getApplicationContext().startActivity(reply);
+                startActivity(message.getReplyIntent(replyToThread));
                 replying = true;
                 myFinish();
             }
         });
     }
 
+    private void replyToMessage(SmsMmsMessage message) {
+        replyToMessage(message, true);
+    }
+        
+    private void replyToMessage(boolean replyToThread) {
+        replyToMessage(smsPopupPager.getActiveMessage(), replyToThread);
+    }
+    
     private void replyToMessage() {
-        replyToMessage(true);
+        replyToMessage(smsPopupPager.getActiveMessage());
     }
 
     /**
@@ -1056,9 +1062,8 @@ public class SmsPopupActivity extends Activity {
      * Delete the current message from the system database
      */
     private void deleteMessage() {
-        Intent i =
-                new Intent(SmsPopupActivity.this.getApplicationContext(),
-                        SmsPopupUtilsService.class);
+        Intent i = new Intent(SmsPopupActivity.this.getApplicationContext(), 
+                SmsPopupUtilsService.class);
         i.setAction(SmsPopupUtilsService.ACTION_DELETE_MESSAGE);
         i.putExtras(smsPopupPager.getActiveMessage().toBundle());
         WakefulIntentService.sendWakefulWork(getApplicationContext(), i);
@@ -1105,7 +1110,7 @@ public class SmsPopupActivity extends Activity {
     private void quickReply(String text) {
 
         // If this is a MMS just use regular reply
-        if (smsPopupPager.getActiveMessage().getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
+        if (smsPopupPager.getActiveMessage().isMms()) {
             replyToMessage();
         } else { // Else show the quick reply dialog
             if (text == null || "".equals(text)) {
@@ -1123,7 +1128,7 @@ public class SmsPopupActivity extends Activity {
         Intent contactIntent = new Intent(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT);
 
         SmsMmsMessage message = smsPopupPager.getActiveMessage();
-        if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS || message.isEmail()) {
+        if (message.isMms() || message.isEmail()) {
             contactIntent.setData(Uri.fromParts("mailto", message.getAddress(), null));
         } else {
             contactIntent.setData(Uri.fromParts("tel", message.getAddress(), null));
@@ -1135,8 +1140,7 @@ public class SmsPopupActivity extends Activity {
      * Refresh the quick reply view - update the edittext and the counter
      */
     private void updateQuickReplyView(String editText) {
-        if (Log.DEBUG)
-            Log.v("updateQuickReplyView - '" + editText + "'");
+        if (Log.DEBUG) Log.v("updateQuickReplyView - '" + editText + "'");
         if (qrEditText != null && editText != null) {
             qrEditText.setText(editText + signatureText);
             qrEditText.setSelection(editText.length());
@@ -1173,8 +1177,7 @@ public class SmsPopupActivity extends Activity {
      * Show the soft keyboard and store the view that triggered it
      */
     private void showSoftKeyboard(View triggerView) {
-        if (Log.DEBUG)
-            Log.v("showSoftKeyboard()");
+        if (Log.DEBUG) Log.v("showSoftKeyboard()");
         if (inputManager == null) {
             inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         }
@@ -1188,19 +1191,13 @@ public class SmsPopupActivity extends Activity {
     private void hideSoftKeyboard() {
         if (inputView == null)
             return;
-        if (Log.DEBUG)
-            Log.v("hideSoftKeyboard()");
+        if (Log.DEBUG) Log.v("hideSoftKeyboard()");
         if (inputManager == null) {
             inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         }
         inputManager.hideSoftInputFromWindow(inputView.getApplicationWindowToken(), 0);
         inputView = null;
     }
-
-    /*
-     * *****************************************************************************
-     * Inner classes *****************************************************************************
-     */
 
     /*
      * Inner class to handle dynamic button functions on popup
@@ -1238,8 +1235,8 @@ public class SmsPopupActivity extends Activity {
             case ButtonListPreference.BUTTON_DELETE: // Delete
                 showDialog(DIALOG_DELETE);
                 break;
-            case ButtonListPreference.BUTTON_DELETE_NO_CONFIRM: // Delete no
-                                                                // confirmation
+            case ButtonListPreference.BUTTON_DELETE_NO_CONFIRM:
+                // Delete no confirmation
                 deleteMessage();
                 break;
             case ButtonListPreference.BUTTON_REPLY: // Reply

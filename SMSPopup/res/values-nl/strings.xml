@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="pref_about_text">Gemaakt door: Adam K\nEmail: adam\@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup is een eenvoudige applicatie die een dialoogvenster toont wanneer een SMS wordt ontvangen - indien nodig wordt het scherm aangezet en de toetsenblokkering opgehoffen. Het toont het laatst ontvangen bericht, de afzender, en de foto van de afzender (indien beschikbaar).\n\nMail gerust commentaar, suggesties of bugs.\n\nDuitse vertaling door: Feyyaz A.\nEmail: f_alingan\@hotmail.com\nWebsite: http://www.yenio.com\n\nNederlandse vertaling door: Vincent Van Den Berghe &amp; Henk van der Velden\nEmail: smspopup\@mediasensation.be\n\nSpaanse vertaling door: Diego Fernández\nEmail: profediego\@gmail.com\n\nRussische vertaling door: Artem Kavalerov\nEmail: artem.kavalerov\@gmail.com\n\nHet applicatie icoon is eigendom van Min Tran.\n(http://min.frexy.com)\n</string>
   <string name="app_name">SMS Popup</string>
   <string name="new_text_at">Nieuw bericht op %s</string>
   <string name="unread_text_waiting">%d andere ongelezen bericht(en)</string>
