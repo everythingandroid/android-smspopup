@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.util.Log;
-
 import android.content.Context;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -23,6 +22,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     private Context mContext;
     private SmsPopupPagerAdapter mAdapter;
     private CirclePageIndicator mPagerIndicator;
+    private int privacyMode;
 
     public SmsPopupPager(Context context) {
         super(context);
@@ -40,7 +40,6 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         mAdapter = new SmsPopupPagerAdapter();
         setAdapter(mAdapter);
         currentPage = 0;
-        // setOnPageChangeListener(this);
     }
 
     public int getPageCount() {
@@ -180,7 +179,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
 
         @Override
         public Object instantiateItem(View container, int position) {
-            SmsPopupView mView = new SmsPopupView(mContext, messages.get(position));
+            SmsPopupView mView = new SmsPopupView(mContext, messages.get(position), privacyMode);
             ((ViewPager) container).addView(mView);
             return mView;
         }
@@ -223,6 +222,13 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         if (pagerIndicator != null) {
             mPagerIndicator = pagerIndicator;
             mPagerIndicator.setOnPageChangeListener(this);
+        }
+    }
+
+    public void setPrivacy(int mode) {
+        privacyMode = mode;
+        for (int i = 0; i < getChildCount(); i++) {
+            ((SmsPopupView) getChildAt(i)).setPrivacy(mode);
         }
     }
 }

@@ -37,8 +37,6 @@ public class ConfigContactActivity extends PreferenceActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Log.DEBUG)
-            Log.v("SMSPopupConfigPerContactActivity: onCreate()");
 
         // Create and setup preferences
         createOrFetchContactPreferences();
@@ -49,9 +47,8 @@ public class ConfigContactActivity extends PreferenceActivity {
         super.onResume();
 
         SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Uri ringtoneUri = Uri.parse(myPrefs.getString
-                (getString(R.string.c_pref_notif_sound_key), ManageNotification.defaultRingtone));
-        Log.v("Ringtone URI is: " + ringtoneUri.toString());
+        Uri ringtoneUri = Uri.parse(myPrefs.getString(getString(R.string.c_pref_notif_sound_key),        
+                ManageNotification.defaultRingtone));
         Ringtone mRingtone = RingtoneManager.getRingtone(this, ringtoneUri);
 
         if (mRingtone == null) {
@@ -68,16 +65,19 @@ public class ConfigContactActivity extends PreferenceActivity {
         final Uri contactNotificationsUri = getIntent().getParcelableExtra(EXTRA_CONTACT_URI);
 
         Cursor c = getContentResolver().query(contactNotificationsUri, null, null, null, null);
-
+        
         if (c == null || c.getCount() == 0) {
             c = createContact(contactNotificationsUri);
         }
 
         if (c == null || c.getCount() != 1) {
+            if (c != null) {
+                c.close();
+            }
             finish();
             return;
         }
-
+        
         // Let Activity manage the cursor
         startManagingCursor(c);
 
@@ -159,8 +159,6 @@ public class ConfigContactActivity extends PreferenceActivity {
      */
     private OnPreferenceChangeListener onPrefChangeListener = new OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            if (Log.DEBUG)
-                Log.v("onPreferenceChange - " + newValue);
             return storePreferences(preference, newValue);
         }
     };
@@ -169,8 +167,6 @@ public class ConfigContactActivity extends PreferenceActivity {
      * Store a single preference back to the database
      */
     private boolean storePreferences(Preference preference, Object newValue) {
-        if (Log.DEBUG)
-            Log.v("storePrefs()");
         String key = preference.getKey();
         String column = null;
 
@@ -220,55 +216,56 @@ public class ConfigContactActivity extends PreferenceActivity {
             return;
         }
 
-        c.moveToFirst();
+        if (c.moveToFirst()) {
 
-        rowId = c.getLong(c.getColumnIndexOrThrow(ContactNotifications._ID));
+            rowId = c.getLong(c.getColumnIndexOrThrow(ContactNotifications._ID));
 
-        final String one = "1";
-        if (Log.DEBUG)
-            Log.v("retrievePrefs()");
-        SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = myPrefs.edit();
+            final String one = "1";
+            SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = myPrefs.edit();
 
-        /*
-         * Fetch Main Prefs
-         */
-        editor.putBoolean(getString(R.string.c_pref_notif_enabled_key),
-                one.equals(c.getString(c.getColumnIndexOrThrow(ContactNotifications.ENABLED))));
-        editor.putBoolean(
-                getString(R.string.c_pref_popup_enabled_key),
-                one.equals(c.getString(
-                        c.getColumnIndexOrThrow(ContactNotifications.POPUP_ENABLED))));
-        editor.putString(getString(R.string.c_pref_notif_sound_key),
-                c.getString(c.getColumnIndexOrThrow(ContactNotifications.RINGTONE)));
+            /*
+             * Fetch Main Prefs
+             */
+            editor.putBoolean(getString(R.string.c_pref_notif_enabled_key),
+                    one.equals(c.getString(c.getColumnIndexOrThrow(ContactNotifications.ENABLED))));
+            editor.putBoolean(
+                    getString(R.string.c_pref_popup_enabled_key),
+                    one.equals(c.getString(
+                            c.getColumnIndexOrThrow(ContactNotifications.POPUP_ENABLED))));
+            editor.putString(getString(R.string.c_pref_notif_sound_key),
+                    c.getString(c.getColumnIndexOrThrow(ContactNotifications.RINGTONE)));
 
-        /*
-         * Fetch Vibrate prefs
-         */
-        editor.putBoolean(getString(R.string.c_pref_vibrate_key),
-                one.equals(c.getString(c
-                        .getColumnIndexOrThrow(ContactNotifications.VIBRATE_ENABLED))));
-        editor.putString(getString(R.string.c_pref_vibrate_pattern_key),
-                c.getString(c.getColumnIndexOrThrow(ContactNotifications.VIBRATE_PATTERN)));
-        editor.putString(getString(R.string.c_pref_vibrate_pattern_custom_key),
-                c.getString(c.getColumnIndexOrThrow(ContactNotifications.VIBRATE_PATTERN_CUSTOM)));
+            /*
+             * Fetch Vibrate prefs
+             */
+            editor.putBoolean(getString(R.string.c_pref_vibrate_key),
+                    one.equals(c.getString(c
+                            .getColumnIndexOrThrow(ContactNotifications.VIBRATE_ENABLED))));
+            editor.putString(getString(R.string.c_pref_vibrate_pattern_key),
+                    c.getString(c.getColumnIndexOrThrow(ContactNotifications.VIBRATE_PATTERN)));
+            editor.putString(getString(R.string.c_pref_vibrate_pattern_custom_key),
+                    c.getString(c
+                            .getColumnIndexOrThrow(ContactNotifications.VIBRATE_PATTERN_CUSTOM)));
 
-        /*
-         * Fetch LED prefs
-         */
-        editor.putBoolean(getString(R.string.c_pref_flashled_key),
-                one.equals(c.getString(c.getColumnIndexOrThrow(ContactNotifications.LED_ENABLED))));
-        editor.putString(getString(R.string.c_pref_flashled_color_key),
-                c.getString(c.getColumnIndexOrThrow(ContactNotifications.LED_COLOR)));
-        editor.putString(getString(R.string.c_pref_flashled_color_custom_key),
-                c.getString(c.getColumnIndexOrThrow(ContactNotifications.LED_COLOR_CUSTOM)));
-        editor.putString(getString(R.string.c_pref_flashled_pattern_key),
-                c.getString(c.getColumnIndexOrThrow(ContactNotifications.LED_PATTERN)));
-        editor.putString(getString(R.string.c_pref_flashled_pattern_custom_key),
-                c.getString(c.getColumnIndexOrThrow(ContactNotifications.LED_PATTERN_CUSTOM)));
+            /*
+             * Fetch LED prefs
+             */
+            editor.putBoolean(getString(R.string.c_pref_flashled_key),
+                    one.equals(c.getString(c
+                            .getColumnIndexOrThrow(ContactNotifications.LED_ENABLED))));
+            editor.putString(getString(R.string.c_pref_flashled_color_key),
+                    c.getString(c.getColumnIndexOrThrow(ContactNotifications.LED_COLOR)));
+            editor.putString(getString(R.string.c_pref_flashled_color_custom_key),
+                    c.getString(c.getColumnIndexOrThrow(ContactNotifications.LED_COLOR_CUSTOM)));
+            editor.putString(getString(R.string.c_pref_flashled_pattern_key),
+                    c.getString(c.getColumnIndexOrThrow(ContactNotifications.LED_PATTERN)));
+            editor.putString(getString(R.string.c_pref_flashled_pattern_custom_key),
+                    c.getString(c.getColumnIndexOrThrow(ContactNotifications.LED_PATTERN_CUSTOM)));
 
-        // Commit prefs
-        editor.commit();
+            // Commit prefs
+            editor.commit();
+        }
     }
 
     @Override
@@ -294,8 +291,6 @@ public class ConfigContactActivity extends PreferenceActivity {
     }
 
     private Cursor createContact(String contactLookupKey) {
-        // getIntent().putExtra(EXTRA_CONTACT_ID, contactId);
-
         final String contactName =
                 SmsPopupUtils.getPersonNameByLookup(this, contactLookupKey, null);
         if (contactName == null) {
@@ -310,8 +305,7 @@ public class ConfigContactActivity extends PreferenceActivity {
 
         final Cursor c = getContentResolver().query(contactUri, null, null, null, null);
         if (c == null || c.getCount() == 0) {
-            if (Log.DEBUG)
-                Log.v("Error creating contact");
+            if (Log.DEBUG) Log.v("Error creating contact");
             finish();
         }
 
