@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -22,16 +21,15 @@ import android.widget.TextView;
 
 public class SmsPopupView extends LinearLayout {
     private SmsMmsMessage message;
-    private Context context;
+    private Context mContext;
     private boolean messageViewed = false;
 
     protected OnReactToMessage mOnReactToMessage;
 
-    private TextView fromTV;
-    private TextView timestampTV;
-    private TextView messageTV;
+    private TextView fromTv;
+    private TextView timestampTv;
+    private TextView messageTv;
 
-    private TextView mmsSubjectTV = null;
     private ScrollView messageScrollView = null;
 
     private QuickContactBadge contactBadge = null;
@@ -43,153 +41,138 @@ public class SmsPopupView extends LinearLayout {
     public static final int PRIVACY_MODE_OFF = 0;
     public static final int PRIVACY_MODE_HIDE_MESSAGE = 1;
     public static final int PRIVACY_MODE_HIDE_ALL = 2;
-    private static int privacyMode = PRIVACY_MODE_OFF;
+    private int privacyMode = PRIVACY_MODE_OFF;
 
-    public SmsPopupView(Context _context, SmsMmsMessage newMessage) {
-        super(_context);
-        context = _context;
-        setupLayout(context);
-        message = newMessage;
-        populateViews(message);
+    private static final int CONTACT_IMAGE_FADE_DURATION = 500;
+
+    public SmsPopupView(Context context, SmsMmsMessage newMessage) {
+        super(context);
+        init(context, newMessage, PRIVACY_MODE_OFF);
     }
 
-    public SmsPopupView(Context _context, AttributeSet attrs) {
-        super(_context, attrs);
-        context = _context;
-        setupLayout(context);
+    public SmsPopupView(Context context, SmsMmsMessage newMessage, int initialPrivacyMode) {
+        super(context);
+        init(context, newMessage, initialPrivacyMode);
+    }
+
+    public SmsPopupView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        mContext = context;
+        setupLayout(mContext);
+    }
+
+    private void init(Context context, SmsMmsMessage newMessage, int initialPrivacyMode) {
+        privacyMode = initialPrivacyMode;
+        mContext = context;
+        setupLayout(mContext);
+        message = newMessage;
+        populateViews(message);
     }
 
     public void setOnReactToMessage(OnReactToMessage r) {
         mOnReactToMessage = r;
     }
 
-    // Set privacy using mode
-    public static void setPrivacy(int mode) {
-        privacyMode = mode;
-    }
+    private void setupLayout(Context context) {
+        View.inflate(context, R.layout.message, this);
 
-    // Set privacy from preference boolean values
-    public static void setPrivacy(boolean privacyMode, boolean privacySender) {
-        setPrivacy(SmsPopupView.PRIVACY_MODE_OFF);
-        if (privacyMode) {
-            if (privacySender) {
-                setPrivacy(SmsPopupView.PRIVACY_MODE_HIDE_ALL);
-            } else {
-                setPrivacy(SmsPopupView.PRIVACY_MODE_HIDE_MESSAGE);
+        // Find the main textviews and layouts
+        fromTv = (TextView) findViewById(R.id.fromTextView);
+        messageTv = (TextView) findViewById(R.id.messageTextView);
+        timestampTv = (TextView) findViewById(R.id.timestampTextView);
+        messageScrollView = (ScrollView) findViewById(R.id.messageScrollView);
+        mmsLayout = findViewById(R.id.mmsLinearLayout);
+        privacyLayout = findViewById(R.id.viewButtonLinearLayout);
+
+        // Find the QuickContactBadge view that will show the contact photo
+        contactBadge = (QuickContactBadge) findViewById(R.id.contactBadge);
+
+        // The ViewMMS button
+        Button viewMmsButton = (Button) mmsLayout.findViewById(R.id.viewMmsButton);
+        viewMmsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnReactToMessage != null) {
+                    mOnReactToMessage.onReplyToMessage();
+                }
             }
-        }
-    }
+        });
 
-    private void refreshPrivacy(int privacyMode) {
-
-        if (privacyMode == PRIVACY_MODE_OFF) {
-            // set public mode
-            if (Log.DEBUG)
-                Log.v("refreshPrivacy(): set to public mode.");
-
-            privacyLayout.setVisibility(View.GONE);
-            messageScrollView.setVisibility(View.VISIBLE);
-            fromTV.setVisibility(View.VISIBLE);
-            // messageViewed = true;
-            loadContactPhoto();
-
-        } else {
-
-            privacyLayout.setVisibility(View.VISIBLE);
-            messageScrollView.setVisibility(View.GONE);
-
-            if (privacyMode == PRIVACY_MODE_HIDE_ALL) {
-                fromTV.setVisibility(View.GONE);
-            } else {
-                loadContactPhoto();
+        // The view button (if in privacy mode)
+        Button viewButton = (Button) privacyLayout.findViewById(R.id.viewButton);
+        viewButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnReactToMessage != null) {
+                    mOnReactToMessage.onViewMessage();
+                }
+                setPrivacy(PRIVACY_MODE_OFF);
             }
-        }
-    }
-
-    public void refreshPrivacy() {
-        refreshPrivacy(false);
+        });
     }
 
     /*
-     * This handles hiding and showing various views depending on the user privacy settings
+     * Populate all the main SMS/MMS views with content from the actual SmsMmsMessage
      */
-    private void refreshPrivacy(boolean forceView) {
+    private void populateViews(SmsMmsMessage message) {
 
-        if (Log.DEBUG) Log.v("refreshPrivacy(): " + forceView);
+        // If it's a MMS, show the MMS layout, hide other layouts
+        if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
 
-        if (privacyMode == PRIVACY_MODE_OFF || forceView) {
+            messageScrollView.setVisibility(View.GONE);
 
-            // set public mode
-            if (Log.DEBUG) Log.v("refreshPrivacy(): set to public mode.");
+        } else { // Otherwise SMS, show SMS layouts, hide other layouts
+
+            // Otherwise hide MMS layout
+            mmsLayout.setVisibility(View.GONE);
+
+            messageTv.setText(message.getMessageBody());
+
+        }
+
+        // Set the from, message and header views
+        fromTv.setText(message.getContactName());
+        timestampTv.setText(message.getFormattedTimestamp());
+
+        setPrivacy(privacyMode);
+    }
+
+    // Set privacy using mode
+    public void setPrivacy(int mode) {
+        privacyMode = mode;
+
+        if (privacyMode == PRIVACY_MODE_OFF) {
 
             privacyLayout.setVisibility(View.GONE);
             messageScrollView.setVisibility(View.VISIBLE);
-            fromTV.setVisibility(View.VISIBLE);
+            fromTv.setVisibility(View.VISIBLE);
             messageViewed = true;
             loadContactPhoto();
-            contactBadge.setClickable(true);
-            final Uri contactUri = message.getContactLookupUri();
-            if (contactUri != null) {
-                contactBadge.assignContactUri(message.getContactLookupUri());
-            } else {
-                contactBadge.assignContactFromPhone(message.getAddress(), false);
-            }
 
-        } else {
+        } else if (privacyMode == PRIVACY_MODE_HIDE_MESSAGE) {
+
+            privacyLayout.setVisibility(View.VISIBLE);
+            messageScrollView.setVisibility(View.GONE);
+            loadContactPhoto();
+
+        } else if (privacyMode == PRIVACY_MODE_HIDE_ALL) {
 
             privacyLayout.setVisibility(View.VISIBLE);
             messageScrollView.setVisibility(View.GONE);
 
-            if (privacyMode == PRIVACY_MODE_HIDE_ALL) {
-                fromTV.setVisibility(View.GONE);
-            } else {
-                loadContactPhoto();
-            }
-
-            // // if message has been already shown, disable privacy mode
-            // if (messageViewed == true) {
-            // forceView = true;
-            // }
-            //
-            // // We need to init the keyguard class so we can check if the
-            // keyguard
-            // is on
-            // ManageKeyguard.initialize(getApplicationContext());
-            //
-            // if ((ManageKeyguard.inKeyguardRestrictedInputMode()
-            // || privacyAlways == true) && forceView == false) {
-            //
-            // messageViewed = false;
-            //
-            // // set to privacy mode
-            // if (Log.DEBUG) Log.v("refreshPrivacy(): set to privacy mode.");
-            // messageScrollView.setVisibility(View.GONE);
-            //
-            // if (privacySender) {
-            // fromTV.setVisibility(View.GONE);
-            // }
-            //
-            // } else {
-            //
-            // // set public mode
-            // if (Log.DEBUG) Log.v("refreshPrivacy(): set to public mode.");
-            //
-            // // Fetch contact photo
-            // new FetchContactPhotoTask().execute(message.getContactId());
-            //
-            // // Add quick contact onClick to contact imageview
-            // addQuickContactOnClick(true);
-            //
-            // if (privacyView != null) {
-            // privacyView.setVisibility(View.GONE);
-            // }
-            //
-            // messageScrollView.setVisibility(View.VISIBLE);
-            // fromTV.setVisibility(View.VISIBLE);
-            // messageViewed = true;
-            // }
+            // TODO: hide fromTv
         }
+    }
 
+    // Set privacy from preference boolean values
+    public void setPrivacy(boolean privacyMode, boolean privacySender) {
+        if (privacyMode && privacySender) {
+            setPrivacy(PRIVACY_MODE_HIDE_ALL);
+        } else if (privacyMode && !privacySender) {
+            setPrivacy(PRIVACY_MODE_HIDE_MESSAGE);
+        } else {
+            setPrivacy(PRIVACY_MODE_OFF);
+        }
     }
 
     public void setMessageViewed(boolean viewed) {
@@ -200,84 +183,17 @@ public class SmsPopupView extends LinearLayout {
         return messageViewed;
     }
 
-    private void setupLayout(Context context) {
-        View.inflate(context, R.layout.message, this);
-
-        // Find the main textviews and layouts
-        fromTV = (TextView) findViewById(R.id.FromTextView);
-        messageTV = (TextView) findViewById(R.id.MessageTextView);
-        timestampTV = (TextView) findViewById(R.id.TimestampTextView);
-        messageScrollView = (ScrollView) findViewById(R.id.MessageScrollView);
-        mmsLayout = findViewById(R.id.MmsLinearLayout);
-        privacyLayout = findViewById(R.id.ViewButtonLinearLayout);
-        mmsSubjectTV = (TextView) findViewById(R.id.MmsSubjectTextView);
-
-        // Find the QuickContactBadge view that will show the contact photo
-        contactBadge = (QuickContactBadge) findViewById(R.id.ContactBadge);
-
-        // The ViewMMS button
-        Button viewMmsButton = (Button) mmsLayout.findViewById(R.id.ViewMmsButton);
-        viewMmsButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnReactToMessage.onReplyToMessage();
-            }
-        });
-
-        // The view button (if in privacy mode)
-        Button viewButton = (Button) privacyLayout.findViewById(R.id.ViewButton);
-        viewButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnReactToMessage.onViewMessage();
-            }
-        });
-    }
-
-    /*
-     * Populate all the main SMS/MMS views with content from the actual SmsMmsMessage
-     */
-    private void populateViews(SmsMmsMessage message) {
-
-        // Refresh privacy settings (hide/show message) depending on privacy
-        // setting
-        refreshPrivacy(false);
-
-        // If it's a MMS message, just show the MMS layout
-        if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_MMS) {
-
-            messageScrollView.setVisibility(View.GONE);
-            mmsLayout.setVisibility(View.VISIBLE);
-
-            // If no MMS subject, hide the subject text view
-            if (TextUtils.isEmpty(message.getMessageBody())) {
-                mmsSubjectTV.setVisibility(View.GONE);
-            } else {
-                mmsSubjectTV.setVisibility(View.VISIBLE);
-            }
-
-        } else {
-
-            // Otherwise hide MMS layout
-            mmsLayout.setVisibility(View.GONE);
-
-        }
-
-        // Set the from, message and header views
-        fromTV.setText(message.getContactName());
-        if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_SMS) {
-            messageTV.setText(message.getMessageBody());
-        } else {
-            mmsSubjectTV.setText(context.getString(R.string.mms_subject) + " "
-                    + message.getMessageBody());
-        }
-        timestampTV.setText(message.getFormattedTimestamp());
-    }
-
     private void loadContactPhoto() {
         // Fetch contact photo in background
         if (contactPhoto == null) {
             new FetchContactPhotoTask().execute(message.getContactLookupUri());
+        }
+        contactBadge.setClickable(true);
+        final Uri contactUri = message.getContactLookupUri();
+        if (contactUri != null) {
+            contactBadge.assignContactUri(message.getContactLookupUri());
+        } else {
+            contactBadge.assignContactFromPhone(message.getAddress(), false);
         }
     }
 
@@ -287,13 +203,15 @@ public class SmsPopupView extends LinearLayout {
     private class FetchContactPhotoTask extends AsyncTask<Uri, Integer, Bitmap> {
         @Override
         protected Bitmap doInBackground(Uri... params) {
-            if (Log.DEBUG) Log.v("Loading contact photo in background...");
-            return SmsPopupUtils.getPersonPhoto(context, params[0]);
+            if (Log.DEBUG)
+                Log.v("Loading contact photo in background...");
+            return SmsPopupUtils.getPersonPhoto(mContext, params[0]);
         }
 
         @Override
         protected void onPostExecute(Bitmap photo) {
-            if (Log.DEBUG) Log.v("Done loading contact photo");
+            if (Log.DEBUG)
+                Log.v("Done loading contact photo");
             if (photo != null) {
                 contactPhoto = photo;
                 TransitionDrawable mTd = new TransitionDrawable(new Drawable[] {
@@ -301,8 +219,8 @@ public class SmsPopupView extends LinearLayout {
                         new BitmapDrawable(getResources(), contactPhoto)
                 });
                 contactBadge.setImageDrawable(mTd);
-                mTd.setCrossFadeEnabled(true);                
-                mTd.startTransition(500);
+                mTd.setCrossFadeEnabled(true);
+                mTd.startTransition(CONTACT_IMAGE_FADE_DURATION);
             }
         }
     }

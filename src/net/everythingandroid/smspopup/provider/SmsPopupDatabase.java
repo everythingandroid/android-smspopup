@@ -6,6 +6,7 @@ import net.everythingandroid.smspopup.util.Log;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.Settings;
 
 
 public class SmsPopupDatabase extends SQLiteOpenHelper {
@@ -25,8 +26,8 @@ public class SmsPopupDatabase extends SQLiteOpenHelper {
         ContactNotifications.ENABLED                + " integer default 1, " +
         ContactNotifications.POPUP_ENABLED          + " integer default 1, " +
         ContactNotifications.RINGTONE               + " text default '" +
-        //+ Settings.System.DEFAULT_NOTIFICATION_URI.toString() + "', " +
-        "content://settings/system/notification_sound" + "', " +
+        Settings.System.DEFAULT_NOTIFICATION_URI.toString() + "', " +
+        //"content://settings/system/notification_sound" + "', " +
         ContactNotifications.VIBRATE_ENABLED        + " integer default 1, " +
         ContactNotifications.VIBRATE_PATTERN        + " text default '0,1200', " +
         ContactNotifications.VIBRATE_PATTERN_CUSTOM + " text null, " +

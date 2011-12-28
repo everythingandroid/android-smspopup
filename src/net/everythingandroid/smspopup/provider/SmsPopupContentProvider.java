@@ -187,16 +187,14 @@ public class SmsPopupContentProvider extends ContentProvider {
             }
             break;
         case QUICKMESSAGES:
-            count =
-                    db.update(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, values, selection,
-                            selectionArgs);
+            count = db.update(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, values, 
+                    selection, selectionArgs);
             break;
         case QUICKMESSAGES_ID:
             final String qmSelection = QuickMessages._ID + " = ?";
             final String[] qmSelectionArgs = { QuickMessages.getQuickMessageId(uri) };
-            count =
-                    db.update(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, values, qmSelection,
-                            qmSelectionArgs);
+            count = db.update(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, values,
+                    qmSelection, qmSelectionArgs);
             break;
         default:
             throw new UnsupportedOperationException("Unknown uri: " + uri);

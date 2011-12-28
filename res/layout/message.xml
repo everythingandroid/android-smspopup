@@ -6,24 +6,22 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/FromLinearLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left" >
 
         <QuickContactBadge
-            android:id="@+id/ContactBadge"
+            android:id="@+id/contactBadge"
             android:layout_width="@dimen/contact_thumbnail_size"
             android:layout_height="@dimen/contact_thumbnail_size"
             android:layout_gravity="center"
             android:layout_margin="@dimen/contact_thumbnail_margin"
+            android:background="@drawable/quickcontact_badge_small"
             android:clickable="false"
             android:scaleType="fitCenter"
-            android:background="@drawable/quickcontact_badge_small"
             android:src="@drawable/ic_contact_picture" />
 
         <LinearLayout
-            android:id="@+id/FromTextLinearLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -32,7 +30,7 @@
             android:padding="4dp" >
 
             <TextView
-                android:id="@+id/FromTextView"
+                android:id="@+id/fromTextView"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:autoLink="phone"
@@ -45,7 +43,7 @@
                 android:textColorLink="?android:attr/textColorPrimaryDisableOnly" />
 
             <TextView
-                android:id="@+id/TimestampTextView"
+                android:id="@+id/timestampTextView"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="2dp"
@@ -58,17 +56,16 @@
     <include layout="@layout/popup_divider" />
 
     <ScrollView
-        android:id="@+id/MessageScrollView"
+        android:id="@+id/messageScrollView"
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:fillViewport="true"
         android:paddingBottom="8dp"
-        android:paddingTop="6dp"
-        android:visibility="gone" >
+        android:paddingTop="6dp" >
 
         <TextView
-            android:id="@+id/MessageTextView"
+            android:id="@+id/messageTextView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:autoLink="all"
@@ -82,28 +79,16 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/MmsLinearLayout"
+        android:id="@+id/mmsLinearLayout"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
         android:paddingBottom="12dp"
         android:paddingTop="12dp" >
 
-        <TextView
-            android:id="@+id/MmsSubjectTextView"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="all"
-            android:gravity="center"
-            android:paddingBottom="12dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="@string/mms_subject"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
         <Button
-            android:id="@+id/ViewMmsButton"
+            android:id="@+id/viewMmsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -112,16 +97,16 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ViewButtonLinearLayout"
+        android:id="@+id/viewButtonLinearLayout"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
         android:paddingBottom="12dp"
         android:paddingTop="12dp" >
 
         <Button
-            android:id="@+id/ViewButton"
+            android:id="@+id/viewButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="140dp"
