@@ -376,6 +376,12 @@ public class ConfigContactsActivity extends FragmentActivity {
 
             return v;
         }
+        
+        @Override
+        public void onResume() {
+            super.onResume();
+            getLoaderManager().restartLoader(0, null, this);
+        }
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
