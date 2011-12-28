@@ -361,7 +361,15 @@ public class SmsMmsMessage {
     public int getMessageType() {
         return messageType;
     }
-
+    
+    public boolean isSms() {
+        return messageType == MESSAGE_TYPE_SMS;
+    }
+    
+    public boolean isMms() {
+        return messageType == MESSAGE_TYPE_MMS;
+    }
+    
     public boolean getNotify() {
         if (Log.DEBUG) Log.v("getNotify() - notify is " + notify);
         return notify;

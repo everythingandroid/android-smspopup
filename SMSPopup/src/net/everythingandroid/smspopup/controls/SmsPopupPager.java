@@ -2,6 +2,7 @@ package net.everythingandroid.smspopup.controls;
 
 import java.util.ArrayList;
 
+import net.everythingandroid.smspopup.controls.SmsPopupView.OnReactToMessage;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.util.Log;
 import android.content.Context;
@@ -23,7 +24,8 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     private SmsPopupPagerAdapter mAdapter;
     private CirclePageIndicator mPagerIndicator;
     private int privacyMode;
-
+    private OnReactToMessage mOnReactToMessage;
+    
     public SmsPopupPager(Context context) {
         super(context);
         init(context);
@@ -40,6 +42,10 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         mAdapter = new SmsPopupPagerAdapter();
         setAdapter(mAdapter);
         currentPage = 0;
+    }
+    
+    public void setOnReactToMessage(OnReactToMessage r) {
+        mOnReactToMessage = r;
     }
 
     public int getPageCount() {
@@ -180,6 +186,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         @Override
         public Object instantiateItem(View container, int position) {
             SmsPopupView mView = new SmsPopupView(mContext, messages.get(position), privacyMode);
+            mView.setOnReactToMessage(mOnReactToMessage);
             ((ViewPager) container).addView(mView);
             return mView;
         }

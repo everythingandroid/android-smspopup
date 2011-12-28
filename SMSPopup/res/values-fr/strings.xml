@@ -29,7 +29,6 @@
   <string name="pref_enabled_summaryoff">SMS Popup est désactivé</string>
   <string name="pref_about_title">À propos</string>
   <string name="pref_about_summary">À propose de SMS Popup</string>
-  <string name="pref_about_text">Email: adam\@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup est une application qui a simplement pour but de faire apparaître une pop-up quand un SMS arrive sur votre smartphone Android, allumant ainsi l\'écran, pouvant débloquer le schéma de blocage si nécessaire. Il montre le message le plus récent, son destinataire et la photo du contact si elle existe.\n\nVous pouvez m\'envoyer vos remarques, suggestions ou bugs par mail.\n\nTraduction Française par: Norman Obry\n\nTraduction Allemande par: Feyyaz A.\nEmail: f_alingan\@hotmail.com\nSite: http://www.yenio.com\n\nTraduction Hollandaise par: mellie\@xs4all.nl\n\nTraduction Espagnole par: Diego Fernández\nEmail: profediego\@gmail.com\n\nTraduction Russe par: Artem Kavalerov\nEmail: artem.kavalerov\@gmail.com\n\nCredits à Min Tran pour l\'icône de l\'application.\n(http://min.frexy.com)\n</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Questions fréquentes</string>
   <string name="pref_releasenotes_title">Quoi de neuf ?</string>
