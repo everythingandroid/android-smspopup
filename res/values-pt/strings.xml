@@ -29,7 +29,6 @@
   <string name="pref_enabled_summaryoff">Popup da SMS estão desactivos</string>
   <string name="pref_about_title">Sobre</string>
   <string name="pref_about_summary">Sobre SMS Popup</string>
-  <string name="pref_about_text">Portuguese Translation by: Daniel Rodrigues\nEmail:naotodigo\@gmail.com\n</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Perguntas mais frequentes (FAQ)</string>
   <string name="pref_releasenotes_title">Novidades</string>

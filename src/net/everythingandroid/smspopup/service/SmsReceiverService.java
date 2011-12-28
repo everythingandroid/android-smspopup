@@ -154,8 +154,7 @@ public class SmsReceiverService extends Service {
     private void notifyMessageReceived(SmsMmsMessage message) {
 
         // Class 0 SMS, let the system handle this
-        if (message.getMessageType() == SmsMmsMessage.MESSAGE_TYPE_SMS &&
-                message.getMessageClass() == MessageClass.CLASS_0) {
+        if (message.isSms() && message.getMessageClass() == MessageClass.CLASS_0) {
             return;
         }
 
