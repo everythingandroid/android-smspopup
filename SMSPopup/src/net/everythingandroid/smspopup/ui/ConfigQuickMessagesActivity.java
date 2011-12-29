@@ -55,7 +55,7 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
 
         // TODO: make this look better
         tv.setText(R.string.message_presets_add);
-        tv.setTextSize(SmsPopupUtils.pixelsToDip(getResources(), 20));
+        tv.setTextSize(SmsPopupUtils.pixelsToDip(getResources(), 13));
         final int tvPadding = SmsPopupUtils.pixelsToDip(getResources(), 10);
         tv.setPadding(tvPadding, tvPadding, tvPadding, tvPadding);
 

@@ -19,26 +19,28 @@
         android:paddingBottom="8dp"
         android:paddingTop="4dp" />
 
-    <ViewSwitcher
-        android:id="@+id/ButtonViewSwitcher"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+    <LinearLayout
+        android:id="@+id/buttonPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="?android:attr/dividerHorizontal"
+        android:dividerPadding="0dip"
+        android:orientation="vertical"
+        android:showDividers="beginning" >
 
-        <LinearLayout
-            android:id="@+id/buttonPanel"
-            android:layout_width="match_parent"
+        <ViewSwitcher
+            android:id="@+id/ButtonViewSwitcher"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:divider="?android:attr/dividerHorizontal"
-            android:dividerPadding="0dip"
-            android:orientation="vertical"
-            android:showDividers="beginning" >
+            android:inAnimation="@android:anim/fade_in"
+            android:outAnimation="@android:anim/fade_out" >
 
             <LinearLayout
                 android:id="@+id/ButtonLayout"
                 style="@style/ButtonBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center" >              
+                android:gravity="center" >
 
                 <Button
                     android:id="@+id/button1"
@@ -64,24 +66,25 @@
                     android:layout_weight="1"
                     android:text="@string/button_reply" />
             </LinearLayout>
-        </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/UnlockButtonLayout"
-            style="@style/ButtonBar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            <RelativeLayout
+                android:id="@+id/UnlockButtonLayout"
+                style="@style/ButtonBar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
 
-            <Button
-                android:id="@+id/unlockButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:minWidth="100dp"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-                android:text="@string/button_unlock" />
-        </RelativeLayout>
-    </ViewSwitcher>
+                <Button
+                    android:id="@+id/unlockButton"
+                    style="@style/ButtonBarButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:minWidth="100dp"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:text="@string/button_unlock" />
+            </RelativeLayout>
+        </ViewSwitcher>
+    </LinearLayout>
 
 </LinearLayout>

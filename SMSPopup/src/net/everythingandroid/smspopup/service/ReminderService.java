@@ -3,18 +3,16 @@ package net.everythingandroid.smspopup.service;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.receiver.ReminderReceiver;
-import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageNotification;
+import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
 import net.everythingandroid.smspopup.util.ManageWakeLock;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
@@ -57,8 +55,7 @@ public class ReminderService extends WakefulIntentService {
     private static void processReminder(Context context, Intent intent) {
         int unreadSms = SmsPopupUtils.getUnreadMessagesCount(context);
         if (unreadSms > 0) {
-            Bundle extras = intent.getExtras();
-            SmsMmsMessage message = new SmsMmsMessage(context, extras);
+            SmsMmsMessage message = new SmsMmsMessage(context, intent.getExtras());
 
             SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             int repeat_times =

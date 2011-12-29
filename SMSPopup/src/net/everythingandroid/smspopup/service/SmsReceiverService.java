@@ -183,15 +183,14 @@ public class SmsReceiverService extends Service {
                         ContactNotifications.ENABLED);
 
         // get docked state of phone
-        int docked_state =
-                mPrefs.getInt(R.string.pref_docked_key, 0);
-
-        boolean docked = docked_state == ExternalEventReceiver.EXTRA_DOCK_STATE_DESK;
+        boolean docked = 
+                mPrefs.getInt(R.string.pref_docked_key, 0) == 
+                        ExternalEventReceiver.EXTRA_DOCK_STATE_DESK;
 
         mPrefs.close();
 
-        // Fetch call state, if the user is in a call or the phone is ringing we don't want to show
-        // the popup
+        // Fetch call state, if the user is in a call or the phone is ringing we don't want 
+        // to show the popup
         TelephonyManager mTM =
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         boolean callStateIdle = mTM.getCallState() == TelephonyManager.CALL_STATE_IDLE;
@@ -200,7 +199,7 @@ public class SmsReceiverService extends Service {
         ManageKeyguard.initialize(context);
 
         /*
-         * If popup is enabled for this user -AND- the user is not in a call -AND- -AND- phone is
+         * If popup is enabled for this user -AND- the user is not in a call --AND- phone is
          * not docked -AND- (screen is locked -OR- (setting is OFF to only show on keyguard -AND-
          * user is not in messaging app: then show the popup activity, otherwise check if
          * notifications are on and just use the standard notification))
