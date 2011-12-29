@@ -24,12 +24,10 @@ public class QmTextWatcher implements TextWatcher {
     }
 
     @Override
-    public void afterTextChanged(Editable s) {
-    }
+    public void afterTextChanged(Editable s) {}
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-    }
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -52,10 +50,10 @@ public class QmTextWatcher implements TextWatcher {
         }
 
         /*
-         * SmsMessage.calculateLength returns an int[4] with: int[0] being the
-         * number of SMS's required, int[1] the number of code units used,
-         * int[2] is the number of code units remaining until the next message.
-         * int[3] is the encoding type that should be used for the message.
+         * SmsMessage.calculateLength returns an int[4] with: int[0] being the number of SMS's
+         * required, int[1] the number of code units used, int[2] is the number of code units
+         * remaining until the next message. int[3] is the encoding type that should be used for the
+         * message.
          */
         int[] params = SmsMessage.calculateLength(s, false);
         int msgCount = params[0];

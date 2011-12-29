@@ -47,7 +47,7 @@ public class ConfigContactActivity extends PreferenceActivity {
         super.onResume();
 
         SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Uri ringtoneUri = Uri.parse(myPrefs.getString(getString(R.string.c_pref_notif_sound_key),        
+        Uri ringtoneUri = Uri.parse(myPrefs.getString(getString(R.string.c_pref_notif_sound_key),
                 ManageNotification.defaultRingtone));
         Ringtone mRingtone = RingtoneManager.getRingtone(this, ringtoneUri);
 
@@ -65,7 +65,7 @@ public class ConfigContactActivity extends PreferenceActivity {
         final Uri contactNotificationsUri = getIntent().getParcelableExtra(EXTRA_CONTACT_URI);
 
         Cursor c = getContentResolver().query(contactNotificationsUri, null, null, null, null);
-        
+
         if (c == null || c.getCount() == 0) {
             c = createContact(contactNotificationsUri);
         }
@@ -77,7 +77,7 @@ public class ConfigContactActivity extends PreferenceActivity {
             finish();
             return;
         }
-        
+
         // Let Activity manage the cursor
         startManagingCursor(c);
 
@@ -305,7 +305,8 @@ public class ConfigContactActivity extends PreferenceActivity {
 
         final Cursor c = getContentResolver().query(contactUri, null, null, null, null);
         if (c == null || c.getCount() == 0) {
-            if (Log.DEBUG) Log.v("Error creating contact");
+            if (Log.DEBUG)
+                Log.v("Error creating contact");
             finish();
         }
 

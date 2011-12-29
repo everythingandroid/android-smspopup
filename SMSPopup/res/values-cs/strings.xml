@@ -136,7 +136,7 @@
   <string name="contact_customization_title">Upozornění pro %s</string>
   <string name="contact_customization_enabled">Upozornění je aktivní pro %s</string>
   <string name="contact_customization_disabled">Upozornění není aktivní pro %s</string>
-  <string name="contact_customization_add_hint">Přidat vlastní upozornění...</string>
+  <string name="contact_customization_add_hint">Přidat vlastní upozornění…</string>
   <string name="ringtone_silent">Tiché</string>
   <string name="pref_message_presets_title">Zpráva pro odpověď</string>
   <string name="pref_message_presets_summary">Nastavení zprávy pro rychlou odpověď</string>
@@ -159,9 +159,9 @@
   <string name="quickreply_from_text">Komu: %s</string>
   <string name="quickreply_preset_button">Odpovědi</string>
   <string name="quickreply_send_button">Odeslat</string>
-  <string name="quickreply_sending_toast">Odesílám zprávu...</string>
+  <string name="quickreply_sending_toast">Odesílám zprávu…</string>
   <string name="quickreply_nomessage_toast">Odeslat</string>
-  <string name="loading_message">Nahrávám...</string>
+  <string name="loading_message">Nahrávám…</string>
   <string name="error_message">Chyba</string>
   <string name="error_no_voice_recognition">Rozpoznávání hlasu není na tomto zařízení nainstalováno</string>
   <string name="pref_button_config_title">Konfigurace tlačítek</string>

@@ -166,9 +166,9 @@
   <string name="quickreply_from_text">Till: %s</string>
   <string name="quickreply_preset_button">Mallar</string>
   <string name="quickreply_send_button">Skicka</string>
-  <string name="quickreply_sending_toast">Skickar meddelande...</string>
+  <string name="quickreply_sending_toast">Skickar meddelande…</string>
   <string name="quickreply_nomessage_toast">Skicka</string>
-  <string name="loading_message">Laddar...</string>
+  <string name="loading_message">Laddar…</string>
   <string name="error_message">Fel</string>
   <string name="error_no_voice_recognition">Röstigenkänning ej tillgänglig på denna enhet</string>
   <string name="pref_button_config_title">Knappinställningar</string>

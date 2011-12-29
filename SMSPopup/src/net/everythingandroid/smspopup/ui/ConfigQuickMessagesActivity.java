@@ -104,7 +104,7 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.config_contacts, menu);
+        inflater.inflate(R.menu.config_quickmessages, menu);
         return true;
     }
 
