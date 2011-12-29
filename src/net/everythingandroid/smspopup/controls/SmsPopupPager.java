@@ -25,7 +25,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     private CirclePageIndicator mPagerIndicator;
     private int privacyMode;
     private OnReactToMessage mOnReactToMessage;
-    
+
     public SmsPopupPager(Context context) {
         super(context);
         init(context);
@@ -43,7 +43,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         setAdapter(mAdapter);
         currentPage = 0;
     }
-    
+
     public void setOnReactToMessage(OnReactToMessage r) {
         mOnReactToMessage = r;
     }
@@ -55,7 +55,8 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     /**
      * Add a message and its view to the end of the list of messages.
      * 
-     * @param newMessage The message to add.
+     * @param newMessage
+     *            The message to add.
      */
     public void addMessage(SmsMmsMessage newMessage) {
         messages.add(newMessage);
@@ -65,7 +66,8 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     /**
      * Add a list of new messages to the end of the current message list.
      * 
-     * @param newMessages The list of new messages to add.
+     * @param newMessages
+     *            The list of new messages to add.
      */
     public void addMessages(ArrayList<SmsMmsMessage> newMessages) {
         if (newMessages != null) {
@@ -75,8 +77,8 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     }
 
     /**
-     * Remove a specific message from the list, if there is only one message
-     * left then it will not be removed.
+     * Remove a specific message from the list, if there is only one message left then it will not
+     * be removed.
      * 
      * @param numMessage
      * @return true if a message was removed, false otherwise.
@@ -84,8 +86,10 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     public synchronized boolean removeMessage(int numMessage) {
         final int totalMessages = getPageCount();
 
-        if (totalMessages <= 1) return false;
-        if (numMessage >= totalMessages || numMessage < 0) return false;
+        if (totalMessages <= 1)
+            return false;
+        if (numMessage >= totalMessages || numMessage < 0)
+            return false;
 
         if (numMessage < currentPage && currentPage != (totalMessages - 1)) {
             currentPage--;
@@ -99,8 +103,8 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     }
 
     /**
-     * Remove the currently active message, if there is only one message left
-     * then it will not be removed.
+     * Remove the currently active message, if there is only one message left then it will not be
+     * removed.
      * 
      * @return true if a message was removed, false otherwise.
      */
@@ -158,8 +162,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {
-    }
+    public void onPageScrollStateChanged(int state) {}
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -175,8 +178,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     private class SmsPopupPagerAdapter extends PagerAdapter {
 
         @Override
-        public void finishUpdate(View container) {
-        }
+        public void finishUpdate(View container) {}
 
         @Override
         public int getCount() {
@@ -202,8 +204,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         }
 
         @Override
-        public void restoreState(Parcelable state, ClassLoader loader) {
-        }
+        public void restoreState(Parcelable state, ClassLoader loader) {}
 
         @Override
         public Parcelable saveState() {
@@ -211,8 +212,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         }
 
         @Override
-        public void startUpdate(View container) {
-        }
+        public void startUpdate(View container) {}
 
         @Override
         public int getItemPosition(Object object) {

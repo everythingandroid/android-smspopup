@@ -166,9 +166,9 @@
   <string name="quickreply_from_text">%s</string>
   <string name="quickreply_preset_button">Modelos</string>
   <string name="quickreply_send_button">Enviar</string>
-  <string name="quickreply_sending_toast">A Enviar Mensagem...</string>
+  <string name="quickreply_sending_toast">A Enviar Mensagem…</string>
   <string name="quickreply_nomessage_toast">Enviar</string>
-  <string name="loading_message">A Carregar...</string>
+  <string name="loading_message">A Carregar…</string>
   <string name="error_message">Erro</string>
   <string name="error_no_voice_recognition">Reconhecimento de Voz Não Disponivel neste Dispositivo</string>
   <string name="pref_button_config_title">Configuração de Botões</string>

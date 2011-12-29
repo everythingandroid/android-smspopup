@@ -42,11 +42,11 @@ import android.widget.TextView;
 
 public class ConfigContactsActivity extends FragmentActivity {
     private static final int REQ_CODE_CHOOSE_CONTACT = 0;
-    
+
     private static final String[] CONTACT_PROJECTION = new String[] {
-        Contacts._ID,
-        Contacts.DISPLAY_NAME,
-        Contacts.LOOKUP_KEY
+            Contacts._ID,
+            Contacts.DISPLAY_NAME,
+            Contacts.LOOKUP_KEY
     };
 
     private static final int COLUMN_DISPLAY_NAME = 1;
@@ -61,7 +61,7 @@ public class ConfigContactsActivity extends FragmentActivity {
         ft.add(android.R.id.content, ConfigContactsListFragment.newInstance());
         ft.commit();
 
-//        new SynchronizeContactNames().execute();
+        // new SynchronizeContactNames().execute();
     }
 
     @Override
@@ -72,13 +72,13 @@ public class ConfigContactsActivity extends FragmentActivity {
             if (resultCode == -1) { // Success, contact chosen
                 final List<String> segments = data.getData().getPathSegments();
                 final String lookupKey = segments.get(segments.size() - 2);
-                startActivity(getConfigPerContactIntent(getApplicationContext(), 
+                startActivity(getConfigPerContactIntent(getApplicationContext(),
                         ContactNotifications.buildLookupUri(lookupKey)));
             }
             break;
         }
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -120,16 +120,16 @@ public class ConfigContactsActivity extends FragmentActivity {
      */
     private static Intent getConfigPerContactIntent(Context context, long rowId) {
         Intent i = getConfigPerContactIntent(context);
-        i.putExtra(ConfigContactActivity.EXTRA_CONTACT_URI, 
+        i.putExtra(ConfigContactActivity.EXTRA_CONTACT_URI,
                 ContactNotifications.buildContactUri(rowId));
         return i;
     }
-    
+
     private static Intent getConfigPerContactIntent(Context context, Uri uri) {
         Intent i = getConfigPerContactIntent(context);
         i.putExtra(ConfigContactActivity.EXTRA_CONTACT_URI, uri);
         return i;
-    }    
+    }
 
     /**
      * AsyncTask to sync contact names from our database with those from the system database
@@ -268,9 +268,9 @@ public class ConfigContactsActivity extends FragmentActivity {
             if (getFilterQueryProvider() != null) {
                 return getFilterQueryProvider().runQuery(constraint);
             }
-            
+
             return mContent.query(
-                    Uri.withAppendedPath(Contacts.CONTENT_FILTER_URI, (String) constraint), 
+                    Uri.withAppendedPath(Contacts.CONTENT_FILTER_URI, (String) constraint),
                     CONTACT_PROJECTION, null, null, null);
         }
     }
@@ -316,7 +316,8 @@ public class ConfigContactsActivity extends FragmentActivity {
         public boolean onContextItemSelected(MenuItem item) {
             AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 
-            if (Log.DEBUG) Log.v("onContextItemSelected()");
+            if (Log.DEBUG)
+                Log.v("onContextItemSelected()");
 
             if (info.id != -1) {
                 switch (item.getItemId()) {
@@ -367,8 +368,10 @@ public class ConfigContactsActivity extends FragmentActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     final Cursor c = (Cursor) adapter.getItem(position);
-                    final Uri uri = Uri.withAppendedPath(
-                            ContactNotifications.CONTENT_LOOKUP_URI, c.getString(COLUMN_LOOKUP_KEY));
+                    final Uri uri =
+                            Uri.withAppendedPath(
+                                    ContactNotifications.CONTENT_LOOKUP_URI, c
+                                            .getString(COLUMN_LOOKUP_KEY));
                     startActivity(getConfigPerContactIntent(getActivity(), uri));
                     contactsAutoComplete.setText("");
                 }
@@ -376,7 +379,7 @@ public class ConfigContactsActivity extends FragmentActivity {
 
             return v;
         }
-        
+
         @Override
         public void onResume() {
             super.onResume();

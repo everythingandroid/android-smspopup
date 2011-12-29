@@ -17,9 +17,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.QuickContactBadge;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 public class SmsPopupView extends LinearLayout {
@@ -40,12 +38,12 @@ public class SmsPopupView extends LinearLayout {
     public static final int PRIVACY_MODE_OFF = 0;
     public static final int PRIVACY_MODE_HIDE_MESSAGE = 1;
     public static final int PRIVACY_MODE_HIDE_ALL = 2;
-    
+
     private static final int VIEW_SMS = 0;
-    private static final int VIEW_MMS = 1;    
+    private static final int VIEW_MMS = 1;
     private static final int VIEW_PRIVACY_SMS = 2;
     private static final int VIEW_PRIVACY_MMS = VIEW_MMS;
-        
+
     private int privacyMode = PRIVACY_MODE_OFF;
 
     private static final int CONTACT_IMAGE_FADE_DURATION = 500;
@@ -115,15 +113,14 @@ public class SmsPopupView extends LinearLayout {
     }
 
     /*
-     * Populate all the main SMS/MMS views with content from the actual
-     * SmsMmsMessage
+     * Populate all the main SMS/MMS views with content from the actual SmsMmsMessage
      */
     private void populateViews(SmsMmsMessage message) {
-        
+
         if (message.isSms()) {
             messageTv.setText(message.getMessageBody());
         }
-        
+
         // Set the from, message and header views
         fromTv.setText(message.getContactName());
         timestampTv.setText(message.getFormattedTimestamp());
@@ -134,12 +131,12 @@ public class SmsPopupView extends LinearLayout {
     // Set privacy using mode
     public void setPrivacy(int mode) {
         privacyMode = mode;
-        
-        final int viewPrivacy = 
-            message.isSms() ? VIEW_PRIVACY_SMS : VIEW_PRIVACY_MMS;
-        
+
+        final int viewPrivacy =
+                message.isSms() ? VIEW_PRIVACY_SMS : VIEW_PRIVACY_MMS;
+
         final int viewPrivacyOff =
-            message.isSms() ? VIEW_SMS : VIEW_MMS;
+                message.isSms() ? VIEW_SMS : VIEW_MMS;
 
         if (privacyMode == PRIVACY_MODE_OFF) {
 
@@ -149,13 +146,13 @@ public class SmsPopupView extends LinearLayout {
             loadContactPhoto();
 
         } else if (privacyMode == PRIVACY_MODE_HIDE_MESSAGE) {
-                        
+
             contentFlipper.setDisplayedChild(viewPrivacy);
             fromTv.setVisibility(View.VISIBLE);
             loadContactPhoto();
 
         } else if (privacyMode == PRIVACY_MODE_HIDE_ALL) {
-            
+
             contentFlipper.setDisplayedChild(viewPrivacy);
             fromTv.setVisibility(View.GONE);
         }
@@ -200,19 +197,21 @@ public class SmsPopupView extends LinearLayout {
     private class FetchContactPhotoTask extends AsyncTask<Uri, Integer, Bitmap> {
         @Override
         protected Bitmap doInBackground(Uri... params) {
-            if (Log.DEBUG) Log.v("Loading contact photo in background...");
+            if (Log.DEBUG)
+                Log.v("Loading contact photo in background...");
             return SmsPopupUtils.getPersonPhoto(mContext, params[0]);
         }
 
         @Override
         protected void onPostExecute(Bitmap photo) {
-            if (Log.DEBUG) Log.v("Done loading contact photo");
+            if (Log.DEBUG)
+                Log.v("Done loading contact photo");
             if (photo != null) {
                 contactPhoto = photo;
                 TransitionDrawable mTd =
                         new TransitionDrawable(new Drawable[] {
                                 getResources().getDrawable(R.drawable.ic_contact_picture),
-                                new BitmapDrawable(getResources(), contactPhoto)});
+                                new BitmapDrawable(getResources(), contactPhoto) });
                 contactBadge.setImageDrawable(mTd);
                 mTd.setCrossFadeEnabled(true);
                 mTd.startTransition(CONTACT_IMAGE_FADE_DURATION);
