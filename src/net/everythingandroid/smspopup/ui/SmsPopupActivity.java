@@ -55,6 +55,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -197,8 +198,6 @@ public class SmsPopupActivity extends Activity {
         smsPopupPager.setIndicator(pagerIndicator);
         mainLayout = (LinearLayout) findViewById(R.id.MainLayout);
         buttonSwitcher = (ViewSwitcher) findViewById(R.id.ButtonViewSwitcher);
-        // buttonLayout = findViewById(R.id.ButtonLayout);
-        // unlockButtonLayout = findViewById(R.id.UnlockButtonLayout);
 
         // Set privacy mode
         smsPopupPager.setPrivacy(privacyMode);
@@ -217,7 +216,16 @@ public class SmsPopupActivity extends Activity {
             
         });
 
-        Button unlockButton = (Button) findViewById(R.id.unlockButton);
+        final Button unlockButton = (Button) findViewById(R.id.unlockButton);
+        
+        // If on ICS+ set button to fill_parent (this is set to wrap_content by default). This
+        // matches better visually with ICS dialog buttons.
+        if (SmsPopupUtils.isICS()) {
+            final ViewGroup.LayoutParams unlockLayoutParams = unlockButton.getLayoutParams();
+            unlockLayoutParams.width = LayoutParams.FILL_PARENT;
+            unlockButton.setLayoutParams(unlockLayoutParams);
+        }
+        
         unlockButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -366,25 +374,32 @@ public class SmsPopupActivity extends Activity {
      * *****************************************************************************
      */
     private void refreshViews() {
+        
+        final int currentView = buttonSwitcher.getDisplayedChild();
 
         ManageKeyguard.initialize(this);
         if (ManageKeyguard.inKeyguardRestrictedInputMode()) {
-            // Show unlock button
-            buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_UNLOCK_BUTTON);
+            
+            if (currentView != BUTTON_SWITCHER_UNLOCK_BUTTON) { 
+                // Show unlock button
+                buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_UNLOCK_BUTTON);
+            }
 
             // Disable long-press context menu
             unregisterForContextMenu(smsPopupPager);
 
-            // SmsPopupSwipeView.setLockMode(true);
-
         } else {
-            // Show main popup buttons
-            buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_MAIN_BUTTONS);
+            
+            if (currentView != BUTTON_SWITCHER_MAIN_BUTTONS) {
+                // Show main popup buttons
+                buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_MAIN_BUTTONS);
+            }
 
             // Enable long-press context menu
             registerForContextMenu(smsPopupPager);
 
-            // SmsPopupSwipeView.setLockMode(false);
+            // Now keyguard is off, disable privacy mode
+            smsPopupPager.setPrivacy(SmsPopupView.PRIVACY_MODE_OFF);
         }
     }
 
@@ -572,7 +587,9 @@ public class SmsPopupActivity extends Activity {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             deleteMessage();
                         }
-                    }).setNegativeButton(android.R.string.cancel, null).create();
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .create();
 
             /*
              * Quick Reply Dialog
@@ -581,12 +598,12 @@ public class SmsPopupActivity extends Activity {
             LayoutInflater factory = getLayoutInflater();
             final View qrLayout = factory.inflate(R.layout.message_quick_reply, null);
             qrEditText = (EditText) qrLayout.findViewById(R.id.QuickReplyEditText);
-            final TextView qrCounterTextView = (TextView) qrLayout
-                    .findViewById(R.id.QuickReplyCounterTextView);
+            final TextView qrCounterTextView = 
+                    (TextView) qrLayout.findViewById(R.id.QuickReplyCounterTextView);
             final Button qrSendButton = (Button) qrLayout.findViewById(R.id.send_button);
 
-            final ImageButton voiceRecognitionButton = (ImageButton) qrLayout
-                    .findViewById(R.id.SpeechRecogButton);
+            final ImageButton voiceRecognitionButton = 
+                    (ImageButton) qrLayout.findViewById(R.id.SpeechRecogButton);
 
             voiceRecognitionButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -608,9 +625,8 @@ public class SmsPopupActivity extends Activity {
                         ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
                             @Override
                             public void LaunchOnKeyguardExitSuccess() {
-                                SmsPopupActivity.this
-                                        .startActivityForResult(intent,
-                                                VOICE_RECOGNITION_REQUEST_CODE);
+                                SmsPopupActivity.this.startActivityForResult(
+                                        intent, VOICE_RECOGNITION_REQUEST_CODE);
                             }
                         });
                     } else {
@@ -677,6 +693,13 @@ public class SmsPopupActivity extends Activity {
 
             // Set the custom layout with no spacing at the bottom
             qrAlertDialog.setView(qrLayout, 0, SmsPopupUtils.pixelsToDip(getResources(), 5), 0, 0);
+            
+            qrAlertDialog.setOnCancelListener(new OnCancelListener() { 
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    removeDialog(DIALOG_QUICKREPLY);
+                }
+            });
 
             // Preset messages button
             Button presetButton = (Button) qrLayout.findViewById(R.id.PresetMessagesButton);
@@ -695,6 +718,7 @@ public class SmsPopupActivity extends Activity {
                     if (qrAlertDialog != null) {
                         hideSoftKeyboard();
                         qrAlertDialog.dismiss();
+                        removeDialog(DIALOG_QUICKREPLY);
                     }
                 }
             });
@@ -737,14 +761,8 @@ public class SmsPopupActivity extends Activity {
 
             AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_email)
-                    .setTitle(R.string.pref_message_presets_title)
-                    .setOnCancelListener(new OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            showDialog(DIALOG_QUICKREPLY);
-                        }
-                    });
-
+                    .setTitle(R.string.pref_message_presets_title);
+            
             // If user has some presets defined ...
             if (mCursor != null && mCursor.getCount() > 0) {
 
@@ -754,8 +772,8 @@ public class SmsPopupActivity extends Activity {
                         if (Log.DEBUG)
                             Log.v("Item clicked = " + item);
                         mCursor.moveToPosition(item);
-                        quickReply(mCursor.getString(mCursor
-                                .getColumnIndexOrThrow(QuickMessages.QUICKMESSAGE)));
+                        quickReply(mCursor.getString(
+                                mCursor.getColumnIndexOrThrow(QuickMessages.QUICKMESSAGE)));
                     }
                 }, QuickMessages.QUICKMESSAGE);
             } else { // Otherwise display a placeholder as user has no presets
@@ -766,11 +784,7 @@ public class SmsPopupActivity extends Activity {
                         getString(R.string.message_presets_empty_text) });
                 mDialogBuilder.setCursor(emptyCursor, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int item) {
-                        // startActivity(new Intent(
-                        // SmsPopupActivity.this.getApplicationContext(),
-                        // net.everythingandroid.smspopup.ConfigPresetMessagesActivity.class));
-                    }
+                    public void onClick(DialogInterface dialog, int item) {}
                 }, QuickMessages.QUICKMESSAGE);
             }
 
@@ -806,10 +820,10 @@ public class SmsPopupActivity extends Activity {
             showSoftKeyboard(qrEditText);
 
             // Set width of dialog to fill_parent
-            LayoutParams mLP = dialog.getWindow().getAttributes();
+            final LayoutParams mLP = dialog.getWindow().getAttributes();
 
             // TODO: this should be limited in case the screen is large
-            mLP.width = LayoutParams.FILL_PARENT;
+            mLP.width = LayoutParams.FILL_PARENT;            
             dialog.getWindow().setAttributes(mLP);
             break;
 

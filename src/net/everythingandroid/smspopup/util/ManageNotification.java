@@ -160,29 +160,29 @@ public class ManageNotification {
     /*
      * The main notify method
      */
-    private static void
-            notify(Context context, SmsMmsMessage message, boolean onlyUpdate, int notif) {
+    private static void notify(Context context, SmsMmsMessage message, 
+            boolean onlyUpdate, int notif) {
 
         // Fetch info from the message object
-        int unreadCount = message.getUnreadCount();
-        String messageBody = message.getMessageBody();
-        String contactName = message.getContactName();
-        long timestamp = message.getTimestamp();
+        final int unreadCount = message.getUnreadCount();
+        final String messageBody = message.getMessageBody();
+        final String contactName = message.getContactName();
+        final long timestamp = message.getTimestamp();
 
         // Check if there are unread messages - if not, we're done :)
         if (unreadCount < 1) {
             return;
         }
 
-        PopupNotification n =
+        final PopupNotification n =
                 buildNotification(context, message.getContactLookupKey(), onlyUpdate, notif);
 
         if (n == null)
             return;
 
         // The notification title, sub-text and text that will scroll
-        String contentTitle;
-        String contentText;
+        String contentTitle = "";
+        String contentText = "";
         SpannableString scrollText;
 
         // If we're updating the notification, do not set the ticker text
@@ -198,25 +198,27 @@ public class ManageNotification {
 
             // If we're in privacy mode and the keyguard is on then just display
             // the name of the person, otherwise scroll the name and message
-            if (n.privacyMode
-                    && (ManageKeyguard.inKeyguardRestrictedInputMode() || n.privacyAlways)) {
-
+            if (n.privacyMode && 
+                    (ManageKeyguard.inKeyguardRestrictedInputMode() || n.privacyAlways)) {
+                
                 if (n.privacySender) {
-                    scrollText =
-                            new SpannableString(context
-                                    .getString(R.string.notification_scroll_privacy_no_name));
+                    scrollText = new SpannableString(context.getString(
+                            R.string.notification_scroll_privacy_no_name));
+                    contentTitle = scrollText.toString();
                 } else {
-                    scrollText =
-                            new SpannableString(context.getString(
-                                    R.string.notification_scroll_privacy, contactName));
+                    scrollText = new SpannableString(context.getString(
+                            R.string.notification_scroll_privacy, contactName));
+                    contentTitle = contactName;
+                    contentText = context.getString(R.string.notification_scroll_privacy_no_name);                    
                 }
 
             } else {
+                
+                contentTitle = contactName;
+                contentText = messageBody;
 
-                scrollText =
-                        new SpannableString(context.getString(R.string.notification_scroll,
-                                contactName,
-                                messageBody));
+                scrollText = new SpannableString(context.getString(R.string.notification_scroll, 
+                        contactName, messageBody));
 
                 // Set contact name as bold
                 scrollText.setSpan(new StyleSpan(Typeface.BOLD), 0, contactName.length(),
@@ -232,10 +234,7 @@ public class ManageNotification {
         if (unreadCount > 1) {
             contentTitle = context.getString(R.string.notification_multiple_title);
             contentText = context.getString(R.string.notification_multiple_text, unreadCount);
-            // smsIntent = SMSPopupUtils.getSmsIntent();
-        } else { // Else 1 message, set text and intent accordingly
-            contentTitle = contactName;
-            contentText = messageBody;
+        } else { // Else 1 message, set intent accordingly
             smsIntent = message.getReplyIntent(n.replyToThread);
         }
 
@@ -281,7 +280,6 @@ public class ManageNotification {
                 ContactNotifications.ENABLED)) {
 
             return null;
-
         }
 
         // Get some preferences: vibrate and vibrate_pattern prefs
