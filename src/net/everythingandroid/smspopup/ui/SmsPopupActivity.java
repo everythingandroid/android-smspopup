@@ -130,8 +130,6 @@ public class SmsPopupActivity extends Activity {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        if (Log.DEBUG)
-            Log.v("SMSPopupActivity: onCreate()");
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.popup);
@@ -176,7 +174,7 @@ public class SmsPopupActivity extends Activity {
         privacyAlways = mPrefs.getBoolean(getString(R.string.pref_privacy_always_key),
                 Defaults.PREFS_PRIVACY_ALWAYS);
         
-        if (privacySender) {
+        if (privacySender && privacyMessage) {
             privacyMode = SmsPopupView.PRIVACY_MODE_HIDE_ALL;
         } else if (privacyMessage) {
             privacyMode = SmsPopupView.PRIVACY_MODE_HIDE_MESSAGE;
@@ -255,7 +253,7 @@ public class SmsPopupActivity extends Activity {
             @Override
             public void onChange(int current, int total) {
                 if (total == 1) {
-                    pagerIndicator.setVisibility(View.GONE);
+                    pagerIndicator.setVisibility(View.INVISIBLE);
                 } else if (total >= 2) {
                     pagerIndicator.setVisibility(View.VISIBLE);
                 }
@@ -424,8 +422,8 @@ public class SmsPopupActivity extends Activity {
             smsPopupPager.getActiveMessage().updateReminderCount(0);
 
             // Schedule a reminder notification
-            ReminderService.scheduleReminder(getApplicationContext(), smsPopupPager
-                    .getActiveMessage());
+            ReminderService.scheduleReminder(getApplicationContext(), 
+                    smsPopupPager.getActiveMessage());
 
             // Run the notification
             ManageNotification.show(getApplicationContext(), smsPopupPager.getActiveMessage());

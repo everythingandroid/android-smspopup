@@ -8,8 +8,8 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 
 public class ManageWakeLock {
-    private static PowerManager.WakeLock mWakeLock = null;
-    private static PowerManager.WakeLock mPartialWakeLock = null;
+    private static volatile PowerManager.WakeLock mWakeLock = null;
+    private static volatile  PowerManager.WakeLock mPartialWakeLock = null;
     private static final boolean PREFS_SCREENON_DEFAULT = true;
     private static final boolean PREFS_DIMSCREEN_DEFAULT = false;
     private static final String PREFS_TIMEOUT_DEFAULT = "30";
@@ -49,10 +49,8 @@ public class ManageWakeLock {
             Log.v("**Wakelock acquired");
 
         // Fetch wakelock/screen timeout from preferences
-        int timeout =
-                Integer.valueOf(
-                        mPrefs.getString(mContext.getString(R.string.pref_timeout_key),
-                                PREFS_TIMEOUT_DEFAULT));
+        int timeout = Integer.valueOf(mPrefs.getString(
+                mContext.getString(R.string.pref_timeout_key), PREFS_TIMEOUT_DEFAULT));
 
         // Set a receiver to remove all locks in "timeout" seconds
         ClearAllReceiver.setCancel(mContext, timeout);
@@ -65,13 +63,8 @@ public class ManageWakeLock {
 
         PowerManager mPm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 
-        // TODO: this should be partial wake lock, but that seems to be causing issues with the cpu
-        // sleeping so changed to screen bright wake lock
         mPartialWakeLock =
-                mPm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-                        | PowerManager.ACQUIRE_CAUSES_WAKEUP, Log.LOGTAG + ".partial");
-        // mPartialWakeLock = mPm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG +
-        // ".partial");
+                mPm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG + ".partial");
         if (Log.DEBUG)
             Log.v("**Wakelock (partial) acquired");
         mPartialWakeLock.setReferenceCounted(false);
