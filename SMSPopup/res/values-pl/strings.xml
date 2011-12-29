@@ -168,7 +168,7 @@
   <string name="quickreply_send_button">Wyślij</string>
   <string name="quickreply_sending_toast">Wysyłanie wiadomości</string>
   <string name="quickreply_nomessage_toast">Wyślij</string>
-  <string name="loading_message">Ładowanie...</string>
+  <string name="loading_message">Ładowanie…</string>
   <string name="error_message">Błąd</string>
   <string name="error_no_voice_recognition">Funkcja rozpoznawania głosu jest niedostępna w tym urządzeniu</string>
   <string name="pref_button_config_title">Programowanie przycisków</string>

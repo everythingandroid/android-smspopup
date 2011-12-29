@@ -143,7 +143,7 @@
   <string name="contact_customization_title">Уведомления для %s</string>
   <string name="contact_customization_enabled">Уведомления включены для %s</string>
   <string name="contact_customization_disabled">Уведомления отключены для %s</string>
-  <string name="contact_customization_add_hint">Добавить/Изменить уведомления контакта...</string>
+  <string name="contact_customization_add_hint">Добавить/Изменить уведомления контакта…</string>
   <string name="ringtone_silent">Тишина</string>
   <string name="pref_message_presets_title">Шаблоны</string>
   <string name="pref_message_presets_summary">Задать шаблоны для быстрого ответа</string>
@@ -166,9 +166,9 @@
   <string name="quickreply_from_text">Кому: %s</string>
   <string name="quickreply_preset_button">Шаблоны</string>
   <string name="quickreply_send_button">Отправить</string>
-  <string name="quickreply_sending_toast">Отправка сообщения...</string>
+  <string name="quickreply_sending_toast">Отправка сообщения…</string>
   <string name="quickreply_nomessage_toast">Отправить</string>
-  <string name="loading_message">Загрузка...</string>
+  <string name="loading_message">Загрузка…</string>
   <string name="error_message">Ошибка</string>
   <string name="error_no_voice_recognition">Распознование голоса не доступно на этом устройстве</string>
   <string name="pref_button_config_title">Настройка кнопки</string>

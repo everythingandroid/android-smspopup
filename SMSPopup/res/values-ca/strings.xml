@@ -26,7 +26,7 @@
   <string name="pref_enabled_title">Activar la notificació d\'SMS</string>
   <string name="pref_enabled_summaryon">La notificació d\'SMS està activada</string>
   <string name="pref_enabled_summaryoff">La notificació d\'SMS està desactivada</string>
-  <string name="pref_about_title">Quant a...</string>
+  <string name="pref_about_title">Quant a…</string>
   <string name="pref_about_summary">Quant a SMS Popup</string>
   <string name="pref_faq_title">Preguntes més freqüents</string>
   <string name="pref_faq_summary">Preguntes més freqüents</string>

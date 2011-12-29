@@ -143,7 +143,7 @@
   <string name="contact_customization_title">Notifiche per %s</string>
   <string name="contact_customization_enabled">Notifiche abilitate per %s</string>
   <string name="contact_customization_disabled">Notifiche disabilitate per %s</string>
-  <string name="contact_customization_add_hint">Aggiungi/Modifica notifiche contatto...</string>
+  <string name="contact_customization_add_hint">Aggiungi/Modifica notifiche contatto…</string>
   <string name="ringtone_silent">Silenzioso</string>
   <string name="pref_message_presets_title">Messaggi standard</string>
   <string name="pref_message_presets_summary">Configura messaggi standard per risposte rapide</string>
@@ -166,9 +166,9 @@
   <string name="quickreply_from_text">A: %s</string>
   <string name="quickreply_preset_button">Msg standard</string>
   <string name="quickreply_send_button">Invia</string>
-  <string name="quickreply_sending_toast">Invio messaggio...</string>
+  <string name="quickreply_sending_toast">Invio messaggio…</string>
   <string name="quickreply_nomessage_toast">Invia</string>
-  <string name="loading_message">Caricamento...</string>
+  <string name="loading_message">Caricamento…</string>
   <string name="error_message">Errore</string>
   <string name="error_no_voice_recognition">Riconoscimento vocale non disponibile su questo dispositivo</string>
   <string name="pref_button_config_title">Configurazione tasti</string>

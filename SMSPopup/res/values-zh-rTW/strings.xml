@@ -135,7 +135,7 @@
   <string name="contact_customization_title">%s 的通知</string>
   <string name="contact_customization_enabled">%s 的通知已啟用</string>
   <string name="contact_customization_disabled">%s 的通知已禁用</string>
-  <string name="contact_customization_add_hint">新增/編輯聯絡人通知...</string>
+  <string name="contact_customization_add_hint">新增/編輯聯絡人通知…</string>
   <string name="ringtone_silent">靜音</string>
   <string name="pref_message_presets_title">預設資訊</string>
   <string name="pref_message_presets_summary">設定快速回覆的預設資訊</string>
@@ -158,9 +158,9 @@
   <string name="quickreply_from_text">到: %s</string>
   <string name="quickreply_preset_button">預設</string>
   <string name="quickreply_send_button">發送</string>
-  <string name="quickreply_sending_toast">正在發送資訊...</string>
+  <string name="quickreply_sending_toast">正在發送資訊…</string>
   <string name="quickreply_nomessage_toast">發送</string>
-  <string name="loading_message">載入中...</string>
+  <string name="loading_message">載入中…</string>
   <string name="error_message">錯誤</string>
   <string name="error_no_voice_recognition">此裝置上聲音識別不可用</string>
   <string name="pref_button_config_title">按鈕組態</string>

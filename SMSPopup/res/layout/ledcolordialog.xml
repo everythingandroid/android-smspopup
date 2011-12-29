@@ -1,81 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  android:layout_height="wrap_content"
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:orientation="vertical"
-  android:paddingLeft="5dp"
-  android:paddingRight="5dp"
-  android:id="@+id/CustomLEDColorLinearLayout">
-  <ScrollView
-    android:layout_height="wrap_content"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/CustomLEDColorScrollView"
     android:layout_width="fill_parent"
-    android:id="@+id/CustomLEDColorScrollView">
+    android:layout_height="wrap_content"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp" >
+
     <LinearLayout
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:layout_width="fill_parent"
-      android:id="@+id/ScrollViewLinearLayout"
-      android:paddingLeft="5dp"
-      android:paddingRight="5dp"
-      android:paddingBottom="2dp"
-      android:paddingTop="2dp">
-      <LinearLayout
-        android:layout_height="wrap_content"
+        android:id="@+id/ScrollViewLinearLayout"
         android:layout_width="fill_parent"
-        android:id="@+id/PreviewLinearLayout"
-        android:gravity="left|center">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="2dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="2dp" >
+
+        <LinearLayout
+            android:id="@+id/PreviewLinearLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center" >
+
+            <TextView
+                android:id="@+id/PreviewTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="right"
+                android:paddingRight="15dp"
+                android:text="@string/pref_flashled_color_custom_dialog_preview" />
+
+            <ImageView
+                android:id="@+id/PreviewImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:maxHeight="30dp"
+                android:maxWidth="50dp"
+                android:minHeight="30dp"
+                android:minWidth="50dp" />
+        </LinearLayout>
+
         <TextView
-          android:layout_height="wrap_content"
-          android:id="@+id/PreviewTextView"
-          android:layout_width="wrap_content"
-          android:layout_gravity="center"
-          android:gravity="right"
-          android:text="@string/pref_flashled_color_custom_dialog_preview"
-          android:paddingRight="15dp"></TextView>
-        <ImageView
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:id="@+id/PreviewImageView"
-          android:layout_width="wrap_content"
-          android:maxHeight="30dp"
-          android:minHeight="30dp"
-          android:maxWidth="50dp"
-          android:minWidth="50dp"></ImageView>
-      </LinearLayout>
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/RedTextView"
-        android:text="@string/pref_flashled_color_custom_dialog_red"
-        android:paddingTop="5dp"></TextView>
-      <SeekBar
-        android:id="@+id/RedSeekBar"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:max="255"></SeekBar>
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/GreenTextView"
-        android:text="@string/pref_flashled_color_custom_dialog_green"
-        android:paddingTop="5dp"></TextView>
-      <SeekBar
-        android:id="@+id/GreenSeekBar"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:max="255"></SeekBar>
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/BlueTextView"
-        android:text="@string/pref_flashled_color_custom_dialog_blue"
-        android:paddingTop="5dp"></TextView>
-      <SeekBar
-        android:id="@+id/BlueSeekBar"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:max="255"></SeekBar>
+            android:id="@+id/RedTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="@string/pref_flashled_color_custom_dialog_red" />
+
+        <SeekBar
+            android:id="@+id/RedSeekBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="255" />
+
+        <TextView
+            android:id="@+id/GreenTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="@string/pref_flashled_color_custom_dialog_green" />
+
+        <SeekBar
+            android:id="@+id/GreenSeekBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="255" />
+
+        <TextView
+            android:id="@+id/BlueTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="@string/pref_flashled_color_custom_dialog_blue" />
+
+        <SeekBar
+            android:id="@+id/BlueSeekBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:max="255" />
     </LinearLayout>
-  </ScrollView>
-</LinearLayout>
+
+</ScrollView>

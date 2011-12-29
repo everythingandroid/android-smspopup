@@ -7,8 +7,8 @@ import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.controls.SmsPopupPager;
 import net.everythingandroid.smspopup.controls.SmsPopupPager.MessageCountChanged;
-import net.everythingandroid.smspopup.controls.SmsPopupView.OnReactToMessage;
 import net.everythingandroid.smspopup.controls.SmsPopupView;
+import net.everythingandroid.smspopup.controls.SmsPopupView.OnReactToMessage;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
@@ -37,10 +37,8 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.MatrixCursor;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -155,8 +153,8 @@ public class SmsPopupActivity extends Activity {
 
     /*
      * *****************************************************************************
-     * Setup methods - these will mostly be run one time only ********************
-     * *********************************************************
+     * Setup methods - these will mostly be run one time only 
+     * *****************************************************************************
      */
 
     private void setupPreferences() {

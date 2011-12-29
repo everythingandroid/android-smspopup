@@ -34,7 +34,7 @@ public class ManageNotification {
     public static final int NOTIFICATION_ALERT = 1337;
     public static final int NOTIFICATION_TEST = 888;
     public static final int NOTIFICATION_SEND_FAILED = 100;
-    public static final String defaultRingtone = 
+    public static final String defaultRingtone =
             Settings.System.DEFAULT_NOTIFICATION_URI.toString();
     private static final Uri UNDELIVERED_URI = Uri.parse("content://mms-sms/undelivered");
 
@@ -117,7 +117,8 @@ public class ManageNotification {
             // Seems this is needed for the number value to take effect on the Notification
             myNM.cancel(notif);
 
-            if (Log.DEBUG) Log.v("*** Notify running ***");
+            if (Log.DEBUG)
+                Log.v("*** Notify running ***");
             myNM.notify(notif, notification);
         }
     }
@@ -340,7 +341,8 @@ public class ManageNotification {
                         defaultRingtone,
                         ContactNotifications.RINGTONE));
 
-        if (Log.DEBUG) Log.v("Sounds URI = " + notifSoundUri.toString());
+        if (Log.DEBUG)
+            Log.v("Sounds URI = " + notifSoundUri.toString());
 
         // Fetch privacy settings
         boolean privacyMode =
