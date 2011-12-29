@@ -200,10 +200,18 @@ public class SmsPopupUtils {
         if (address == null)
             return null;
 
-        Cursor cursor = context.getContentResolver().query(
-                Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address)),
-                new String[] { PhoneLookup._ID, PhoneLookup.DISPLAY_NAME, PhoneLookup.LOOKUP_KEY },
-                null, null, null);
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(
+                    Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address)),
+                    new String[] { PhoneLookup._ID, PhoneLookup.DISPLAY_NAME, PhoneLookup.LOOKUP_KEY },
+                    null, null, null);
+        } catch (IllegalArgumentException e) {
+            Log.v("getPersonIdFromPhoneNumber(): " + e.toString());
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
 
         if (cursor != null) {
             try {
@@ -241,8 +249,10 @@ public class SmsPopupUtils {
                             Uri.encode(extractAddrSpec(email))),
                     new String[] { Email.CONTACT_ID, Email.DISPLAY_NAME, Email.LOOKUP_KEY },
                     null, null, null);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             Log.v("getPersonIdFromEmail(): " + e.toString());
+            return null;
+        } catch (Exception e) {
             return null;
         }
 
@@ -451,17 +461,19 @@ public class SmsPopupUtils {
 
         long threadId = 0;
 
-        Cursor cursor = context.getContentResolver().query(
-                uriBuilder.build(),
-                new String[] { Contacts._ID },
-                null, null, null);
+        Cursor cursor = null;
+        try {
 
-        if (cursor != null) {
-            try {
-                if (cursor.moveToFirst()) {
-                    threadId = cursor.getLong(0);
-                }
-            } finally {
+            cursor = context.getContentResolver().query(
+                    uriBuilder.build(),
+                    new String[] { Contacts._ID },
+                    null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                threadId = cursor.getLong(0);
+            }
+        } finally {
+            if (cursor != null) {
                 cursor.close();
             }
         }

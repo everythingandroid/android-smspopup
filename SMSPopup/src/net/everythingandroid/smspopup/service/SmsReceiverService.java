@@ -145,8 +145,8 @@ public class SmsReceiverService extends Service {
         if (bundle != null) {
             SmsMessage[] messages = SmsPopupUtils.getMessagesFromIntent(intent);
             if (messages != null) {
-                notifyMessageReceived(new SmsMmsMessage(context, messages, System
-                        .currentTimeMillis()));
+                notifyMessageReceived(new SmsMmsMessage(
+                        context, messages, System.currentTimeMillis()));
             }
         }
     }
@@ -211,7 +211,7 @@ public class SmsReceiverService extends Service {
 
             if (Log.DEBUG)
                 Log.v("^^^^^^Showing SMS Popup");
-            ManageWakeLock.acquireFull(context);
+            ManageWakeLock.acquirePartial(context);
             context.startActivity(message.getPopupIntent());
 
         } else if (notifEnabled) {

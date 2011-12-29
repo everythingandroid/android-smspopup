@@ -33,7 +33,7 @@ public class SmsPopupView extends LinearLayout {
     private ViewFlipper contentFlipper;
 
     private QuickContactBadge contactBadge = null;
-    private Bitmap contactPhoto = null;
+    private boolean fetchedContactPhoto = false;
 
     public static final int PRIVACY_MODE_OFF = 0;
     public static final int PRIVACY_MODE_HIDE_MESSAGE = 1;
@@ -137,23 +137,31 @@ public class SmsPopupView extends LinearLayout {
 
         final int viewPrivacyOff =
                 message.isSms() ? VIEW_SMS : VIEW_MMS;
+        
+        final int currentView = contentFlipper.getDisplayedChild();
 
         if (privacyMode == PRIVACY_MODE_OFF) {
 
-            contentFlipper.setDisplayedChild(viewPrivacyOff);
+            if (currentView != viewPrivacyOff) {
+                contentFlipper.setDisplayedChild(viewPrivacyOff);
+            }
             fromTv.setVisibility(View.VISIBLE);
             messageViewed = true;
             loadContactPhoto();
 
         } else if (privacyMode == PRIVACY_MODE_HIDE_MESSAGE) {
 
-            contentFlipper.setDisplayedChild(viewPrivacy);
+            if (currentView != viewPrivacy) {
+                contentFlipper.setDisplayedChild(viewPrivacy);
+            }
             fromTv.setVisibility(View.VISIBLE);
             loadContactPhoto();
 
         } else if (privacyMode == PRIVACY_MODE_HIDE_ALL) {
 
-            contentFlipper.setDisplayedChild(viewPrivacy);
+            if (currentView != viewPrivacy) {
+                contentFlipper.setDisplayedChild(viewPrivacy);
+            }
             fromTv.setVisibility(View.GONE);
         }
     }
@@ -179,16 +187,18 @@ public class SmsPopupView extends LinearLayout {
 
     private void loadContactPhoto() {
         // Fetch contact photo in background
-        if (contactPhoto == null) {
+        // if (contactPhoto == null || contactPhoto.get() == null) {
+        if (!fetchedContactPhoto) {
             new FetchContactPhotoTask().execute(message.getContactLookupUri());
-        }
-        contactBadge.setClickable(true);
-        final Uri contactUri = message.getContactLookupUri();
-        if (contactUri != null) {
-            contactBadge.assignContactUri(message.getContactLookupUri());
-        } else {
-            contactBadge.assignContactFromPhone(message.getAddress(), false);
-        }
+            
+            contactBadge.setClickable(true);
+            final Uri contactUri = message.getContactLookupUri();
+            if (contactUri != null) {
+                contactBadge.assignContactUri(message.getContactLookupUri());
+            } else {
+                contactBadge.assignContactFromPhone(message.getAddress(), false);
+            }            
+        }        
     }
 
     /**
@@ -207,11 +217,11 @@ public class SmsPopupView extends LinearLayout {
             if (Log.DEBUG)
                 Log.v("Done loading contact photo");
             if (photo != null) {
-                contactPhoto = photo;
+                fetchedContactPhoto = true;
                 TransitionDrawable mTd =
                         new TransitionDrawable(new Drawable[] {
                                 getResources().getDrawable(R.drawable.ic_contact_picture),
-                                new BitmapDrawable(getResources(), contactPhoto) });
+                                new BitmapDrawable(getResources(), photo) });
                 contactBadge.setImageDrawable(mTd);
                 mTd.setCrossFadeEnabled(true);
                 mTd.startTransition(CONTACT_IMAGE_FADE_DURATION);

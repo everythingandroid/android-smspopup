@@ -341,7 +341,14 @@ public class SmsMmsMessage {
     }
 
     public CharSequence getFormattedTimestamp() {
-        return DateUtils.formatDateTime(context, timestamp, DateUtils.FORMAT_SHOW_TIME);
+        CharSequence formattedTime;
+        try {
+            formattedTime = DateUtils.formatDateTime(context, timestamp, DateUtils.FORMAT_SHOW_TIME);
+        } catch (Exception e) {
+            if (Log.DEBUG) Log.v("Error formatting timestamp + " + timestamp);
+            formattedTime = "";
+        }
+        return formattedTime;
     }
 
     public String getContactName() {
@@ -464,8 +471,7 @@ public class SmsMmsMessage {
         return sender.sendMessage();
     }
 
-    // Checks if user is on carrier Sprint and message is a special system
-    // message
+    // Checks if user is on carrier Sprint and message is a special system message
     public boolean isSprintVisualVoicemail() {
 
         if (!SPRINT_BRAND.equals(Build.BRAND)) {
