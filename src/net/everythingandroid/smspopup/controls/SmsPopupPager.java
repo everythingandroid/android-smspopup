@@ -29,6 +29,11 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     private CirclePageIndicator mPagerIndicator;
     private int privacyMode;
     private OnReactToMessage mOnReactToMessage;
+    private volatile boolean removingMessage = false;
+    
+    public static int STATUS_MESSAGES_REMAINING = 0;
+    public static int STATUS_NO_MESSAGES_REMAINING = 1;
+    public static int STATUS_REMOVING_MESSAGE = 2;
 
     public SmsPopupPager(Context context) {
         super(context);
@@ -85,31 +90,39 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
      * be removed.
      * 
      * @param numMessage
-     * @return true if a message was removed, false otherwise.
+     * @return One of STATUS_MESSAGES_REMAINING, STATUS_NO_MESSAGES_REMAINING or 
+     * STATUS_REMOVING_MESSAGE
      */
-    public synchronized boolean removeMessage(final int numMessage) {
+    public synchronized int removeMessage(final int numMessage) {
+        if (removingMessage) {
+            return STATUS_REMOVING_MESSAGE;
+        }
+        
         final int totalMessages = getPageCount();
 
         if (totalMessages <= 1)
-            return false;
+            return STATUS_NO_MESSAGES_REMAINING;
         if (numMessage >= totalMessages || numMessage < 0)
-            return false;
-
-        if (numMessage < currentPage && currentPage != (totalMessages - 1)) {
-            currentPage--;
-        }
+            return STATUS_NO_MESSAGES_REMAINING;
         
         Animation mAnimation = AnimationUtils.loadAnimation(mContext, R.anim.shrink_fade_out_center);
         mAnimation.setAnimationListener(new AnimationListener() {
 
             @Override
-            public void onAnimationStart(Animation animation) {}
+            public void onAnimationStart(Animation animation) {
+                removingMessage = true;
+            }
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                if (numMessage < currentPage && currentPage != (totalMessages - 1)) {
+                    currentPage--;
+                }
+                
                 messages.remove(numMessage);
                 mAdapter.notifyDataSetChanged();
                 UpdateMessageCount();
+                removingMessage = false;
             }
 
             @Override
@@ -118,16 +131,17 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         });
         startAnimation(mAnimation);
 
-        return true;
+        return STATUS_MESSAGES_REMAINING;
     }
 
     /**
      * Remove the currently active message, if there is only one message left then it will not be
      * removed.
      * 
-     * @return true if a message was removed, false otherwise.
+     * @return One of STATUS_MESSAGES_REMAINING, STATUS_NO_MESSAGES_REMAINING or 
+     * STATUS_REMOVING_MESSAGE
      */
-    public boolean removeActiveMessage() {
+    public int removeActiveMessage() {
         return removeMessage(currentPage);
     }
 
