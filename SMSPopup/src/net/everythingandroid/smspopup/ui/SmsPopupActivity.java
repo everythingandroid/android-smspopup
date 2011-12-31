@@ -1161,9 +1161,10 @@ public class SmsPopupActivity extends Activity {
      * Removes the active message
      */
     private void removeActiveMessage() {
-        if (smsPopupPager.removeActiveMessage()) {
+        final int status = smsPopupPager.removeActiveMessage();
+        if (status == SmsPopupPager.STATUS_MESSAGES_REMAINING) {
             ManageNotification.update(this, smsPopupPager.getActiveMessage());
-        } else { // No more messages to remove, finish up.
+        } else if (status == SmsPopupPager.STATUS_NO_MESSAGES_REMAINING)  {
             myFinish();
         }
     }
