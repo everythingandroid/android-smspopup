@@ -59,8 +59,8 @@
         android:id="@+id/contentFlipper"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:inAnimation="@android:anim/fade_in"
-        android:outAnimation="@android:anim/fade_out" >
+        android:inAnimation="@anim/grow_fade_in_center_high"
+        android:outAnimation="@anim/shrink_fade_out_center_high" >
 
         <ScrollView
             android:layout_width="fill_parent"

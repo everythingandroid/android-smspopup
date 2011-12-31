@@ -38,9 +38,7 @@
         <ViewSwitcher
             android:id="@+id/ButtonViewSwitcher"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inAnimation="@android:anim/fade_in"
-            android:outAnimation="@android:anim/fade_out" >
+            android:layout_height="wrap_content" >
 
             <LinearLayout
                 android:id="@+id/ButtonLayout"
