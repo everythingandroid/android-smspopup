@@ -4,5 +4,6 @@
     <dimen name="contact_thumbnail_size">100dp</dimen>
     <dimen name="contact_thumbnail_border">0dp</dimen>
     <dimen name="contact_thumbnail_margin">2dp</dimen>
+    <dimen name="smspopup_pager_height">220dp</dimen>
 
 </resources>

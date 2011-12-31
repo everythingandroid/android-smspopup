@@ -22,7 +22,6 @@ public class ReminderService extends WakefulIntentService {
     private static PendingIntent reminderPendingIntent = null;
 
     public static final String ACTION_REMIND = "net.everythingandroid.smspopup.ACTION_REMIND";
-    public static final String ACTION_OTHER = "net.everythingandroid.smspopup.ACTION_OTHER";
 
     public ReminderService() {
         super(TAG);

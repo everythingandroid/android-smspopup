@@ -6,18 +6,25 @@
     android:minWidth="310dp"
     android:orientation="vertical" >
 
-    <net.everythingandroid.smspopup.controls.SmsPopupPager
-        android:id="@+id/SmsPopupPager"
-        android:layout_width="fill_parent"
-        android:layout_height="200dp" >
-    </net.everythingandroid.smspopup.controls.SmsPopupPager>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/smspopup_pager_height" >
 
-    <com.viewpagerindicator.CirclePageIndicator
-        android:id="@+id/indicator"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="8dp"
-        android:paddingTop="4dp" />
+        <net.everythingandroid.smspopup.controls.SmsPopupPager
+            android:id="@+id/SmsPopupPager"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingBottom="9dp" >
+        </net.everythingandroid.smspopup.controls.SmsPopupPager>
+
+        <com.viewpagerindicator.CirclePageIndicator
+            android:id="@+id/indicator"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:paddingBottom="4dp"
+            android:paddingTop="2dp" />
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/buttonPanel"
