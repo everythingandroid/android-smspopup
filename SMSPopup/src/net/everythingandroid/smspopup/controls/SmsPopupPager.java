@@ -2,6 +2,7 @@ package net.everythingandroid.smspopup.controls;
 
 import java.util.ArrayList;
 
+import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.controls.SmsPopupView.OnReactToMessage;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.util.Log;
@@ -12,6 +13,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -58,7 +62,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
      * @param newMessage
      *            The message to add.
      */
-    public void addMessage(SmsMmsMessage newMessage) {
+    public synchronized void addMessage(SmsMmsMessage newMessage) {
         messages.add(newMessage);
         UpdateMessageCount();
     }
@@ -69,7 +73,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
      * @param newMessages
      *            The list of new messages to add.
      */
-    public void addMessages(ArrayList<SmsMmsMessage> newMessages) {
+    public synchronized void addMessages(ArrayList<SmsMmsMessage> newMessages) {
         if (newMessages != null) {
             messages.addAll(newMessages);
             UpdateMessageCount();
@@ -83,7 +87,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
      * @param numMessage
      * @return true if a message was removed, false otherwise.
      */
-    public synchronized boolean removeMessage(int numMessage) {
+    public synchronized boolean removeMessage(final int numMessage) {
         final int totalMessages = getPageCount();
 
         if (totalMessages <= 1)
@@ -94,10 +98,25 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         if (numMessage < currentPage && currentPage != (totalMessages - 1)) {
             currentPage--;
         }
+        
+        Animation mAnimation = AnimationUtils.loadAnimation(mContext, R.anim.shrink_fade_out_center);
+        mAnimation.setAnimationListener(new AnimationListener() {
 
-        messages.remove(numMessage);
-        mAdapter.notifyDataSetChanged();
-        UpdateMessageCount();
+            @Override
+            public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                messages.remove(numMessage);
+                mAdapter.notifyDataSetChanged();
+                UpdateMessageCount();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+            
+        });
+        startAnimation(mAnimation);
 
         return true;
     }
