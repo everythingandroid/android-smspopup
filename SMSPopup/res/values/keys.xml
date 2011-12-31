@@ -14,7 +14,7 @@
     <string name="pref_privacy_always_key">privacy_always</string>
     <string name="pref_markread_key">markread</string>
     <string name="pref_onlyShowOnKeyguard_key">showonkeyguard</string>
-    <string name="pref_require_unlock_key">requireunlock</string>
+    <string name="pref_useUnlockButton_key">useunlock</string>
     <string name="pref_inbox_app_key">inboxapp</string>
     <string name="pref_show_buttons_key">showbuttons</string>
     <string name="pref_show_delete_button_key">showdelete</string>

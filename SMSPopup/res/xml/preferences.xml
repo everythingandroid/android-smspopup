@@ -170,6 +170,13 @@
             android:summaryOn="@string/pref_show_buttons_summaryon"
             android:summaryOff="@string/pref_show_buttons_summaryoff"
             android:defaultValue="@string/pref_show_buttons_default" />
+          <CheckBoxPreference
+            android:key="@string/pref_useUnlockButton_key"
+            android:title="@string/pref_useUnlockButton_title"
+            android:summaryOn="@string/pref_useUnlockButton_summaryon"
+            android:summaryOff="@string/pref_useUnlockButton_summaryoff"
+            android:defaultValue="@string/pref_useUnlockButton_default"
+            android:dependency="@string/pref_show_buttons_key" />
           <net.everythingandroid.smspopup.preferences.ButtonListPreference
             android:key="@string/pref_button1_key"
             android:title="@string/pref_button1_title"
