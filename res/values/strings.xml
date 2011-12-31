@@ -75,23 +75,15 @@
     <string name="pref_onlyShowOnKeyguard_title">Restrict Popup</string>
     <string name="pref_onlyShowOnKeyguard_summaryon">Popup window will only show when keyguard is engaged</string>
     <string name="pref_onlyShowOnKeyguard_summaryoff">Popup will always show</string>
-    <string name="pref_require_unlock_title">Require Screen Unlock</string>
-    <string name="pref_require_unlock_summaryon">Buttons will be hidden till screen is unlocked</string>
-    <string name="pref_require_unlock_summaryoff">Buttons will show immediately</string>
+    <string name="pref_useUnlockButton_title">Show Unlock Button</string>
+    <string name="pref_useUnlockButton_summaryon">Unlock button will show when screen is locked</string>
+    <string name="pref_useUnlockButton_summaryoff">Regular buttons will show when screen is locked</string>
     <string name="pref_inbox_app_title">Choose Inbox App</string>
     <string name="pref_inbox_app_summary">Choose the application that is launched for multiple messages</string>
     <string name="pref_inbox_app_info">Note that the "Reply" messaging application is set by the system</string>
     <string name="pref_show_buttons_title">Show Buttons On Popup</string>
     <string name="pref_show_buttons_summaryon">Buttons on popup are visible</string>
     <string name="pref_show_buttons_summaryoff">Buttons are hidden in long press menu</string>
-    <string name="pref_show_delete_button_title">Show a Delete Button</string>
-    <string name="pref_show_delete_button_summaryon">Delete button is enabled</string>
-    <string name="pref_show_delete_button_summaryoff">Delete button is disabled</string>
-    <string name="pref_show_delete_button_dialog_title">Delete Message</string>
-    <string name="pref_show_delete_button_dialog_text">Are you sure?</string>
-    <string name="pref_blur_title">Blur Background</string>
-    <string name="pref_blur_summaryon">The background behind the message window will be blurred out</string>
-    <string name="pref_blur_summaryoff">The background behind the message window will not be blurred</string>
 
     <!-- Notification Preferences -->
     <string name="pref_notif_title">Notifications</string>
@@ -202,8 +194,6 @@
     <string name="message_presets_error_toast">Error - please try again</string>
 
     <!-- Quick Reply Strings -->
-    <string name="message_counter">%d chars remaining</string>
-    <string name="message_counter_multiple" formatted="false">%d chars remaining, %d messages</string>
     <string name="quickreply_title">Quick Reply</string>
     <string name="quickreply_from_text">To: %s</string>
     <string name="quickreply_preset_button">Presets</string>

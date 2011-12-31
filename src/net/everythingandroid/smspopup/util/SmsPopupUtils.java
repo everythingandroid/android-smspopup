@@ -207,9 +207,10 @@ public class SmsPopupUtils {
                     new String[] { PhoneLookup._ID, PhoneLookup.DISPLAY_NAME, PhoneLookup.LOOKUP_KEY },
                     null, null, null);
         } catch (IllegalArgumentException e) {
-            Log.v("getPersonIdFromPhoneNumber(): " + e.toString());
+            Log.e("getPersonIdFromPhoneNumber(): " + e.toString());
             return null;
         } catch (Exception e) {
+            Log.e("getPersonIdFromPhoneNumber(): " + e.toString());
             return null;
         }
 
@@ -247,12 +248,13 @@ public class SmsPopupUtils {
                     Uri.withAppendedPath(
                             Email.CONTENT_LOOKUP_URI,
                             Uri.encode(extractAddrSpec(email))),
-                    new String[] { Email.CONTACT_ID, Email.DISPLAY_NAME, Email.LOOKUP_KEY },
+                    new String[] { Email.CONTACT_ID, Email.DISPLAY_NAME_PRIMARY, Email.LOOKUP_KEY },
                     null, null, null);
         } catch (IllegalArgumentException e) {
-            Log.v("getPersonIdFromEmail(): " + e.toString());
+            Log.e("getPersonIdFromEmail(): " + e.toString());
             return null;
         } catch (Exception e) {
+            Log.e("getPersonIdFromEmail(): " + e.toString());
             return null;
         }
 
@@ -606,8 +608,8 @@ public class SmsPopupUtils {
      * Tries to delete a message from the system database, given the thread id, the timestamp of the
      * message and the message type (sms/mms).
      */
-    public static void
-            deleteMessage(Context context, long messageId, long threadId, int messageType) {
+    public static void deleteMessage(Context context, long messageId, 
+            long threadId, int messageType) {
 
         if (messageId > 0) {
             if (Log.DEBUG)
@@ -659,7 +661,7 @@ public class SmsPopupUtils {
     public static ArrayList<SmsMmsMessage> getUnreadMessages(Context context, long ignoreMessageId) {
 
         if (Log.DEBUG)
-            Log.v("getUnreadMessages(): " + ignoreMessageId);
+            Log.v("getUnreadMessages(), ignore id: " + ignoreMessageId);
 
         ArrayList<SmsMmsMessage> messages = null;
 

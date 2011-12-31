@@ -125,8 +125,6 @@ public class SmsMmsMessage {
             contactName = contactIdentify.contactName;
         }
 
-        // contactName = SmsPopupUtils.getPersonName(context, contactId,
-        // fromAddress);
         unreadCount = SmsPopupUtils.getUnreadMessagesCount(context, timestamp, messageBody);
 
         if (contactName == null) {
@@ -150,19 +148,24 @@ public class SmsMmsMessage {
         messageType = _messageType;
 
         fromAddress = SmsPopupUtils.getMmsAddress(context, messageId);
+        fromEmailGateway = false;
 
-        ContactIdentification contactIdentify = null;
-
-        if (PhoneNumberUtils.isWellFormedSmsAddress(fromAddress)) {
-            contactIdentify = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
-            contactName = PhoneNumberUtils.formatNumber(fromAddress);
-            fromEmailGateway = false;
-        } else {
+        contactName = PhoneNumberUtils.formatNumber(fromAddress);
+        
+        // Look up by phone number first
+        ContactIdentification contactIdentify = 
+                SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
+        
+        if (contactIdentify == null) {
+            // Lookup by email
             contactIdentify = SmsPopupUtils.getPersonIdFromEmail(context, fromAddress);
-            contactName = fromAddress.trim();
-            fromEmailGateway = true;
+            if (contactIdentify != null) {
+                // If found then set "from email" flag
+                fromEmailGateway = true;
+            }
         }
 
+        // If a contact was found then set fields
         if (contactIdentify != null) {
             contactId = contactIdentify.contactId;
             contactLookupKey = contactIdentify.contactLookup;

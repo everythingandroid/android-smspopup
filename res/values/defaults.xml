@@ -8,6 +8,7 @@
     <string name="pref_privacy_always_default">false</string>
     <string name="pref_markread_default">true</string>
     <string name="pref_onlyShowOnKeyguard_default">false</string>
+    <string name="pref_useUnlockButton_default">false</string>
     <string name="pref_require_unlock_default">false</string>
     <string name="pref_show_buttons_default">true</string>
     <string name="pref_show_delete_button_default">false</string>

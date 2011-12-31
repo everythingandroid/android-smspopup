@@ -94,6 +94,7 @@ public class SmsPopupActivity extends Activity {
     private boolean inbox = false;
     private int privacyMode;
     private boolean privacyAlways = false;
+    private boolean useUnlockButton = false;
     private String signatureText;
 
     private static final double WIDTH = 0.9;
@@ -182,6 +183,9 @@ public class SmsPopupActivity extends Activity {
         } else {
             privacyMode = SmsPopupView.PRIVACY_MODE_OFF;
         }
+        
+        useUnlockButton = mPrefs.getBoolean(
+                getString(R.string.pref_useUnlockButton_key), Defaults.PREFS_USE_UNLOCK_BUTTON);
 
         // Fetch quick reply signature
         signatureText = mPrefs.getString(getString(R.string.pref_notif_signature_key), "");
@@ -206,7 +210,7 @@ public class SmsPopupActivity extends Activity {
 
             @Override
             public void onViewMessage(SmsMmsMessage message) {
-                smsPopupPager.setPrivacy(SmsPopupView.PRIVACY_MODE_OFF);
+                viewMessage();
             }
 
             @Override
@@ -229,12 +233,7 @@ public class SmsPopupActivity extends Activity {
         unlockButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                exitingKeyguardSecurely = true;
-
-                ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
-                    @Override
-                    public void LaunchOnKeyguardExitSuccess() {}
-                });
+                viewMessage();
             }
         });
 
@@ -359,13 +358,13 @@ public class SmsPopupActivity extends Activity {
 
         smsPopupPager.addMessage(message);
 
-        if (!newIntent) {
+        if (newIntent) {
+            
+        } else {
             // TODO: move off UI thread
-            smsPopupPager
-                    .addMessages(SmsPopupUtils.getUnreadMessages(this, message.getMessageId()));
+            smsPopupPager.addMessages(
+                    SmsPopupUtils.getUnreadMessages(this, message.getMessageId()));
         }
-
-        // mSmsPopups.refreshPrivacy();
     }
 
     /*
@@ -380,9 +379,11 @@ public class SmsPopupActivity extends Activity {
         ManageKeyguard.initialize(this);
         if (ManageKeyguard.inKeyguardRestrictedInputMode()) {
             
-            if (currentView != BUTTON_SWITCHER_UNLOCK_BUTTON) { 
-                // Show unlock button
-                buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_UNLOCK_BUTTON);
+            if (useUnlockButton) {
+                if (currentView != BUTTON_SWITCHER_UNLOCK_BUTTON) { 
+                    // Show unlock button
+                    buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_UNLOCK_BUTTON);
+                }
             }
 
             // Disable long-press context menu
@@ -398,8 +399,10 @@ public class SmsPopupActivity extends Activity {
             // Enable long-press context menu
             registerForContextMenu(smsPopupPager);
 
-            // Now keyguard is off, disable privacy mode
-            smsPopupPager.setPrivacy(SmsPopupView.PRIVACY_MODE_OFF);
+            if (!privacyAlways) {
+                // Now keyguard is off, disable privacy mode
+                smsPopupPager.setPrivacy(SmsPopupView.PRIVACY_MODE_OFF);                
+            }
         }
     }
 
@@ -433,12 +436,9 @@ public class SmsPopupActivity extends Activity {
             // Store extra to signify we have already notified for this message
             bundle.putBoolean(SmsMmsMessage.EXTRAS_NOTIFY, false);
 
-            // Reset the reminderCount to 0 just to be sure
-            smsPopupPager.getActiveMessage().updateReminderCount(0);
-
             // Schedule a reminder notification
-            ReminderService.scheduleReminder(getApplicationContext(), 
-                    smsPopupPager.getActiveMessage());
+            ReminderService.scheduleReminder(
+                    getApplicationContext(), smsPopupPager.getActiveMessage());
 
             // Run the notification
             ManageNotification.show(getApplicationContext(), smsPopupPager.getActiveMessage());
@@ -618,9 +618,8 @@ public class SmsPopupActivity extends Activity {
                     List<ResolveInfo> list = packageManager.queryIntentActivities(intent, 0);
 
                     if (list.size() > 0) {
-                        // TODO: really should allow voice input here without unlocking first (quick
-                        // replies
-                        // without unlock are OK anyway)
+                        // TODO: really should allow voice input here without unlocking first 
+                        // (quick replies without unlock are OK anyway)
                         exitingKeyguardSecurely = true;
                         ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
                             @Override
@@ -1025,29 +1024,20 @@ public class SmsPopupActivity extends Activity {
     }
 
     /**
-     * View the private message (this basically just unlocks the keyguard and then reloads the
-     * activity).
+     * View the private message (this basically just unlocks the keyguard and then updates the
+     * privacy of the messages).
      */
     private void viewMessage() {
         exitingKeyguardSecurely = true;
         ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
             @Override
             public void LaunchOnKeyguardExitSuccess() {
-                // Yet another fix for the View button in privacy mode :(
-                // This will remotely call refreshPrivacy in case the user
-                // doesn't have
-                // the security pattern on (so the screen will not refresh and
-                // therefore
-                // the popup will not come out of privacy mode)
-                runOnUiThread(new Runnable() {
+                smsPopupPager.post(new Runnable() {
                     @Override
                     public void run() {
-                        // force message view this time!
-                        // refreshPrivacy(true);
-
-                        // mSmsPopupView.refreshPrivacy(true);
-                    }
-                });
+                        smsPopupPager.setPrivacy(SmsPopupView.PRIVACY_MODE_OFF);
+                    }  
+                });  
             }
         });
     }
@@ -1118,13 +1108,14 @@ public class SmsPopupActivity extends Activity {
      * SmsMmsMessage (in case another message comes in)
      */
     private void quickReply(String text) {
+        final SmsMmsMessage message = smsPopupPager.getActiveMessage();
 
-        // If this is a MMS just use regular reply
-        if (smsPopupPager.getActiveMessage().isMms()) {
+        // If this is a MMS or a SMS from email gateway then use regular reply
+        if (message.isMms() || message.isEmail()) {
             replyToMessage();
         } else { // Else show the quick reply dialog
             if (text == null || "".equals(text)) {
-                quickReplySmsMessage = smsPopupPager.getActiveMessage();
+                quickReplySmsMessage = message;
             }
             updateQuickReplyView(text);
             showDialog(DIALOG_QUICKREPLY);
