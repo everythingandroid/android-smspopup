@@ -50,6 +50,10 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
         super.onCreate(savedInstanceState);
 
         registerForContextMenu(getListView());
+        
+        if (SmsPopupUtils.isHoneycomb()) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         TextView tv = new TextView(this);
 
@@ -114,6 +118,9 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            break;
         case R.id.add_menu_item:
             showDialog(ADD_DIALOG);
             break;

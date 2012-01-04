@@ -4,13 +4,13 @@ import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.preferences.AppEnabledCheckBoxPreference;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.preferences.DialogPreference;
-import net.everythingandroid.smspopup.preferences.EmailDialogPreference;
 import net.everythingandroid.smspopup.preferences.QuickReplyCheckBoxPreference;
 import net.everythingandroid.smspopup.util.Eula;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -26,6 +26,8 @@ import android.preference.PreferenceScreen;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -33,25 +35,26 @@ import android.widget.Toast;
 
 public class SmsPopupConfigActivity extends PreferenceActivity {
     private static final int DIALOG_DONATE = Menu.FIRST;
+    private static final int DIALOG_EMAIL = Menu.FIRST + 1;
     private Preference donateDialogPref = null;
     private QuickReplyCheckBoxPreference quickReplyPref;
     private ButtonListPreference button1;
     private ButtonListPreference button2;
     private ButtonListPreference button3;
+    private String version = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         addPreferencesFromResource(R.xml.preferences);
 
         // Try and find app version number
-        String version;
         try {
             // Get version number, not sure if there is a better way to do this
             version = " v" +
                     getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
         } catch (NameNotFoundException e) {
-            version = "";
         }
 
         // Set the version number in the about dialog preference
@@ -59,11 +62,6 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
                 (DialogPreference) findPreference(getString(R.string.pref_about_key));
         aboutPref.setDialogTitle(getString(R.string.app_name) + version);
         aboutPref.setDialogLayoutResource(R.layout.about);
-
-        // Set the version number in the email preference dialog
-        final EmailDialogPreference emailPref =
-                (EmailDialogPreference) findPreference(getString(R.string.pref_sendemail_key));
-        emailPref.setVersion(version);
 
         // Set intent for contact notification option
         final PreferenceScreen contactsPS =
@@ -203,7 +201,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
         if (donateDialogPref != null) {
             donateDialogPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
-                    SmsPopupConfigActivity.this.showDialog(DIALOG_DONATE);
+                    showDialog(DIALOG_DONATE);
                     return true;
                 }
             });
@@ -294,8 +292,51 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
                     .setView(donateView)
                     .setPositiveButton(android.R.string.ok, null)
                     .create();
+        case DIALOG_EMAIL:
+            
+            Dialog.OnClickListener listener = new Dialog.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                    case Dialog.BUTTON_POSITIVE:
+                        SmsPopupUtils.launchEmailToIntent(SmsPopupConfigActivity.this, 
+                                getString(R.string.app_name) + version, true);                        
+                        break;
+                    case Dialog.BUTTON_NEGATIVE:
+                        SmsPopupUtils.launchEmailToIntent(SmsPopupConfigActivity.this, 
+                                getString(R.string.app_name) + version, false);
+                        break;
+                    }
+                }
+            };
+            
+            return new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.smspopup_icon)
+                    .setTitle(R.string.pref_sendemail_title)
+                    .setMessage(R.string.pref_sendemail_dialog)
+                    .setPositiveButton(R.string.pref_sendemail_buttonok, listener)
+                    .setNegativeButton(R.string.pref_sendemail_buttoncancel, listener)
+                    .create();
         }
+
         return super.onCreateDialog(id);
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.smspopup_config, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.email_menu_item:
+            showDialog(DIALOG_EMAIL);
+            break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /*
