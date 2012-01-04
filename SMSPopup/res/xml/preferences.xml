@@ -337,14 +337,5 @@
       android:dialogTitle="@string/app_name"
       android:summary="@string/pref_about_summary"
       android:negativeButtonText="@null" />
-    <net.everythingandroid.smspopup.preferences.EmailDialogPreference
-      android:key="@string/pref_sendemail_key"
-      android:title="@string/pref_sendemail_title"
-      android:summary="@string/pref_sendemail_summary"
-      android:dialogIcon="@drawable/smspopup_icon"
-      android:dialogTitle="@string/pref_sendemail_title"
-      android:dialogMessage="@string/pref_sendemail_dialog"
-      android:positiveButtonText="@string/pref_sendemail_buttonok"
-      android:negativeButtonText="@string/pref_sendemail_buttoncancel" />
   </PreferenceCategory>
 </PreferenceScreen>

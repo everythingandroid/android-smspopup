@@ -259,6 +259,8 @@
     <string name="pref_screen_category">Screen Control</string>
 
     <!-- Other new Quick Reply prefs -->
+    <string name="pref_show_delete_button_dialog_title">Delete Message</string>
+    <string name="pref_show_delete_button_dialog_text">Are you sure?</string>
     <string name="quickreply_sent_toast">Message Sent</string>
     <string name="quickreply_failed_send_later">Currently unable to send your message. It will be sent when the service becomes available.</string>
     <string name="quickreply_failed">Message failed to send</string>
