@@ -5,6 +5,7 @@ import java.util.List;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -56,7 +57,11 @@ public class ConfigContactsActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_PROGRESS);
-
+        
+        if (SmsPopupUtils.isHoneycomb()) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(android.R.id.content, ConfigContactsListFragment.newInstance());
         ft.commit();
@@ -89,6 +94,9 @@ public class ConfigContactsActivity extends FragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            break;
         case R.id.add_menu_item:
             startContactPicker();
             break;

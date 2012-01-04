@@ -37,7 +37,11 @@ public class ConfigContactActivity extends PreferenceActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
+        if (SmsPopupUtils.isHoneycomb()) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        
         // Create and setup preferences
         createOrFetchContactPreferences();
     }
@@ -278,6 +282,9 @@ public class ConfigContactActivity extends PreferenceActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            break;
         case R.id.save_menu_item:
             finish();
             return true;
