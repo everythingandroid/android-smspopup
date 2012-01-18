@@ -379,9 +379,13 @@ public class SmsMmsMessage {
     public boolean isMms() {
         return messageType == MESSAGE_TYPE_MMS;
     }
+
+    public void setNotify(boolean mNotify) {
+        notify = mNotify;
+    }
     
-    public boolean getNotify() {
-        if (Log.DEBUG) Log.v("getNotify() - notify is " + notify);
+    public boolean shouldNotify() {
+        if (Log.DEBUG) Log.v("shouldNotify() - notify is " + notify);
         return notify;
     }
 
@@ -417,9 +421,8 @@ public class SmsMmsMessage {
             if (threadId == 0) {
                 locateThreadId();
             }
-            messageId =
-                    SmsPopupUtils.findMessageId(context, threadId, timestamp, messageBody,
-                            messageType);
+            messageId = SmsPopupUtils.findMessageId(
+                    context, threadId, timestamp, messageBody, messageType);
         }
     }
 

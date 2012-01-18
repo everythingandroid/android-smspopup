@@ -690,6 +690,7 @@ public class SmsPopupUtils {
         String address;
         long timestamp;
         String body;
+        SmsMmsMessage message;
 
         if (cursor != null) {
 
@@ -708,10 +709,13 @@ public class SmsPopupUtils {
                         address = cursor.getString(2);
                         timestamp = cursor.getLong(3);
                         body = cursor.getString(4);
-
-                        messages.add(new SmsMmsMessage(
+                        
+                        message = new SmsMmsMessage(
                                 context, address, body, timestamp, threadId,
-                                count, messageId, SmsMmsMessage.MESSAGE_TYPE_SMS));
+                                count, messageId, SmsMmsMessage.MESSAGE_TYPE_SMS);
+                        message.setNotify(false);
+
+                        messages.add(message);
                     }
                 }
 

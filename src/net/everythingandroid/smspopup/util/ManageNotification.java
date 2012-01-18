@@ -225,6 +225,9 @@ public class ManageNotification {
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             }
+            
+            // Flag that a notification has been sent for this message
+            message.setNotify(false);
         }
 
         // The default intent when the notification is clicked (Inbox)

@@ -80,7 +80,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
      */
     public synchronized void addMessages(ArrayList<SmsMmsMessage> newMessages) {
         if (newMessages != null) {
-            messages.addAll(newMessages);
+            messages.addAll(0, newMessages);
             UpdateMessageCount();
         }
     }
@@ -193,6 +193,10 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         currentPage = num;
         UpdateMessageCount();
     }
+    
+    public void showLast() {
+        setCurrentItem(getPageCount() - 1);
+    }    
 
     @Override
     public void onPageScrollStateChanged(int state) {}
@@ -270,5 +274,21 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         for (int i = 0; i < getChildCount(); i++) {
             ((SmsPopupView) getChildAt(i)).setPrivacy(mode);
         }
+    }
+    
+    public SmsMmsMessage shouldNotify() {
+        SmsMmsMessage message;
+        for (int i = 0; i < messages.size(); i++) {
+            message = messages.get(i);
+            if (message.shouldNotify()) {
+                return message;
+            }
+        }
+        
+        return null;
+    }
+    
+    public ArrayList<SmsMmsMessage> getMessages() {
+        return messages;
     }
 }
