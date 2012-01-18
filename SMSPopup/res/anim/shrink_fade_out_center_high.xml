@@ -27,8 +27,8 @@
         android:interpolator="@interpolator/decelerate_quint"
         android:pivotX="50%"
         android:pivotY="50%"
-        android:toXScale="0.3"
-        android:toYScale="0.3" />
+        android:toXScale="0.5"
+        android:toYScale="0.5" />
 
     <alpha
         android:duration="@integer/config_activityShortDur"

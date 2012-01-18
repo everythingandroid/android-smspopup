@@ -22,8 +22,8 @@
 
     <scale
         android:duration="@integer/config_activityDefaultDur"
-        android:fromXScale="0.3"
-        android:fromYScale="0.3"
+        android:fromXScale="0.5"
+        android:fromYScale="0.5"
         android:interpolator="@interpolator/decelerate_quint"
         android:pivotX="50%"
         android:pivotY="50%"

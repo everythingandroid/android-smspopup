@@ -40,6 +40,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
@@ -64,7 +65,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -76,7 +79,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 public class SmsPopupActivity extends Activity {
 
     private boolean exitingKeyguardSecurely = false;
-    private Bundle bundle = null;
+//    private Bundle bundle = null;
     private SharedPreferences mPrefs;
     private InputMethodManager inputManager = null;
     private View inputView = null;
@@ -140,13 +143,10 @@ public class SmsPopupActivity extends Activity {
         setupViews();
 
         if (bundle == null) { // new activity
-            setupMessages(getIntent().getExtras());
+            initializeMessagesAndWake(getIntent().getExtras());
         } else { // this activity was recreated after being destroyed
-            setupMessages(bundle);
+            initializeMessagesAndWake(bundle);
         }
-
-        // wake up app (turn on screen and run notification)
-        wakeApp();
 
         Eula.show(this);
     }
@@ -237,24 +237,6 @@ public class SmsPopupActivity extends Activity {
             }
         });
 
-        /*
-         * final Button previousButton = (Button) findViewById(R.id.PreviousButton); final Button
-         * nextButton = (Button) findViewById(R.id.NextButton); final Button inboxButton = (Button)
-         * findViewById(R.id.InboxButton);
-         * 
-         * previousButton.setOnClickListener(new OnClickListener() {
-         * 
-         * @Override public void onClick(View v) { smsPopupPager.showPrevious(); } });
-         * 
-         * nextButton.setOnClickListener(new OnClickListener() {
-         * 
-         * @Override public void onClick(View v) { smsPopupPager.showNext(); } });
-         * 
-         * inboxButton.setOnClickListener(new OnClickListener() {
-         * 
-         * @Override public void onClick(View v) { gotoInbox(); } });
-         */
-
         smsPopupPager.setOnMessageCountChanged(new MessageCountChanged() {
 
             @Override
@@ -336,8 +318,8 @@ public class SmsPopupActivity extends Activity {
         resizeLayout();
     }
 
-    private void setupMessages(Bundle b) {
-        setupMessages(b, false);
+    private void initializeMessagesAndWake(Bundle b) {
+        initializeMessagesAndWake(b, false);
     }
 
     /**
@@ -348,25 +330,64 @@ public class SmsPopupActivity extends Activity {
      * @param newIntent
      *            if this is from onNewIntent or not
      */
-    private void setupMessages(Bundle b, boolean newIntent) {
-
-        // Store bundle
-        bundle = b;
+    private void initializeMessagesAndWake(Bundle b, boolean newIntent) {
 
         // Create message from bundle
-        SmsMmsMessage message = new SmsMmsMessage(getApplicationContext(), bundle);
-
-        smsPopupPager.addMessage(message);
+        SmsMmsMessage message = new SmsMmsMessage(getApplicationContext(), b);
 
         if (newIntent) {
-            
+            smsPopupPager.addMessage(message);   
+            wakeApp();
         } else {
-            // TODO: move off UI thread
-            smsPopupPager.addMessages(
-                    SmsPopupUtils.getUnreadMessages(this, message.getMessageId()));
+            if (message != null) {
+                new LoadUnreadMessagesAsyncTask().execute(message);
+            }
+        }        
+    }
+    
+    private class LoadUnreadMessagesAsyncTask extends AsyncTask<SmsMmsMessage, 
+            Void, ArrayList<SmsMmsMessage>> {
+        
+        ProgressBar mProgressBar;
+                
+        @Override
+        protected void onPreExecute() {
+            mProgressBar = (ProgressBar) findViewById(R.id.progress);
+            mProgressBar.setVisibility(View.VISIBLE);
+            disablePopupButtons(false);
+        }
+
+        @Override
+        protected ArrayList<SmsMmsMessage> doInBackground(SmsMmsMessage... arg) {
+            ArrayList<SmsMmsMessage> messages = SmsPopupUtils.getUnreadMessages(
+                    SmsPopupActivity.this, arg[0].getMessageId());
+            
+            if (messages == null) {
+                messages = new ArrayList<SmsMmsMessage>(1);
+            }
+            
+            messages.add(arg[0]);
+                        
+            return messages;
+        }
+        
+        @Override
+        protected void onPostExecute(ArrayList<SmsMmsMessage> result) {
+            disablePopupButtons(true);
+            mProgressBar.setVisibility(View.GONE);
+            smsPopupPager.addMessages(result);
+            smsPopupPager.showLast();
+            wakeApp();
         }
     }
-
+    
+    private void disablePopupButtons(boolean enabled) {
+        findViewById(R.id.button1).setEnabled(enabled);
+        findViewById(R.id.button2).setEnabled(enabled);
+        findViewById(R.id.button3).setEnabled(enabled);
+        findViewById(R.id.unlockButton).setEnabled(enabled);
+    }
+    
     /*
      * *****************************************************************************
      * Methods that will be called several times throughout the life of the activity
@@ -431,17 +452,19 @@ public class SmsPopupActivity extends Activity {
         replying = false;
         inbox = false;
 
+        SmsMmsMessage notifyMessage = smsPopupPager.shouldNotify();
         // See if a notification has been played for this message...
-        if (smsPopupPager.getActiveMessage().getNotify()) {
+        if (notifyMessage != null) {
+                       
             // Store extra to signify we have already notified for this message
-            bundle.putBoolean(SmsMmsMessage.EXTRAS_NOTIFY, false);
+//            bundle.putBoolean(SmsMmsMessage.EXTRAS_NOTIFY, false);
 
             // Schedule a reminder notification
             ReminderService.scheduleReminder(
-                    getApplicationContext(), smsPopupPager.getActiveMessage());
+                    getApplicationContext(), notifyMessage);
 
             // Run the notification
-            ManageNotification.show(getApplicationContext(), smsPopupPager.getActiveMessage());
+            ManageNotification.show(getApplicationContext(), notifyMessage);
         }
     }
 
@@ -500,9 +523,7 @@ public class SmsPopupActivity extends Activity {
         setIntent(intent);
 
         // Setup messages
-        setupMessages(intent.getExtras(), true);
-
-        wakeApp();
+        initializeMessagesAndWake(intent.getExtras(), true);
     }
 
     @Override
@@ -870,7 +891,14 @@ public class SmsPopupActivity extends Activity {
             Log.v("SMSPopupActivity: onSaveInstanceState()");
 
         // Save values from most recent bundle (ie. most recent message)
-        outState.putAll(bundle);
+//        outState.putAll(bundle);
+    }
+    
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (Log.DEBUG)
+            Log.v("SMSPopupActivity: onRestoreInstanceState()");        
     }
 
     @Override
@@ -1085,10 +1113,9 @@ public class SmsPopupActivity extends Activity {
                 if (Log.DEBUG)
                     Log.v("Sending message to " + quickReplySmsMessage.getContactName());
                 WakefulIntentService.sendWakefulWork(getApplicationContext(), i);
-                ManageNotification.clearAll(this);
                 Toast.makeText(this, R.string.quickreply_sending_toast, Toast.LENGTH_LONG).show();
+                dismissDialog(DIALOG_QUICKREPLY);                
                 removeActiveMessage();
-                dismissDialog(DIALOG_QUICKREPLY);
             } else {
                 Toast.makeText(this, R.string.quickreply_nomessage_toast, Toast.LENGTH_LONG).show();
             }
