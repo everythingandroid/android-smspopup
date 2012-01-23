@@ -1,13 +1,12 @@
 package net.everythingandroid.smspopup.service;
 
-import android.content.Intent;
-
-import com.commonsware.cwac.wakeful.WakefulIntentService;
-
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageNotification;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
+import android.content.Intent;
+
+import com.commonsware.cwac.wakeful.WakefulIntentService;
 
 public class SmsPopupUtilsService extends WakefulIntentService {
     private static final String TAG = SmsPopupUtilsService.class.getName();
@@ -87,7 +86,8 @@ public class SmsPopupUtilsService extends WakefulIntentService {
         SmsMmsMessage recentMessage = SmsPopupUtils.getRecentMessage(this, message);
 
         // Update the notification in the status bar
-        ManageNotification.update(this, recentMessage);
+        ManageNotification.update(this, recentMessage, 
+                recentMessage == null ? 0 : recentMessage.getUnreadCount());
     }
 
 }

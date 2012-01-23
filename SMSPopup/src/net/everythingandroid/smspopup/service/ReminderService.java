@@ -66,7 +66,7 @@ public class ReminderService extends WakefulIntentService {
             // -1 repeat indefinitely
             // positive value is exact number of repeats
             if (message.getReminderCount() <= repeat_times || repeat_times == -1) {
-                ManageNotification.show(context, message);
+                ManageNotification.show(context, message, unreadSms);
                 ReminderService.scheduleReminder(context, message);
                 if (myPrefs.getBoolean(context.getString(R.string.pref_notif_repeat_screen_on_key),
                         Defaults.PREFS_NOTIF_REPEAT_SCREEN_ON)) {

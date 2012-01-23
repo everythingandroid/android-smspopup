@@ -217,7 +217,7 @@ public class SmsReceiverService extends Service {
 
             if (Log.DEBUG)
                 Log.v("^^^^^^Not showing SMS Popup, using notifications");
-            ManageNotification.show(context, message);
+            ManageNotification.show(context, message, message == null ? 0 : message.getUnreadCount());
             ReminderService.scheduleReminder(context, message);
 
         }

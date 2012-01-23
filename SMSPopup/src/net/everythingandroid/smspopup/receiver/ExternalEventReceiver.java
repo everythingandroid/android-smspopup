@@ -1,15 +1,13 @@
 package net.everythingandroid.smspopup.receiver;
 
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
-import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.R.string;
-import net.everythingandroid.smspopup.util.Log;
-import net.everythingandroid.smspopup.util.SmsPopupUtils;
 
 public class ExternalEventReceiver extends BroadcastReceiver {
   public static final String ACTION_SMSPOPUP_ENABLE = "net.everythingandroid.smspopup.ENABLE";
