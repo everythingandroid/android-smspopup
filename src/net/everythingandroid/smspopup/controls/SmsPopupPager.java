@@ -153,6 +153,10 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     public synchronized SmsMmsMessage getActiveMessage() {
         return messages.get(currentPage);
     }
+    
+    public synchronized int getActiveMessageNum() {
+        return currentPage;
+    }
 
     public void setOnMessageCountChanged(MessageCountChanged m) {
         messageCountChanged = m;
@@ -191,7 +195,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     public void setCurrentItem(int num) {
         super.setCurrentItem(num);
         currentPage = num;
-        UpdateMessageCount();
+//        UpdateMessageCount();
     }
     
     public void showLast() {
@@ -209,7 +213,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     @Override
     public void onPageSelected(int position) {
         currentPage = position;
-        UpdateMessageCount();
+//        UpdateMessageCount();
     }
 
     private class SmsPopupPagerAdapter extends PagerAdapter {
@@ -275,7 +279,12 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
             ((SmsPopupView) getChildAt(i)).setPrivacy(mode);
         }
     }
-    
+
+    /**
+     * Check if the set of messages associated with this pager should send a notification.
+     * 
+     * @return The message number that requires a notification or -1 if no notificaiton is needed.
+     */
     public SmsMmsMessage shouldNotify() {
         SmsMmsMessage message;
         for (int i = 0; i < messages.size(); i++) {
@@ -290,5 +299,9 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     
     public ArrayList<SmsMmsMessage> getMessages() {
         return messages;
+    }
+    
+    public SmsMmsMessage getMessage(int i) {
+        return messages.get(i);
     }
 }
