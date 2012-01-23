@@ -65,7 +65,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -79,7 +78,6 @@ import com.viewpagerindicator.CirclePageIndicator;
 public class SmsPopupActivity extends Activity {
 
     private boolean exitingKeyguardSecurely = false;
-//    private Bundle bundle = null;
     private SharedPreferences mPrefs;
     private InputMethodManager inputManager = null;
     private View inputView = null;
@@ -246,6 +244,9 @@ public class SmsPopupActivity extends Activity {
                 } else if (total >= 2) {
                     pagerIndicator.setVisibility(View.VISIBLE);
                 }
+                
+                ManageNotification.update(SmsPopupActivity.this,
+                        smsPopupPager.getMessage(current), total);
             }
         });
 
@@ -453,18 +454,15 @@ public class SmsPopupActivity extends Activity {
         inbox = false;
 
         SmsMmsMessage notifyMessage = smsPopupPager.shouldNotify();
-        // See if a notification has been played for this message...
+        
+        // See if a notification is needed for this set of messages
         if (notifyMessage != null) {
                        
-            // Store extra to signify we have already notified for this message
-//            bundle.putBoolean(SmsMmsMessage.EXTRAS_NOTIFY, false);
-
             // Schedule a reminder notification
-            ReminderService.scheduleReminder(
-                    getApplicationContext(), notifyMessage);
+            ReminderService.scheduleReminder(this, notifyMessage);
 
             // Run the notification
-            ManageNotification.show(getApplicationContext(), notifyMessage);
+            ManageNotification.show(this, notifyMessage, smsPopupPager.getPageCount());
         }
     }
 
@@ -997,7 +995,8 @@ public class SmsPopupActivity extends Activity {
             ReminderService.cancelReminder(getApplicationContext());
 
             // We'll use update notification to stop the sound playing
-            ManageNotification.update(getApplicationContext(), smsPopupPager.getActiveMessage());
+            ManageNotification.update(
+                    this, smsPopupPager.getActiveMessage(), smsPopupPager.getPageCount());
 
             androidTts = new TextToSpeech(SmsPopupActivity.this, androidTtsListener);
 
@@ -1187,11 +1186,12 @@ public class SmsPopupActivity extends Activity {
     /**
      * Removes the active message
      */
-    private void removeActiveMessage() {
+    private void removeActiveMessage() {        
         final int status = smsPopupPager.removeActiveMessage();
-        if (status == SmsPopupPager.STATUS_MESSAGES_REMAINING) {
-            ManageNotification.update(this, smsPopupPager.getActiveMessage());
-        } else if (status == SmsPopupPager.STATUS_NO_MESSAGES_REMAINING)  {
+//        if (status == SmsPopupPager.STATUS_MESSAGES_REMAINING) {
+//            ManageNotification.update(
+//                    this, smsPopupPager.getActiveMessage(), count);
+        if (status == SmsPopupPager.STATUS_NO_MESSAGES_REMAINING)  {
             myFinish();
         }
     }

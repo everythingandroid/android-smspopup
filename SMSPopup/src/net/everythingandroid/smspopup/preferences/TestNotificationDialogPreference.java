@@ -66,7 +66,7 @@ public class TestNotificationDialogPreference extends DialogPreference {
                         0, contactId, null, testPhone, 1, 0, SmsMmsMessage.MESSAGE_TYPE_SMS);
 
         // Show notification
-        ManageNotification.show(context, message, ManageNotification.NOTIFICATION_TEST);
+        ManageNotification.show(context, message, 1, ManageNotification.NOTIFICATION_TEST);
 
         return super.onCreateDialogView();
     }

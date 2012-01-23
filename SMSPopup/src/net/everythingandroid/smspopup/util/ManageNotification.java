@@ -110,7 +110,7 @@ public class ManageNotification {
             this.notification = n;
         }
 
-        final public void notify(Context context, int notif) {
+        public void notify(Context context, int notif) {
             NotificationManager myNM =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -122,121 +122,120 @@ public class ManageNotification {
             myNM.notify(notif, notification);
         }
     }
+    
+    /*
+     * Default to NOTIFICATION_ALERT if notif is left out
+     */
+    public static void show(Context context, SmsMmsMessage message) {
+        show(context, message, 1);
+    }
+    
+    public static void show(Context context, SmsMmsMessage message, int messageCount) {
+        show(context, message, messageCount, NOTIFICATION_ALERT);   
+    }
 
     /*
      * Show/play the notification given a SmsMmsMessage and a notification ID (really just
      * NOTIFICATION_ALERT for the main alert and NOTIFICATION_TEST for the test notification from
      * the preferences screen)
      */
-    public static void show(Context context, SmsMmsMessage message, int notif) {
-        notify(context, message, false, notif);
+    public static void show(Context context, SmsMmsMessage message, int messageCount, int notif) {
+        notify(context, message, messageCount, false, notif);
     }
-
-    /*
-     * Default to NOTIFICATION_ALERT if notif is left out
-     */
-    public static void show(Context context, SmsMmsMessage message) {
-        notify(context, message, false, NOTIFICATION_ALERT);
-    }
-
+    
     /*
      * Only update the notification given the SmsMmsMessage (ie. do not play the vibrate/sound, just
      * update the text).
      */
-    public static void update(Context context, SmsMmsMessage message) {
+    public static void update(Context context, SmsMmsMessage message, int messageCount) {
+        
         // TODO: can I just use Notification.setLatestEventInfo() to update instead?
-
-        if (message != null) {
-            if (message.getUnreadCount() > 0) {
-                notify(context, message, true, NOTIFICATION_ALERT);
-                return;
-            }
+        if (message != null && messageCount > 0) {
+            notify(context, message, messageCount, true, NOTIFICATION_ALERT);
+        } else {
+            // TODO: Should reply flag be set to true?
+            ManageNotification.clearAll(context, true);
         }
-
-        // TODO: Should reply flag be set to true?
-        ManageNotification.clearAll(context, true);
     }
-
+    
     /*
      * The main notify method
      */
-    private static void notify(Context context, SmsMmsMessage message, 
+    private static void notify(Context context, SmsMmsMessage message, int messageCount, 
             boolean onlyUpdate, int notif) {
-
-        // Fetch info from the message object
-        final int unreadCount = message.getUnreadCount();
+        
+        if (message == null || messageCount < 1) {
+            return;
+        }
+                
         final String messageBody = message.getMessageBody();
         final String contactName = message.getContactName();
         final long timestamp = message.getTimestamp();
 
-        // Check if there are unread messages - if not, we're done :)
-        if (unreadCount < 1) {
-            return;
-        }
-
         final PopupNotification n =
                 buildNotification(context, message.getContactLookupKey(), onlyUpdate, notif);
 
-        if (n == null)
+        if (n == null) {
             return;
+        }
 
         // The notification title, sub-text and text that will scroll
         String contentTitle = "";
         String contentText = "";
         SpannableString scrollText;
 
-        // If we're updating the notification, do not set the ticker text
+        /*
+         * This service runs a content observer on the system sms db to help clear the
+         * notification icon in the case the user reads the messages outside of sms popup. the
+         * service will be stopped when unread messages = 0
+         */
+        SmsMonitorService.beginStartingService(context);
+
+        // If we're in privacy mode and the keyguard is on then just display
+        // the name of the person, otherwise scroll the name and message
+        if (n.privacyMode && 
+                (ManageKeyguard.inKeyguardRestrictedInputMode() || n.privacyAlways)) {
+            
+            if (n.privacySender) {
+                scrollText = new SpannableString(context.getString(
+                        R.string.notification_scroll_privacy_no_name));
+                contentTitle = scrollText.toString();
+            } else {
+                scrollText = new SpannableString(context.getString(
+                        R.string.notification_scroll_privacy, contactName));
+                contentTitle = contactName;
+                contentText = context.getString(R.string.notification_scroll_privacy_no_name);                    
+            }
+
+        } else {
+            
+            contentTitle = contactName;
+            contentText = messageBody;
+
+            scrollText = new SpannableString(context.getString(R.string.notification_scroll, 
+                    contactName, messageBody));
+
+            // Set contact name as bold
+            scrollText.setSpan(new StyleSpan(Typeface.BOLD), 0, contactName.length(),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        }
+        
+        // If updating don't set scroll text
         if (onlyUpdate) {
             scrollText = null;
-        } else {
-            /*
-             * This service runs a content observer on the system sms db to help clear the
-             * notification icon in the case the user reads the messages outside of sms popup. the
-             * service will be stopped when unread messages = 0
-             */
-            SmsMonitorService.beginStartingService(context);
-
-            // If we're in privacy mode and the keyguard is on then just display
-            // the name of the person, otherwise scroll the name and message
-            if (n.privacyMode && 
-                    (ManageKeyguard.inKeyguardRestrictedInputMode() || n.privacyAlways)) {
-                
-                if (n.privacySender) {
-                    scrollText = new SpannableString(context.getString(
-                            R.string.notification_scroll_privacy_no_name));
-                    contentTitle = scrollText.toString();
-                } else {
-                    scrollText = new SpannableString(context.getString(
-                            R.string.notification_scroll_privacy, contactName));
-                    contentTitle = contactName;
-                    contentText = context.getString(R.string.notification_scroll_privacy_no_name);                    
-                }
-
-            } else {
-                
-                contentTitle = contactName;
-                contentText = messageBody;
-
-                scrollText = new SpannableString(context.getString(R.string.notification_scroll, 
-                        contactName, messageBody));
-
-                // Set contact name as bold
-                scrollText.setSpan(new StyleSpan(Typeface.BOLD), 0, contactName.length(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            }
-            
-            // Flag that a notification has been sent for this message
-            message.setNotify(false);
         }
+        
+        // Flag that a notification has been sent for this message
+        message.setNotify(false);
 
         // The default intent when the notification is clicked (Inbox)
         Intent smsIntent = SmsPopupUtils.getSmsInboxIntent();
 
         // If more than one message waiting ...
-        if (unreadCount > 1) {
+        if (messageCount > 1) {
             contentTitle = context.getString(R.string.notification_multiple_title);
-            contentText = context.getString(R.string.notification_multiple_text, unreadCount);
+            contentText = context.getString(R.string.notification_multiple_text, messageCount);
         } else { // Else 1 message, set intent accordingly
             smsIntent = message.getReplyIntent(n.replyToThread);
         }
@@ -260,12 +259,13 @@ public class ManageNotification {
         n.notification.setLatestEventInfo(context, contentTitle, contentText, notifIntent);
 
         // Set number of events that this notification signifies (unread messages)
-        if (unreadCount > 1) {
-            n.notification.number = unreadCount;
+        if (messageCount > 1) {
+            n.notification.number = messageCount;
         }
 
         n.notify(context, notif);
     }
+
 
     /*
      * Build the notification from user preferences
