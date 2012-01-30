@@ -81,6 +81,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
                 (ButtonListPreference) findPreference(getString(R.string.pref_button1_key));
         button1.refreshSummary();
         button1.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 quickReplyPref.setChecked(
                         isQuickReplyActive((String) newValue, button2.getValue(), button3
@@ -95,6 +96,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
                 (ButtonListPreference) findPreference(getString(R.string.pref_button2_key));
         button2.refreshSummary();
         button2.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 quickReplyPref.setChecked(
                         isQuickReplyActive((String) newValue, button1.getValue(), button3
@@ -109,6 +111,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
                 (ButtonListPreference) findPreference(getString(R.string.pref_button3_key));
         button3.refreshSummary();
         button3.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 quickReplyPref.setChecked(
                         isQuickReplyActive((String) newValue, button1.getValue(), button2
@@ -135,6 +138,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
          * opposite when disabling.
          */
         quickReplyPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 int button1val = Integer.valueOf(button1.getValue());
                 int button2val = Integer.valueOf(button2.getValue());
@@ -200,6 +204,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
         donateDialogPref = findPreference(getString(R.string.pref_donate_key));
         if (donateDialogPref != null) {
             donateDialogPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
                 public boolean onPreferenceClick(Preference preference) {
                     showDialog(DIALOG_DONATE);
                     return true;
@@ -269,6 +274,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
 
             Button donateMarketButton = (Button) donateView.findViewById(R.id.DonateMarketButton);
             donateMarketButton.setOnClickListener(new OnClickListener() {
+                @Override
                 public void onClick(View v) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(SmsPopupUtils.DONATE_MARKET_URI);
@@ -279,6 +285,7 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
 
             Button donatePaypalButton = (Button) donateView.findViewById(R.id.DonatePaypalButton);
             donatePaypalButton.setOnClickListener(new OnClickListener() {
+                @Override
                 public void onClick(View v) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(SmsPopupUtils.DONATE_PAYPAL_URI);
