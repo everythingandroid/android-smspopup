@@ -247,7 +247,6 @@ public class SmsPopupActivity extends Activity {
                 }
                 
                 if (hasNotified) {
-                    Log.v("setOnMessageCountChanged.onChange() " + current);
                     ManageNotification.update(SmsPopupActivity.this,
                             smsPopupPager.getMessage(current), total);
                 }
