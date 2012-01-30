@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -195,7 +196,6 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     public void setCurrentItem(int num) {
         super.setCurrentItem(num);
         currentPage = num;
-//        UpdateMessageCount();
     }
     
     public void showLast() {
@@ -207,35 +207,42 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        // super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+        super.onPageScrolled(position, positionOffset, positionOffsetPixels);
     }
 
     @Override
     public void onPageSelected(int position) {
         currentPage = position;
-//        UpdateMessageCount();
     }
 
     private class SmsPopupPagerAdapter extends PagerAdapter {
+        
+        @Override
+        public void finishUpdate(ViewGroup container) {
+            super.finishUpdate(container);
+        }
 
         @Override
-        public void finishUpdate(View container) {}
+        public void startUpdate(ViewGroup container) {
+            super.startUpdate(container);
+        }
 
         @Override
         public int getCount() {
             return getPageCount();
         }
-
+        
         @Override
-        public Object instantiateItem(View container, int position) {
-            SmsPopupView mView = new SmsPopupView(mContext, messages.get(position), privacyMode);
+        public Object instantiateItem(ViewGroup container, int position) {            
+            final SmsPopupView mView = 
+                    new SmsPopupView(mContext, messages.get(position), privacyMode);
             mView.setOnReactToMessage(mOnReactToMessage);
-            ((ViewPager) container).addView(mView);
+            ((ViewPager) container).addView(mView);            
             return mView;
         }
-
+        
         @Override
-        public void destroyItem(View container, int position, Object object) {
+        public void destroyItem(ViewGroup container, int position, Object object) {
             ((ViewPager) container).removeView((SmsPopupView) object);
         }
 
@@ -251,9 +258,6 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         public Parcelable saveState() {
             return null;
         }
-
-        @Override
-        public void startUpdate(View container) {}
 
         @Override
         public int getItemPosition(Object object) {
