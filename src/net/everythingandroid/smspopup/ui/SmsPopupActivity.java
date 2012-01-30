@@ -97,6 +97,7 @@ public class SmsPopupActivity extends Activity {
     private boolean privacyAlways = false;
     private boolean useUnlockButton = false;
     private String signatureText;
+    private boolean hasNotified = false;
 
     private static final double WIDTH = 0.9;
     private static final int MAX_WIDTH = 640;
@@ -245,8 +246,11 @@ public class SmsPopupActivity extends Activity {
                     pagerIndicator.setVisibility(View.VISIBLE);
                 }
                 
-                ManageNotification.update(SmsPopupActivity.this,
-                        smsPopupPager.getMessage(current), total);
+                if (hasNotified) {
+                    Log.v("setOnMessageCountChanged.onChange() " + current);
+                    ManageNotification.update(SmsPopupActivity.this,
+                            smsPopupPager.getMessage(current), total);
+                }
             }
         });
 
@@ -463,6 +467,8 @@ public class SmsPopupActivity extends Activity {
 
             // Run the notification
             ManageNotification.show(this, notifyMessage, smsPopupPager.getPageCount());
+            
+            hasNotified = true;
         }
     }
 
@@ -516,6 +522,8 @@ public class SmsPopupActivity extends Activity {
         super.onNewIntent(intent);
         if (Log.DEBUG)
             Log.v("SMSPopupActivity: onNewIntent()");
+        
+        hasNotified = false;
 
         // Update intent held by activity
         setIntent(intent);
@@ -1188,9 +1196,6 @@ public class SmsPopupActivity extends Activity {
      */
     private void removeActiveMessage() {        
         final int status = smsPopupPager.removeActiveMessage();
-//        if (status == SmsPopupPager.STATUS_MESSAGES_REMAINING) {
-//            ManageNotification.update(
-//                    this, smsPopupPager.getActiveMessage(), count);
         if (status == SmsPopupPager.STATUS_NO_MESSAGES_REMAINING)  {
             myFinish();
         }
