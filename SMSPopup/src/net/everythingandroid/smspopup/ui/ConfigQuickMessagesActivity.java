@@ -5,6 +5,7 @@ import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -45,6 +46,7 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
     private TextView addQMTextView;
     private TextView editQMTextView;
 
+    @SuppressLint("NewApi")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

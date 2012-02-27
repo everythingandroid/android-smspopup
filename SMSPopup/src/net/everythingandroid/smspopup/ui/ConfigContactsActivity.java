@@ -6,6 +6,7 @@ import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -53,6 +54,7 @@ public class ConfigContactsActivity extends FragmentActivity {
     private static final int COLUMN_DISPLAY_NAME = 1;
     private static final int COLUMN_LOOKUP_KEY = 2;
 
+    @SuppressLint("NewApi")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
