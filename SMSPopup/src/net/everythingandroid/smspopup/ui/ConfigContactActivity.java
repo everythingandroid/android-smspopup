@@ -9,6 +9,7 @@ import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotificat
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageNotification;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -34,6 +35,7 @@ public class ConfigContactActivity extends PreferenceActivity {
     public static final String EXTRA_CONTACT_URI =
             "net.everythingandroid.smspopuppro.EXTRA_CONTACT_URI";
 
+    @SuppressLint("NewApi")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
