@@ -17,6 +17,7 @@ import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotificat
 import net.everythingandroid.smspopup.receiver.ExternalEventReceiver;
 import net.everythingandroid.smspopup.receiver.SmsReceiver;
 import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.ComponentName;
@@ -408,6 +409,7 @@ public class SmsPopupUtils {
      * @param options
      *            the decoding options, can be set to null
      */
+    @SuppressLint("NewApi")
     public static Bitmap loadContactPhoto(Context context, Uri contactUri,
             int placeholderImageResource, BitmapFactory.Options options) {
 
