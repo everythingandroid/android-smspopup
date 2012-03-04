@@ -1,12 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="app_name">SMS Popup</string>
-  <string name="new_text_at">Nowa wiadomość z %s</string>
-  <string name="unread_text_waiting">%d innych nie przeczytanych wiadomości</string>
-  <string name="mms_subject">Temat:</string>
   <string name="notification_multiple_title">Nowe wiadomości</string>
   <string name="notification_multiple_text">%d nieprzeczytanych wiadomości</string>
-  <string name="notification_scroll" formatted="false">%s: %s</string>
   <string name="notification_scroll_privacy">Nowa wiadomość od: %s</string>
   <string name="button_close">Zamknij</string>
   <string name="button_reply">Odpowiedz</string>
@@ -14,8 +9,6 @@
   <string name="button_view">Pokaż</string>
   <string name="button_view_mms">Pokaż MMS</string>
   <string name="button_delete">Usuń</string>
-  <string name="button_next">Następna</string>
-  <string name="button_previous">Poprzednia</string>
   <string name="button_unlock">Odblokuj</string>
   <string name="button_tts">Tekst-na-mowę</string>
   <string name="button_speak">Powiedz</string>
@@ -31,11 +24,7 @@
   <string name="pref_about_summary">Więcej o SMS Popup</string>
   <string name="pref_faq_title">FAQ</string>
   <string name="pref_faq_summary">Najczęściej zadawane pytania</string>
-  <string name="pref_releasenotes_title">Co nowego?</string>
-  <string name="pref_releasenotes_summary">Sprawdź co nowego w tej wersji</string>
-  <string name="pref_releasenotes_text">\nhttp://code.google.com/p/android-smspopup/wiki/ReleaseNotes</string>
   <string name="pref_sendemail_title">Wyślij e-mail do programisty</string>
-  <string name="pref_sendemail_summary">Wyślij e-mail z komentarzami oraz błędami do programisty</string>
   <string name="pref_sendemail_dialog">Czy mogę przesłać informacje o Twoim systemie poprzez e-mail (ułatwi mi to poprawianie błędów)?</string>
   <string name="pref_sendemail_buttonok">Oczywiście</string>
   <string name="pref_sendemail_buttoncancel">Nie ma mowy</string>
@@ -47,31 +36,15 @@
   <string name="pref_dimscreen_summaryon">Ekran z powiadomieniem się wygasi (oszczędza baterie)</string>
   <string name="pref_dimscreen_summaryoff">Ekran z powiadomieniem będzie się świecił</string>
   <string name="pref_privacy_title">Tryb prywatny</string>
-  <string name="pref_privacy_summaryon">Zawartość wiadomości zostanie wyświetlona dopiero po odblokowaniu</string>
-  <string name="pref_privacy_summaryoff">Zawartość wiadomości zostanie natychmiast wyświetlona</string>
   <string name="pref_markread_title">Oznacz jako przeczytane</string>
   <string name="pref_markread_summaryon">Wiadomości zostaną oznaczone jako przeczytane po naciśnięciu \"Zamknij\"</string>
   <string name="pref_markread_summaryoff">Wiadomości nie zostaną oznaczone jako przeczytane po naciśnięciu \"Zamknij\"</string>
   <string name="pref_onlyShowOnKeyguard_title">Ograniczenia dla powiadomień</string>
   <string name="pref_onlyShowOnKeyguard_summaryon">Powiadomienie pojawia się tylko gdy telefon jest zablokowany</string>
   <string name="pref_onlyShowOnKeyguard_summaryoff">Powiadomienie zawsze się pojawia</string>
-  <string name="pref_require_unlock_title">Konieczne odblokowanie ekranu</string>
-  <string name="pref_require_unlock_summaryon">Przyciski zostaną ukryte aż do odblokowania telefonu</string>
-  <string name="pref_require_unlock_summaryoff">Przyciski natychmiast się pojawią</string>
-  <string name="pref_inbox_app_title">Aplikacja dla wiadomości przychodzących</string>
-  <string name="pref_inbox_app_summary">Wybierz aplikację uruchamianą dla wielu wiadomości</string>
-  <string name="pref_inbox_app_info">Przycisk \"Odpowiedz\" jest obsługiwany przez system</string>
   <string name="pref_show_buttons_title">Pokaż przyciski przy powiadomieniu</string>
   <string name="pref_show_buttons_summaryon">Przyciski powiadomienia są widoczne</string>
   <string name="pref_show_buttons_summaryoff">Długie przyciśnięcie menu odkrywa przyciski</string>
-  <string name="pref_show_delete_button_title">Pokazuj przycisk \"Usuń\"</string>
-  <string name="pref_show_delete_button_summaryon">Przycisk \"Usuń\" jest włączony</string>
-  <string name="pref_show_delete_button_summaryoff">"Przycisk  \"Usuń\" jest wyłączony"</string>
-  <string name="pref_show_delete_button_dialog_title">Usuń wiadomość</string>
-  <string name="pref_show_delete_button_dialog_text">Czy jesteś pewny/a?</string>
-  <string name="pref_blur_title">Tło rozmazane</string>
-  <string name="pref_blur_summaryon">Tło za okienkiem z wiadomością będzie rozmazane</string>
-  <string name="pref_blur_summaryoff">Tło za wiadomością nie będzie rozmazane.</string>
   <string name="pref_notif_title">Powiadomienia</string>
   <string name="pref_notif_summary">Ustawienia powiadomień</string>
   <string name="pref_notif_category_title">Ustawienia powiadomień</string>
@@ -84,7 +57,6 @@
   <string name="pref_notif_enabled_warning">By zapobiec konfliktom i wielokrotnym alarmom, proszę wyłącz systemowe powiadomienia SMS i jakiekolwiek inne aplikacje, które wysyłają powiadomienie o nadejściu SMS.\nBy wyłączyć systemowe powiadomienia, uruchom aplikację zarządzającą SMS a następnie naciśnij menu, ustawienia i odznacz \"powiadomienia\".</string>
   <string name="pref_popup_enabled_title">Pokaż okienko Popup</string>
   <string name="pref_popup_enabled_summaryon">Wiadomość otworzy się w okienku Popup</string>
-  <string name="pref_popup_enabled_summaryoff">Wiadomość zostanie pokazana tylko w pasku powiadomień(jeśli jest włączone)</string>
   <string name="pref_notif_test_title">Powiadomienie testowe</string>
   <string name="pref_notif_test_summary">Sprawdź swoje powiadomienia</string>
   <string name="pref_notif_test_message">Sprawdzanie twoich powiadomień</string>
@@ -98,7 +70,6 @@
   <string name="pref_vibrate_pattern_ok">Ustaw własny typ wibracji</string>
   <string name="pref_vibrate_pattern_bad">Niewłaściwy typ własnej wibracji</string>
   <string name="pref_vibrate_pattern_help">Wprowadź własny typ wibracji, w takim formacie:\nmilisekundy włączone, milisekundy wyłączone\n\nPrzykład:\n0.1000\n0.500,200,500,200,500</string>
-  <string name="pref_custom_val">własny</string>
   <string name="pref_flashled_title">Migająca dioda LED</string>
   <string name="pref_flashled_summaryon">Dioda LED miga gdy nadejdzie wiadomość</string>
   <string name="pref_flashled_summaryoff">Dioda LED nie będzie migać gdy nadejdzie wiadomość</string>
@@ -127,23 +98,19 @@
   <string name="pref_notif_repeat_screen_on_title">Ekran włączony podczas przypomnień</string>
   <string name="pref_notif_repeat_screen_on_summaryon">Przypomnienia ponownie włączą ekran</string>
   <string name="pref_notif_repeat_screen_on_summaryoff">Przypomnienia nie włączą ekranu</string>
-  <string name="pref_notif_repeat_screen_on_warning">Ostrzeżenie - włączenie ekranu podczas przypomnień może znacząco wpłynąć na zużycie baterii</string>
   <string name="pref_notif_default_title">Domyślne powiadomienia</string>
   <string name="pref_notif_default_summary">Powiadomienia dla wszystkich kontaktów bez indywidualnych ustawień</string>
   <string name="pref_contacts_title">Powiadomienia dla kontaktów</string>
   <string name="pref_contacts_summary">Ustawienie powiadomienia dla kontaktu</string>
   <string name="pref_notif_help_title">Pomocy - nie wiem o co chodzi?</string>
   <string name="pref_notif_help_summary">Powiadomienia - pomoc</string>
-  <string name="pref_notif_help_message">SMS Popup teraz oferuje możliwość ustawienia powiadomień w zależności od kontaktu. Kiedy przychodzi nowa wiadomość, SMS Popup w pierwszej kolejności sprawdzi czy kontakt ma przypisane, ustawione wcześniej powiadomienie . Jeśli tak, użyje tych ustawień, w innym wypadku, będą użyte standardowe powiadomienia. \n\nDzięki użyciu tej funkcjonalności, możesz zdefiniować ustawienia, które spowodują że tylko kilka kontaktów będzie pokazywać popup, kiedy reszta użyje standardowo ustawionych powiadomień. Możesz również zignorować określone kontakty, ustawiając dla nich wyciszone powiadomienia.</string>
   <string name="contact_customization_add">Dodaj zmodyfikowane powiadomienia</string>
   <string name="contact_customization_edit">Edytuj zmodyfikowane powiadomienia</string>
   <string name="contact_customization_remove">Usuń zmodyfikowane powiadomienia</string>
-  <string name="contact_customization_removed_toast">Zmodyfikowane powiadomienie zostało usunięte</string>
   <string name="contact_customization_save">Zapisz</string>
   <string name="contact_customization_title">Powiadomienia dla %s</string>
   <string name="contact_customization_enabled">Powiadomienia są dostępne dla %s</string>
   <string name="contact_customization_disabled">Powiadomienia są niedostępne dla %s</string>
-  <string name="contact_customization_add_hint">Dodaj/Edytuj powiadomienia dla kontaktów</string>
   <string name="ringtone_silent">Cichy</string>
   <string name="pref_message_presets_title">Wiadomości predefiniowane.</string>
   <string name="pref_message_presets_summary">Ustaw wiadomości predefiniowane do szybkich odpowiedzi.</string>
@@ -160,15 +127,11 @@
   <string name="message_presets_delete_toast">Wiadomość predefiniowana została skasowana.</string>
   <string name="message_presets_reorder_toast">Wiadomość predefiniowana została przesunięta na szczyt listy.</string>
   <string name="message_presets_error_toast">Błąd - spróbuj jeszcze raz</string>
-  <string name="message_counter">%d znaków jeszcze pozostało</string>
-  <string name="message_counter_multiple" formatted="false">%d znaków zostało, %d wiadomości.</string>
   <string name="quickreply_title">Szybka odpowiedź</string>
   <string name="quickreply_from_text">Do: %s</string>
   <string name="quickreply_preset_button">Gotowe ustawienia</string>
   <string name="quickreply_send_button">Wyślij</string>
-  <string name="quickreply_sending_toast">Wysyłanie wiadomości</string>
   <string name="quickreply_nomessage_toast">Wyślij</string>
-  <string name="loading_message">Ładowanie…</string>
   <string name="error_message">Błąd</string>
   <string name="error_no_voice_recognition">Funkcja rozpoznawania głosu jest niedostępna w tym urządzeniu</string>
   <string name="pref_button_config_title">Programowanie przycisków</string>
@@ -205,6 +168,8 @@
   <string name="pref_screen_on_summaryon">Ekran włączy się po pojawieniu się okienka z wiadomością</string>
   <string name="pref_screen_on_summaryoff">Kiedy przyjdzie wiadomość, ekran nie zostanie włączony.</string>
   <string name="pref_screen_category">Ustawienia ekranu</string>
+  <string name="pref_show_delete_button_dialog_title">Usuń wiadomość</string>
+  <string name="pref_show_delete_button_dialog_text">Czy jesteś pewny/a?</string>
   <string name="quickreply_sent_toast">Wiadomość wysłana</string>
   <string name="quickreply_failed_send_later">W tym momencie nie mogę wysłać twojej wiadomości. Zostanie wysłana kiedy usługa będzie możliwa.</string>
   <string name="quickreply_failed">Nie udało się wysłać wiadomości</string>

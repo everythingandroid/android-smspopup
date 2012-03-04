@@ -1,56 +1,42 @@
+# Translations template for PROJECT.
+# Copyright (C) 2012 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-02-16 22:17-0300\n"
+"POT-Creation-Date: 2012-03-04 18:33-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-02-23 00:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
-"Generated-By: Babel 1.0\n"
+"Generated-By: Babel 1.0dev\n"
 
-msgctxt "app_name"
-msgid "SMS Popup"
-msgstr ""
-
-#, python-format
-msgctxt "new_text_at"
-msgid "New message at %s"
-msgstr ""
-
-#, python-format
-msgctxt "unread_text_waiting"
-msgid "%d other unread message(s)"
-msgstr ""
-
-msgctxt "mms_subject"
-msgid "Subject:"
-msgstr ""
-
+#. Notification Strings
 msgctxt "notification_multiple_title"
 msgid "New messages"
 msgstr ""
 
-#, python-format
+#, c-format
 msgctxt "notification_multiple_text"
 msgid "%d unread messages."
 msgstr ""
 
-#, python-format
-msgctxt "notification_scroll"
-msgid "%s: %s"
-msgstr ""
-
-#, python-format
+#, c-format
 msgctxt "notification_scroll_privacy"
 msgid "New message from: %s"
 msgstr ""
 
+msgctxt "notification_scroll_privacy_no_name"
+msgid "New message"
+msgstr ""
+
+#. Button Strings
 msgctxt "button_close"
 msgid "Close"
 msgstr ""
@@ -73,14 +59,6 @@ msgstr ""
 
 msgctxt "button_delete"
 msgid "Delete"
-msgstr ""
-
-msgctxt "button_next"
-msgid "Next"
-msgstr ""
-
-msgctxt "button_previous"
-msgid "Previous"
 msgstr ""
 
 msgctxt "button_unlock"
@@ -107,6 +85,7 @@ msgctxt "button_disabled"
 msgid "Disabled"
 msgstr ""
 
+#. Main Preferences
 msgctxt "pref_config_title"
 msgid "SMS Popup Configuration"
 msgstr ""
@@ -143,30 +122,8 @@ msgctxt "pref_faq_summary"
 msgid "Frequently Asked Questions"
 msgstr ""
 
-msgctxt "pref_faq_url"
-msgid "http://code.google.com/p/android-smspopup/wiki/FAQ"
-msgstr ""
-
-msgctxt "pref_releasenotes_title"
-msgid "What's New?"
-msgstr ""
-
-msgctxt "pref_releasenotes_summary"
-msgid "See what's new in this version"
-msgstr ""
-
-msgctxt "pref_releasenotes_text"
-msgid ""
-"\n"
-"http://code.google.com/p/android-smspopup/wiki/ReleaseNotes"
-msgstr ""
-
 msgctxt "pref_sendemail_title"
 msgid "E-mail the Developer"
-msgstr ""
-
-msgctxt "pref_sendemail_summary"
-msgid "E-mail comments or bugs to the developer"
 msgstr ""
 
 msgctxt "pref_sendemail_dialog"
@@ -183,6 +140,7 @@ msgctxt "pref_sendemail_buttoncancel"
 msgid "No way"
 msgstr ""
 
+#. Additional Preferences
 msgctxt "pref_additional_title"
 msgid "Additional Settings"
 msgstr ""
@@ -211,16 +169,44 @@ msgctxt "pref_dimscreen_summaryoff"
 msgid "Popup screen will be bright"
 msgstr ""
 
+msgctxt "pref_privacy_category"
+msgid "Privacy"
+msgstr ""
+
 msgctxt "pref_privacy_title"
 msgid "Privacy Mode"
 msgstr ""
 
 msgctxt "pref_privacy_summaryon"
-msgid "Contents of the message will only be shown after unlock"
+msgid "Popup will use privacy mode"
 msgstr ""
 
 msgctxt "pref_privacy_summaryoff"
-msgid "Contents of the message will be shown immediately"
+msgid "Popup will show all message details"
+msgstr ""
+
+msgctxt "pref_privacy_sender_title"
+msgid "Hide Contact Name"
+msgstr ""
+
+msgctxt "pref_privacy_sender_summaryon"
+msgid "Message sender name will also be hidden"
+msgstr ""
+
+msgctxt "pref_privacy_sender_summaryoff"
+msgid "Message sender name will be shown"
+msgstr ""
+
+msgctxt "pref_privacy_always_title"
+msgid "Always Use Privacy Mode"
+msgstr ""
+
+msgctxt "pref_privacy_always_summaryon"
+msgid "Privacy mode will always be used"
+msgstr ""
+
+msgctxt "pref_privacy_always_summaryoff"
+msgid "Only use privacy mode when screen is locked"
 msgstr ""
 
 msgctxt "pref_markread_title"
@@ -247,28 +233,16 @@ msgctxt "pref_onlyShowOnKeyguard_summaryoff"
 msgid "Popup will always show"
 msgstr ""
 
-msgctxt "pref_require_unlock_title"
-msgid "Require Screen Unlock"
+msgctxt "pref_useUnlockButton_title"
+msgid "Show Unlock Button"
 msgstr ""
 
-msgctxt "pref_require_unlock_summaryon"
-msgid "Buttons will be hidden till screen is unlocked"
+msgctxt "pref_useUnlockButton_summaryon"
+msgid "Unlock button will show when screen is locked"
 msgstr ""
 
-msgctxt "pref_require_unlock_summaryoff"
-msgid "Buttons will show immediately"
-msgstr ""
-
-msgctxt "pref_inbox_app_title"
-msgid "Choose Inbox App"
-msgstr ""
-
-msgctxt "pref_inbox_app_summary"
-msgid "Choose the application that is launched for multiple messages"
-msgstr ""
-
-msgctxt "pref_inbox_app_info"
-msgid "Note that the Reply messaging application is set by the system"
+msgctxt "pref_useUnlockButton_summaryoff"
+msgid "Regular buttons will show when screen is locked"
 msgstr ""
 
 msgctxt "pref_show_buttons_title"
@@ -283,38 +257,7 @@ msgctxt "pref_show_buttons_summaryoff"
 msgid "Buttons are hidden in long press menu"
 msgstr ""
 
-msgctxt "pref_show_delete_button_title"
-msgid "Show a Delete Button"
-msgstr ""
-
-msgctxt "pref_show_delete_button_summaryon"
-msgid "Delete button is enabled"
-msgstr ""
-
-msgctxt "pref_show_delete_button_summaryoff"
-msgid "Delete button is disabled"
-msgstr ""
-
-msgctxt "pref_show_delete_button_dialog_title"
-msgid "Delete Message"
-msgstr ""
-
-msgctxt "pref_show_delete_button_dialog_text"
-msgid "Are you sure?"
-msgstr ""
-
-msgctxt "pref_blur_title"
-msgid "Blur Background"
-msgstr ""
-
-msgctxt "pref_blur_summaryon"
-msgid "The background behind the message window will be blurred out"
-msgstr ""
-
-msgctxt "pref_blur_summaryoff"
-msgid "The background behind the message window will not be blurred"
-msgstr ""
-
+#. Notification Preferences
 msgctxt "pref_notif_title"
 msgid "Notifications"
 msgstr ""
@@ -323,6 +266,7 @@ msgctxt "pref_notif_summary"
 msgid "Notification configuration"
 msgstr ""
 
+#. Category headings
 msgctxt "pref_notif_category_title"
 msgid "Notification Configuration"
 msgstr ""
@@ -339,6 +283,7 @@ msgctxt "pref_reminder_category_title"
 msgid "Reminder Configuration"
 msgstr ""
 
+#. General Notification Preferences
 msgctxt "pref_notif_enabled_title"
 msgid "Enable Notifications"
 msgstr ""
@@ -354,11 +299,11 @@ msgstr ""
 msgctxt "pref_notif_enabled_warning"
 msgid ""
 "To avoid conflicts and multiple alerts, please disable the system SMS "
-"notifications and any other apps that provide a notification when a SMS is "
-"received.\n"
+"notifications and any other apps that provide a notification when a SMS "
+"is received.\n"
 "\n"
-"To turn off the system notification, go to the messaging app, hit menu -&gt; "
-"settings and un-check notifications."
+"To turn off the system notification, go to the messaging app, hit menu "
+"-&gt; settings and un-check notifications."
 msgstr ""
 
 msgctxt "pref_popup_enabled_title"
@@ -370,7 +315,7 @@ msgid "Message will open in a popup"
 msgstr ""
 
 msgctxt "pref_popup_enabled_summaryoff"
-msgid "Message will only show in notification area (if enabled)"
+msgid "Message will only show in notification area"
 msgstr ""
 
 msgctxt "pref_notif_test_title"
@@ -393,6 +338,26 @@ msgctxt "pref_notif_sound_summary"
 msgid "This sound will play when a message is received"
 msgstr ""
 
+msgctxt "pref_notifyOnCall_title"
+msgid "Notify On Call"
+msgstr ""
+
+msgctxt "pref_notifyOnCall_summaryon"
+msgid "Sound will play while on a call"
+msgstr ""
+
+msgctxt "pref_notifyOnCall_summaryoff"
+msgid "Sound will not play while on a call"
+msgstr ""
+
+msgctxt "pref_notif_icon_title"
+msgid "Notification Icon"
+msgstr ""
+
+msgctxt "pref_notif_icon_summary"
+msgid "Change the notification area icon"
+msgstr ""
+
 msgctxt "pref_vibrate_title"
 msgid "Vibrate"
 msgstr ""
@@ -405,6 +370,7 @@ msgctxt "pref_vibrate_summaryoff"
 msgid "Vibrate is off"
 msgstr ""
 
+#. Vibrate Preferences
 msgctxt "pref_vibrate_pattern_title"
 msgid "Vibrate Pattern"
 msgstr ""
@@ -431,10 +397,7 @@ msgid ""
 "0,500,200,500,200,500"
 msgstr ""
 
-msgctxt "pref_custom_val"
-msgid "custom"
-msgstr ""
-
+#. LED Preferences
 msgctxt "pref_flashled_title"
 msgid "Blink LED"
 msgstr ""
@@ -503,6 +466,7 @@ msgctxt "pref_flashled_pattern_help_off"
 msgid "Time off:"
 msgstr ""
 
+#. Notification Repeat Preferences
 msgctxt "pref_notif_repeat_title"
 msgid "Enable Reminders"
 msgstr ""
@@ -547,12 +511,7 @@ msgctxt "pref_notif_repeat_screen_on_summaryoff"
 msgid "Reminders will not turn screen on"
 msgstr ""
 
-msgctxt "pref_notif_repeat_screen_on_warning"
-msgid ""
-"Warning - turning the screen on for reminders can significantly affect "
-"battery life"
-msgstr ""
-
+#. Contact Notification Customization Strings
 msgctxt "pref_notif_default_title"
 msgid "Default Notifications"
 msgstr ""
@@ -579,14 +538,14 @@ msgstr ""
 
 msgctxt "pref_notif_help_message"
 msgid ""
-"SMS Popup now offers the ability to customize notifications on a per contact "
+"SMS Popup offers the ability to customize notifications on a per contact "
 "basis. When a new message comes in, SMS Popup will first check if the "
 "contact has a customized notification. If so, those settings are used, "
 "otherwise the default notifications are used.\n"
 "\n"
 "Using this functionality, you could set things up so only a few contacts "
-"show a popup while the rest trigger a regular notification. You could also "
-"ignore certain contacts by setting their notification to silent."
+"show a popup while the rest trigger a regular notification. You could "
+"also ignore certain contacts by setting their notification to silent."
 msgstr ""
 
 msgctxt "contact_customization_add"
@@ -601,37 +560,34 @@ msgctxt "contact_customization_remove"
 msgid "Remove Custom Notification"
 msgstr ""
 
-msgctxt "contact_customization_removed_toast"
-msgid "Custom Notification Removed"
-msgstr ""
-
 msgctxt "contact_customization_save"
 msgid "Save"
 msgstr ""
 
-#, python-format
+#, c-format
 msgctxt "contact_customization_title"
 msgid "Notifications for %s"
 msgstr ""
 
-#, python-format
+#, c-format
 msgctxt "contact_customization_enabled"
 msgid "Notifications are enabled for %s"
 msgstr ""
 
-#, python-format
+#, c-format
 msgctxt "contact_customization_disabled"
 msgid "Notifications are disabled for %s"
 msgstr ""
 
 msgctxt "contact_customization_add_hint"
-msgid "Add/Edit contact notifications..."
+msgid "Add/Edit contact notifications…"
 msgstr ""
 
 msgctxt "ringtone_silent"
 msgid "Silent"
 msgstr ""
 
+#. Preset Quick Reply Message Strings
 msgctxt "pref_message_presets_title"
 msgid "Preset Messages"
 msgstr ""
@@ -692,21 +648,12 @@ msgctxt "message_presets_error_toast"
 msgid "Error - please try again"
 msgstr ""
 
-#, python-format
-msgctxt "message_counter"
-msgid "%d chars remaining"
-msgstr ""
-
-#, python-format
-msgctxt "message_counter_multiple"
-msgid "%d chars remaining, %d messages"
-msgstr ""
-
+#. Quick Reply Strings
 msgctxt "quickreply_title"
 msgid "Quick Reply"
 msgstr ""
 
-#, python-format
+#, c-format
 msgctxt "quickreply_from_text"
 msgid "To: %s"
 msgstr ""
@@ -720,15 +667,16 @@ msgid "Send"
 msgstr ""
 
 msgctxt "quickreply_sending_toast"
-msgid "Sending message..."
+msgid "Sending message…"
 msgstr ""
 
 msgctxt "quickreply_nomessage_toast"
 msgid "Send"
 msgstr ""
 
+#. Text-To-Speech and Voice Transcription Strings
 msgctxt "loading_message"
-msgid "Loading..."
+msgid "Loading…"
 msgstr ""
 
 msgctxt "error_message"
@@ -739,6 +687,7 @@ msgctxt "error_no_voice_recognition"
 msgid "Voice recognition not available on this device"
 msgstr ""
 
+#. Popup Button Configuration
 msgctxt "pref_button_config_title"
 msgid "Button Configuration"
 msgstr ""
@@ -747,7 +696,7 @@ msgctxt "pref_button_config_summary"
 msgid "Popup button configuration"
 msgstr ""
 
-#, python-format
+#, c-format
 msgctxt "pref_button_summary"
 msgid "Current Setting: %s"
 msgstr ""
@@ -764,14 +713,16 @@ msgctxt "pref_button3_title"
 msgid "Button 3 Configuration"
 msgstr ""
 
+#. Donate Strings (not used right now)
 msgctxt "pref_donate_title"
 msgid "Donate to SMS Popup"
 msgstr ""
 
 msgctxt "pref_donate_text"
 msgid ""
-"SMS Popup is a free application that I work on in my spare time. If you find "
-"it useful, and can spare a few bucks, a donation would be much appreciated.\n"
+"SMS Popup is a free application that I work on in my spare time. If you "
+"find it useful, and can spare a few bucks, a donation would be much "
+"appreciated.\n"
 "\n"
 "Thanks!"
 msgstr ""
@@ -784,10 +735,12 @@ msgctxt "pref_donate_paypal_button"
 msgid "Donate via PayPal"
 msgstr ""
 
+#. Misc missing string
 msgctxt "view_contact"
 msgid "View Contact"
 msgstr ""
 
+#. Quick Reply Checkbox Preference
 msgctxt "pref_quickreply_title"
 msgid "Quick Reply"
 msgstr ""
@@ -802,20 +755,22 @@ msgstr ""
 
 msgctxt "pref_quickreply_bothreplybuttons"
 msgid ""
-"Both reply buttons are already active, to configure them please go to the "
-"Button Configuration screen"
+"Both reply buttons are already active, to configure them please go to the"
+" Button Configuration screen"
 msgstr ""
 
 msgctxt "pref_quickreply_noreplybuttons"
 msgid ""
-"No reply buttons are currently active, to configure them please go to the "
-"Button Configuration screen"
+"No reply buttons are currently active, to configure them please go to the"
+" Button Configuration screen"
 msgstr ""
 
+#. Misc missing string
 msgctxt "button_replybyaddress"
 msgid "Reply (to phone number)"
 msgstr ""
 
+#. Quick Reply Signature pref
 msgctxt "pref_notif_signature_title"
 msgid "Quick Reply Signature"
 msgstr ""
@@ -824,6 +779,7 @@ msgctxt "pref_notif_signature_summary"
 msgid "Appears at the end of every quick reply"
 msgstr ""
 
+#. Eula Strings
 msgctxt "eula_title"
 msgid "SMS Popup License Agreement"
 msgstr ""
@@ -836,6 +792,7 @@ msgctxt "eula_refuse"
 msgid "Uninstall"
 msgstr ""
 
+#. Send message prefs
 msgctxt "pref_delivery_report_title"
 msgid "Delivery Reports"
 msgstr ""
@@ -853,10 +810,10 @@ msgid "Long messages will be split up (only needed for some CDMA carriers)"
 msgstr ""
 
 msgctxt "pref_split_message_summaryoff"
-msgid ""
-"Long messages will not be split up (only needed for some CDMA carriers)"
+msgid "Long messages will not be split up (only needed for some CDMA carriers)"
 msgstr ""
 
+#. Other new prefs
 msgctxt "pref_autorotate_title"
 msgid "Autorotate Always On"
 msgstr ""
@@ -885,6 +842,15 @@ msgctxt "pref_screen_category"
 msgid "Screen Control"
 msgstr ""
 
+#. Other new Quick Reply prefs
+msgctxt "pref_show_delete_button_dialog_title"
+msgid "Delete Message"
+msgstr ""
+
+msgctxt "pref_show_delete_button_dialog_text"
+msgid "Are you sure?"
+msgstr ""
+
 msgctxt "quickreply_sent_toast"
 msgid "Message Sent"
 msgstr ""
@@ -899,6 +865,7 @@ msgctxt "quickreply_failed"
 msgid "Message failed to send"
 msgstr ""
 
+#. Arrays texts
 msgctxt "pref_custom"
 msgid "Custom"
 msgstr ""
@@ -986,3 +953,4 @@ msgstr ""
 msgctxt "pref_led_pattern_entries_slow"
 msgid "Slow"
 msgstr ""
+

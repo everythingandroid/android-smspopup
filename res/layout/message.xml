@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:minWidth="310dp"
@@ -40,7 +41,8 @@
                 android:paddingBottom="2dp"
                 android:text="Text Here"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColorLink="?android:attr/textColorPrimaryDisableOnly" />
+                android:textColorLink="?android:attr/textColorPrimaryDisableOnly"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/timestampTextView"
@@ -49,7 +51,8 @@
                 android:paddingTop="2dp"
                 android:text="Timestamp here"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?android:attr/textColorPrimaryDisableOnly" />
+                android:textColor="?android:attr/textColorPrimaryDisableOnly"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </LinearLayout>
 
@@ -80,7 +83,8 @@
                 android:text="Text here"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="?android:attr/textColorPrimaryDisableOnly"
-                android:textColorLink="?android:attr/textColorPrimaryDisableOnly" />
+                android:textColorLink="?android:attr/textColorPrimaryDisableOnly"
+                tools:ignore="HardcodedText" />
         </ScrollView>
 
         <LinearLayout
