@@ -33,7 +33,7 @@ public class ManagePreferences {
         public static final String PREFS_BUTTON2 = String
                 .valueOf(ButtonListPreference.BUTTON_DELETE);
         public static final String PREFS_BUTTON3 = String
-                .valueOf(ButtonListPreference.BUTTON_REPLY);
+                .valueOf(ButtonListPreference.BUTTON_QUICKREPLY);
         public static final boolean PREFS_SHOW_POPUP = true;
         public static final boolean PREFS_ONLY_SHOW_ON_KEYGUARD = false;
         public static final boolean PREFS_MARK_READ = true;

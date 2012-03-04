@@ -27,13 +27,13 @@
               android:title="@string/pref_popup_enabled_title"
               android:summaryOn="@string/pref_popup_enabled_summaryon"
               android:summaryOff="@string/pref_popup_enabled_summaryoff"
-              android:defaultValue="true" />
+              android:defaultValue="@string/pref_popup_enabled_default" />
             <net.everythingandroid.smspopup.preferences.DialogCheckBoxPreference
               android:key="@string/pref_notif_enabled_key"
               android:title="@string/pref_notif_enabled_title"
               android:summaryOn="@string/pref_notif_enabled_summaryon"
               android:summaryOff="@string/pref_notif_enabled_summaryoff"
-              android:defaultValue="false" />
+              android:defaultValue="@string/pref_notif_enabled_default" />
             <RingtonePreference
               android:key="@string/pref_notif_sound_key"
               android:title="@string/pref_notif_sound_title"
