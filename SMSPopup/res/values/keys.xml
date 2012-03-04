@@ -5,8 +5,6 @@
     <string name="pref_enabled_key">enabled</string>
     <string name="pref_about_key">about</string>
     <string name="pref_faq_key">faq</string>
-    <string name="pref_releasenotes_key">releasenotes</string>
-    <string name="pref_sendemail_key">sendemail</string>
     <string name="pref_timeout_key">timeout</string>
     <string name="pref_dimscreen_key">dimscreen</string>
     <string name="pref_privacy_key">privacy</string>
@@ -15,10 +13,7 @@
     <string name="pref_markread_key">markread</string>
     <string name="pref_onlyShowOnKeyguard_key">showonkeyguard</string>
     <string name="pref_useUnlockButton_key">useunlock</string>
-    <string name="pref_inbox_app_key">inboxapp</string>
     <string name="pref_show_buttons_key">showbuttons</string>
-    <string name="pref_show_delete_button_key">showdelete</string>
-    <string name="pref_blur_key">blur</string>
     <string name="pref_notif_enabled_key">notification</string>
     <string name="pref_popup_enabled_key">popup</string>
     <string name="pref_notif_test_key">notiftest</string>

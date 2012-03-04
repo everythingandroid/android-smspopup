@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup.provider;
 
+import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
 import net.everythingandroid.smspopup.util.Log;
@@ -19,6 +20,7 @@ public class SmsPopupContentProvider extends ContentProvider {
     private static final int CONTACTS_LOOKUP = 102;
     private static final int QUICKMESSAGES = 200;
     private static final int QUICKMESSAGES_ID = 201;
+    private static final int QUICKMESSAGES_UPDATE_ORDER = 202;
 
     private static final UriMatcher uriMatcher = buildUriMatcher();
 
@@ -27,14 +29,17 @@ public class SmsPopupContentProvider extends ContentProvider {
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = SmsPopupContract.CONTENT_AUTHORITY;
-        final String contactsPath = SmsPopupContract.PATH_CONTACTS;
-        final String contactsLookupPath = SmsPopupContract.PATH_CONTACTS_LOOKUP;
-        final String quickMessagesPath = SmsPopupContract.PATH_QUICKMESSAGES;
+        final String contactsPath = ContactNotifications.PATH_CONTACTS;
+        final String contactsLookupPath = ContactNotifications.PATH_CONTACTS_LOOKUP;
+        final String quickMessagesPath = QuickMessages.PATH_QUICKMESSAGES;
+        final String quickMessagesUpdateOrderPath = QuickMessages.PATH_QUICKMESSAGES_UPDATE_ORDER;
         matcher.addURI(authority, contactsPath, CONTACTS);
-        matcher.addURI(authority, contactsPath + "/*", CONTACTS_ID);
-        matcher.addURI(authority, contactsLookupPath + "/*", CONTACTS_LOOKUP);
+        matcher.addURI(authority, contactsPath + "/#", CONTACTS_ID);
+        matcher.addURI(authority, contactsLookupPath + "/#", CONTACTS_LOOKUP);
         matcher.addURI(authority, quickMessagesPath, QUICKMESSAGES);
-        matcher.addURI(authority, quickMessagesPath + "/*", QUICKMESSAGES_ID);
+        matcher.addURI(authority, quickMessagesPath + "/#", QUICKMESSAGES_ID);
+        matcher.addURI(authority, quickMessagesPath + "/" + quickMessagesUpdateOrderPath + "/#", 
+        		QUICKMESSAGES_UPDATE_ORDER);
 
         return matcher;
     }
@@ -102,6 +107,23 @@ public class SmsPopupContentProvider extends ContentProvider {
             updateContactNotificationSummary(newUri);
             break;
         case QUICKMESSAGES:
+        	
+        	// Fetch max of quick message order column
+        	Cursor c = db.query(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, 
+        			new String[] { "max(" + QuickMessages.ORDER + ")" }, 
+        			null, null, null, null, null);
+        	
+        	int highestOrder = SmsPopupDatabase.QUICKMESSAGE_ORDER_DEFAULT;
+        	if (c != null && c.moveToFirst()) {
+        		highestOrder = c.getInt(0) + 1;
+        	}
+        	
+        	if (c != null) {
+        		c.close();
+        	}
+
+            values.put(QuickMessages.ORDER, highestOrder);        	
+
             id = db.insertOrThrow(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, null, values);
             newUri = QuickMessages.buildQuickMessageUri(String.valueOf(id));
             break;
@@ -149,7 +171,7 @@ public class SmsPopupContentProvider extends ContentProvider {
         case QUICKMESSAGES:
             sqlBuilder.setTables(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE);
             if (sortOrder == null) {
-                sortOrder = QuickMessages.ORDER;
+                sortOrder = QuickMessages.DEFAULT_SORT;
             }
             break;
         case QUICKMESSAGES_ID:
@@ -196,6 +218,9 @@ public class SmsPopupContentProvider extends ContentProvider {
             count = db.update(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, values,
                     qmSelection, qmSelectionArgs);
             break;
+        case QUICKMESSAGES_UPDATE_ORDER:
+        	count = updateQuickMessageOrder(db, QuickMessages.getQuickMessageId(uri));
+        	break;
         default:
             throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -203,6 +228,38 @@ public class SmsPopupContentProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(uri, null);
 
         return count;
+    }
+    
+    private int updateQuickMessageOrder(SQLiteDatabase db, String id) {
+    	// Fetch minimum of quick message order column
+    	Cursor c = db.query(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, 
+    			new String[] { "min(" + QuickMessages.ORDER + ")" }, null, null, null, null, null);
+    	
+    	if (c != null && c.moveToFirst()) {
+    		
+    		// Reduce by one so ordering will place this on top 
+    		int lowestOrder = c.getInt(0) - 1;
+    		
+    		c.close();
+    		    		
+    		// If we're at zero, then we need to update all rows to make some space
+    		if (lowestOrder == 0) {
+    			db.execSQL(SmsPopupDatabase.QUICKMESSAGES_UPDATE_ORDER_SQL);
+    			lowestOrder += SmsPopupDatabase.QUICKMESSAGE_ORDER_DEFAULT;
+    		}
+    		
+    		// Update the row with new ordering value
+    		final ContentValues vals = new ContentValues();
+    		vals.put(QuickMessages.ORDER, lowestOrder);
+    		return db.update(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, 
+    				vals, QuickMessages._ID + " = ?", new String[] { id });
+    	}
+    	
+    	if (c != null) {
+    		c.close();
+    	}
+    	
+        return 0;
     }
 
     /**
