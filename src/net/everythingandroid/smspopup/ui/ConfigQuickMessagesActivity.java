@@ -3,6 +3,7 @@ package net.everythingandroid.smspopup.ui;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
+import net.everythingandroid.smspopup.provider.SmsPopupDatabase;
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.annotation.SuppressLint;
@@ -261,9 +262,12 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
             CharSequence message = c.getString(c.getColumnIndexOrThrow(QuickMessages.QUICKMESSAGE));
             editQMEditText.setText(message);
             editQMEditText.setSelection(message.length());
-            c.close();
         } else {
             editQMEditText.setText("");
+        }
+        
+        if (c != null) {
+            c.close();
         }
     }
 
@@ -273,11 +277,9 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
 
         final ContentValues vals = new ContentValues();
         vals.put(QuickMessages.QUICKMESSAGE, message);
-        final int rows =
-                getContentResolver().update(QuickMessages.buildQuickMessageUri(id), vals, null,
-                        null);
+        final int rows = getContentResolver().update(
+        		QuickMessages.buildQuickMessageUri(id), vals, null, null);
         final boolean result = rows == 1 ? true : false;
-        fillData();
         if (result) {
             myToast(R.string.message_presets_save_toast);
         } else {
@@ -290,7 +292,6 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
         final int rows =
                 getContentResolver().delete(QuickMessages.buildQuickMessageUri(id), null, null);
         final boolean result = rows == 1 ? true : false;
-        fillData();
         if (result) {
             myToast(R.string.message_presets_delete_toast);
         } else {
@@ -306,7 +307,6 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
         final ContentValues vals = new ContentValues();
         vals.put(QuickMessages.QUICKMESSAGE, message);
         final Uri resultUri = getContentResolver().insert(QuickMessages.CONTENT_URI, vals);
-        fillData();
         if (resultUri == null) {
             myToast(R.string.message_presets_error_toast);
             return null;
@@ -317,12 +317,12 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
     }
 
     private boolean reorderQuickMessage(String id) {
-        /*
-         * boolean result = mDbAdapter.reorderQuickMessage(id); fillData(); if (result) {
-         * myToast(R.string.message_presets_reorder_toast); } else {
-         * myToast(R.string.message_presets_error_toast); } return result;
-         */
-        return true;
+    	if (1 == getContentResolver().update(QuickMessages.buildQuickMessageOrderUpdateUri(id), null, null, null)) {
+    		myToast(R.string.message_presets_reorder_toast);
+    		return true;
+    	}
+    	myToast(R.string.message_presets_error_toast);
+    	return false;
     }
 
     private void myToast(int resId) {
