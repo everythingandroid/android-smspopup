@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
+    <!-- App Strings -->
+    <string name="app_name" translatable="false">SMS Popup</string>
 
     <!-- Notification Strings -->
     <string name="notification_multiple_title">New messages</string>
     <string name="notification_multiple_text">%d unread messages.</string>
+    <string name="notification_scroll" formatted="false" translatable="false">%s: %s</string>
     <string name="notification_scroll_privacy">New message from: %s</string>
     <string name="notification_scroll_privacy_no_name">New message</string>
 
@@ -29,8 +33,10 @@
     <string name="pref_enabled_summaryoff">SMS Popup is disabled</string>
     <string name="pref_about_title">About</string>
     <string name="pref_about_summary">About SMS Popup</string>
+    <string name="pref_about_text" translatable="false">Created by: Adam K\nEmail: adam@everythingandroid.net\nBlog: http://www.everythingandroid.net\n\nSMS Popup provides a convenient popup dialog when a message is received that allows you to quickly read and reply to messages.  It also provides in-depth customization of message notifications including contact specific sound, vibrate and LED settings.\n\nFeel free to email me any comments, suggestions or bugs.\n\nCredits to Min Tran for the app icon.\n(http://min.frexy.com)\n</string>
     <string name="pref_faq_title">FAQ</string>
     <string name="pref_faq_summary">Frequently Asked Questions</string>
+    <string name="pref_faq_url" translatable="false">http://code.google.com/p/android-smspopup/wiki/FAQ</string>
     <string name="pref_sendemail_title">E-mail the Developer</string>
     <string name="pref_sendemail_dialog">Can I include your system information in the e-mail (this will help me troubleshoot bugs easier)?</string>
     <string name="pref_sendemail_buttonok">Sure</string>
