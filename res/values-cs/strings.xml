@@ -58,14 +58,8 @@
   <string name="pref_show_buttons_title">Zobrazit tlačítka</string>
   <string name="pref_show_buttons_summaryon">Tlačítka budou viditelná</string>
   <string name="pref_show_buttons_summaryoff">Tlačítka jsou skytá (stlačte dlouze tl. menu)</string>
-  <string name="pref_show_delete_button_title">Zobrazit tlačítko Smazat</string>
-  <string name="pref_show_delete_button_summaryon">Tlačítko Smazat je aktivní</string>
-  <string name="pref_show_delete_button_summaryoff">Tlačítko smazat není aktivní</string>
   <string name="pref_show_delete_button_dialog_title">Smazat zprávu</string>
   <string name="pref_show_delete_button_dialog_text">Jste si jisti?</string>
-  <string name="pref_blur_title">Rozostřit pozadí</string>
-  <string name="pref_blur_summaryon">Pozadí za zprávou bude rozostřeno</string>
-  <string name="pref_blur_summaryoff">Pozadí za zprávou nebude rozostřeno</string>
   <string name="pref_notif_title">Upozornění</string>
   <string name="pref_notif_summary">Nastavení upozornění</string>
   <string name="pref_notif_category_title">Nastavenmí upozornění</string>
