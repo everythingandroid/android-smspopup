@@ -1,4 +1,4 @@
-# Czech translations for PROJECT.
+# Chinese (China) translations for PROJECT.
 # Copyright (C) 2010 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -7,410 +7,295 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2010-02-16 22:17-0300\n"
-"PO-Revision-Date: 2010-02-09 09:38+0000\n"
-"Last-Translator: Macarse <macarse@gmail.com>\n"
-"Language-Team: cs <LL@li.org>\n"
+"POT-Creation-Date: 2012-03-04 14:24-0500\n"
+"PO-Revision-Date: 2012-01-10 08:52+0000\n"
+"Last-Translator: Wentao Han <Unknown>\n"
+"Language-Team: zh_CN <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-02-23 00:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2012-03-04 23:16+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "Generated-By: Babel 1.0\n"
 
-msgctxt "app_name"
-msgid "SMS Popup"
-msgstr "SMS Popup"
-
-#, python-format
-msgctxt "new_text_at"
-msgid "New message at %s"
-msgstr "New message at %s"
-
-#, python-format
-msgctxt "unread_text_waiting"
-msgid "%d other unread message(s)"
-msgstr "%d další nepřečtená zpráva(y)"
-
-msgctxt "mms_subject"
-msgid "Subject:"
-msgstr "Předmět:"
-
+#. Notification Strings
 msgctxt "notification_multiple_title"
 msgid "New messages"
-msgstr "Nové zprávy"
+msgstr "新短信"
 
-#, python-format
+#, c-format
 msgctxt "notification_multiple_text"
 msgid "%d unread messages."
-msgstr "%d nepřečtených zpráv."
+msgstr "%d 个未读短信。"
 
-#, python-format
-msgctxt "notification_scroll"
-msgid "%s: %s"
-msgstr ""
-
-#, python-format
+#, c-format
 msgctxt "notification_scroll_privacy"
 msgid "New message from: %s"
-msgstr "Nová zpráva od: %s"
+msgstr "新短信来源: %s"
 
+msgctxt "notification_scroll_privacy_no_name"
+msgid "New message"
+msgstr ""
+
+#. Button Strings
 msgctxt "button_close"
 msgid "Close"
-msgstr "Zavřít"
+msgstr "关闭"
 
 msgctxt "button_reply"
 msgid "Reply"
-msgstr "Odpovědět"
+msgstr "回复"
 
 msgctxt "button_inbox"
 msgid "Inbox"
-msgstr "Přijaté"
+msgstr "收件箱"
 
 msgctxt "button_view"
 msgid "View"
-msgstr "Zobrazit"
+msgstr "查看"
 
 msgctxt "button_view_mms"
 msgid "View MMS"
-msgstr "Zobrazit MMS"
+msgstr "查看彩信"
 
 msgctxt "button_delete"
 msgid "Delete"
-msgstr "Smazat"
-
-msgctxt "button_next"
-msgid "Next"
-msgstr "Další"
-
-msgctxt "button_previous"
-msgid "Previous"
-msgstr "Předchozí"
+msgstr "删除"
 
 msgctxt "button_unlock"
 msgid "Unlock"
-msgstr "Odemknout"
+msgstr "解锁"
 
 msgctxt "button_tts"
 msgid "Text-to-speech"
-msgstr "Přečíst text"
+msgstr "语音信息"
 
 msgctxt "button_speak"
 msgid "Speak"
-msgstr "Číst"
+msgstr "说话"
 
 msgctxt "button_delete_noconfirm"
 msgid "Delete (no confirmation)"
-msgstr "Smazat (bez upozornění)"
+msgstr "删除 (没有确认框)"
 
 msgctxt "button_quickreply"
 msgid "Quick Reply"
-msgstr "Rychlá odpověď"
+msgstr "快速回复"
 
 msgctxt "button_disabled"
 msgid "Disabled"
-msgstr "Zamčeno"
+msgstr "禁用"
 
+#. Main Preferences
 msgctxt "pref_config_title"
 msgid "SMS Popup Configuration"
-msgstr "Nastavení SMS Popup"
+msgstr "SMS Popup设置"
 
 msgctxt "pref_other_title"
 msgid "Other"
-msgstr "Ostatní"
+msgstr "其他"
 
 msgctxt "pref_enabled_title"
 msgid "Enable SMS Popup"
-msgstr "Povolit SMS Popup"
+msgstr "启用SMS Popup"
 
 msgctxt "pref_enabled_summaryon"
 msgid "SMS Popup is enabled"
-msgstr "SMS Popup je aktivní"
+msgstr "SMS Popup已启用"
 
 msgctxt "pref_enabled_summaryoff"
 msgid "SMS Popup is disabled"
-msgstr "SMS Popup není aktivní"
+msgstr "SMS Popup已关闭"
 
 msgctxt "pref_about_title"
 msgid "About"
-msgstr "O aplikaci"
+msgstr "关于"
 
 msgctxt "pref_about_summary"
 msgid "About SMS Popup"
-msgstr "O aplikaci SMS Popup"
-
-msgctxt "pref_about_text"
-msgid ""
-"Created by: Adam K\n"
-"Email: adam@everythingandroid.net\n"
-"Blog: http://www.everythingandroid.net\n"
-"\n"
-"SMS Popup is a simple application that shows a dialog when an SMS is "
-"received - turning on the screen and unlocking the keyguard if needed. It "
-"shows the most recent message, who it's from and the contact picture if "
-"available.\n"
-"\n"
-"Feel free to email me any comments, suggestions or bugs.\n"
-"\n"
-"German translation by: Feyyaz A.\n"
-"Email: f_alingan@hotmail.com\n"
-"Website: http://www.yenio.com\n"
-"\n"
-"Dutch translation by: mellie@xs4all.nl\n"
-"\n"
-"Spanish translation by: Diego Fernández\n"
-"Email: profediego@gmail.com\n"
-"\n"
-"Russian translation by: Artem Kavalerov\n"
-"Email: artem.kavalerov@gmail.com\n"
-"\n"
-"Credits to Min Tran for the app icon.\n"
-"(http://min.frexy.com)\n"
-msgstr ""
-"Vytvořil: Adam K\n"
-"Email: adam@everythingandroid.net\n"
-"Blog: http://www.everythingandroid.net\n"
-"\n"
-"SMS Popup je jednoduchá aplikace která zobrazí dialog při příchozí textové "
-"zprávě - rozsvítí a odemkne displej pokud je to potřeba. V dialogu se "
-"zobrazí aktivní zprávavčetně odesílatele a jeho obrázku pokud ho u kontaktu "
-"máte nadefinovaný.\n"
-"\n"
-"Pokud byste měli nějaké nápady či objevili nějakou chybu, neváhejte mne "
-"kontaktovat.\n"
-"\n"
-"Německý překlad: Feyyaz A.\n"
-"Email: f_alingan@hotmail.com\n"
-"Webové stránky: http://www.yenio.com\n"
-"\n"
-"Dánský překlad: mellie@xs4all.nl\n"
-"\n"
-"Španělský překlad: Diego FernĂˇndez\n"
-"Email: profediego@gmail.com\n"
-"\n"
-"Ruský překlad: Artem Kavalerov\n"
-"Email: artem.kavalerov@gmail.com\n"
-"\n"
-"Děkuji Min Tran za ikonku k aplikaci.\n"
-"(http://min.frexy.com)\n"
+msgstr "关于SMS Popup"
 
 msgctxt "pref_faq_title"
 msgid "FAQ"
-msgstr ""
+msgstr "常见问题"
 
 msgctxt "pref_faq_summary"
 msgid "Frequently Asked Questions"
-msgstr ""
-
-msgctxt "pref_faq_url"
-msgid "http://code.google.com/p/android-smspopup/wiki/FAQ"
-msgstr ""
-
-msgctxt "pref_releasenotes_title"
-msgid "What's New?"
-msgstr ""
-
-msgctxt "pref_releasenotes_summary"
-msgid "See what's new in this version"
-msgstr ""
-
-msgctxt "pref_releasenotes_text"
-msgid ""
-"\n"
-"http://code.google.com/p/android-smspopup/wiki/ReleaseNotes"
-msgstr ""
+msgstr "常见问题"
 
 msgctxt "pref_sendemail_title"
 msgid "E-mail the Developer"
-msgstr "Kontaktovat vývojáře"
-
-msgctxt "pref_sendemail_summary"
-msgid "E-mail comments or bugs to the developer"
-msgstr "Poslat email vývojáři"
+msgstr "给开发者发E-mail"
 
 msgctxt "pref_sendemail_dialog"
 msgid ""
 "Can I include your system information in the e-mail (this will help me "
 "troubleshoot bugs easier)?"
-msgstr ""
-"Mohu do zprávy zahrnout informace o Vašem systému (pomůže mi to ke snažšímu "
-"odhalení chyby)?"
+msgstr "是否允许我把您的系统信息添加至e-mail中(这将帮助我更快修复bug)?"
 
 msgctxt "pref_sendemail_buttonok"
 msgid "Sure"
-msgstr "Jistě"
+msgstr "同意"
 
 msgctxt "pref_sendemail_buttoncancel"
 msgid "No way"
-msgstr "NE"
+msgstr "拒绝"
 
+#. Additional Preferences
 msgctxt "pref_additional_title"
 msgid "Additional Settings"
-msgstr "Další nastavení"
+msgstr "更多设置"
 
 msgctxt "pref_additional_summary"
 msgid "Additional SMS Popup configuration"
-msgstr "Doplňkové nastavení SMS Popup"
+msgstr "其他 SMS Popup 设置"
 
 msgctxt "pref_timeout_title"
 msgid "Screen Timeout"
-msgstr "Doba ke zhasnutí displeje"
+msgstr "屏幕超时"
 
 msgctxt "pref_timeout_summary"
 msgid "The screen will sleep after this time"
-msgstr "Displej po této době zhasne"
+msgstr "超过此事件屏幕将进入睡眠状态"
 
 msgctxt "pref_dimscreen_title"
 msgid "Dim Popup Screen"
-msgstr "Ztmavit displej"
+msgstr "半亮弹出窗口"
 
 msgctxt "pref_dimscreen_summaryon"
 msgid "Popup screen will be dim (saves battery)"
-msgstr "Dislej při dialogu bude ztmavený (šetří baterii)"
+msgstr "半亮显示弹出窗口(节省电量)"
 
 msgctxt "pref_dimscreen_summaryoff"
 msgid "Popup screen will be bright"
-msgstr "Displej při dialogu bude jasný"
+msgstr "全亮显示弹出窗口"
+
+msgctxt "pref_privacy_category"
+msgid "Privacy"
+msgstr ""
 
 msgctxt "pref_privacy_title"
 msgid "Privacy Mode"
-msgstr "Důvěrný mód"
+msgstr "隐私模式"
 
 msgctxt "pref_privacy_summaryon"
-msgid "Contents of the message will only be shown after unlock"
-msgstr "Obsah zprávy bude zobrazen až po odemknutí"
+msgid "Popup will use privacy mode"
+msgstr ""
 
 msgctxt "pref_privacy_summaryoff"
-msgid "Contents of the message will be shown immediately"
-msgstr "Obsah zprávy bude zobrazen hned"
+msgid "Popup will show all message details"
+msgstr ""
+
+msgctxt "pref_privacy_sender_title"
+msgid "Hide Contact Name"
+msgstr ""
+
+msgctxt "pref_privacy_sender_summaryon"
+msgid "Message sender name will also be hidden"
+msgstr ""
+
+msgctxt "pref_privacy_sender_summaryoff"
+msgid "Message sender name will be shown"
+msgstr ""
+
+msgctxt "pref_privacy_always_title"
+msgid "Always Use Privacy Mode"
+msgstr ""
+
+msgctxt "pref_privacy_always_summaryon"
+msgid "Privacy mode will always be used"
+msgstr ""
+
+msgctxt "pref_privacy_always_summaryoff"
+msgid "Only use privacy mode when screen is locked"
+msgstr ""
 
 msgctxt "pref_markread_title"
 msgid "Mark Read"
-msgstr "Označit jako přečtené"
+msgstr "标记已读"
 
 msgctxt "pref_markread_summaryon"
 msgid "Messages will be marked as read when clicking \"Close\""
-msgstr "Zpráva bude označená jako přečtená po kliknutí na \"Close\""
+msgstr "点击\"关闭\"后，标记短信为已读"
 
 msgctxt "pref_markread_summaryoff"
 msgid "Messages will not be marked as read when clicking \"Close\""
-msgstr "Zpráva nebude označená jako přečtená po kliknutí na \"Close\""
+msgstr "点击\"关闭\"后，不标记短信为已读"
 
 msgctxt "pref_onlyShowOnKeyguard_title"
 msgid "Restrict Popup"
-msgstr "Omezení dialogu"
+msgstr "禁止弹出"
 
 msgctxt "pref_onlyShowOnKeyguard_summaryon"
 msgid "Popup window will only show when keyguard is engaged"
-msgstr "Dialogové okno se zobrazí pouze když je odemčený displej"
+msgstr "仅在解锁后显示弹出窗口"
 
 msgctxt "pref_onlyShowOnKeyguard_summaryoff"
 msgid "Popup will always show"
-msgstr "Dialogové okno se zobrazí vždy"
+msgstr "总是弹出"
 
-msgctxt "pref_require_unlock_title"
-msgid "Require Screen Unlock"
-msgstr "Požadovat odemknutí displeje"
+msgctxt "pref_useUnlockButton_title"
+msgid "Show Unlock Button"
+msgstr ""
 
-msgctxt "pref_require_unlock_summaryon"
-msgid "Buttons will be hidden till screen is unlocked"
-msgstr "Tlačítka budou do odemknutí displeje skrytá"
+msgctxt "pref_useUnlockButton_summaryon"
+msgid "Unlock button will show when screen is locked"
+msgstr ""
 
-msgctxt "pref_require_unlock_summaryoff"
-msgid "Buttons will show immediately"
-msgstr "Tlačítka budou viditelná vždy"
-
-msgctxt "pref_inbox_app_title"
-msgid "Choose Inbox App"
-msgstr "Vybrat aplikaci pro SMS"
-
-msgctxt "pref_inbox_app_summary"
-msgid "Choose the application that is launched for multiple messages"
-msgstr "Vybrat aplikaci která se spustí pro správu sms"
-
-msgctxt "pref_inbox_app_info"
-msgid "Note that the Reply messaging application is set by the system"
-msgstr "Aplikace pro odpověď je nastavena systémem!"
+msgctxt "pref_useUnlockButton_summaryoff"
+msgid "Regular buttons will show when screen is locked"
+msgstr ""
 
 msgctxt "pref_show_buttons_title"
 msgid "Show Buttons On Popup"
-msgstr "Zobrazit tlačítka"
+msgstr "在弹出框上显示按钮"
 
 msgctxt "pref_show_buttons_summaryon"
 msgid "Buttons on popup are visible"
-msgstr "Tlačítka budou viditelná"
+msgstr "弹出框上的按钮可见"
 
 msgctxt "pref_show_buttons_summaryoff"
 msgid "Buttons are hidden in long press menu"
-msgstr "Tlačítka jsou skytá (stlačte dlouze tl. menu)"
+msgstr "长按菜单时隐藏按钮"
 
-msgctxt "pref_show_delete_button_title"
-msgid "Show a Delete Button"
-msgstr "Zobrazit tlačítko Smazat"
-
-msgctxt "pref_show_delete_button_summaryon"
-msgid "Delete button is enabled"
-msgstr "Tlačítko Smazat je aktivní"
-
-msgctxt "pref_show_delete_button_summaryoff"
-msgid "Delete button is disabled"
-msgstr "Tlačítko smazat není aktivní"
-
-msgctxt "pref_show_delete_button_dialog_title"
-msgid "Delete Message"
-msgstr "Smazat zprávu"
-
-msgctxt "pref_show_delete_button_dialog_text"
-msgid "Are you sure?"
-msgstr "Jste si jisti?"
-
-msgctxt "pref_blur_title"
-msgid "Blur Background"
-msgstr "Rozostřit pozadí"
-
-msgctxt "pref_blur_summaryon"
-msgid "The background behind the message window will be blurred out"
-msgstr "Pozadí za zprávou bude rozostřeno"
-
-msgctxt "pref_blur_summaryoff"
-msgid "The background behind the message window will not be blurred"
-msgstr "Pozadí za zprávou nebude rozostřeno"
-
+#. Notification Preferences
 msgctxt "pref_notif_title"
 msgid "Notifications"
-msgstr "Upozornění"
+msgstr "通知"
 
 msgctxt "pref_notif_summary"
 msgid "Notification configuration"
-msgstr "Nastavení upozornění"
+msgstr "通知设置"
 
+#. Category headings
 msgctxt "pref_notif_category_title"
 msgid "Notification Configuration"
-msgstr "Nastavenmí upozornění"
+msgstr "通知设置"
 
 msgctxt "pref_vibrate_category_title"
 msgid "Vibrate Configuration"
-msgstr "Nastavení vibrací"
+msgstr "振动设置"
 
 msgctxt "pref_flashled_category_title"
 msgid "LED Configuration"
-msgstr "Nastavení LED"
+msgstr "LED灯设置"
 
 msgctxt "pref_reminder_category_title"
 msgid "Reminder Configuration"
-msgstr "Nastavení upomínky"
+msgstr "提醒设置"
 
+#. General Notification Preferences
 msgctxt "pref_notif_enabled_title"
 msgid "Enable Notifications"
-msgstr "Povolit upozornění"
+msgstr "启用通知"
 
 msgctxt "pref_notif_enabled_summaryon"
 msgid "Notifications are enabled"
-msgstr "Upozornění je povoleno"
+msgstr "已启用通知"
 
 msgctxt "pref_notif_enabled_summaryoff"
 msgid "Notifications are disabled"
-msgstr "Upozornění není povoleno"
+msgstr "已关闭通知"
 
 msgctxt "pref_notif_enabled_warning"
 msgid ""
@@ -421,72 +306,90 @@ msgid ""
 "To turn off the system notification, go to the messaging app, hit menu -&gt; "
 "settings and un-check notifications."
 msgstr ""
-"Prosím vypněte upozornění na příchozí zprávy ve všech ostatních aplikacích "
-"které používáte na správu SMS abyste se vyhnuli problémům s několikanásobným "
-"upozorněním. \n"
+"为避免冲突和多次通知，请关闭系统短信通知以及其他收到短信时进行通知的软件。\n"
 "\n"
-"Pro vypnutí systémové aplikace stlačte po jejím spuštění tlačítko menu -&gt; "
-"nastavení -&gt; a zrušte upozornění."
+"关闭系统短信通知步骤：打开短信程序，点击菜单 -&gt; 设置并取消通知。"
 
 msgctxt "pref_popup_enabled_title"
 msgid "Show a Popup"
-msgstr "Zobrazovat vyskakovací okno"
+msgstr "显示一个弹出框"
 
 msgctxt "pref_popup_enabled_summaryon"
 msgid "Message will open in a popup"
-msgstr "Zpráva bude otevřena ve vysk. okně"
+msgstr "信息将会在弹出框中打开"
 
 msgctxt "pref_popup_enabled_summaryoff"
-msgid "Message will only show in notification area (if enabled)"
-msgstr "Zpráva se zobrazí pouze v oznamovací liště (pokud je zapnuto)"
+msgid "Message will only show in notification area"
+msgstr ""
 
 msgctxt "pref_notif_test_title"
 msgid "Test Notification"
-msgstr "Test upozornění"
+msgstr "测试通知"
 
 msgctxt "pref_notif_test_summary"
 msgid "Test out your notification"
-msgstr "Testovat Vaše upozornění"
+msgstr "测试通知"
 
 msgctxt "pref_notif_test_message"
 msgid "Testing your notification now!"
-msgstr "Právě testuji Vaše upozornění!"
+msgstr "正在测试通知！"
 
 msgctxt "pref_notif_sound_title"
 msgid "Notification Sound"
-msgstr "Zvuk pro upozornění"
+msgstr "通知声"
 
 msgctxt "pref_notif_sound_summary"
 msgid "This sound will play when a message is received"
-msgstr "Tento zvuk bude přehrán při příchozí zprávě"
+msgstr "收到短信时播放此铃音"
+
+msgctxt "pref_notifyOnCall_title"
+msgid "Notify On Call"
+msgstr ""
+
+msgctxt "pref_notifyOnCall_summaryon"
+msgid "Sound will play while on a call"
+msgstr ""
+
+msgctxt "pref_notifyOnCall_summaryoff"
+msgid "Sound will not play while on a call"
+msgstr ""
+
+msgctxt "pref_notif_icon_title"
+msgid "Notification Icon"
+msgstr ""
+
+msgctxt "pref_notif_icon_summary"
+msgid "Change the notification area icon"
+msgstr ""
 
 msgctxt "pref_vibrate_title"
 msgid "Vibrate"
-msgstr "Vibrace"
+msgstr "振动"
 
 msgctxt "pref_vibrate_summaryon"
 msgid "Vibrate is on"
-msgstr "Vibrace je zapnuta"
+msgstr "振动已开启"
 
 msgctxt "pref_vibrate_summaryoff"
 msgid "Vibrate is off"
-msgstr "Vibrace je vypnuta"
+msgstr "振动已关闭"
 
+#. Vibrate Preferences
 msgctxt "pref_vibrate_pattern_title"
 msgid "Vibrate Pattern"
-msgstr "Styl vibrace"
+msgstr "振动模式"
 
 msgctxt "pref_vibrate_pattern_summary"
 msgid "Set the vibration pattern"
-msgstr "Vyberte si styl vibrací"
+msgstr "设置振动模式"
 
 msgctxt "pref_vibrate_pattern_ok"
 msgid "Custom vibrate pattern set"
-msgstr "Vlastní styl vibrace"
+msgstr "自定义振动模式"
 
 msgctxt "pref_vibrate_pattern_bad"
 msgid "Custom vibrate pattern invalid"
-msgstr "Vlastní styl vibrace není platný, použiji standartní"
+msgstr "自定义振动模式不可用, 使用默认"
 
 msgctxt "pref_vibrate_pattern_help"
 msgid ""
@@ -497,163 +400,155 @@ msgid ""
 "0,1000\n"
 "0,500,200,500,200,500"
 msgstr ""
-"Vložte vlastní styl vibraceve formátu:\n"
-"millisOff, millisOn, atd.\n"
+"输入自定义振动模式格式:\n"
+"停止振动毫秒数, 开始振动毫秒数, 等等.\n"
 "\n"
-"Například:\n"
+"例如:\n"
 "0,1000\n"
 "0,500,200,500,200,500"
 
-msgctxt "pref_custom_val"
-msgid "custom"
-msgstr ""
-
+#. LED Preferences
 msgctxt "pref_flashled_title"
 msgid "Blink LED"
-msgstr "Blikání LED"
+msgstr "LED灯闪烁"
 
 msgctxt "pref_flashled_summaryon"
 msgid "Blink LED when a message is received"
-msgstr "Blikání LED při příchozí zprávě"
+msgstr "收到短信时LED灯闪烁"
 
 msgctxt "pref_flashled_summaryoff"
 msgid "Do not blink LED when a message is received"
-msgstr "Nepoužívat blikání LED"
+msgstr "收到短信时LED灯不闪烁"
 
 msgctxt "pref_flashled_color_title"
 msgid "LED Color"
-msgstr "Barva LED diody"
+msgstr "LED灯颜色"
 
 msgctxt "pref_flashled_color_summary"
 msgid "The color of the LED"
-msgstr "Barva LED diody"
+msgstr "LED灯的颜色"
 
 msgctxt "pref_flashled_color_custom_dialog_red"
 msgid "Red:"
-msgstr "Červená:"
+msgstr "红:"
 
 msgctxt "pref_flashled_color_custom_dialog_green"
 msgid "Green:"
-msgstr "Zelená:"
+msgstr "绿:"
 
 msgctxt "pref_flashled_color_custom_dialog_blue"
 msgid "Blue:"
-msgstr "Modrá:"
+msgstr "蓝:"
 
 msgctxt "pref_flashled_color_custom_dialog_preview"
 msgid "Preview:"
-msgstr "Ukázka:"
+msgstr "预览:"
 
 msgctxt "pref_flashled_color_custom_set"
 msgid "Custom LED color set"
-msgstr "Vlastní nastavení barvy LED diody"
+msgstr "自定义LED灯颜色"
 
 msgctxt "pref_flashled_pattern_title"
 msgid "LED Blink Rate"
-msgstr "Rychlost blikání LED"
+msgstr "LED灯闪烁频率"
 
 msgctxt "pref_flashled_pattern_summary"
 msgid "Set the speed the LED blinks"
-msgstr "Nastavení rychlosti blikání LED diody"
+msgstr "设置LED灯闪烁频率"
 
 msgctxt "pref_flashled_pattern_ok"
 msgid "Custom LED blink rate set"
-msgstr "Vlastní nastavení rychlosti blikání LED"
+msgstr "自定义LED灯闪烁频率"
 
 msgctxt "pref_flashled_pattern_bad"
 msgid "Custom LED blink rate is invalid"
-msgstr "Vlastní nastavení rychlosti blikání LED není platné, použiji výchozí"
+msgstr "自定义LED灯闪烁频率无效,使用默认"
 
 msgctxt "pref_flashled_pattern_help"
 msgid "Enter the time in milliseconds to turn the LED on and off"
-msgstr "Vložte čas v milisekundách pro zapínání LED diody"
+msgstr "输入LED灯开关的毫秒数"
 
 msgctxt "pref_flashled_pattern_help_on"
 msgid "Time on:"
-msgstr "Čas pro zapnutí:"
+msgstr "开启时间:"
 
 msgctxt "pref_flashled_pattern_help_off"
 msgid "Time off:"
-msgstr "Čas pro vypnutí:"
+msgstr "关闭时间:"
 
+#. Notification Repeat Preferences
 msgctxt "pref_notif_repeat_title"
 msgid "Enable Reminders"
-msgstr "Zapnout upomínku"
+msgstr "启用提醒"
 
 msgctxt "pref_notif_repeat_summaryon"
 msgid "Unread message reminders are enabled"
-msgstr "Upomínky pro nepřečtené zprávy jsou zapnuty"
+msgstr "在有未读短信时进行提醒"
 
 msgctxt "pref_notif_repeat_summaryoff"
 msgid "Unread message reminders are disabled"
-msgstr "Upomínky pro nepřečtené zprávy jsou vypnuty"
+msgstr "在有未读短信时不进行提醒"
 
 msgctxt "pref_notif_repeat_interval_title"
 msgid "Reminder Interval"
-msgstr "Interval upomínky"
+msgstr "提醒间隔"
 
 msgctxt "pref_notif_repeat_interval_summary"
 msgid "The time period between notification reminders"
-msgstr "Časová prodleva mezi upomínkami"
+msgstr "两次提醒间的时间间隔"
 
 msgctxt "pref_notif_repeat_interval_dialogTitle"
 msgid "Interval (minutes)"
-msgstr "Interval (v minutách)"
+msgstr "间隔 (分钟)"
 
 msgctxt "pref_notif_repeat_times_title"
 msgid "Number of Reminders"
-msgstr "Počet upomínek"
+msgstr "提醒次数"
 
 msgctxt "pref_notif_repeat_times_summary"
 msgid "The number of reminder notifications to play"
-msgstr "Počet upomínek pro přehrání"
+msgstr "出现提醒通知的次数"
 
 msgctxt "pref_notif_repeat_screen_on_title"
 msgid "Screen On for Reminders"
-msgstr "Nastavení displeje pro upomínky"
+msgstr "提醒时开启屏幕"
 
 msgctxt "pref_notif_repeat_screen_on_summaryon"
 msgid "Reminders will turn screen on again"
-msgstr "Upomínky znovu zapnou displej"
+msgstr "提醒时屏幕变亮"
 
 msgctxt "pref_notif_repeat_screen_on_summaryoff"
 msgid "Reminders will not turn screen on"
-msgstr "Upomínky nezapnout znovu displej"
+msgstr "提醒时屏幕不变亮"
 
-msgctxt "pref_notif_repeat_screen_on_warning"
-msgid ""
-"Warning - turning the screen on for reminders can significantly affect "
-"battery life"
-msgstr ""
-"Varování - zapínání dipleje při upomínkách razantně sníží nabití Vaší baterie"
-
+#. Contact Notification Customization Strings
 msgctxt "pref_notif_default_title"
 msgid "Default Notifications"
-msgstr "Standartní upozornění"
+msgstr "默认通知"
 
 msgctxt "pref_notif_default_summary"
 msgid "Notifications for all contacts without an individual customization"
-msgstr "Upozornění pro všechny kontakty bez individuálního nastavení"
+msgstr "没有单独定制的联系人的默认通知"
 
 msgctxt "pref_contacts_title"
 msgid "Contacts Notifications"
-msgstr "Upozornění pro kontakty"
+msgstr "联系人通知"
 
 msgctxt "pref_contacts_summary"
 msgid "Individual contact customization"
-msgstr "Individuální nastavení pro kontakty"
+msgstr "联系人单独定制"
 
 msgctxt "pref_notif_help_title"
 msgid "Help - I'm confused!"
-msgstr "Pomoc - jsem ztracený!"
+msgstr "帮助 - 我很困惑!"
 
 msgctxt "pref_notif_help_summary"
 msgid "Notifications Help"
-msgstr "Nápověda"
+msgstr "通知帮助"
 
 msgctxt "pref_notif_help_message"
 msgid ""
-"SMS Popup now offers the ability to customize notifications on a per contact "
+"SMS Popup offers the ability to customize notifications on a per contact "
 "basis. When a new message comes in, SMS Popup will first check if the "
 "contact has a customized notification. If so, those settings are used, "
 "otherwise the default notifications are used.\n"
@@ -662,193 +557,176 @@ msgid ""
 "show a popup while the rest trigger a regular notification. You could also "
 "ignore certain contacts by setting their notification to silent."
 msgstr ""
-"SMS Popup nyní umožňuje nastavení upozornění pro jednotlivé kontakty. Když "
-"přijde nová zpráva, SMS Popup nejdříve zkontroluje zda u daného kontaktu "
-"nemáte nastavení nějaké individuální požadavky. Pokud tomu tak je, použije "
-"je, pokud ne, použije se standartní nastavení.\n"
-"\n"
-"Díky této funkci si můžete nastavit upozornění pouze pro některé kontakty a "
-"u ostatních nechat pouze klasické upozorňování defaultní aplikace. Můžete "
-"také ignorovat některé kontakty tím, že jim nastavíte tiché vyzvánění."
 
 msgctxt "contact_customization_add"
 msgid "Add Custom Notifications"
-msgstr "Přidat vlastní upozornění"
+msgstr "添加定制通知"
 
 msgctxt "contact_customization_edit"
 msgid "Edit Custom Notification"
-msgstr "Upravit vlastní upozornění"
+msgstr "编辑定制通知"
 
 msgctxt "contact_customization_remove"
 msgid "Remove Custom Notification"
-msgstr "Odebrat vlastní upozornění"
-
-msgctxt "contact_customization_removed_toast"
-msgid "Custom Notification Removed"
-msgstr "Vlastní upozornění odebráno"
+msgstr "删除定制通知"
 
 msgctxt "contact_customization_save"
 msgid "Save"
-msgstr "Uložit"
+msgstr "保存"
 
-#, python-format
+#, c-format
 msgctxt "contact_customization_title"
 msgid "Notifications for %s"
-msgstr "Upozornění pro %s"
+msgstr "%s 的通知"
 
-#, python-format
+#, c-format
 msgctxt "contact_customization_enabled"
 msgid "Notifications are enabled for %s"
-msgstr "Upozornění je aktivní pro %s"
+msgstr "%s 的通知已启用"
 
-#, python-format
+#, c-format
 msgctxt "contact_customization_disabled"
 msgid "Notifications are disabled for %s"
-msgstr "Upozornění není aktivní pro %s"
+msgstr "%s 的通知已禁用"
 
 msgctxt "contact_customization_add_hint"
-msgid "Add/Edit contact notifications..."
-msgstr "Přidat vlastní upozornění..."
+msgid "Add/Edit contact notifications…"
+msgstr ""
 
 msgctxt "ringtone_silent"
 msgid "Silent"
-msgstr "Tiché"
+msgstr "静音"
 
+#. Preset Quick Reply Message Strings
 msgctxt "pref_message_presets_title"
 msgid "Preset Messages"
-msgstr "Zpráva pro odpověď"
+msgstr "预设信息"
 
 msgctxt "pref_message_presets_summary"
 msgid "Configure preset messages for quick replies"
-msgstr "Nastavení zprávy pro rychlou odpověď"
+msgstr "设置快速回复的预设信息"
 
 msgctxt "message_presets_add"
 msgid "Add Preset Message"
-msgstr "Přidat odpověď"
+msgstr "添加预设信息"
 
 msgctxt "message_presets_edit"
 msgid "Edit Preset Message"
-msgstr "Upravit odpověď"
+msgstr "编辑预设信息"
 
 msgctxt "message_presets_add_text"
 msgid "Create"
-msgstr "Vytvořit"
+msgstr "创建"
 
 msgctxt "message_presets_save_text"
 msgid "Save"
-msgstr "Uložit"
+msgstr "保存"
 
 msgctxt "message_presets_delete_text"
 msgid "Remove"
-msgstr "Odebrat"
+msgstr "删除"
 
 msgctxt "message_presets_edit_text"
 msgid "Edit"
-msgstr "Upravit"
+msgstr "编辑"
 
 msgctxt "message_presets_reorder_text"
 msgid "Move to top"
-msgstr "Přesunout nahoru"
+msgstr "上移到顶部"
 
 msgctxt "message_presets_empty_text"
 msgid "No presets defined"
-msgstr "Žádný text"
+msgstr "没有定义预设"
 
 msgctxt "message_presets_add_toast"
 msgid "Message preset added"
-msgstr "Zpráva pro odpověď přidána"
+msgstr "预设信息已添加"
 
 msgctxt "message_presets_save_toast"
 msgid "Message preset updated"
-msgstr "Zpráva pro odpověď upravena"
+msgstr "预设信息已更新"
 
 msgctxt "message_presets_delete_toast"
 msgid "Message preset deleted"
-msgstr "Zpráva pro odpověď smazána"
+msgstr "预设信息已删除"
 
 msgctxt "message_presets_reorder_toast"
 msgid "Message preset moved to top"
-msgstr "Zpráva pro odpověď přesunuta nahoru"
+msgstr "预设信息已移动到顶部"
 
 msgctxt "message_presets_error_toast"
 msgid "Error - please try again"
-msgstr "Chyba - prosím zkuste to znovu"
+msgstr "错误 - 请重试"
 
-#, python-format
-msgctxt "message_counter"
-msgid "%d chars remaining"
-msgstr "%d znaků zbývá"
-
-#, python-format
-msgctxt "message_counter_multiple"
-msgid "%d chars remaining, %d messages"
-msgstr "%d znaků zbývá, %d zpráv"
-
+#. Quick Reply Strings
 msgctxt "quickreply_title"
 msgid "Quick Reply"
-msgstr "Rychlá odpověď"
+msgstr "快速回复"
 
-#, python-format
+#, c-format
 msgctxt "quickreply_from_text"
 msgid "To: %s"
-msgstr "Komu: %s"
+msgstr "到: %s"
 
 msgctxt "quickreply_preset_button"
 msgid "Presets"
-msgstr "Odpovědi"
+msgstr "预设"
 
 msgctxt "quickreply_send_button"
 msgid "Send"
-msgstr "Odeslat"
+msgstr "发送"
 
 msgctxt "quickreply_sending_toast"
-msgid "Sending message..."
-msgstr "Odesílám zprávu..."
+msgid "Sending message…"
+msgstr ""
 
 msgctxt "quickreply_nomessage_toast"
 msgid "Send"
-msgstr "Odeslat"
+msgstr "发送"
 
+#. Text-To-Speech and Voice Transcription Strings
 msgctxt "loading_message"
-msgid "Loading..."
-msgstr "Nahrávám..."
+msgid "Loading…"
+msgstr ""
 
 msgctxt "error_message"
 msgid "Error"
-msgstr "Chyba"
+msgstr "错误"
 
 msgctxt "error_no_voice_recognition"
 msgid "Voice recognition not available on this device"
-msgstr "Rozpoznávání hlasu není na tomto zařízení nainstalováno"
+msgstr "此设备上声音识别不可用"
 
+#. Popup Button Configuration
 msgctxt "pref_button_config_title"
 msgid "Button Configuration"
-msgstr "Konfigurace tlačítek"
+msgstr "按钮配置"
 
 msgctxt "pref_button_config_summary"
 msgid "Popup button configuration"
-msgstr "Konfigurace vyskakujícího okna"
+msgstr "弹出按钮配置"
 
-#, python-format
+#, c-format
 msgctxt "pref_button_summary"
 msgid "Current Setting: %s"
-msgstr "Aktuální nastavení: %s"
+msgstr "当前设置: %s"
 
 msgctxt "pref_button1_title"
 msgid "Button 1 Configuration"
-msgstr "Konfigurace Tlačítka 1"
+msgstr "按钮 1 配置"
 
 msgctxt "pref_button2_title"
 msgid "Button 2 Configuration"
-msgstr "Konfigurace Tlačítka 2"
+msgstr "按钮 2 配置"
 
 msgctxt "pref_button3_title"
 msgid "Button 3 Configuration"
-msgstr "Konfigurace Tlačítka 3"
+msgstr "按钮 3 配置"
 
+#. Donate Strings (not used right now)
 msgctxt "pref_donate_title"
 msgid "Donate to SMS Popup"
-msgstr "Podpořte SMS Popup"
+msgstr "捐赠 SMS Popup"
 
 msgctxt "pref_donate_text"
 msgid ""
@@ -857,218 +735,234 @@ msgid ""
 "\n"
 "Thanks!"
 msgstr ""
-"SMS Popup je zdarma a pracuji na ní ve svém volném čase. Pokud se Vám zdá "
-"užitečná a můžete oželet pár drobných, podpoříte vývoj dalších aplikací.\n"
+"SMS Popup 是我在业余时间制作的一款免费的程序。如果您感觉它很有用，可以捐赠我的开发。\n"
 "\n"
-"Děkuji!"
+"感谢支持!"
 
 msgctxt "pref_donate_market_button"
 msgid "Donate via Android Market"
-msgstr "Podpořit přes Android Market"
+msgstr "通过Android Market捐赠"
 
 msgctxt "pref_donate_paypal_button"
 msgid "Donate via PayPal"
-msgstr "Podpořit přes PayPal"
+msgstr "通过PayPal捐赠"
 
+#. Misc missing string
 msgctxt "view_contact"
 msgid "View Contact"
-msgstr "Prohlédnout kontakt"
+msgstr "查看联络"
 
+#. Quick Reply Checkbox Preference
 msgctxt "pref_quickreply_title"
 msgid "Quick Reply"
-msgstr ""
+msgstr "快速回复"
 
 msgctxt "pref_quickreply_summaryon"
 msgid "Quick Reply is enabled"
-msgstr ""
+msgstr "快速回复已启动"
 
 msgctxt "pref_quickreply_summaryoff"
 msgid "Quick Reply is disabled"
-msgstr ""
+msgstr "快速回复未启动"
 
 msgctxt "pref_quickreply_bothreplybuttons"
 msgid ""
 "Both reply buttons are already active, to configure them please go to the "
 "Button Configuration screen"
-msgstr ""
+msgstr "两个回复按键都已启动，请回按键设置界面修改"
 
 msgctxt "pref_quickreply_noreplybuttons"
 msgid ""
 "No reply buttons are currently active, to configure them please go to the "
 "Button Configuration screen"
-msgstr ""
+msgstr "回复按键未启动，请回按键设置界面修改"
 
+#. Misc missing string
 msgctxt "button_replybyaddress"
 msgid "Reply (to phone number)"
-msgstr ""
+msgstr "回复（电话号码）"
 
+#. Quick Reply Signature pref
 msgctxt "pref_notif_signature_title"
 msgid "Quick Reply Signature"
-msgstr ""
+msgstr "快速签名回复"
 
 msgctxt "pref_notif_signature_summary"
 msgid "Appears at the end of every quick reply"
-msgstr ""
+msgstr "出现在每次快速回复里"
 
+#. Eula Strings
 msgctxt "eula_title"
 msgid "SMS Popup License Agreement"
-msgstr ""
+msgstr "SMS Popup 许可协议"
 
 msgctxt "eula_accept"
 msgid "Accept"
-msgstr ""
+msgstr "接受"
 
 msgctxt "eula_refuse"
 msgid "Uninstall"
-msgstr ""
+msgstr "卸载"
 
+#. Send message prefs
 msgctxt "pref_delivery_report_title"
 msgid "Delivery Reports"
-msgstr ""
+msgstr "报告信息"
 
 msgctxt "pref_delivery_report_summary"
 msgid "Request a delivery report for each message you send via quick reply"
-msgstr ""
+msgstr "在每次快速回复信息时发送报告"
 
 msgctxt "pref_split_message_title"
 msgid "Split Long Messages"
-msgstr ""
+msgstr "信息分段"
 
 msgctxt "pref_split_message_summaryon"
 msgid "Long messages will be split up (only needed for some CDMA carriers)"
-msgstr ""
+msgstr "信息将自动分段（仅为某些CDMA公司）"
 
 msgctxt "pref_split_message_summaryoff"
 msgid ""
 "Long messages will not be split up (only needed for some CDMA carriers)"
-msgstr ""
+msgstr "信息将不会自动分段（仅为某些CDMA公司）"
 
+#. Other new prefs
 msgctxt "pref_autorotate_title"
 msgid "Autorotate Always On"
-msgstr ""
+msgstr "自动旋转启动"
 
 msgctxt "pref_autorotate_summaryon"
 msgid "Popup will always autorotate"
-msgstr ""
+msgstr "Popup将自动旋转"
 
 msgctxt "pref_autorotate_summaryoff"
 msgid "Popup will auto-rotate based on the screen behind it"
-msgstr ""
+msgstr "Popup将根据屏幕自动旋转"
 
 msgctxt "pref_screen_on_title"
 msgid "Screen On for Popup"
-msgstr ""
+msgstr "为Popup启动荧屏"
 
 msgctxt "pref_screen_on_summaryon"
 msgid "Screen will turn on when popup shows"
-msgstr ""
+msgstr "当Popup出现屏幕将会启动"
 
 msgctxt "pref_screen_on_summaryoff"
 msgid "Screen will not turn on when popup shows"
-msgstr ""
+msgstr "当Popup出现屏幕将不会启动"
 
 msgctxt "pref_screen_category"
 msgid "Screen Control"
-msgstr ""
+msgstr "屏幕控制"
+
+#. Other new Quick Reply prefs
+msgctxt "pref_show_delete_button_dialog_title"
+msgid "Delete Message"
+msgstr "删除短信"
+
+msgctxt "pref_show_delete_button_dialog_text"
+msgid "Are you sure?"
+msgstr "确定？"
 
 msgctxt "quickreply_sent_toast"
 msgid "Message Sent"
-msgstr ""
+msgstr "信息已发送"
 
 msgctxt "quickreply_failed_send_later"
 msgid ""
 "Currently unable to send your message. It will be sent when the service "
 "becomes available."
-msgstr ""
+msgstr "信息无法发送，当网络服务恢复后将再次发送。"
 
 msgctxt "quickreply_failed"
 msgid "Message failed to send"
-msgstr ""
+msgstr "信息发送失败"
 
+#. Arrays texts
 msgctxt "pref_custom"
 msgid "Custom"
-msgstr ""
+msgstr "自定义"
 
 msgctxt "pref_notif_repeat_times_entries_keep_repeting"
 msgid "Keep repeating"
-msgstr ""
+msgstr "继续重复"
 
 msgctxt "pref_timeout_entries_10s"
 msgid "10 seconds"
-msgstr ""
+msgstr "10 秒"
 
 msgctxt "pref_timeout_entries_20s"
 msgid "20 seconds"
-msgstr ""
+msgstr "20 秒"
 
 msgctxt "pref_timeout_entries_30s"
 msgid "30 seconds"
-msgstr ""
+msgstr "30 秒"
 
 msgctxt "pref_timeout_entries_1m"
 msgid "1 minute"
-msgstr ""
+msgstr "1 分钟"
 
 msgctxt "pref_timeout_entries_2m"
 msgid "2 minutes"
-msgstr ""
+msgstr "2 分钟"
 
 msgctxt "pref_timeout_entries_5m"
 msgid "5 minutes"
-msgstr ""
+msgstr "5 分钟"
 
 msgctxt "pref_timeout_entries_10m"
 msgid "10 minutes"
-msgstr ""
+msgstr "10 分钟"
 
 msgctxt "pref_vibrate_pattern_entries_normal"
 msgid "Normal"
-msgstr ""
+msgstr "正常"
 
 msgctxt "pref_vibrate_pattern_entries_long"
 msgid "Long Vibrate"
-msgstr ""
+msgstr "单次长性振动"
 
 msgctxt "pref_vibrate_pattern_entries_multiple_short"
 msgid "Multiple Short"
-msgstr ""
+msgstr "多次短性振动"
 
 msgctxt "pref_vibrate_pattern_entries_multiple_long"
 msgid "Multiple Long"
-msgstr ""
+msgstr "多次长性振动"
 
 msgctxt "pref_led_color_blue"
 msgid "Blue"
-msgstr ""
+msgstr "蓝色"
 
 msgctxt "pref_led_color_green"
 msgid "Green"
-msgstr ""
+msgstr "绿色"
 
 msgctxt "pref_led_color_red"
 msgid "Red"
-msgstr ""
+msgstr "红色"
 
 msgctxt "pref_led_color_yellow"
 msgid "Yellow"
-msgstr ""
+msgstr "黄色"
 
 msgctxt "pref_led_color_magenta"
 msgid "Magenta"
-msgstr ""
+msgstr "洋红色"
 
 msgctxt "pref_led_color_cyan"
 msgid "Cyan"
-msgstr ""
+msgstr "青色"
 
 msgctxt "pref_led_pattern_entries_fast"
 msgid "Fast"
-msgstr ""
+msgstr "快速"
 
 msgctxt "pref_led_pattern_entries_normal"
 msgid "Normal"
-msgstr ""
+msgstr "正常"
 
 msgctxt "pref_led_pattern_entries_slow"
 msgid "Slow"
-msgstr ""
+msgstr "慢速"
