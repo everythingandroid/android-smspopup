@@ -12,10 +12,14 @@ import android.provider.Settings;
 public class SmsPopupDatabase extends SQLiteOpenHelper {
     public static final String CONTACTS_DB_TABLE = "contacts";
     public static final String QUICKMESSAGES_DB_TABLE = "quickmessages";
-
-    private static final int QUICKMESSAGES_ORDERING_DEFAULT = 100;
+    public static final int QUICKMESSAGE_ORDER_DEFAULT = 100;
+    
     private static final String DATABASE_NAME = "data";
     private static final int DATABASE_VERSION = 2;
+    
+	public static final String QUICKMESSAGES_UPDATE_ORDER_SQL = "update " 
+			+ QUICKMESSAGES_DB_TABLE + " set " + QuickMessages.ORDER + "="
+			+ QuickMessages.ORDER + "+" + QUICKMESSAGE_ORDER_DEFAULT;
 
     // Table creation sql statement
     private static final String CONTACTS_DB_CREATE =
@@ -49,7 +53,7 @@ public class SmsPopupDatabase extends SQLiteOpenHelper {
         "create table "  + QUICKMESSAGES_DB_TABLE + " (" +
         QuickMessages._ID          + " integer primary key autoincrement, " +
         QuickMessages.QUICKMESSAGE + " text, " +
-        QuickMessages.ORDER        + " integer default " + QUICKMESSAGES_ORDERING_DEFAULT +
+        QuickMessages.ORDER        + " integer default " + QUICKMESSAGE_ORDER_DEFAULT +
         ");";
 
     public SmsPopupDatabase(Context context) {

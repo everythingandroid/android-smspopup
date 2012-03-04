@@ -10,10 +10,6 @@ public class SmsPopupContract {
     public static final String CONTENT_AUTHORITY = "net.everythingandroid.smspopup.provider";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
-    public static final String PATH_CONTACTS = "contacts";
-    public static final String PATH_CONTACTS_LOOKUP = "contactslookup";
-    public static final String PATH_QUICKMESSAGES = "quickmessages";
-
     interface ContactNotificationsColumns {
         String CONTACT_LOOKUPKEY = "contact_lookupkey";
         String CONTACT_NAME = "contact_displayname";
@@ -37,6 +33,9 @@ public class SmsPopupContract {
     }
 
     public static class ContactNotifications implements ContactNotificationsColumns, BaseColumns {
+    	public static final String PATH_CONTACTS = "contacts";
+        public static final String PATH_CONTACTS_LOOKUP = "contactslookup";
+
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_CONTACTS).build();
         public static final Uri CONTENT_LOOKUP_URI =
@@ -86,26 +85,42 @@ public class SmsPopupContract {
             }
             return null;
         }
-
     }
 
     public static class QuickMessages implements QuickMessagesColumns, BaseColumns {
+    	public static final String PATH_QUICKMESSAGES = "quickmessages";
+        public static final String PATH_QUICKMESSAGES_UPDATE_ORDER = "updateorder";
+        
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_QUICKMESSAGES).build();
+        
+        public static final Uri UPDATE_ORDER_URI =
+        		BASE_CONTENT_URI.buildUpon().appendPath(PATH_QUICKMESSAGES)
+        				.appendPath(PATH_QUICKMESSAGES_UPDATE_ORDER).build();
 
         public static final String CONTENT_TYPE =
                 "vnd.android.cursor.dir/vnd.everythingandroid.quickmessage";
         public static final String CONTENT_ITEM_TYPE =
                 "vnd.android.cursor.item/vnd.everythingandroid.quickmessage";
+        
+        public static final String DEFAULT_SORT = ORDER + ", " + _ID;
 
         public static Uri buildQuickMessageUri(String quickMessageId) {
             return CONTENT_URI.buildUpon().appendPath(quickMessageId).build();
         }
 
         public static String getQuickMessageId(Uri uri) {
-            return uri.getPathSegments().get(1);
+        	final List<String> segments = uri.getPathSegments();
+            return segments.get(segments.size() - 1);
+        }
+        
+        public static Uri buildQuickMessageOrderUpdateUri(String quickMessageId) {
+            return UPDATE_ORDER_URI.buildUpon().appendPath(quickMessageId).build();
         }
 
+//        public static String getQuickMessageId(Uri uri) {
+//            return uri.getPathSegments().get(1);
+//        }
     }
 
 }

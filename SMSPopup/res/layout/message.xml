@@ -110,6 +110,7 @@
                 android:id="@+id/viewButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/button_view"
                 android:padding="8dp"
                 android:src="@android:drawable/ic_menu_view" />
         </LinearLayout>
