@@ -52,11 +52,11 @@ public class ConfigContactActivity extends PreferenceActivity {
     protected void onResume() {
         super.onResume();
 
-        SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Uri ringtoneUri = Uri.parse(myPrefs.getString(getString(R.string.c_pref_notif_sound_key),
+        final SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        final Uri ringtoneUri = Uri.parse(myPrefs.getString(getString(R.string.c_pref_notif_sound_key),
                 ManageNotification.defaultRingtone));
-        Ringtone mRingtone = RingtoneManager.getRingtone(this, ringtoneUri);
-
+        final Ringtone mRingtone = RingtoneManager.getRingtone(this, ringtoneUri);
+        
         if (mRingtone == null) {
             ringtonePref.setSummary(getString(R.string.ringtone_silent));
         } else {
@@ -73,6 +73,9 @@ public class ConfigContactActivity extends PreferenceActivity {
         Cursor c = getContentResolver().query(contactNotificationsUri, null, null, null, null);
 
         if (c == null || c.getCount() == 0) {
+        	if (c != null) {
+        		c.close();
+        	}
             c = createContact(contactNotificationsUri);
         }
 
@@ -318,9 +321,7 @@ public class ConfigContactActivity extends PreferenceActivity {
                 Log.v("Error creating contact");
             finish();
         }
-
         return c;
-
     }
 
     private Cursor createContact(Uri contactUri) {

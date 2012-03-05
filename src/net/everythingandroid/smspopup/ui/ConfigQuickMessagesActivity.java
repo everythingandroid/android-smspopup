@@ -3,7 +3,6 @@ package net.everythingandroid.smspopup.ui;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
-import net.everythingandroid.smspopup.provider.SmsPopupDatabase;
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.annotation.SuppressLint;
@@ -11,18 +10,23 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -46,6 +50,7 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
     private View editQMLayout;
     private TextView addQMTextView;
     private TextView editQMTextView;
+    private InputMethodManager inputManager;
 
     @SuppressLint("NewApi")
     @Override
@@ -58,15 +63,12 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        TextView tv = new TextView(this);
-
-        // TODO: make this look better
-        tv.setText(R.string.message_presets_add);
-        tv.setTextSize(SmsPopupUtils.pixelsToDip(getResources(), 13));
-        final int tvPadding = SmsPopupUtils.pixelsToDip(getResources(), 10);
-        tv.setPadding(tvPadding, tvPadding, tvPadding, tvPadding);
-
         if (!SmsPopupUtils.isICS()) {
+            final TextView tv = new TextView(this);
+            tv.setText(R.string.message_presets_add);
+            tv.setTextSize(SmsPopupUtils.pixelsToDip(getResources(), 13));
+            final int tvPadding = SmsPopupUtils.pixelsToDip(getResources(), 10);
+            tv.setPadding(tvPadding, tvPadding, tvPadding, tvPadding);
             getListView().addHeaderView(tv, null, true);
         }
 
@@ -187,9 +189,18 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
      */
     @Override
     protected Dialog onCreateDialog(int id) {
+    	OnDismissListener dismissListener = new OnDismissListener () {
+
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				Log.v("dismissed!");
+				hideSoftKeyboard();
+			}
+    	};
+    	
         switch (id) {
         case ADD_DIALOG:
-            return new AlertDialog.Builder(this)
+        	final AlertDialog addDialog = new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_email)
                     .setTitle(R.string.message_presets_add)
                     .setView(addQMLayout)
@@ -200,10 +211,21 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
                                 }
                             })
                     .setNegativeButton(android.R.string.cancel, null)
+                    .setOnCancelListener(new OnCancelListener() {
+
+						@Override
+						public void onCancel(DialogInterface dialog) {
+							Log.v("canceled!");
+//							hideSoftKeyboard();							
+						}
+                    	
+                    })
                     .create();
+        	addDialog.setOnDismissListener(dismissListener);
+        	return addDialog;
 
         case EDIT_DIALOG:
-            return new AlertDialog.Builder(this)
+        	final AlertDialog editDialog = new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_email)
                     .setTitle(R.string.message_presets_edit)
                     .setView(editQMLayout)
@@ -220,7 +242,18 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
                                 }
                             })
                     .setNegativeButton(android.R.string.cancel, null)
+                    .setOnCancelListener(new OnCancelListener() {
+
+						@Override
+						public void onCancel(DialogInterface dialog) {
+							Log.v("canceled!");
+//							hideSoftKeyboard();							
+						}
+                    	
+                    })
                     .create();
+        	editDialog.setOnDismissListener(dismissListener);
+        	return editDialog;
         }
         return null;
     }
@@ -232,10 +265,12 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
         case ADD_DIALOG:
             addQMEditText.setText("");
             addQMEditText.requestFocus();
+            showSoftKeyboard();
             break;
         case EDIT_DIALOG:
             updateEditText(editId);
             editQMEditText.requestFocus();
+            showSoftKeyboard();
             break;
         }
     }
@@ -346,5 +381,22 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
 
         // otherwise allow keypress through
         return false;
+    }
+    
+    /**
+     * Show the soft keyboard and store the view that triggered it
+     */
+    private void showSoftKeyboard() {
+        if (inputManager == null) {
+            inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        }
+        inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+    
+    /**
+     * Hide the soft keyboard
+     */
+    private void hideSoftKeyboard() {
+    	getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 }

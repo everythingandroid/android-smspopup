@@ -1,6 +1,5 @@
 package net.everythingandroid.smspopup.provider;
 
-import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
 import net.everythingandroid.smspopup.util.Log;
@@ -34,8 +33,8 @@ public class SmsPopupContentProvider extends ContentProvider {
         final String quickMessagesPath = QuickMessages.PATH_QUICKMESSAGES;
         final String quickMessagesUpdateOrderPath = QuickMessages.PATH_QUICKMESSAGES_UPDATE_ORDER;
         matcher.addURI(authority, contactsPath, CONTACTS);
-        matcher.addURI(authority, contactsPath + "/#", CONTACTS_ID);
-        matcher.addURI(authority, contactsLookupPath + "/#", CONTACTS_LOOKUP);
+        matcher.addURI(authority, contactsPath + "/*", CONTACTS_ID);
+        matcher.addURI(authority, contactsLookupPath + "/*", CONTACTS_LOOKUP);
         matcher.addURI(authority, quickMessagesPath, QUICKMESSAGES);
         matcher.addURI(authority, quickMessagesPath + "/#", QUICKMESSAGES_ID);
         matcher.addURI(authority, quickMessagesPath + "/" + quickMessagesUpdateOrderPath + "/#", 

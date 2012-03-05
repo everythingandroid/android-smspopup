@@ -2,18 +2,19 @@ package net.everythingandroid.smspopup.ui;
 
 import java.util.List;
 
+import com.commonsware.cwac.wakeful.WakefulIntentService;
+
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+import net.everythingandroid.smspopup.service.SmsPopupUtilsService;
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
 import android.support.v4.app.FragmentActivity;
@@ -32,13 +33,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.CursorAdapter;
-import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -58,17 +57,19 @@ public class ConfigContactsActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_PROGRESS);
         
         if (SmsPopupUtils.isHoneycomb()) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
         
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(android.R.id.content, ConfigContactsListFragment.newInstance());
+        ft.add(android.R.id.content, new ConfigContactsListFragment());
         ft.commit();
 
-        // new SynchronizeContactNames().execute();
+        // Kick off the contact names sync background task.
+        Intent i = new Intent(getApplicationContext(), SmsPopupUtilsService.class);
+        i.setAction(SmsPopupUtilsService.ACTION_SYNC_CONTACT_NAMES);
+        WakefulIntentService.sendWakefulWork(getApplicationContext(), i);
     }
 
     @Override
@@ -141,111 +142,7 @@ public class ConfigContactsActivity extends FragmentActivity {
         return i;
     }
 
-    /**
-     * AsyncTask to sync contact names from our database with those from the system database
-     */
-    private class SynchronizeContactNames extends AsyncTask<Void, Integer, Void> {
-        private Cursor mCursor, sysContactCursor;
-        private ContentResolver mContentResolver;
-        private int totalCount;
-
-        @Override
-        protected void onPreExecute() {
-            mContentResolver = getContentResolver();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            mCursor = mContentResolver.query(
-                    ContactNotifications.CONTENT_URI, null, null, null, null);
-
-            totalCount = 0;
-            if (mCursor != null) {
-                totalCount = mCursor.getCount();
-            }
-
-            if (totalCount == 0) {
-                return null;
-            }
-
-            // ConfigContactsActivity.this.startManagingCursor(mCursor);
-
-            if (mCursor != null) {
-                int count = 0;
-                String contactId;
-                String contactName;
-                String sysContactName;
-                String rawSysContactName;
-
-                // loop through the local sms popup contacts table
-                while (mCursor.moveToNext()) {
-                    count++;
-
-                    contactName = mCursor.getString(
-                            mCursor.getColumnIndexOrThrow(ContactNotifications.CONTACT_NAME));
-                    contactId = mCursor.getString(
-                            mCursor.getColumnIndexOrThrow(ContactNotifications._ID));
-
-                    // fetch the system db contact name
-                    sysContactCursor = mContentResolver.query(
-                            Uri.withAppendedPath(Contacts.CONTENT_URI, contactId),
-                            new String[] { Contacts.DISPLAY_NAME }, null, null, null);
-
-                    if (sysContactCursor != null) {
-                        // ConfigContactsActivity.this.startManagingCursor(sysContactCursor);
-                        if (sysContactCursor.moveToFirst()) {
-                            rawSysContactName = sysContactCursor.getString(0);
-                            if (rawSysContactName != null) {
-                                sysContactName = rawSysContactName.trim();
-                                if (!contactName.equals(sysContactName)) {
-                                    ContentValues vals = new ContentValues();
-                                    vals.put(ContactNotifications.CONTACT_NAME, sysContactName);
-                                    mContentResolver.update(ContactNotifications
-                                            .buildContactUri(contactId), vals, null, null);
-                                }
-                            }
-                        } else {
-                            // if this contact has been removed from the system db then delete from
-                            // the local db
-                            mContentResolver.delete(
-                                    ContactNotifications.buildContactUri(contactId), null, null);
-                        }
-                        sysContactCursor.close();
-                    }
-
-                    // try { Thread.sleep(3000); } catch (InterruptedException e) {}
-
-                    // update progress dialog
-                    publishProgress(count);
-                }
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            getWindow().setFeatureInt(Window.FEATURE_PROGRESS,
-                    Window.PROGRESS_END * values[0] / totalCount);
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            getWindow().setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_END);
-            if (mCursor != null)
-                mCursor.close();
-        }
-
-        @Override
-        protected void onCancelled() {
-            if (mCursor != null)
-                mCursor.close();
-        }
-    }
-
-    // XXX compiler bug in javac 1.5.0_07-164, we need to implement Filterable
-    // to make compilation work
-    public static class ContactListAdapter extends CursorAdapter implements Filterable {
+    public static class ContactListAdapter extends CursorAdapter {
         private ContentResolver mContent;
 
         public ContactListAdapter(Context context, Cursor c) {
@@ -288,10 +185,14 @@ public class ConfigContactsActivity extends FragmentActivity {
     public static class ConfigContactsListFragment extends ListFragment implements
             LoaderCallbacks<Cursor> {
 
-        private SimpleCursorAdapter mAdapter;
+        private SimpleCursorAdapter mContactNotififcationsAdapter;
+        private ContactListAdapter mSystemContactsAdapter;
 
         private static final int CONTEXT_MENU_DELETE_ID = Menu.FIRST;
         private static final int CONTEXT_MENU_EDIT_ID = Menu.FIRST + 1;
+        
+        private static final int LOADER_CONTACT_NOTIFICATIONS = 0;
+        private static final int LOADER_SYSTEM_CONTACTS = 1;
 
         public ConfigContactsListFragment() {}
 
@@ -300,28 +201,7 @@ public class ConfigContactsActivity extends FragmentActivity {
             super.onListItemClick(l, v, position, id);
             startActivity(getConfigPerContactIntent(getActivity(), id));
         }
-
-        public static ConfigContactsListFragment newInstance() {
-            return new ConfigContactsListFragment();
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-
-            final String[] from =
-                    new String[] { ContactNotifications.CONTACT_NAME, ContactNotifications.SUMMARY };
-            final int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
-
-            // Now create an array adapter and set it to display using our row
-            mAdapter = new SimpleCursorAdapter(
-                    getActivity(), R.layout.simple_list_item_2, null, from, to, 0);
-
-            setListAdapter(mAdapter);
-
-            getLoaderManager().initLoader(0, null, this);
-        }
-
+        
         @Override
         public boolean onContextItemSelected(MenuItem item) {
             AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
@@ -365,27 +245,35 @@ public class ConfigContactsActivity extends FragmentActivity {
                 }
             });
 
-            ContentResolver content = getActivity().getContentResolver();
-            Cursor cursor =
-                    content.query(Contacts.CONTENT_URI, CONTACT_PROJECTION, null, null, null);
-            final ContactListAdapter adapter = new ContactListAdapter(getActivity(), cursor);
-
+            mSystemContactsAdapter = new ContactListAdapter(getActivity(), null);
             final AutoCompleteTextView contactsAutoComplete =
                     (AutoCompleteTextView) v.findViewById(R.id.ContactsAutoCompleteTextView);
-            contactsAutoComplete.setAdapter(adapter);
+            contactsAutoComplete.setAdapter(mSystemContactsAdapter);
 
             contactsAutoComplete.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    final Cursor c = (Cursor) adapter.getItem(position);
+                    final Cursor c = (Cursor) mSystemContactsAdapter.getItem(position);
                     final Uri uri =
                             Uri.withAppendedPath(
-                                    ContactNotifications.CONTENT_LOOKUP_URI, c
-                                            .getString(COLUMN_LOOKUP_KEY));
+                                    ContactNotifications.CONTENT_LOOKUP_URI,
+                                    c.getString(COLUMN_LOOKUP_KEY));
                     startActivity(getConfigPerContactIntent(getActivity(), uri));
                     contactsAutoComplete.setText("");
                 }
             });
+            
+            final String[] from =
+                    new String[] { ContactNotifications.CONTACT_NAME, ContactNotifications.SUMMARY };
+            final int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
+
+            // Now create an array adapter and set it to display using our row
+            mContactNotififcationsAdapter = new SimpleCursorAdapter(
+                    getActivity(), R.layout.simple_list_item_2, null, from, to, 0);
+            setListAdapter(mContactNotififcationsAdapter);
+
+            getLoaderManager().initLoader(LOADER_CONTACT_NOTIFICATIONS, null, this);  
+            getLoaderManager().initLoader(LOADER_SYSTEM_CONTACTS, null, this);
 
             return v;
         }
@@ -393,7 +281,8 @@ public class ConfigContactsActivity extends FragmentActivity {
         @Override
         public void onResume() {
             super.onResume();
-            getLoaderManager().restartLoader(0, null, this);
+            getLoaderManager().restartLoader(LOADER_CONTACT_NOTIFICATIONS, null, this);
+            getLoaderManager().restartLoader(LOADER_SYSTEM_CONTACTS, null, this);
         }
 
         @Override
@@ -405,18 +294,39 @@ public class ConfigContactsActivity extends FragmentActivity {
 
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            return new CursorLoader(getActivity(), ContactNotifications.CONTENT_URI,
-                    ContactNotifications.PROJECTION_SUMMARY, null, null, null);
+        	switch (id) {
+        	case LOADER_CONTACT_NOTIFICATIONS:
+                return new CursorLoader(getActivity(), ContactNotifications.CONTENT_URI,
+                        ContactNotifications.PROJECTION_SUMMARY, null, null, null);
+        	case LOADER_SYSTEM_CONTACTS:
+        		return new CursorLoader(getActivity(), Contacts.CONTENT_URI, 
+        				CONTACT_PROJECTION, null, null, null);
+        	}
+        	return null;
         }
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            mAdapter.swapCursor(data);
+        	switch (loader.getId()) {
+        	case LOADER_CONTACT_NOTIFICATIONS:
+        		mContactNotififcationsAdapter.swapCursor(data);
+        		break;
+        	case LOADER_SYSTEM_CONTACTS:
+        		mSystemContactsAdapter.swapCursor(data);
+        		break;
+        	}
         }
 
         @Override
-        public void onLoaderReset(Loader<Cursor> loarder) {
-            mAdapter.swapCursor(null);
+        public void onLoaderReset(Loader<Cursor> loader) {
+        	switch (loader.getId()) {
+        	case LOADER_CONTACT_NOTIFICATIONS:
+        		mContactNotififcationsAdapter.swapCursor(null);
+        		break;
+        	case LOADER_SYSTEM_CONTACTS:
+        		mSystemContactsAdapter.swapCursor(null);
+        		break;
+        	}
         }
     }
 }

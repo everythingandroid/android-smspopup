@@ -48,22 +48,19 @@ public class TestNotificationDialogPreference extends DialogPreference {
         // If contactId is set, use it's phone else just use a default.
         if (contactId != null) {
             // Cursor contactCursor = mDbAdapter.fetchContact(Long.valueOf(contactId));
-            Cursor contactCursor =
-                    context.getContentResolver()
-                            .query(ContactNotifications.buildContactUri(contactId), null, null,
-                                    null, null);
+            Cursor contactCursor = context.getContentResolver().query(
+		    		ContactNotifications.buildContactUri(contactId), 
+		    		null, null, null, null);
             if (contactCursor != null && contactCursor.moveToFirst()) {
-                testPhone =
-                        contactCursor.getString(contactCursor
-                                .getColumnIndexOrThrow(ContactNotifications.CONTACT_NAME));
+                testPhone = contactCursor.getString(
+                		contactCursor.getColumnIndexOrThrow(ContactNotifications.CONTACT_NAME));
                 contactCursor.close();
             }
         }
 
-        SmsMmsMessage message =
-                new SmsMmsMessage(context, testPhone, context
-                        .getString(R.string.pref_notif_test_title),
-                        0, contactId, null, testPhone, 1, 0, SmsMmsMessage.MESSAGE_TYPE_SMS);
+        SmsMmsMessage message = new SmsMmsMessage(context, testPhone, 
+				context.getString(R.string.pref_notif_test_title), 0, contactId, null, 
+				testPhone, 1, 0, SmsMmsMessage.MESSAGE_TYPE_SMS);
 
         // Show notification
         ManageNotification.show(context, message, 1, ManageNotification.NOTIFICATION_TEST);
