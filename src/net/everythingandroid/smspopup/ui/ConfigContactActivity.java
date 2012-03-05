@@ -72,18 +72,24 @@ public class ConfigContactActivity extends PreferenceActivity {
 
         Cursor c = getContentResolver().query(contactNotificationsUri, null, null, null, null);
 
-        if (c == null || c.getCount() == 0) {
+        // Wow is this ugly, should tidy this up.
+        if (c == null || c.getCount() != 1) {
+        	// If cursor is null or count is not 1..
         	if (c != null) {
-        		c.close();
+        		c.close(); // close up cursor
         	}
+        	// create new contact notification and return new cursor
             c = createContact(contactNotificationsUri);
         }
 
+        // check cursor again, as we may have created a new contact notification
         if (c == null || c.getCount() != 1) {
+        	
+        	// something went really wrong now
             if (c != null) {
-                c.close();
+                c.close(); // close up cursor again
             }
-            finish();
+            finish(); // get out of here
             return;
         }
 
@@ -315,13 +321,7 @@ public class ConfigContactActivity extends PreferenceActivity {
 
         final Uri contactUri = getContentResolver().insert(ContactNotifications.CONTENT_URI, vals);
 
-        final Cursor c = getContentResolver().query(contactUri, null, null, null, null);
-        if (c == null || c.getCount() == 0) {
-            if (Log.DEBUG)
-                Log.v("Error creating contact");
-            finish();
-        }
-        return c;
+        return getContentResolver().query(contactUri, null, null, null, null);
     }
 
     private Cursor createContact(Uri contactUri) {
