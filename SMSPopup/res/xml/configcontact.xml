@@ -42,7 +42,7 @@
       android:title="@string/pref_vibrate_title"
       android:summaryOn="@string/pref_vibrate_summaryon"
       android:summaryOff="@string/pref_vibrate_summaryoff"
-      android:defaultValue="@string/pref_vibrate_default"
+      android:defaultValue="@bool/pref_vibrate_default"
       android:dependency="@string/c_pref_notif_enabled_key" />
     <net.everythingandroid.smspopup.preferences.CustomVibrateListPreference
       android:key="@string/c_pref_vibrate_pattern_key"
@@ -60,7 +60,7 @@
       android:title="@string/pref_flashled_title"
       android:summaryOn="@string/pref_flashled_summaryon"
       android:summaryOff="@string/pref_flashled_summaryoff"
-      android:defaultValue="@string/pref_flashled_default"
+      android:defaultValue="@bool/pref_flashled_default"
       android:dependency="@string/c_pref_notif_enabled_key" />
     <net.everythingandroid.smspopup.preferences.CustomLEDColorListPreference
       android:key="@string/c_pref_flashled_color_key"
