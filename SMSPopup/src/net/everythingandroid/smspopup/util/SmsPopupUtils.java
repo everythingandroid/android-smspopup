@@ -137,10 +137,26 @@ public class SmsPopupUtils {
 
         return null;
     }
+    
+    /**
+     * Looks up a contacts display name by contact lookup key - if not found, 
+     * the address (phone number) will be formatted and returned instead.
+     * @param context Context.
+     * @param lookupKey Contact lookup key.
+     * @return Contact name or null if not found.
+     */
+    public static String getPersonNameByLookup(Context context, String lookupKey) {
+    	return getPersonNameByLookup(context, lookupKey, null);
+    }
 
     /**
-     * Looks up a contacts display name by contact id - if not found, the address (phone number)
-     * will be formatted and returned instead.
+     * Looks up a contacts display name by contact lookup key - if not found, 
+     * the address (phone number) will be formatted and returned instead.
+     * @param context Context.
+     * @param lookupKey Contact lookup key.
+     * @param address Address (phone number) that will be returned if the contact cannot be 
+     * 		found. The address will be formatted before it is returned.
+     * @return Contact name or null if not found.
      */
     public static String getPersonNameByLookup(Context context, String lookupKey, String address) {
 
@@ -535,7 +551,7 @@ public class SmsPopupUtils {
         SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean markRead = myPrefs.getBoolean(
                 context.getString(R.string.pref_markread_key),
-                Boolean.valueOf(context.getString(R.string.pref_markread_default)));
+                Defaults.PREFS_MARK_READ);
 
         if (!markRead)
             return;
@@ -966,7 +982,7 @@ public class SmsPopupUtils {
      * @param context
      * @return unread sms message count
      */
-    private static int getUnreadSmsCount(Context context) {
+    public static int getUnreadSmsCount(Context context) {
         return getUnreadSmsCount(context, 0, null);
     }
 
