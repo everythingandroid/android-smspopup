@@ -23,6 +23,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -37,7 +38,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -146,7 +146,7 @@ public class ConfigContactsActivity extends FragmentActivity {
         private ContentResolver mContent;
 
         public ContactListAdapter(Context context, Cursor c) {
-            super(context, c);
+            super(context, c, false);
             mContent = context.getContentResolver();
         }
 
