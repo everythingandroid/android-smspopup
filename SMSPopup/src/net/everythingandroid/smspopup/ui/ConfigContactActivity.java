@@ -6,7 +6,6 @@ import net.everythingandroid.smspopup.preferences.CustomLEDPatternListPreference
 import net.everythingandroid.smspopup.preferences.CustomVibrateListPreference;
 import net.everythingandroid.smspopup.preferences.TestNotificationDialogPreference;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
-import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageNotification;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.annotation.SuppressLint;

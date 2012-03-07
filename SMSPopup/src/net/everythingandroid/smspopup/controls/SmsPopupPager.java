@@ -12,9 +12,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -34,7 +31,6 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     private int privacyMode;
     private OnReactToMessage mOnReactToMessage;
     private volatile boolean removingMessage = false;
-    private GestureDetector mGestureDetector;
     
     public static int STATUS_MESSAGES_REMAINING = 0;
     public static int STATUS_NO_MESSAGES_REMAINING = 1;
@@ -56,15 +52,8 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         mAdapter = new SmsPopupPagerAdapter();
         setAdapter(mAdapter);
         currentPage = 0;
-        
-        mGestureDetector = new GestureDetector (context, new SimpleOnGestureListener() {
-			@Override
-			public void onLongPress(MotionEvent e) {
-				if (privacyMode == SmsPopupView.PRIVACY_MODE_OFF) {
-					showContextMenu();
-				}
-			}
-        });      
+        setOffscreenPageLimit(2);
+        setLongClickable(true);     
     }
 
     public void setOnReactToMessage(OnReactToMessage r) {
@@ -295,6 +284,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         for (int i = 0; i < getChildCount(); i++) {
             ((SmsPopupView) getChildAt(i)).setPrivacy(mode);
         }
+        setLongClickable(privacyMode == SmsPopupView.PRIVACY_MODE_OFF);
     }
 
     /**
@@ -321,17 +311,4 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     public SmsMmsMessage getMessage(int i) {
         return messages.get(i);
     }
-
-	@Override
-	public boolean onInterceptTouchEvent(MotionEvent event) {
-		mGestureDetector.onTouchEvent(event);
-		return super.onInterceptTouchEvent(event);
-	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		mGestureDetector.onTouchEvent(event);
-		return super.onTouchEvent(event);
-	}
-    
 }

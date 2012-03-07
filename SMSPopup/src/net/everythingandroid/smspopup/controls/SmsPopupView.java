@@ -46,7 +46,7 @@ public class SmsPopupView extends LinearLayout {
 
     private int privacyMode = PRIVACY_MODE_OFF;
 
-    private static final int CONTACT_IMAGE_FADE_DURATION = 500;
+    private static final int CONTACT_IMAGE_FADE_DURATION = 300;
 
     public SmsPopupView(Context context, SmsMmsMessage newMessage) {
         super(context);
@@ -223,7 +223,7 @@ public class SmsPopupView extends LinearLayout {
                                 getResources().getDrawable(R.drawable.ic_contact_picture),
                                 new BitmapDrawable(getResources(), photo) });
                 contactBadge.setImageDrawable(mTd);
-                mTd.setCrossFadeEnabled(true);
+                mTd.setCrossFadeEnabled(false);
                 mTd.startTransition(CONTACT_IMAGE_FADE_DURATION);
             }
         }
