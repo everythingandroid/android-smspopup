@@ -277,41 +277,35 @@ public class SmsPopupActivity extends Activity {
 
             // Button 1
             final Button button1 = (Button) findViewById(R.id.button1);
-            PopupButton button1Vals =
-                    new PopupButton(getApplicationContext(), Integer
-                            .parseInt(mPrefs
-                                    .getString(getString(R.string.pref_button1_key),
-                                            Defaults.PREFS_BUTTON1)));
+            PopupButton button1Vals = new PopupButton(getApplicationContext(), 
+            		Integer.parseInt(mPrefs.getString(getString(R.string.pref_button1_key), 
+            				Defaults.PREFS_BUTTON1)));
             button1.setOnClickListener(button1Vals);
             button1.setText(button1Vals.buttonText);
             button1.setVisibility(button1Vals.buttonVisibility);
 
             // Button 2
             final Button button2 = (Button) findViewById(R.id.button2);
-            PopupButton button2Vals =
-                    new PopupButton(getApplicationContext(), Integer
-                            .parseInt(mPrefs
-                                    .getString(getString(R.string.pref_button2_key),
-                                            Defaults.PREFS_BUTTON2)));
+            PopupButton button2Vals = new PopupButton(getApplicationContext(), 
+            		Integer.parseInt(mPrefs.getString(getString(R.string.pref_button2_key),
+            				Defaults.PREFS_BUTTON2)));
             button2.setOnClickListener(button2Vals);
             button2.setText(button2Vals.buttonText);
             button2.setVisibility(button2Vals.buttonVisibility);
 
             // Button 3
             final Button button3 = (Button) findViewById(R.id.button3);
-            PopupButton button3Vals =
-                    new PopupButton(getApplicationContext(), Integer
-                            .parseInt(mPrefs
-                                    .getString(getString(R.string.pref_button3_key),
-                                            Defaults.PREFS_BUTTON3)));
+            PopupButton button3Vals = new PopupButton(getApplicationContext(), 
+            		Integer.parseInt(mPrefs.getString(getString(R.string.pref_button3_key), 
+            				Defaults.PREFS_BUTTON3)));
             button3.setOnClickListener(button3Vals);
             button3.setText(button3Vals.buttonText);
             button3.setVisibility(button3Vals.buttonVisibility);
 
             /*
              * This is really hacky. There are two types of reply buttons (quick reply and reply).
-             * If the user has selected to show both the replies then the text on the buttons should
-             * be different. If they only use one then the text can just be "Reply".
+             * If the user has selected to show both the replies then the text on the buttons 
+             * should be different. If they only use one then the text can just be "Reply".
              */
             int numReplyButtons = 0;
             if (button1Vals.isReplyButton)
@@ -422,10 +416,11 @@ public class SmsPopupActivity extends Activity {
                     // Show unlock button
                     buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_UNLOCK_BUTTON);
                 }
+                // Disable long-press context menu
+                unregisterForContextMenu(smsPopupPager);
             }
-
-            // Disable long-press context menu
-            unregisterForContextMenu(smsPopupPager);
+            
+            
 
         } else {
             
@@ -457,8 +452,8 @@ public class SmsPopupActivity extends Activity {
 
     /**
      * Wake up the activity, this will acquire the wakelock (turn on the screen) and sound the
-     * notification if needed. This is called once all preparation is done for this activity (end of
-     * onCreate()).
+     * notification if needed. This is called once all preparation is done for this activity (end 
+     * of onCreate()).
      */
     private void wakeApp() {
 
@@ -486,7 +481,7 @@ public class SmsPopupActivity extends Activity {
 
     /**
      * Customized activity finish. Ensures the notification is in sync and cancels any scheduled
-     * reminders (as the user has interrupted the app.
+     * reminders (as the user has interrupted the app).
      */
     private void myFinish() {
         if (Log.DEBUG)
@@ -898,7 +893,6 @@ public class SmsPopupActivity extends Activity {
             // things 2 times but this seemed to be the only reliable way (?)
             wasVisible = true;
             refreshViews();
-            // refreshPrivacy(false);
         }
     }
 
@@ -1000,8 +994,7 @@ public class SmsPopupActivity extends Activity {
      * free eyes-free text-to-speech library)
      */
     private void speakMessage() {
-        // TODO: we should really require the keyguard be unlocked here if we
-        // are in privacy mode
+        // TODO: we should really require the keyguard be unlocked here if we are in privacy mode
 
         // If not previously initialized...
         if (androidTts == null) {

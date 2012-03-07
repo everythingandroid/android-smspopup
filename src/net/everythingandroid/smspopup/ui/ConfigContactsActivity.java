@@ -143,19 +143,18 @@ public class ConfigContactsActivity extends FragmentActivity {
     }
 
     public static class ContactListAdapter extends CursorAdapter {
-        private ContentResolver mContent;
+        private ContentResolver mContentResolver;
 
         public ContactListAdapter(Context context, Cursor c) {
             super(context, c, false);
-            mContent = context.getContentResolver();
+            mContentResolver = context.getContentResolver();
         }
 
         @Override
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
             final LayoutInflater inflater = LayoutInflater.from(context);
-            final TextView view =
-                    (TextView) inflater.inflate(android.R.layout.simple_dropdown_item_1line,
-                            parent, false);
+            final TextView view = (TextView) inflater.inflate(
+            		android.R.layout.simple_dropdown_item_1line, parent, false);
             view.setText(cursor.getString(COLUMN_DISPLAY_NAME));
             return view;
         }
@@ -176,7 +175,7 @@ public class ConfigContactsActivity extends FragmentActivity {
                 return getFilterQueryProvider().runQuery(constraint);
             }
 
-            return mContent.query(
+            return mContentResolver.query(
                     Uri.withAppendedPath(Contacts.CONTENT_FILTER_URI, (String) constraint),
                     CONTACT_PROJECTION, null, null, null);
         }
@@ -245,24 +244,25 @@ public class ConfigContactsActivity extends FragmentActivity {
                 }
             });
 
+            // System contacts adapter for the auto complete textview
             mSystemContactsAdapter = new ContactListAdapter(getActivity(), null);
             final AutoCompleteTextView contactsAutoComplete =
                     (AutoCompleteTextView) v.findViewById(R.id.ContactsAutoCompleteTextView);
             contactsAutoComplete.setAdapter(mSystemContactsAdapter);
 
+            // When clicked we go to an activity that has the notification config for that contact
             contactsAutoComplete.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     final Cursor c = (Cursor) mSystemContactsAdapter.getItem(position);
-                    final Uri uri =
-                            Uri.withAppendedPath(
-                                    ContactNotifications.CONTENT_LOOKUP_URI,
-                                    c.getString(COLUMN_LOOKUP_KEY));
+                    final Uri uri = Uri.withAppendedPath(ContactNotifications.CONTENT_LOOKUP_URI,
+                    		c.getString(COLUMN_LOOKUP_KEY));
                     startActivity(getConfigPerContactIntent(getActivity(), uri));
                     contactsAutoComplete.setText("");
                 }
             });
             
+            // Adapter from/to mapping
             final String[] from =
                     new String[] { ContactNotifications.CONTACT_NAME, ContactNotifications.SUMMARY };
             final int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
@@ -272,6 +272,7 @@ public class ConfigContactsActivity extends FragmentActivity {
                     getActivity(), R.layout.simple_list_item_2, null, from, to, 0);
             setListAdapter(mContactNotififcationsAdapter);
 
+            // Initialize the two loaders
             getLoaderManager().initLoader(LOADER_CONTACT_NOTIFICATIONS, null, this);  
             getLoaderManager().initLoader(LOADER_SYSTEM_CONTACTS, null, this);
 
