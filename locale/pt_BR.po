@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: smspopup\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-03-04 14:24-0500\n"
-"PO-Revision-Date: 2011-12-30 03:37+0000\n"
-"Last-Translator: Giordano Giuliano <Unknown>\n"
+"POT-Creation-Date: 2012-03-04 18:33-0500\n"
+"PO-Revision-Date: 2012-03-05 00:51+0000\n"
+"Last-Translator: 0s1ride <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-04 23:16+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
+"X-Launchpad-Export-Date: 2012-03-08 00:16+0000\n"
+"X-Generator: Launchpad (build 14907)\n"
 
 #. Notification Strings
 msgctxt "notification_multiple_title"
@@ -34,7 +34,7 @@ msgstr "Nova mensagem de: %s"
 
 msgctxt "notification_scroll_privacy_no_name"
 msgid "New message"
-msgstr ""
+msgstr "Nova mensagem"
 
 #. Button Strings
 msgctxt "button_close"
@@ -173,7 +173,7 @@ msgstr "O Popup será brilhante"
 
 msgctxt "pref_privacy_category"
 msgid "Privacy"
-msgstr ""
+msgstr "Privacidade"
 
 msgctxt "pref_privacy_title"
 msgid "Privacy Mode"
