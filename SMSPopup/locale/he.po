@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: smspopup\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-03-04 14:24-0500\n"
-"PO-Revision-Date: 2011-05-16 20:50+0000\n"
-"Last-Translator: Lior Razli <Unknown>\n"
+"POT-Creation-Date: 2012-03-04 18:33-0500\n"
+"PO-Revision-Date: 2012-03-07 07:54+0000\n"
+"Last-Translator: idol42002 <idol42002@yahoo.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-04 23:16+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
+"X-Launchpad-Export-Date: 2012-03-08 00:16+0000\n"
+"X-Generator: Launchpad (build 14907)\n"
 
 #. Notification Strings
 msgctxt "notification_multiple_title"
@@ -34,7 +34,7 @@ msgstr "הודעה חדשה מ: %s"
 
 msgctxt "notification_scroll_privacy_no_name"
 msgid "New message"
-msgstr ""
+msgstr "הודעה חדשה"
 
 #. Button Strings
 msgctxt "button_close"
@@ -43,7 +43,7 @@ msgstr "סגור"
 
 msgctxt "button_reply"
 msgid "Reply"
-msgstr "הגב"
+msgstr "השב"
 
 msgctxt "button_inbox"
 msgid "Inbox"
@@ -168,11 +168,11 @@ msgstr "מסך קפיצת ההודעות יהיה מעומעם"
 
 msgctxt "pref_dimscreen_summaryoff"
 msgid "Popup screen will be bright"
-msgstr "הבהר את מסך קפיצת ההודעות"
+msgstr "מסך קפיצת הודעות יהיה בהיר"
 
 msgctxt "pref_privacy_category"
 msgid "Privacy"
-msgstr ""
+msgstr "פרטיות"
 
 msgctxt "pref_privacy_title"
 msgid "Privacy Mode"
@@ -180,51 +180,51 @@ msgstr "מצב פרטיות"
 
 msgctxt "pref_privacy_summaryon"
 msgid "Popup will use privacy mode"
-msgstr ""
+msgstr "Popup ישתמש במצב פרטיות"
 
 msgctxt "pref_privacy_summaryoff"
 msgid "Popup will show all message details"
-msgstr ""
+msgstr "Popup יציג כל פרטיי ההודעות"
 
 msgctxt "pref_privacy_sender_title"
 msgid "Hide Contact Name"
-msgstr ""
+msgstr "הסתר שם מתקשר"
 
 msgctxt "pref_privacy_sender_summaryon"
 msgid "Message sender name will also be hidden"
-msgstr ""
+msgstr "שם שולח הודעה גם יהיה מוסתר"
 
 msgctxt "pref_privacy_sender_summaryoff"
 msgid "Message sender name will be shown"
-msgstr ""
+msgstr "שם שולח הודעה יהיה חשוף"
 
 msgctxt "pref_privacy_always_title"
 msgid "Always Use Privacy Mode"
-msgstr ""
+msgstr "תמיד השתמש במצב פרטיות"
 
 msgctxt "pref_privacy_always_summaryon"
 msgid "Privacy mode will always be used"
-msgstr ""
+msgstr "מצב פרטיות יהיה תמיד בשימוש"
 
 msgctxt "pref_privacy_always_summaryoff"
 msgid "Only use privacy mode when screen is locked"
-msgstr ""
+msgstr "השתמש במצב פרטיות רק כשהמסך נעול"
 
 msgctxt "pref_markread_title"
 msgid "Mark Read"
-msgstr "מסך כנקרא"
+msgstr "סמן כנקרא"
 
 msgctxt "pref_markread_summaryon"
 msgid "Messages will be marked as read when clicking \"Close\""
-msgstr "ההודעה תסומן כנקראה שתלחץ על \"סגור\""
+msgstr "ההודעה תסומן כנקראה כשתלחץ על \"סגור\""
 
 msgctxt "pref_markread_summaryoff"
 msgid "Messages will not be marked as read when clicking \"Close\""
-msgstr "ההודעה לא תסומן כנקראה שתלחץ על \"סגור\""
+msgstr "ההודעה לא תסומן כנקראה כשתלחץ על \"סגור\""
 
 msgctxt "pref_onlyShowOnKeyguard_title"
 msgid "Restrict Popup"
-msgstr "הגבל פופאפ"
+msgstr "הגבל Popup"
 
 msgctxt "pref_onlyShowOnKeyguard_summaryon"
 msgid "Popup window will only show when keyguard is engaged"
@@ -236,27 +236,27 @@ msgstr "פופאפ יוצג תמיד"
 
 msgctxt "pref_useUnlockButton_title"
 msgid "Show Unlock Button"
-msgstr ""
+msgstr "הראה לחצן שחרור"
 
 msgctxt "pref_useUnlockButton_summaryon"
 msgid "Unlock button will show when screen is locked"
-msgstr ""
+msgstr "לחצןשחרור ייראה כשמסך נעול"
 
 msgctxt "pref_useUnlockButton_summaryoff"
 msgid "Regular buttons will show when screen is locked"
-msgstr ""
+msgstr "לחצנים רגילים ייראו כשמסך נעול"
 
 msgctxt "pref_show_buttons_title"
 msgid "Show Buttons On Popup"
-msgstr "הצג כפתורים רק בפופאפ"
+msgstr "הצג לחצנים רק בפופאפ"
 
 msgctxt "pref_show_buttons_summaryon"
 msgid "Buttons on popup are visible"
-msgstr "הכפתורים בפופאפ יוצגו"
+msgstr "הלחצנים בפופאפ יוצגו"
 
 msgctxt "pref_show_buttons_summaryoff"
 msgid "Buttons are hidden in long press menu"
-msgstr "כפתורים יוסתרו בלחיצה ארוכה על כפתור האפשריות"
+msgstr "לחצנים יוסתרו בלחיצה ארוכה על כפתור האפשריות"
 
 #. Notification Preferences
 msgctxt "pref_notif_title"
@@ -309,8 +309,8 @@ msgstr ""
 "כדי להימנע מהתנגשות בהתראות, אנא בטל את מערכת ההתראות של הודעות ה SMS וכל "
 "אפליקציה אחרת שמספקת התראות להודעות ה SMS.\n"
 "\n"
-"כדי לכבות את התראות המערכת, לך לאפלקציה, בחר באפשריות, הגדרות והסר את הסימון "
-"מההתראות."
+"כדי לכבות את התראות המערכת, לך לאפלקציה, בחר באפשרויות, הגדרות והסר את "
+"הסימון מההתראות."
 
 msgctxt "pref_popup_enabled_title"
 msgid "Show a Popup"
@@ -322,7 +322,7 @@ msgstr "הודעה תיפתח בפופאפ"
 
 msgctxt "pref_popup_enabled_summaryoff"
 msgid "Message will only show in notification area"
-msgstr ""
+msgstr "הודעה רק תראה באזור ההתראות"
 
 msgctxt "pref_notif_test_title"
 msgid "Test Notification"
@@ -342,27 +342,27 @@ msgstr "צליל התראה"
 
 msgctxt "pref_notif_sound_summary"
 msgid "This sound will play when a message is received"
-msgstr "הצליל יושמע שתתקבל הודעה"
+msgstr "הצליל יושמע כשתתקבל הודעה"
 
 msgctxt "pref_notifyOnCall_title"
 msgid "Notify On Call"
-msgstr ""
+msgstr "התראה בשיחה"
 
 msgctxt "pref_notifyOnCall_summaryon"
 msgid "Sound will play while on a call"
-msgstr ""
+msgstr "צליל יושמע בזמן שיחה"
 
 msgctxt "pref_notifyOnCall_summaryoff"
 msgid "Sound will not play while on a call"
-msgstr ""
+msgstr "צליל לא יושמע בזמן שיחה"
 
 msgctxt "pref_notif_icon_title"
 msgid "Notification Icon"
-msgstr ""
+msgstr "איקון התראה"
 
 msgctxt "pref_notif_icon_summary"
 msgid "Change the notification area icon"
-msgstr ""
+msgstr "שנה את האיקון באזור ההתראה"
 
 msgctxt "pref_vibrate_title"
 msgid "Vibrate"
@@ -379,19 +379,19 @@ msgstr "רטט מכובה"
 #. Vibrate Preferences
 msgctxt "pref_vibrate_pattern_title"
 msgid "Vibrate Pattern"
-msgstr "תצורת הפתיחה"
+msgstr "תצורת הרטט"
 
 msgctxt "pref_vibrate_pattern_summary"
 msgid "Set the vibration pattern"
-msgstr "בחר את תצורת הפתיחה"
+msgstr "בחר את תצורת הרטט"
 
 msgctxt "pref_vibrate_pattern_ok"
 msgid "Custom vibrate pattern set"
-msgstr "תצורת פתיחה אקראית"
+msgstr "תצורת רטט אקראית"
 
 msgctxt "pref_vibrate_pattern_bad"
 msgid "Custom vibrate pattern invalid"
-msgstr "תצורת פתיחה לא חוקית"
+msgstr "תצורת רטט לא חוקית"
 
 msgctxt "pref_vibrate_pattern_help"
 msgid ""
@@ -402,7 +402,7 @@ msgid ""
 "0,1000\n"
 "0,500,200,500,200,500"
 msgstr ""
-"הזן תצורת פתיחה בפורמט הבא:\n"
+"הזן תצורת רטט בפורמט הבא:\n"
 "millisOff, millisOn, etc.\n"
 "\n"
 "לדוגמא:\n"
@@ -448,7 +448,7 @@ msgstr "תצוגה מקדימה:"
 
 msgctxt "pref_flashled_color_custom_set"
 msgid "Custom LED color set"
-msgstr "בחירת צבע לד אקראית נבחרה"
+msgstr "צבע לד מותאם אישית נבחר"
 
 msgctxt "pref_flashled_pattern_title"
 msgid "LED Blink Rate"
@@ -460,15 +460,15 @@ msgstr "מהירות היבהוב הלד"
 
 msgctxt "pref_flashled_pattern_ok"
 msgid "Custom LED blink rate set"
-msgstr "קצב היבהוב הלד נבחר"
+msgstr "קצב היבהוב לד מותאם אישית נבחר"
 
 msgctxt "pref_flashled_pattern_bad"
 msgid "Custom LED blink rate is invalid"
-msgstr "קצב היבהוב לא חוקי"
+msgstr "קצב היבהוב לד מותאם אישית לא חוקי"
 
 msgctxt "pref_flashled_pattern_help"
 msgid "Enter the time in milliseconds to turn the LED on and off"
-msgstr "הזן את הזמן במילישניות להדלקת וכיבוי הלד"
+msgstr "הזן את הזמן במילישניות להדלקה וכיבוי הלד"
 
 msgctxt "pref_flashled_pattern_help_on"
 msgid "Time on:"
@@ -485,23 +485,23 @@ msgstr "אפשר תזכורות"
 
 msgctxt "pref_notif_repeat_summaryon"
 msgid "Unread message reminders are enabled"
-msgstr "תזכורת להודעה שלא נקראה - מאופשרת"
+msgstr "תזכורת להודעה שלא נקראה מאופשרת"
 
 msgctxt "pref_notif_repeat_summaryoff"
 msgid "Unread message reminders are disabled"
-msgstr "תזכורת להודעה שלא נקראה - כבויה"
+msgstr "תזכורת להודעה שלא נקראה  כבויה"
 
 msgctxt "pref_notif_repeat_interval_title"
 msgid "Reminder Interval"
-msgstr "תזכורת מופסקת"
+msgstr "מרווח תזכורת"
 
 msgctxt "pref_notif_repeat_interval_summary"
 msgid "The time period between notification reminders"
-msgstr "הזמן בין תזכורות"
+msgstr "מרווח הזמן בין תזכורות"
 
 msgctxt "pref_notif_repeat_interval_dialogTitle"
 msgid "Interval (minutes)"
-msgstr "הפסקה (דקות)"
+msgstr "מרווח (דקות)"
 
 msgctxt "pref_notif_repeat_times_title"
 msgid "Number of Reminders"
@@ -521,12 +521,12 @@ msgstr "תזכורות ידליקו את המסך בחזרה"
 
 msgctxt "pref_notif_repeat_screen_on_summaryoff"
 msgid "Reminders will not turn screen on"
-msgstr "תזכורות לא ידליק את המסך"
+msgstr "תזכורות לא ידליקו את המסך"
 
 #. Contact Notification Customization Strings
 msgctxt "pref_notif_default_title"
 msgid "Default Notifications"
-msgstr "התראת ברירת מחדל"
+msgstr "התראות ברירת מחדל"
 
 msgctxt "pref_notif_default_summary"
 msgid "Notifications for all contacts without an individual customization"
@@ -538,7 +538,7 @@ msgstr "התראת איש קשר"
 
 msgctxt "pref_contacts_summary"
 msgid "Individual contact customization"
-msgstr "התראת איש קשר אישית"
+msgstr "התאמה אישית להתראת איש קשר"
 
 msgctxt "pref_notif_help_title"
 msgid "Help - I'm confused!"
@@ -559,6 +559,12 @@ msgid ""
 "show a popup while the rest trigger a regular notification. You could also "
 "ignore certain contacts by setting their notification to silent."
 msgstr ""
+"SMS POP UP מציעה את היכולת לבצע התאמה אישית של התראות על בסיס אנשי קשר. כאשר "
+"התראה חדשה נכנסת, SMS Popup יהיה הראשון לבדוק אם לאיש הקשר יש התראה אישית. "
+"אם כן, הגדרות אלה יופעלו, אחרת התראות ברירת המחדל יופעלו.\n"
+"באמצעות פונקציונליות זו, אתה יכול להגדיר את הדברים כך שרק כמה אנשי קשר "
+"יפעילו את POPUP והשאר יפעילו הודעה רגילה. אתה יכול גם להתעלם מאנשי קשר "
+"מסוימים על ידי הגדרת התראה שלהם על שקט."
 
 msgctxt "contact_customization_add"
 msgid "Add Custom Notifications"
@@ -570,7 +576,7 @@ msgstr "ערוך התראה מותאמת אישית"
 
 msgctxt "contact_customization_remove"
 msgid "Remove Custom Notification"
-msgstr "הוסר התראה בהתאמה אישית"
+msgstr "הסר התראה בהתאמה אישית"
 
 msgctxt "contact_customization_save"
 msgid "Save"
@@ -593,7 +599,7 @@ msgstr "התראות מבוטלות עבור %s"
 
 msgctxt "contact_customization_add_hint"
 msgid "Add/Edit contact notifications…"
-msgstr ""
+msgstr "הוסף/ערוך התראות איש קשר"
 
 msgctxt "ringtone_silent"
 msgid "Silent"
@@ -602,19 +608,19 @@ msgstr "שקט"
 #. Preset Quick Reply Message Strings
 msgctxt "pref_message_presets_title"
 msgid "Preset Messages"
-msgstr "הודעות מוכנות"
+msgstr "הודעות מוכנות מראש"
 
 msgctxt "pref_message_presets_summary"
 msgid "Configure preset messages for quick replies"
-msgstr "ערוך הודעה מותאמת אישית על ידי תגובה מהירה"
+msgstr "ערוך הודעה מוכנה מראש לשימוש בתגובה מהירה"
 
 msgctxt "message_presets_add"
 msgid "Add Preset Message"
-msgstr "הוסף הודעות מוכנות"
+msgstr "הוסף הודעות מוכנות מראש"
 
 msgctxt "message_presets_edit"
 msgid "Edit Preset Message"
-msgstr "ערוך הודעה מוכנה"
+msgstr "ערוך הודעה מוכנה מראש"
 
 msgctxt "message_presets_add_text"
 msgid "Create"
@@ -634,27 +640,27 @@ msgstr "ערוך"
 
 msgctxt "message_presets_reorder_text"
 msgid "Move to top"
-msgstr "העבר מעלה"
+msgstr "העבר לראש הרשימה"
 
 msgctxt "message_presets_empty_text"
 msgid "No presets defined"
-msgstr "לא הוגדרה הודעה מוכנה"
+msgstr "לא הוגדרה הודעה מוכנה מראש"
 
 msgctxt "message_presets_add_toast"
 msgid "Message preset added"
-msgstr "נוספה הודעה מוכנה"
+msgstr "נוספה הודעה מוכנה מראש"
 
 msgctxt "message_presets_save_toast"
 msgid "Message preset updated"
-msgstr "עודכנה הודעה מוכנה"
+msgstr "עודכנה הודעה מוכנה מראש"
 
 msgctxt "message_presets_delete_toast"
 msgid "Message preset deleted"
-msgstr "נמחקה הודעה מוכנה"
+msgstr "נמחקה הודעה מוכנה מראש"
 
 msgctxt "message_presets_reorder_toast"
 msgid "Message preset moved to top"
-msgstr "הודעה מוכנה הועברה מעלה"
+msgstr "הודעה מוכנה מראש הועברה לראש הרשימה"
 
 msgctxt "message_presets_error_toast"
 msgid "Error - please try again"
@@ -672,7 +678,7 @@ msgstr "ל: %s"
 
 msgctxt "quickreply_preset_button"
 msgid "Presets"
-msgstr "אפשרויות קבועות"
+msgstr "מתוכננות מראש"
 
 msgctxt "quickreply_send_button"
 msgid "Send"
@@ -680,7 +686,7 @@ msgstr "שלח"
 
 msgctxt "quickreply_sending_toast"
 msgid "Sending message…"
-msgstr ""
+msgstr "שולח הודעה...."
 
 msgctxt "quickreply_nomessage_toast"
 msgid "Send"
@@ -689,7 +695,7 @@ msgstr "שלח"
 #. Text-To-Speech and Voice Transcription Strings
 msgctxt "loading_message"
 msgid "Loading…"
-msgstr ""
+msgstr "בטעינה..."
 
 msgctxt "error_message"
 msgid "Error"
@@ -697,16 +703,16 @@ msgstr "שגיאה"
 
 msgctxt "error_no_voice_recognition"
 msgid "Voice recognition not available on this device"
-msgstr "זיהוי קול לא זמין במכשיר"
+msgstr "זיהוי קולי לא זמין במכשיר"
 
 #. Popup Button Configuration
 msgctxt "pref_button_config_title"
 msgid "Button Configuration"
-msgstr "כפתור הגדרות"
+msgstr "לחצן הגדרות"
 
 msgctxt "pref_button_config_summary"
 msgid "Popup button configuration"
-msgstr "הגדרות כפתור הפופאפ"
+msgstr "הגדרת לחצן הפופאפ"
 
 #, c-format
 msgctxt "pref_button_summary"
@@ -715,15 +721,15 @@ msgstr "הגדרות נוכחיות: %s"
 
 msgctxt "pref_button1_title"
 msgid "Button 1 Configuration"
-msgstr "הגדרות כפתור 1"
+msgstr "הגדרות לחצן 1"
 
 msgctxt "pref_button2_title"
 msgid "Button 2 Configuration"
-msgstr "הגדרות כפתור 2"
+msgstr "הגדרות לחצן 2"
 
 msgctxt "pref_button3_title"
 msgid "Button 3 Configuration"
-msgstr "הגדרות כפתור 3"
+msgstr "הגדרות לחצן 3"
 
 #. Donate Strings (not used right now)
 msgctxt "pref_donate_title"
@@ -773,13 +779,14 @@ msgid ""
 "Both reply buttons are already active, to configure them please go to the "
 "Button Configuration screen"
 msgstr ""
-"שני כפתורי התגובה כבר מופעלים, לשינוי הכפתורים אנא לך לאיזור הגדרת הכפתורים"
+"שני לחצני התגובה כבר מופעלים, לשינוי הכפתורים אנא לך לאיזור הגדרת הלחצנים"
 
 msgctxt "pref_quickreply_noreplybuttons"
 msgid ""
 "No reply buttons are currently active, to configure them please go to the "
 "Button Configuration screen"
-msgstr "כפתורי תגובה לא נבחרו, לאפשר אותם, אנא לך לאיזור שינוי הכפתורים"
+msgstr ""
+"לחצני תגובה לא מופעלים, על מנת להגדיר אותם אנא לך לאזור הגדרת הלחצנים"
 
 #. Misc missing string
 msgctxt "button_replybyaddress"
@@ -811,11 +818,11 @@ msgstr "הסר התקנה"
 #. Send message prefs
 msgctxt "pref_delivery_report_title"
 msgid "Delivery Reports"
-msgstr "דו\"ח הגעה"
+msgstr "דו\"ח שליחה"
 
 msgctxt "pref_delivery_report_summary"
 msgid "Request a delivery report for each message you send via quick reply"
-msgstr "דרוש דו\"ח הגעה לכל הודעה שנשלחה על ידי תגובה מהירה"
+msgstr "דרוש דו\"ח שליחה לכל הודעה שנשלחה על ידי תגובה מהירה"
 
 msgctxt "pref_split_message_title"
 msgid "Split Long Messages"
@@ -823,7 +830,7 @@ msgstr "פצל הודעות ארוכות"
 
 msgctxt "pref_split_message_summaryon"
 msgid "Long messages will be split up (only needed for some CDMA carriers)"
-msgstr "הודעות ארוכות יפוצלו (דורש מפעיל CDMA בלבד)"
+msgstr "הודעות ארוכות יפוצלו (נדרש בחלק מספקי רשת CDMA בלבד)"
 
 msgctxt "pref_split_message_summaryoff"
 msgid ""
@@ -841,19 +848,19 @@ msgstr "פופאפ תמיד יסתובב עם המסך"
 
 msgctxt "pref_autorotate_summaryoff"
 msgid "Popup will auto-rotate based on the screen behind it"
-msgstr "פופאפ יסובב אוטומטית בהתבסס על המסך שאחריו"
+msgstr "פופאפ יסתובב אוטומטית בהתבסס על המסך שמאחוריו"
 
 msgctxt "pref_screen_on_title"
 msgid "Screen On for Popup"
-msgstr "הדלק מסך בפופאפ"
+msgstr "הדלק מסך לפופאפ"
 
 msgctxt "pref_screen_on_summaryon"
 msgid "Screen will turn on when popup shows"
-msgstr "המסך ידלק שהפופאפ מופיע"
+msgstr "המסך ידלק כשפופאפ מופיע"
 
 msgctxt "pref_screen_on_summaryoff"
 msgid "Screen will not turn on when popup shows"
-msgstr "המסך לא ידלק שהפופאפ מופיע"
+msgstr "המסך לא ידלק כשפופאפ מופיע"
 
 msgctxt "pref_screen_category"
 msgid "Screen Control"
@@ -870,17 +877,17 @@ msgstr "האם אתה בטוח?"
 
 msgctxt "quickreply_sent_toast"
 msgid "Message Sent"
-msgstr "הודעה מהירה"
+msgstr "הודעה נשלחה"
 
 msgctxt "quickreply_failed_send_later"
 msgid ""
 "Currently unable to send your message. It will be sent when the service "
 "becomes available."
-msgstr "כרגע אי אפשר לשלוח את ההודעה. היא תישלח שהשירות יהפוך לזמין"
+msgstr "כרגע אי אפשר לשלוח את ההודעה. היא תישלח כשהשירות יהפוך לזמין"
 
 msgctxt "quickreply_failed"
 msgid "Message failed to send"
-msgstr "הודעה לא נשלחה"
+msgstr "נכשל שליחת הודעה"
 
 #. Arrays texts
 msgctxt "pref_custom"
@@ -921,19 +928,19 @@ msgstr "10 דקות"
 
 msgctxt "pref_vibrate_pattern_entries_normal"
 msgid "Normal"
-msgstr "רגילה"
+msgstr "רגיל"
 
 msgctxt "pref_vibrate_pattern_entries_long"
 msgid "Long Vibrate"
-msgstr "ויברציה ארוכה"
+msgstr "רטט ארוך"
 
 msgctxt "pref_vibrate_pattern_entries_multiple_short"
 msgid "Multiple Short"
-msgstr "קצר רבים"
+msgstr "הרבה קצרים"
 
 msgctxt "pref_vibrate_pattern_entries_multiple_long"
 msgid "Multiple Long"
-msgstr "הארך רבים"
+msgstr "הרבה ארוכים"
 
 msgctxt "pref_led_color_blue"
 msgid "Blue"
