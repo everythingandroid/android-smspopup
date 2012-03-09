@@ -54,7 +54,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -192,18 +191,6 @@ public class SmsPopupActivity extends Activity {
         if (signatureText.length() > 0)
             signatureText = " " + signatureText;
     }
-
-    @Override
-	public boolean onTouchEvent(MotionEvent event) {
-    	
-    	// From ICS onward the touch events appear to get passed to the windows behind or at least
-    	// touching outside the popup causes it to be missed now. We can consume the touch event
-    	// here so this doesn't happen.
-    	if (SmsPopupUtils.isICS()) {
-    		return true;
-    	}
-    	return super.onTouchEvent(event);
-	}
 
 	private void setupViews() {
 
