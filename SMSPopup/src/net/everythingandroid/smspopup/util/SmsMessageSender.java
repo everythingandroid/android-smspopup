@@ -18,6 +18,7 @@ package net.everythingandroid.smspopup.util;
 
 import java.util.ArrayList;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.receiver.SmsReceiver;
 import net.everythingandroid.smspopup.service.SmsReceiverService;
@@ -286,7 +287,7 @@ public class SmsMessageSender {
                             // SmsReceiver.class
                             0));
                 }
-                if (Log.DEBUG)
+                if (BuildConfig.DEBUG)
                     Log.v("Sending message in " + messageCount + " parts");
                 smsManager.sendMultipartTextMessage(
                         mDests[i], mServiceCenter, messages, sentIntents, deliveryIntents);

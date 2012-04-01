@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup.util;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.receiver.ClearAllReceiver;
 import android.content.Context;
@@ -16,7 +17,7 @@ public class ManageWakeLock {
 
     public static synchronized void acquireFull(Context mContext) {
         if (mWakeLock != null) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("**Wakelock already held");
             return;
         }
@@ -45,7 +46,7 @@ public class ManageWakeLock {
         mWakeLock = mPm.newWakeLock(flags, Log.LOGTAG + ".full");
         mWakeLock.setReferenceCounted(false);
         mWakeLock.acquire();
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("**Wakelock acquired");
 
         // Fetch wakelock/screen timeout from preferences
@@ -65,7 +66,7 @@ public class ManageWakeLock {
 
         mPartialWakeLock =
                 mPm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, Log.LOGTAG + ".partial");
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("**Wakelock (partial) acquired");
         mPartialWakeLock.setReferenceCounted(false);
         mPartialWakeLock.acquire();
@@ -73,7 +74,7 @@ public class ManageWakeLock {
 
     public static synchronized void releaseFull() {
         if (mWakeLock != null) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("**Wakelock released");
             mWakeLock.release();
             mWakeLock = null;
@@ -82,7 +83,7 @@ public class ManageWakeLock {
 
     public static synchronized void releasePartial() {
         if (mPartialWakeLock != null) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("**Wakelock (partial) released");
             mPartialWakeLock.release();
             mPartialWakeLock = null;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.everythingandroid.smspopup"
-    android:versionCode="200"
+    android:versionCode="117"
     android:versionName="1.2.0" >
 
     <uses-sdk
@@ -81,12 +81,6 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".receiver.ExternalEventReceiver" >
-            <intent-filter>
-                <action android:name="net.everythingandroid.smspopup.ENABLE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="net.everythingandroid.smspopup.DISABLE" />
-            </intent-filter>
             <intent-filter>
                 <action android:name="net.everythingandroid.smspopup.DONATED" />
             </intent-filter>

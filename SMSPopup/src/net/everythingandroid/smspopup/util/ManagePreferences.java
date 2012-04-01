@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup.util;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import android.content.ContentValues;
@@ -64,20 +65,20 @@ public class ManagePreferences {
         mContext = context;
         useDatabase = false;
 
-        if (Log.DEBUG) Log.v("rowId = " + mRowId);
+        if (BuildConfig.DEBUG) Log.v("rowId = " + mRowId);
 
         if (mRowId > 0) {
             mCursor = mContext.getContentResolver().query(
                     ContactNotifications.buildContactUri(mRowId), null, null, null, null);
             if (mCursor != null && mCursor.moveToFirst()) {
-                if (Log.DEBUG) Log.v("Contact found - using database");
+                if (BuildConfig.DEBUG) Log.v("Contact found - using database");
                 useDatabase = true;
             } else {
                 mCursor = null;
                 useDatabase = false;
             }
         } else {
-            if (Log.DEBUG) Log.v("Contact NOT found - using prefs");
+            if (BuildConfig.DEBUG) Log.v("Contact NOT found - using prefs");
         }
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -92,13 +93,13 @@ public class ManagePreferences {
         mContext = context;
         useDatabase = false;
 
-        if (Log.DEBUG) Log.v("contactId = " + mRowId);
+        if (BuildConfig.DEBUG) Log.v("contactId = " + mRowId);
 
         if (contactLookupKey != null) {
             mCursor = mContext.getContentResolver().query(
                     ContactNotifications.buildLookupUri(contactLookupKey), null, null, null, null);
             if (mCursor != null && mCursor.moveToFirst()) {
-                if (Log.DEBUG) Log.v("Contact found - using database");
+                if (BuildConfig.DEBUG) Log.v("Contact found - using database");
                 mRowId = mCursor.getLong(mCursor.getColumnIndexOrThrow(ContactNotifications._ID));
                 useDatabase = true;
             } else {
@@ -106,7 +107,7 @@ public class ManagePreferences {
                 useDatabase = false;
             }
         } else {
-            if (Log.DEBUG) Log.v("Contact NOT found - using prefs");
+            if (BuildConfig.DEBUG) Log.v("Contact NOT found - using prefs");
         }
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);

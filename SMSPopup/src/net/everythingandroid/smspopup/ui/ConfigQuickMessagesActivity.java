@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup.ui;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
@@ -139,7 +140,7 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("onCreateContextMenu()");
 
         // Create menu if top item is not selected
@@ -156,24 +157,24 @@ public class ConfigQuickMessagesActivity extends ListActivity implements OnEdito
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("onContextItemSelected()");
         if (info.id != -1) {
             final String id = String.valueOf(info.id);
             switch (item.getItemId()) {
             case CONTEXT_MENU_EDIT_ID:
-                if (Log.DEBUG)
+                if (BuildConfig.DEBUG)
                     Log.v("Editing quick message " + id);
                 editId = id;
                 showDialog(EDIT_DIALOG);
                 return true;
             case CONTEXT_MENU_DELETE_ID:
-                if (Log.DEBUG)
+                if (BuildConfig.DEBUG)
                     Log.v("Deleting quickmessage " + id);
                 deleteQuickMessage(id);
                 return true;
             case CONTEXT_MENU_REORDER_ID:
-                if (Log.DEBUG)
+                if (BuildConfig.DEBUG)
                     Log.v("Reordering quickmessage " + id);
                 reorderQuickMessage(id);
                 return true;

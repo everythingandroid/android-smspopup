@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup.provider;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.ui.SmsPopupActivity;
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.SmsMessageSender;
@@ -97,7 +98,7 @@ public class SmsMmsMessage {
                 body = bodyText.toString();
             }
         } catch (Exception e) {
-            if (Log.DEBUG) Log.v("SmsMmsMessage<init> exception: " + e.toString());
+            if (BuildConfig.DEBUG) Log.v("SmsMmsMessage<init> exception: " + e.toString());
         }
         messageBody = body;
 
@@ -110,11 +111,11 @@ public class SmsMmsMessage {
         // If this SMS is from an email gateway then lookup contactId by email
         // address
         if (fromEmailGateway) {
-            if (Log.DEBUG) Log.v("Sms came from email gateway");
+            if (BuildConfig.DEBUG) Log.v("Sms came from email gateway");
             contactIdentify = SmsPopupUtils.getPersonIdFromEmail(context, fromAddress);
             contactName = fromAddress;
         } else { // Else lookup contactId by phone number
-            if (Log.DEBUG) Log.v("Sms did NOT come from email gateway");
+            if (BuildConfig.DEBUG) Log.v("Sms did NOT come from email gateway");
             contactIdentify = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
             contactName = PhoneNumberUtils.formatNumber(fromAddress);
         }
@@ -303,10 +304,10 @@ public class SmsMmsMessage {
              * the threadId).
              */
             if (replyToThread && threadId > 0) {
-                if (Log.DEBUG) Log.v("Replying by threadId: " + threadId);
+                if (BuildConfig.DEBUG) Log.v("Replying by threadId: " + threadId);
                 return SmsPopupUtils.getSmsToIntent(context, threadId);
             } else {
-                if (Log.DEBUG) Log.v("Replying by address: " + fromAddress);
+                if (BuildConfig.DEBUG) Log.v("Replying by address: " + fromAddress);
                 return SmsPopupUtils.getSmsToIntent(context, fromAddress);
             }
         }
@@ -348,7 +349,7 @@ public class SmsMmsMessage {
         try {
             formattedTime = DateUtils.formatDateTime(context, timestamp, DateUtils.FORMAT_SHOW_TIME);
         } catch (Exception e) {
-            if (Log.DEBUG) Log.v("Error formatting timestamp + " + timestamp);
+            if (BuildConfig.DEBUG) Log.v("Error formatting timestamp + " + timestamp);
             formattedTime = "";
         }
         return formattedTime;
@@ -385,7 +386,7 @@ public class SmsMmsMessage {
     }
     
     public boolean shouldNotify() {
-        if (Log.DEBUG) Log.v("shouldNotify() - notify is " + notify);
+        if (BuildConfig.DEBUG) Log.v("shouldNotify() - notify is " + notify);
         return notify;
     }
 

@@ -26,6 +26,6 @@ public class AppEnabledCheckBoxPreference extends CheckBoxPreference {
     @Override
     protected void onClick() {
         super.onClick();
-        SmsPopupUtils.enableSMSPopup(context, isChecked());
+        SmsPopupUtils.enableSmsPopup(context, isChecked());
     }
 }

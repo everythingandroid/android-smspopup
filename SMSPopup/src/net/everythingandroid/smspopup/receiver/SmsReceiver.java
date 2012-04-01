@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.service.SmsReceiverService;
 import net.everythingandroid.smspopup.util.Log;
 
@@ -11,7 +12,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    if (Log.DEBUG) Log.v("SMSReceiver: onReceive()");
+    if (BuildConfig.DEBUG) Log.v("SMSReceiver: onReceive()");
     intent.setClass(context, SmsReceiverService.class);
     intent.putExtra("result", getResultCode());
 

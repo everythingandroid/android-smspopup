@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.service.SmsPopupUtilsService;
@@ -205,18 +206,18 @@ public class ConfigContactsActivity extends FragmentActivity {
         public boolean onContextItemSelected(MenuItem item) {
             AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("onContextItemSelected()");
 
             if (info.id != -1) {
                 switch (item.getItemId()) {
                 case CONTEXT_MENU_EDIT_ID:
-                    if (Log.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.v("Editing contact " + info.id);
                     startActivity(getConfigPerContactIntent(getActivity(), info.id));
                     return true;
                 case CONTEXT_MENU_DELETE_ID:
-                    if (Log.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.v("Deleting contact " + info.id);
                     getActivity().getContentResolver().delete(
                             ContactNotifications.buildContactUri(info.id), null,

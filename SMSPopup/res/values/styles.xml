@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="DialogTheme" parent="android:Theme.Dialog"></style>
+    <style name="DialogTheme" parent="android:Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+		
+
+    </style>
 
     <style name="ButtonBar">
         <item name="android:paddingTop">5dip</item>
