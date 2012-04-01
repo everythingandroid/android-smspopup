@@ -1,4 +1,4 @@
-package net.everythingandroid.smspopup.controls;
+package net.everythingandroid.smspopup.ui;
 
 import java.lang.ref.WeakReference;
 
@@ -27,6 +27,7 @@ import android.widget.ImageButton;
 import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+import android.widget.ViewSwitcher;
 
 public class SmsPopupFragment extends Fragment {
     private SmsMmsMessage message;
@@ -39,53 +40,66 @@ public class SmsPopupFragment extends Fragment {
     private TextView messageTv;
     private ViewFlipper contentFlipper;
 
-    private QuickContactBadge contactBadge = null;
+    private int privacyMode = PRIVACY_MODE_OFF;
+    private boolean showUnlockButton = false;
+    private boolean showButtons = true;
+
+    private QuickContactBadge contactBadge;
+    private ViewSwitcher buttonViewSwitcher;
 
     public static final int PRIVACY_MODE_OFF = 0;
     public static final int PRIVACY_MODE_HIDE_MESSAGE = 1;
     public static final int PRIVACY_MODE_HIDE_ALL = 2;
-    
+
     private static final String EXTRA_PRIVACY_MODE = "net.everythingandroid.smspopup.privacy_mode";
     private static final String EXTRA_BUTTONS = "net.everythingandroid.smspopup.buttons";
+    private static final String EXTRA_UNLOCK_BUTTON = "net.everythingandroid.smspopup.unlock_button";
+    private static final String EXTRA_SHOW_BUTTONS = "net.everythingandroid.smspopup.show_buttons";
 
     private static final int VIEW_SMS = 0;
     private static final int VIEW_MMS = 1;
     private static final int VIEW_PRIVACY_SMS = 2;
     private static final int VIEW_PRIVACY_MMS = VIEW_MMS;
-    
+
     public static final int BUTTON_VIEW = 100;
     public static final int BUTTON_VIEW_MMS = 101;
     public static final int BUTTON_UNLOCK = 102;
-    
-    public int privacyMode = PRIVACY_MODE_OFF;
 
     private static final int CONTACT_IMAGE_FADE_DURATION = 300;
-    
-    public static SmsPopupFragment newInstance(SmsMmsMessage newMessage, int[] buttons, 
-    		int privacyMode) {
-    	
+
+    private static final int BUTTON_SWITCHER_MAIN_BUTTONS = 0;
+    private static final int BUTTON_SWITCHER_UNLOCK_BUTTON = 1;
+
+    public static SmsPopupFragment newInstance(SmsMmsMessage newMessage, int[] buttons,
+    		int privacyMode, boolean showUnlockButton, boolean showButtons) {
+
     	SmsPopupFragment newFragment = new SmsPopupFragment();
     	Bundle args = newMessage.toBundle();
     	args.putInt(EXTRA_PRIVACY_MODE, privacyMode);
     	args.putIntArray(EXTRA_BUTTONS, buttons);
+    	args.putBoolean(EXTRA_UNLOCK_BUTTON, showUnlockButton);
+    	args.putBoolean(EXTRA_SHOW_BUTTONS, showButtons);
     	newFragment.setArguments(args);
     	return newFragment;
     }
-    
+
     public static SmsPopupFragment newInstance(SmsMmsMessage newMessage, int[] buttons) {
-    	return newInstance(newMessage, buttons, PRIVACY_MODE_OFF);
+    	return newInstance(newMessage, buttons, PRIVACY_MODE_OFF, false, true);
     }
-    
+
     public SmsPopupFragment() {};
 
 	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, 
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
     		Bundle savedInstanceState) {
-    	
-        privacyMode = getArguments().getInt(EXTRA_PRIVACY_MODE);
-        final int[] buttons = getArguments().getIntArray(EXTRA_BUTTONS);
-        message = new SmsMmsMessage(getActivity(), getArguments());
-    	    	
+
+	    final Bundle args = getArguments();
+        privacyMode = args.getInt(EXTRA_PRIVACY_MODE);
+        showUnlockButton = args.getBoolean(EXTRA_UNLOCK_BUTTON);
+        showButtons = args.getBoolean(EXTRA_SHOW_BUTTONS);
+        final int[] buttons = args.getIntArray(EXTRA_BUTTONS);
+        message = new SmsMmsMessage(getActivity(), args);
+
     	View v = inflater.inflate(R.layout.popup_message_fragment, container, false);
 
         // Find the main textviews and layouts
@@ -93,92 +107,88 @@ public class SmsPopupFragment extends Fragment {
         messageTv = (TextView) v.findViewById(R.id.messageTextView);
         timestampTv = (TextView) v.findViewById(R.id.timestampTextView);
         contentFlipper = (ViewFlipper) v.findViewById(R.id.contentFlipper);
+        buttonViewSwitcher = (ViewSwitcher) v.findViewById(R.id.buttonViewSwitcher);
 
         // Find the QuickContactBadge view that will show the contact photo
         contactBadge = (QuickContactBadge) v.findViewById(R.id.contactBadge);
 
         final String[] buttonText = getResources().getStringArray(R.array.buttons_text);
-        
-        final Button button1 = (Button) v.findViewById(R.id.button1);
-        final PopupButton button1Vals = new PopupButton(buttons[0], buttonText);
-        button1.setOnClickListener(button1Vals);
-        button1.setVisibility(button1Vals.buttonVisibility);
-        button1.setText(button1Vals.buttonText);
 
-        final Button button2 = (Button) v.findViewById(R.id.button2);
-        final PopupButton button2Vals = new PopupButton(buttons[1], buttonText);
-        button2.setOnClickListener(button2Vals);
-        button2.setVisibility(button2Vals.buttonVisibility);
-        button2.setText(button2Vals.buttonText);
-        
-        final Button button3 = (Button) v.findViewById(R.id.button3);
-        final PopupButton button3Vals = new PopupButton(buttons[2], buttonText);
-        button3.setOnClickListener(button3Vals);
-        button3.setVisibility(button3Vals.buttonVisibility);
-        button3.setText(button3Vals.buttonText);
-        
-        /*
-         * This is really hacky. There are two types of reply buttons (quick reply and reply).
-         * If the user has selected to show both the replies then the text on the buttons 
-         * should be different. If they only use one then the text can just be "Reply".
-         */
-        int numReplyButtons = 0;
-        if (button1Vals.isReplyButton)
-            numReplyButtons++;
-        if (button2Vals.isReplyButton)
-            numReplyButtons++;
-        if (button3Vals.isReplyButton)
-            numReplyButtons++;
+        if (showButtons) {
+            final Button button1 = (Button) v.findViewById(R.id.button1);
+            final PopupButton button1Vals = new PopupButton(buttons[0], buttonText);
+            button1.setOnClickListener(button1Vals);
+            button1.setVisibility(button1Vals.buttonVisibility);
+            button1.setText(button1Vals.buttonText);
 
-        if (numReplyButtons == 1) {
+            final Button button2 = (Button) v.findViewById(R.id.button2);
+            final PopupButton button2Vals = new PopupButton(buttons[1], buttonText);
+            button2.setOnClickListener(button2Vals);
+            button2.setVisibility(button2Vals.buttonVisibility);
+            button2.setText(button2Vals.buttonText);
+
+            final Button button3 = (Button) v.findViewById(R.id.button3);
+            final PopupButton button3Vals = new PopupButton(buttons[2], buttonText);
+            button3.setOnClickListener(button3Vals);
+            button3.setVisibility(button3Vals.buttonVisibility);
+            button3.setText(button3Vals.buttonText);
+
+            /*
+             * This is really hacky. There are two types of reply buttons (quick reply and reply).
+             * If the user has selected to show both the replies then the text on the buttons
+             * should be different. If they only use one then the text can just be "Reply".
+             */
+            int numReplyButtons = 0;
             if (button1Vals.isReplyButton)
-                button1.setText(R.string.button_reply);
+                numReplyButtons++;
             if (button2Vals.isReplyButton)
-                button2.setText(R.string.button_reply);
+                numReplyButtons++;
             if (button3Vals.isReplyButton)
-                button3.setText(R.string.button_reply);
-        }        
+                numReplyButtons++;
+
+            if (numReplyButtons == 1) {
+                if (button1Vals.isReplyButton)
+                    button1.setText(R.string.button_reply);
+                if (button2Vals.isReplyButton)
+                    button2.setText(R.string.button_reply);
+                if (button3Vals.isReplyButton)
+                    button3.setText(R.string.button_reply);
+            }
+
+            ((Button) v.findViewById(R.id.unlockButton)).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mButtonsListener.onButtonClicked(BUTTON_UNLOCK);
+                }
+            });
+        }
 
         // The ViewMMS button
         ((Button) v.findViewById(R.id.viewMmsButton)).setOnClickListener(
-        		new PopupButton(BUTTON_VIEW_MMS, buttonText));
-        
-        ((Button) v.findViewById(R.id.unlockButton)).setOnClickListener(
-        		new PopupButton(BUTTON_UNLOCK, buttonText));
+                new PopupButton(BUTTON_VIEW_MMS, buttonText));
 
+        // The privacy view message button
         ((ImageButton) v.findViewById(R.id.viewButton)).setOnClickListener(
-        		new OnClickListener() {
-        			@Override
-        			public void onClick(View v) {
-        				setPrivacy(PRIVACY_MODE_OFF);
-        				mButtonsListener.onButtonClicked(BUTTON_VIEW);
-        			}
-				});
+                new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setPrivacy(PRIVACY_MODE_OFF);
+                        mButtonsListener.onButtonClicked(BUTTON_VIEW);
+                    }
+                });
 
-//        // The view button (for privacy mode)
-//        final ImageButton viewButton = (ImageButton) v.findViewById(R.id.viewButton);
-//        viewButton.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (mOnReactToMessage != null) {
-//                    mOnReactToMessage.onViewMessage(message);
-//                }
-//                setPrivacy(PRIVACY_MODE_OFF);
-//            }
-//        });
-        
         populateViews();
-        
+
         return v;
     }
-    
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
         	mButtonsListener = (SmsPopupButtonsListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() 
+            throw new ClassCastException(activity.toString()
             		+ " must implement SmsPopupButtonsListener");
         }
     }
@@ -196,45 +206,70 @@ public class SmsPopupFragment extends Fragment {
         timestampTv.setText(message.getFormattedTimestamp());
 
         setPrivacy(privacyMode, true);
+        refreshButtonViews();
     }
-    
+
+    public void setShowUnlockButton(boolean show) {
+        showUnlockButton = show;
+        refreshButtonViews();
+    }
+
+    private void refreshButtonViews() {
+        if (!showButtons) {
+            buttonViewSwitcher.setVisibility(View.GONE);
+        } else {
+            final int currentView = buttonViewSwitcher.getDisplayedChild();
+            if (showUnlockButton) {
+                if (currentView != BUTTON_SWITCHER_UNLOCK_BUTTON) {
+                    // Show unlock button
+                    buttonViewSwitcher.setDisplayedChild(BUTTON_SWITCHER_UNLOCK_BUTTON);
+                }
+            } else {
+                if (currentView != BUTTON_SWITCHER_MAIN_BUTTONS) {
+                    // Show main popup buttons
+                    buttonViewSwitcher.setDisplayedChild(BUTTON_SWITCHER_MAIN_BUTTONS);
+                }
+            }
+        }
+    }
+
     public void setPrivacy(int newMode) {
     	setPrivacy(newMode, false);
     }
-    
-    public void setPrivacy(int newMode, boolean initial) {
-    	
+
+    private void setPrivacy(int newMode, boolean initial) {
+
     	if ((newMode != privacyMode || initial) && message != null && contentFlipper != null) {
 	        final int viewPrivacy =
 	                message.isSms() ? VIEW_PRIVACY_SMS : VIEW_PRIVACY_MMS;
-	
+
 	        final int viewPrivacyOff =
 	                message.isSms() ? VIEW_SMS : VIEW_MMS;
-	        
+
 	        final int currentView = contentFlipper.getDisplayedChild();
-	
+
 	        if (newMode == PRIVACY_MODE_OFF) {
-	
+
 	            if (currentView != viewPrivacyOff) {
 	                contentFlipper.setDisplayedChild(viewPrivacyOff);
 	            }
 	            fromTv.setVisibility(View.VISIBLE);
 	            messageViewed = true;
-	            
+
 	            if (initial || privacyMode == PRIVACY_MODE_HIDE_ALL) {
 	            	loadContactPhoto();
 	            }
-	
+
 	        } else if (newMode == PRIVACY_MODE_HIDE_MESSAGE) {
-	
+
 	            if (currentView != viewPrivacy) {
 	                contentFlipper.setDisplayedChild(viewPrivacy);
 	            }
 	            fromTv.setVisibility(View.VISIBLE);
 	            loadContactPhoto();
-	
+
 	        } else if (newMode == PRIVACY_MODE_HIDE_ALL) {
-	
+
 	            if (currentView != viewPrivacy) {
 	                contentFlipper.setDisplayedChild(viewPrivacy);
 	            }
@@ -242,25 +277,6 @@ public class SmsPopupFragment extends Fragment {
 	        }
     	}
     	privacyMode = newMode;
-    }
-
-    // Set privacy from preference boolean values
-    public void setPrivacy(boolean privacyMode, boolean privacySender) {
-        if (privacyMode && privacySender) {
-            setPrivacy(PRIVACY_MODE_HIDE_ALL);
-        } else if (privacyMode && !privacySender) {
-            setPrivacy(PRIVACY_MODE_HIDE_MESSAGE);
-        } else {
-            setPrivacy(PRIVACY_MODE_OFF);
-        }
-    }
-
-    public void setMessageViewed(boolean viewed) {
-        messageViewed = viewed;
-    }
-
-    public boolean getMessageViewed() {
-        return messageViewed;
     }
 
     private void loadContactPhoto() {
@@ -276,18 +292,18 @@ public class SmsPopupFragment extends Fragment {
     			}
     		}
     	}
-    	
+
     	if (!cacheHit) {
     		new FetchContactPhotoTask(contactBadge).execute(message.getContactLookupUri());
     	}
-        
+
         contactBadge.setClickable(true);
         final Uri contactUri = message.getContactLookupUri();
         if (contactUri != null) {
             contactBadge.assignContactUri(message.getContactLookupUri());
         } else {
             contactBadge.assignContactFromPhone(message.getAddress(), false);
-        }            
+        }
     }
 
     /**
@@ -295,11 +311,11 @@ public class SmsPopupFragment extends Fragment {
      */
     private class FetchContactPhotoTask extends AsyncTask<Uri, Integer, Bitmap> {
     	private final WeakReference<QuickContactBadge> viewReference;
-    	
+
     	public FetchContactPhotoTask(QuickContactBadge badge) {
     		viewReference = new WeakReference<QuickContactBadge> (badge);
     	}
-    	
+
         @Override
         protected Bitmap doInBackground(Uri... params) {
             if (BuildConfig.DEBUG)
@@ -311,7 +327,7 @@ public class SmsPopupFragment extends Fragment {
         			cache.put(params[0], bitmap);
         		}
         	}
-            
+
             return bitmap;
         }
 
@@ -320,7 +336,7 @@ public class SmsPopupFragment extends Fragment {
             if (BuildConfig.DEBUG)
                 Log.v("Done loading contact photo");
             if (photo != null && viewReference != null) {
-            	final QuickContactBadge badge = viewReference.get(); 
+            	final QuickContactBadge badge = viewReference.get();
             	if (badge != null && isAdded()) {
 	                TransitionDrawable mTd =
 	                        new TransitionDrawable(new Drawable[] {
@@ -333,7 +349,7 @@ public class SmsPopupFragment extends Fragment {
             }
         }
     }
-    
+
     private class PopupButton implements OnClickListener {
         final private int buttonId;
         public boolean isReplyButton;
@@ -348,7 +364,7 @@ public class SmsPopupFragment extends Fragment {
                     || buttonId == ButtonListPreference.BUTTON_REPLY_BY_ADDRESS) {
                 isReplyButton = true;
             }
-            
+
             if (buttonId < buttonTextArray.length) {
             	buttonText = buttonTextArray[buttonId];
             }
@@ -363,21 +379,10 @@ public class SmsPopupFragment extends Fragment {
         	mButtonsListener.onButtonClicked(buttonId);
         }
     }
-    
-    @Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-	}
 
-	public static interface OnReactToMessage {
-        abstract void onViewMessage(SmsMmsMessage message);
-
-        abstract void onReplyToMessage(SmsMmsMessage message);
-    }
-    
     public static interface SmsPopupButtonsListener {
     	abstract void onButtonClicked(int buttonType);
     	abstract LruCache<Uri, Bitmap> getCache();
     }
-    
+
 }
