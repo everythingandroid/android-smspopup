@@ -138,7 +138,7 @@
             android:showDividers="beginning" >
 
             <ViewSwitcher
-                android:id="@+id/ButtonViewSwitcher"
+                android:id="@+id/buttonViewSwitcher"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" >
 
