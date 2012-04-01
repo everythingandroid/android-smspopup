@@ -154,7 +154,7 @@
   <string name="quickreply_send_button">שלח</string>
   <string name="quickreply_sending_toast">שולח הודעה....</string>
   <string name="quickreply_nomessage_toast">שלח</string>
-  <string name="loading_message">בטעינה...</string>
+  <string name="loading_message">בטעינה…</string>
   <string name="error_message">שגיאה</string>
   <string name="error_no_voice_recognition">זיהוי קולי לא זמין במכשיר</string>
   <string name="pref_button_config_title">לחצן הגדרות</string>

@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup.service;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.receiver.ReminderReceiver;
@@ -36,16 +37,16 @@ public class ReminderService extends WakefulIntentService {
      */
     @Override
     protected void doWakefulWork(Intent intent) {
-        if (Log.DEBUG) Log.v("ReminderReceiverService: handleMessage()");
+        if (BuildConfig.DEBUG) Log.v("ReminderReceiverService: handleMessage()");
 
         String action = intent.getAction();
 
         if (ACTION_REMIND.equals(action)) {
-            if (Log.DEBUG) Log.v("ReminderReceiverService: processReminder()");
+            if (BuildConfig.DEBUG) Log.v("ReminderReceiverService: processReminder()");
             ReminderService.processReminder(this, intent);
         } else if (Intent.ACTION_DELETE.equals(action)) {
             // TODO: update message count pref
-            if (Log.DEBUG) Log.v("ReminderReceiverService: cancelReminder()");
+            if (BuildConfig.DEBUG) Log.v("ReminderReceiverService: cancelReminder()");
             ReminderService.cancelReminder(this);
         }
     }
@@ -110,7 +111,7 @@ public class ReminderService extends WakefulIntentService {
                             PendingIntent.FLAG_CANCEL_CURRENT);
 
             long triggerTime = System.currentTimeMillis() + (reminder_interval * 1000);
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("ReminderReceiver: scheduled reminder notification in " + reminder_interval
                         + " seconds, count is " + message.getReminderCount());
             mAM.set(AlarmManager.RTC_WAKEUP, triggerTime, reminderPendingIntent);
@@ -127,7 +128,7 @@ public class ReminderService extends WakefulIntentService {
             myAM.cancel(reminderPendingIntent);
             reminderPendingIntent.cancel();
             reminderPendingIntent = null;
-            if (Log.DEBUG) Log.v("ReminderReceiver: cancelReminder()");
+            if (BuildConfig.DEBUG) Log.v("ReminderReceiver: cancelReminder()");
         }
     }
 

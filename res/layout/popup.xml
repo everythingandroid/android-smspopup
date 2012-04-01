@@ -1,102 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/MainLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:minWidth="310dp"
-    android:orientation="vertical" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-    <FrameLayout
+    <net.everythingandroid.smspopup.controls.SmsPopupPager
+        android:id="@+id/SmsPopupPager"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/smspopup_pager_height" >
+        android:layout_height="@+dimen/smspopup_pager_height"
+        android:layout_centerInParent="true" >
+    </net.everythingandroid.smspopup.controls.SmsPopupPager>
 
-        <net.everythingandroid.smspopup.controls.SmsPopupPager
-            android:id="@+id/SmsPopupPager"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingBottom="9dp" >
-        </net.everythingandroid.smspopup.controls.SmsPopupPager>
-
-        <com.viewpagerindicator.CirclePageIndicator
-            android:id="@+id/indicator"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:paddingBottom="4dp"
-            android:paddingTop="2dp" />
-
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-    </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/buttonPanel"
+    <com.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="?android:attr/dividerHorizontal"
-        android:dividerPadding="0dip"
-        android:orientation="vertical"
-        android:showDividers="beginning" >
+        android:layout_below="@+id/SmsPopupPager"
+        android:layout_gravity="center_horizontal|bottom"
+        android:paddingTop="4dp" />
 
-        <ViewSwitcher
-            android:id="@+id/ButtonViewSwitcher"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
-            <LinearLayout
-                android:id="@+id/ButtonLayout"
-                style="@style/ButtonBar"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center" >
-
-                <Button
-                    android:id="@+id/button1"
-                    style="@style/ButtonBarButton"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/button_close" />
-
-                <Button
-                    android:id="@+id/button2"
-                    style="@style/ButtonBarButton"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/button_delete" />
-
-                <Button
-                    android:id="@+id/button3"
-                    style="@style/ButtonBarButton"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/button_reply" />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/UnlockButtonLayout"
-                style="@style/ButtonBar"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-
-                <Button
-                    android:id="@+id/unlockButton"
-                    style="@style/ButtonBarButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:minWidth="100dp"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
-                    android:text="@string/button_unlock" />
-            </RelativeLayout>
-        </ViewSwitcher>
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

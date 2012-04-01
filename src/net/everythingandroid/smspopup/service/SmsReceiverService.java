@@ -2,10 +2,10 @@ package net.everythingandroid.smspopup.service;
 
 import java.util.List;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
-import net.everythingandroid.smspopup.receiver.ExternalEventReceiver;
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageKeyguard;
 import net.everythingandroid.smspopup.util.ManageNotification;
@@ -69,7 +69,7 @@ public class SmsReceiverService extends Service {
 
     @Override
     public void onCreate() {
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSReceiverService: onCreate()");
         HandlerThread thread = new HandlerThread(Log.LOGTAG, Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
@@ -80,7 +80,7 @@ public class SmsReceiverService extends Service {
 
     @Override
     public void onStart(Intent intent, int startId) {
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSReceiverService: onStart()");
 
         mResultCode = intent != null ? intent.getIntExtra("result", 0) : 0;
@@ -93,7 +93,7 @@ public class SmsReceiverService extends Service {
 
     @Override
     public void onDestroy() {
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSReceiverService: onDestroy()");
         mServiceLooper.quit();
     }
@@ -110,7 +110,7 @@ public class SmsReceiverService extends Service {
 
         @Override
         public void handleMessage(Message msg) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("SMSReceiverService: handleMessage()");
 
             int serviceId = msg.arg1;
@@ -138,7 +138,7 @@ public class SmsReceiverService extends Service {
      * Handle receiving a SMS message
      */
     private void handleSmsReceived(Intent intent) {
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSReceiver: Intercept SMS");
 
         Bundle bundle = intent.getExtras();
@@ -183,9 +183,8 @@ public class SmsReceiverService extends Service {
                         ContactNotifications.ENABLED);
 
         // get docked state of phone
-        boolean docked = 
-                mPrefs.getInt(R.string.pref_docked_key, 0) == 
-                        ExternalEventReceiver.EXTRA_DOCK_STATE_DESK;
+        boolean docked = mPrefs.getInt(R.string.pref_docked_key, Intent.EXTRA_DOCK_STATE_UNDOCKED) 
+        		!= Intent.EXTRA_DOCK_STATE_UNDOCKED;
 
         mPrefs.close();
 
@@ -208,14 +207,14 @@ public class SmsReceiverService extends Service {
                 && (ManageKeyguard.inKeyguardRestrictedInputMode() ||
                 (!onlyShowOnKeyguard && !SmsPopupUtils.inMessagingApp(context)))) {
 
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("^^^^^^Showing SMS Popup");
             ManageWakeLock.acquirePartial(context);
             context.startActivity(message.getPopupIntent());
 
         } else if (notifEnabled) {
 
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("^^^^^^Not showing SMS Popup, using notifications");
             ManageNotification.show(context, message, message == null ? 0 : message.getUnreadCount());
             ReminderService.scheduleReminder(context, message);
@@ -227,7 +226,7 @@ public class SmsReceiverService extends Service {
      * Handle receiving a MMS message
      */
     private void handleMmsReceived(Intent intent) {
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("MMS received!");
         SmsMmsMessage mmsMessage = null;
         int count = 0;
@@ -241,11 +240,11 @@ public class SmsReceiverService extends Service {
             mmsMessage = SmsPopupUtils.getMmsDetails(context);
 
             if (mmsMessage != null) {
-                if (Log.DEBUG)
+                if (BuildConfig.DEBUG)
                     Log.v("MMS found in content provider");
                 notifyMessageReceived(mmsMessage);
             } else {
-                if (Log.DEBUG)
+                if (BuildConfig.DEBUG)
                     Log.v("MMS not found, sleeping (count is " + count + ")");
                 count++;
                 try {
@@ -261,7 +260,7 @@ public class SmsReceiverService extends Service {
      * Handle receiving an arbitrary message (potentially coming from a 3rd party app)
      */
     private void handleMessageReceived(Intent intent) {
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSReceiver: Intercept Message");
 
         Bundle bundle = intent.getExtras();
@@ -314,7 +313,7 @@ public class SmsReceiverService extends Service {
      * Handle the result of a sms being sent
      */
     private void handleSmsSent(Intent intent) {
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSReceiver: Handle SMS sent");
 
         PackageManager pm = getPackageManager();
@@ -333,7 +332,7 @@ public class SmsReceiverService extends Service {
         receiverList = pm.queryBroadcastReceivers(tempIntent, 0);
 
         if (receiverList.size() > 0) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("SMSReceiver: Found system messaging app - " + receiverList.get(0).toString());
             sysIntent = tempIntent;
         }
@@ -345,7 +344,7 @@ public class SmsReceiverService extends Service {
          */
         if (sysIntent == null) {
             forwardToSystemApp = false;
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("SMSReceiver: Did not find system messaging app, moving messages directly");
 
             Uri uri = intent.getData();
@@ -364,19 +363,19 @@ public class SmsReceiverService extends Service {
 
         // Check the result and notify the user using a toast
         if (mResultCode == Activity.RESULT_OK) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("SMSReceiver: Message was sent");
             mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_SENT);
 
         } else if ((mResultCode == SmsManager.RESULT_ERROR_RADIO_OFF) ||
                 (mResultCode == SmsManager.RESULT_ERROR_NO_SERVICE)) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("SMSReceiver: Error sending message (will send later)");
             // The system shows a Toast here so no need to show one
             // mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_SEND_LATER);
 
         } else {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("SMSReceiver: Error sending message");
             // ManageNotification.notifySendFailed(this);
             mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_FAILED);
@@ -412,7 +411,7 @@ public class SmsReceiverService extends Service {
      */
     public static void beginStartingService(Context context, Intent intent) {
         synchronized (mStartingServiceSync) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("SMSReceiverService: beginStartingService()");
             if (mStartingService == null) {
                 PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -431,7 +430,7 @@ public class SmsReceiverService extends Service {
      */
     public static void finishStartingService(Service service, int startId) {
         synchronized (mStartingServiceSync) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("SMSReceiverService: finishStartingService()");
             if (mStartingService != null) {
                 if (service.stopSelfResult(startId)) {

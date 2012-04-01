@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
-import net.everythingandroid.smspopup.receiver.ExternalEventReceiver;
 import net.everythingandroid.smspopup.receiver.SmsReceiver;
 import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
 import android.annotation.SuppressLint;
@@ -39,7 +39,6 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.PhoneLookup;
-import android.support.v4.util.LruCache;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsMessage;
 import android.text.TextUtils;
@@ -66,14 +65,12 @@ public class SmsPopupUtils {
     public static final int MESSAGE_TYPE_SMS = 1;
     public static final int MESSAGE_TYPE_MMS = 2;
 
-    public static final int CONTACT_PHOTO_PLACEHOLDER = android.R.drawable.ic_dialog_info;
-
     // The max size of either the width or height of the contact photo
     public static final int CONTACT_PHOTO_MAXSIZE = 1024;
 
     // Bitmap cache
-    private static final int bitmapCacheSize = 5;
-    private static LruCache<Uri, Bitmap> bitmapCache = null;
+//    private static final int bitmapCacheSize = 5;
+//    private static LruCache<Uri, Bitmap> bitmapCache = null;
 
     private static final String[] AUTHOR_CONTACT_INFO =
             { "Adam K <smspopup@everythingandroid.net>" };
@@ -122,7 +119,7 @@ public class SmsPopupUtils {
                 if (cursor.getCount() > 0) {
                     cursor.moveToFirst();
                     String name = cursor.getString(0);
-                    if (Log.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.v("Contact Display Name: " + name);
                     return name;
                 }
@@ -178,7 +175,7 @@ public class SmsPopupUtils {
             try {
                 if (cursor.moveToFirst()) {
                     String name = cursor.getString(0);
-                    if (Log.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.v("Contact Display Name: " + name);
                     return name;
                 }
@@ -239,7 +236,7 @@ public class SmsPopupUtils {
                     String contactName = cursor.getString(1);
                     String contactLookup = cursor.getString(2);
 
-                    if (Log.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.v("Found person: " + contactId + ", " + contactName + ", "
                                 + contactLookup);
                     return new ContactIdentification(contactId, contactLookup, contactName);
@@ -283,7 +280,7 @@ public class SmsPopupUtils {
                     String contactName = cursor.getString(1);
                     String contactLookup = cursor.getString(2);
 
-                    if (Log.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.v("Found person: " + contactId + ", " + contactName + ", "
                                 + contactLookup);
                     return new ContactIdentification(contactId, contactLookup, contactName);
@@ -312,26 +309,11 @@ public class SmsPopupUtils {
      *            the max size the thumbnail can be
      * @return Bitmap of the contacts photo (null if none or an error)
      */
-    public static Bitmap getPersonPhoto(Context context, final Uri contactUri, final int thumbSize) {
+    public static Bitmap getPersonPhoto(Context context, final Uri contactUri, 
+    		final int thumbSize) {
 
-        if (contactUri == null)
+        if (contactUri == null) {
             return null;
-
-        // Init cache
-        if (bitmapCache == null) {
-            final int cacheSize = bitmapCacheSize * thumbSize * thumbSize;
-            bitmapCache = new LruCache<Uri, Bitmap>(cacheSize) {
-                protected int sizeOf(Uri key, Bitmap value) {
-                    return thumbSize * thumbSize;
-                }
-            };
-        }
-
-        // Check bitmap cache
-        synchronized (bitmapCache) {
-            if (bitmapCache.get(contactUri) != null) {
-                return bitmapCache.get(contactUri);
-            }
         }
 
         // First let's just check the dimensions of the contact photo
@@ -339,19 +321,20 @@ public class SmsPopupUtils {
         options.inJustDecodeBounds = true;
 
         // The height and width are stored in 'options' but the photo itself is not loaded
-        loadContactPhoto(context, contactUri, 0, options);
+        loadContactPhoto(context, contactUri, options);
 
         // Raw height and width of contact photo
         final int height = options.outHeight;
         final int width = options.outWidth;
 
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("Contact photo size = " + height + "x" + width);
 
         // If photo is too large or not found get out
         if (height > CONTACT_PHOTO_MAXSIZE || width > CONTACT_PHOTO_MAXSIZE ||
-                width == 0 || height == 0)
+                width == 0 || height == 0) {
             return null;
+        }
 
         // This time we're going to do it for real
         options.inJustDecodeBounds = false;
@@ -382,7 +365,7 @@ public class SmsPopupUtils {
         // Fetch the real contact photo (sampled down if needed)
         Bitmap contactBitmap = null;
         try {
-            contactBitmap = loadContactPhoto(context, contactUri, 0, options);
+            contactBitmap = loadContactPhoto(context, contactUri, options);
         } catch (OutOfMemoryError e) {
             Log.e("Out of memory when loading contact photo");
         }
@@ -392,17 +375,7 @@ public class SmsPopupUtils {
             return null;
 
         // Bitmap scaled to new height and width
-        final Bitmap finalBitmap =
-                Bitmap.createScaledBitmap(contactBitmap, newWidth, newHeight, true);
-
-        // Add to bitmap cache
-        synchronized (bitmapCache) {
-            if (bitmapCache.get(contactUri) == null) {
-                bitmapCache.put(contactUri, finalBitmap);
-            }
-        }
-
-        return finalBitmap;
+        return Bitmap.createScaledBitmap(contactBitmap, newWidth, newHeight, true);
     }
 
     public static Bitmap getPersonPhoto(Context context, Uri contactUri) {
@@ -420,17 +393,15 @@ public class SmsPopupUtils {
      *            the Context
      * @param id
      *            the id of the person
-     * @param placeholderImageResource
-     *            the image resource to use if the person doesn't have a photo
      * @param options
      *            the decoding options, can be set to null
      */
     @SuppressLint("NewApi")
-    public static Bitmap loadContactPhoto(Context context, Uri contactUri,
-            int placeholderImageResource, BitmapFactory.Options options) {
+    public static Bitmap loadContactPhoto(Context context, Uri contactUri, 
+    		BitmapFactory.Options options) {
 
         if (contactUri == null) {
-            return loadPlaceholderPhoto(placeholderImageResource, context, options);
+            return null;
         }
 
         final InputStream stream;
@@ -442,21 +413,7 @@ public class SmsPopupUtils {
                     contactUri);
         }
 
-        Bitmap bm = stream != null ? BitmapFactory.decodeStream(stream, null, options) : null;
-        if (bm == null) {
-            bm = loadPlaceholderPhoto(placeholderImageResource, context, options);
-        }
-
-        return bm;
-    }
-
-    private static Bitmap loadPlaceholderPhoto(int placeholderImageResource, Context context,
-            BitmapFactory.Options options) {
-        if (placeholderImageResource == 0) {
-            return null;
-        }
-        return BitmapFactory.decodeResource(context.getResources(),
-                placeholderImageResource, options);
+        return stream != null ? BitmapFactory.decodeStream(stream, null, options) : null;
     }
 
     /**
@@ -538,7 +495,7 @@ public class SmsPopupUtils {
             } catch (Exception e) {
                 result = 0;
             }
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v(String.format("message id = %s marked as read, result = %s", messageId,
                         result));
         }
@@ -567,10 +524,10 @@ public class SmsPopupUtils {
                         ContentUris.withAppendedId(CONVERSATION_CONTENT_URI, threadId),
                         values, null, null);
             } catch (Exception e) {
-                if (Log.DEBUG)
+                if (BuildConfig.DEBUG)
                     Log.v("error marking thread read");
             }
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("thread id " + threadId + " marked as read, result = " + result);
         }
     }
@@ -583,12 +540,12 @@ public class SmsPopupUtils {
             String body, int messageType) {
 
         long id = 0;
-        String selection = "body = " + DatabaseUtils.sqlEscapeString(body);
+        String selection = "body = " + DatabaseUtils.sqlEscapeString(body != null ? body : "");
         final String sortOrder = "date DESC";
         final String[] projection = new String[] { "_id", "date", "thread_id", "body" };
 
         if (threadId > 0) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("Trying to find message ID");
             if (SmsMmsMessage.MESSAGE_TYPE_MMS == messageType) {
                 // It seems MMS timestamps are stored in a seconds, whereas SMS timestamps are in
@@ -610,7 +567,7 @@ public class SmsPopupUtils {
                 try {
                     if (cursor.moveToFirst()) {
                         id = cursor.getLong(0);
-                        if (Log.DEBUG)
+                        if (BuildConfig.DEBUG)
                             Log.v("Message id found = " + id);
                         // Log.v("Timestamp = " + cursor.getLong(1));
                     }
@@ -630,7 +587,7 @@ public class SmsPopupUtils {
             long threadId, int messageType) {
 
         if (messageId > 0) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("id of message to delete is " + messageId);
 
             // We need to mark this message read first to ensure the entire thread is marked as read
@@ -651,11 +608,11 @@ public class SmsPopupUtils {
             try {
                 count = context.getContentResolver().delete(deleteUri, null, null);
             } catch (Exception e) {
-                if (Log.DEBUG)
+                if (BuildConfig.DEBUG)
                     Log.v("deleteMessage(): Problem deleting message - " + e.toString());
             }
 
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("Messages deleted: " + count);
             if (count == 1) {
                 // TODO: should only set the thread read if there are no more unread messages
@@ -678,7 +635,7 @@ public class SmsPopupUtils {
 
     public static ArrayList<SmsMmsMessage> getUnreadMessages(Context context, long ignoreMessageId) {
 
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("getUnreadMessages(), ignore id: " + ignoreMessageId);
 
         ArrayList<SmsMmsMessage> messages = null;
@@ -996,7 +953,7 @@ public class SmsPopupUtils {
      */
     private static int getUnreadSmsCount(Context context, long timestamp, String messageBody) {
 
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("getUnreadSmsCount()");
 
         final String[] projection = new String[] { SMSMMS_ID, "body" };
@@ -1029,7 +986,7 @@ public class SmsPopupUtils {
                          * to our total count
                          */
                         if (!messageBody.equals(cursor.getString(1))) {
-                            if (Log.DEBUG)
+                            if (BuildConfig.DEBUG)
                                 Log.v("getUnreadSmsCount(): most recent message did not match body, adding 1 to count");
                             count++;
                         }
@@ -1048,7 +1005,7 @@ public class SmsPopupUtils {
             count = 1;
         }
 
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("getUnreadSmsCount(): unread count = " + count);
         return count;
     }
@@ -1078,7 +1035,7 @@ public class SmsPopupUtils {
                 cursor.close();
             }
         }
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("mms unread count = " + count);
         return count;
     }
@@ -1413,7 +1370,7 @@ public class SmsPopupUtils {
                         ||
                         SmsMessageSender.MESSAGING_COMPOSE_CLASS_NAME.equals(runningTaskComponent
                                 .getClassName())) {
-                    if (Log.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.v("User in messaging app - from running task");
                     return true;
                 }
@@ -1426,7 +1383,7 @@ public class SmsPopupUtils {
     /**
      * Enables or disables the main SMS receiver
      */
-    public static void enableSMSPopup(Context context, boolean enable) {
+    public static void enableSmsPopup(Context context, boolean enable) {
         PackageManager pm = context.getPackageManager();
         ComponentName cn = new ComponentName(context, SmsReceiver.class);
 
@@ -1437,30 +1394,19 @@ public class SmsPopupUtils {
         settings.commit();
 
         if (enable) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("SMSPopup receiver is enabled");
             pm.setComponentEnabledSetting(cn,
                     PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
                     PackageManager.DONT_KILL_APP);
 
-            // Send a broadcast to disable other SMS Popup apps
-            disableOtherSMSPopup(context);
-
         } else {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("SMSPopup receiver is disabled");
             pm.setComponentEnabledSetting(cn,
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
         }
-    }
-
-    public static void disableOtherSMSPopup(Context context) {
-        // Send a broadcast to disable SMS Popup Pro
-        Intent i = new Intent(ExternalEventReceiver.ACTION_SMSPOPUP_DISABLE);
-        i.setClassName("net.everythingandroid.smspopuppro",
-                "net.everythingandroid.smspopuppro.ExternalEventReceiver");
-        context.sendBroadcast(i);
     }
 
     /**

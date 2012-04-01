@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageKeyguard;
 import net.everythingandroid.smspopup.util.ManageWakeLock;
@@ -18,7 +19,7 @@ public class ClearAllReceiver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    if (Log.DEBUG) Log.v("ClearAllReceiver: onReceive()");
+    if (BuildConfig.DEBUG) Log.v("ClearAllReceiver: onReceive()");
     clearAll();
 
     // goToSleep() is not supported by the API at this time, this means
@@ -34,7 +35,7 @@ public class ClearAllReceiver extends BroadcastReceiver {
    * like "Reply" or "Inbox".
    */
   public static synchronized void clearAll(boolean reenableKeyguard) {
-    if (Log.DEBUG) Log.v("ClearAllReceiver: clearAll(" + reenableKeyguard + ")");
+    if (BuildConfig.DEBUG) Log.v("ClearAllReceiver: clearAll(" + reenableKeyguard + ")");
     if (reenableKeyguard) {
       ManageKeyguard.reenableKeyguard();
     }
@@ -63,7 +64,7 @@ public class ClearAllReceiver extends BroadcastReceiver {
    */
   public static synchronized void setCancel(Context context, int timeout) {
     removeCancel(context);
-    if (Log.DEBUG) Log.v("ClearAllReceiver: setCancel() for " + timeout + " seconds");
+    if (BuildConfig.DEBUG) Log.v("ClearAllReceiver: setCancel() for " + timeout + " seconds");
     AlarmManager myAM = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     myAM.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (timeout * 1000),
         getPendingIntent(context));
@@ -74,7 +75,7 @@ public class ClearAllReceiver extends BroadcastReceiver {
    * so the Activity can now react to whatever they are doing).
    */
   public static synchronized void removeCancel(Context context) {
-    if (Log.DEBUG) Log.v("ClearAllReceiver: removeCancel()");
+    if (BuildConfig.DEBUG) Log.v("ClearAllReceiver: removeCancel()");
     AlarmManager myAM = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     myAM.cancel(getPendingIntent(context));
   }

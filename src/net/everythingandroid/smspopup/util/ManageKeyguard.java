@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup.util;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.app.KeyguardManager.OnKeyguardExitResult;
@@ -23,7 +24,7 @@ public class ManageKeyguard {
         if (myKM.inKeyguardRestrictedInputMode()) {
             myKL = myKM.newKeyguardLock(Log.LOGTAG);
             myKL.disableKeyguard();
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("--Keyguard disabled");
         } else {
             myKL = null;
@@ -32,7 +33,7 @@ public class ManageKeyguard {
 
     public static synchronized boolean inKeyguardRestrictedInputMode() {
         if (myKM != null) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("--inKeyguardRestrictedInputMode = " + myKM.inKeyguardRestrictedInputMode());
             return myKM.inKeyguardRestrictedInputMode();
         }
@@ -44,7 +45,7 @@ public class ManageKeyguard {
             if (myKL != null) {
                 myKL.reenableKeyguard();
                 myKL = null;
-                if (Log.DEBUG)
+                if (BuildConfig.DEBUG)
                     Log.v("--Keyguard reenabled");
             }
         }
@@ -52,17 +53,17 @@ public class ManageKeyguard {
 
     public static synchronized void exitKeyguardSecurely(final LaunchOnKeyguardExit callback) {
         if (inKeyguardRestrictedInputMode()) {
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("--Trying to exit keyguard securely");
             myKM.exitKeyguardSecurely(new OnKeyguardExitResult() {
                 public void onKeyguardExitResult(boolean success) {
                     reenableKeyguard();
                     if (success) {
-                        if (Log.DEBUG)
+                        if (BuildConfig.DEBUG)
                             Log.v("--Keyguard exited securely");
                         callback.LaunchOnKeyguardExitSuccess();
                     } else {
-                        if (Log.DEBUG)
+                        if (BuildConfig.DEBUG)
                             Log.v("--Keyguard exit failed");
                     }
                 }

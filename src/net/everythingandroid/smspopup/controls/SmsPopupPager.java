@@ -2,18 +2,14 @@ package net.everythingandroid.smspopup.controls;
 
 import java.util.ArrayList;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.controls.SmsPopupView.OnReactToMessage;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.util.Log;
 import android.content.Context;
-import android.os.Parcelable;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -26,10 +22,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     private int currentPage;
     private MessageCountChanged messageCountChanged;
     private Context mContext;
-    private SmsPopupPagerAdapter mAdapter;
     private CirclePageIndicator mPagerIndicator;
-    private int privacyMode;
-    private OnReactToMessage mOnReactToMessage;
     private volatile boolean removingMessage = false;
     
     public static int STATUS_MESSAGES_REMAINING = 0;
@@ -49,15 +42,11 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     private void init(Context context) {
         mContext = context;
         messages = new ArrayList<SmsMmsMessage>(5);
-        mAdapter = new SmsPopupPagerAdapter();
-        setAdapter(mAdapter);
         currentPage = 0;
-        setOffscreenPageLimit(2);
-        setLongClickable(true);     
-    }
-
-    public void setOnReactToMessage(OnReactToMessage r) {
-        mOnReactToMessage = r;
+        setOffscreenPageLimit(1);
+        setLongClickable(true);
+        setPageMargin((int) context.getResources().getDimension(R.dimen.smspopup_pager_margin));
+        setLongClickable(true);
     }
 
     public int getPageCount() {
@@ -123,7 +112,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
                 }
                 
                 messages.remove(numMessage);
-                mAdapter.notifyDataSetChanged();
+                getAdapter().notifyDataSetChanged();
                 UpdateMessageCount();
                 removingMessage = false;
             }
@@ -182,7 +171,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         if (currentPage < (getPageCount() - 1)) {
             setCurrentItem(currentPage + 1);
         }
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("showNext() - " + currentPage + ", " + getActiveMessage().getContactName());
     }
 
@@ -190,7 +179,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         if (currentPage > 0) {
             setCurrentItem(currentPage - 1);
         }
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("showPrevious() - " + currentPage + ", " + getActiveMessage().getContactName());
     }
 
@@ -217,74 +206,11 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         currentPage = position;
     }
 
-    private class SmsPopupPagerAdapter extends PagerAdapter {
-        
-        @Override
-        public void finishUpdate(ViewGroup container) {
-            super.finishUpdate(container);
-        }
-
-        @Override
-        public void startUpdate(ViewGroup container) {
-            super.startUpdate(container);
-        }
-
-        @Override
-        public int getCount() {
-            return getPageCount();
-        }
-        
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {            
-            final SmsPopupView mView = 
-                    new SmsPopupView(mContext, messages.get(position), privacyMode);
-            mView.setOnReactToMessage(mOnReactToMessage);
-            ((ViewPager) container).addView(mView);            
-            return mView;
-        }
-        
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            ((ViewPager) container).removeView((SmsPopupView) object);
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == ((SmsPopupView) object);
-        }
-
-        @Override
-        public void restoreState(Parcelable state, ClassLoader loader) {}
-
-        @Override
-        public Parcelable saveState() {
-            return null;
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            int idx = messages.indexOf(object);
-            if (idx == -1) {
-                return PagerAdapter.POSITION_NONE;
-            }
-            return idx;
-        }
-
-    }
-
     public void setIndicator(CirclePageIndicator pagerIndicator) {
         if (pagerIndicator != null) {
             mPagerIndicator = pagerIndicator;
             mPagerIndicator.setOnPageChangeListener(this);
         }
-    }
-
-    public void setPrivacy(int mode) {
-        privacyMode = mode;
-        for (int i = 0; i < getChildCount(); i++) {
-            ((SmsPopupView) getChildAt(i)).setPrivacy(mode);
-        }
-        setLongClickable(privacyMode == SmsPopupView.PRIVACY_MODE_OFF);
     }
 
     /**
