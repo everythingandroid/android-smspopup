@@ -10,6 +10,9 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.MotionEvent;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -24,7 +27,9 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     private Context mContext;
     private CirclePageIndicator mPagerIndicator;
     private volatile boolean removingMessage = false;
-    
+    private GestureDetector mGestureDetector;
+    private SimpleOnGestureListener mOnGestureListener;
+
     public static int STATUS_MESSAGES_REMAINING = 0;
     public static int STATUS_NO_MESSAGES_REMAINING = 1;
     public static int STATUS_REMOVING_MESSAGE = 2;
@@ -44,7 +49,6 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         messages = new ArrayList<SmsMmsMessage>(5);
         currentPage = 0;
         setOffscreenPageLimit(1);
-        setLongClickable(true);
         setPageMargin((int) context.getResources().getDimension(R.dimen.smspopup_pager_margin));
         setLongClickable(true);
     }
@@ -53,9 +57,13 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         return messages.size();
     }
 
+    public void setGestureListener(SimpleOnGestureListener listener) {
+        mGestureDetector = new GestureDetector(mContext, listener);
+    }
+
     /**
      * Add a message and its view to the end of the list of messages.
-     * 
+     *
      * @param newMessage
      *            The message to add.
      */
@@ -66,7 +74,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
 
     /**
      * Add a list of new messages to the end of the current message list.
-     * 
+     *
      * @param newMessages
      *            The list of new messages to add.
      */
@@ -80,23 +88,23 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     /**
      * Remove a specific message from the list, if there is only one message left then it will not
      * be removed.
-     * 
+     *
      * @param numMessage
-     * @return One of STATUS_MESSAGES_REMAINING, STATUS_NO_MESSAGES_REMAINING or 
+     * @return One of STATUS_MESSAGES_REMAINING, STATUS_NO_MESSAGES_REMAINING or
      * STATUS_REMOVING_MESSAGE
      */
     public synchronized int removeMessage(final int numMessage) {
         if (removingMessage) {
             return STATUS_REMOVING_MESSAGE;
         }
-        
+
         final int totalMessages = getPageCount();
 
         if (totalMessages <= 1)
             return STATUS_NO_MESSAGES_REMAINING;
         if (numMessage >= totalMessages || numMessage < 0)
             return STATUS_NO_MESSAGES_REMAINING;
-        
+
         Animation mAnimation = AnimationUtils.loadAnimation(mContext, R.anim.shrink_fade_out_center);
         mAnimation.setAnimationListener(new AnimationListener() {
 
@@ -110,7 +118,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
                 if (numMessage < currentPage && currentPage != (totalMessages - 1)) {
                     currentPage--;
                 }
-                
+
                 messages.remove(numMessage);
                 getAdapter().notifyDataSetChanged();
                 UpdateMessageCount();
@@ -119,7 +127,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
 
             @Override
             public void onAnimationRepeat(Animation animation) {}
-            
+
         });
         startAnimation(mAnimation);
 
@@ -129,8 +137,8 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     /**
      * Remove the currently active message, if there is only one message left then it will not be
      * removed.
-     * 
-     * @return One of STATUS_MESSAGES_REMAINING, STATUS_NO_MESSAGES_REMAINING or 
+     *
+     * @return One of STATUS_MESSAGES_REMAINING, STATUS_NO_MESSAGES_REMAINING or
      * STATUS_REMOVING_MESSAGE
      */
     public int removeActiveMessage() {
@@ -139,13 +147,13 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
 
     /**
      * Return the currently active message.
-     * 
+     *
      * @return The currently visible message.
      */
     public synchronized SmsMmsMessage getActiveMessage() {
         return messages.get(currentPage);
     }
-    
+
     public synchronized int getActiveMessageNum() {
         return currentPage;
     }
@@ -188,10 +196,10 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
         super.setCurrentItem(num);
         currentPage = num;
     }
-    
+
     public void showLast() {
         setCurrentItem(getPageCount() - 1);
-    }    
+    }
 
     @Override
     public void onPageScrollStateChanged(int state) {}
@@ -215,7 +223,7 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
 
     /**
      * Check if the set of messages associated with this pager should send a notification.
-     * 
+     *
      * @return The message number that requires a notification or -1 if no notificaiton is needed.
      */
     public SmsMmsMessage shouldNotify() {
@@ -226,15 +234,27 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
                 return message;
             }
         }
-        
+
         return null;
     }
-    
+
     public ArrayList<SmsMmsMessage> getMessages() {
         return messages;
     }
-    
+
     public SmsMmsMessage getMessage(int i) {
         return messages.get(i);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        mGestureDetector.onTouchEvent(event);
+        return super.onInterceptTouchEvent(event);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        mGestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 }

@@ -7,8 +7,6 @@ import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.controls.FragmentStatePagerAdapter;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
-import net.everythingandroid.smspopup.controls.SmsPopupFragment;
-import net.everythingandroid.smspopup.controls.SmsPopupFragment.SmsPopupButtonsListener;
 import net.everythingandroid.smspopup.controls.SmsPopupPager;
 import net.everythingandroid.smspopup.controls.SmsPopupPager.MessageCountChanged;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
@@ -17,6 +15,7 @@ import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
 import net.everythingandroid.smspopup.receiver.ClearAllReceiver;
 import net.everythingandroid.smspopup.service.ReminderService;
 import net.everythingandroid.smspopup.service.SmsPopupUtilsService;
+import net.everythingandroid.smspopup.ui.SmsPopupFragment.SmsPopupButtonsListener;
 import net.everythingandroid.smspopup.util.Eula;
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageKeyguard;
@@ -39,7 +38,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.graphics.Bitmap;
@@ -58,10 +56,12 @@ import android.support.v4.util.LruCache;
 import android.support.v4.view.PagerAdapter;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -73,7 +73,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -101,11 +100,11 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
     private boolean inbox = false;
     private int privacyMode;
     private boolean privacyAlways = false;
-    private boolean useUnlockButton = false;
+    private boolean showUnlockButton = false;
+    private boolean showButtons = true;
     private String signatureText;
     private boolean hasNotified = false;
 
-    private static final double WIDTH = 0.9;
     private static final int DIALOG_DELETE = Menu.FIRST;
     private static final int DIALOG_QUICKREPLY = Menu.FIRST + 1;
     private static final int DIALOG_PRESET_MSG = Menu.FIRST + 2;
@@ -120,21 +119,18 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
     private static final int CONTEXT_VIEWCONTACT_ID = Menu.FIRST + 6;
 
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 8888;
-    
-    private static final int BITMAP_CACHE_SIZE = 8;
 
-    private static final int BUTTON_SWITCHER_MAIN_BUTTONS = 0;
-    private static final int BUTTON_SWITCHER_UNLOCK_BUTTON = 1;
+    private static final int BITMAP_CACHE_SIZE = 8;
 
     private TextView quickreplyTextView;
     private SmsMmsMessage quickReplySmsMessage;
 
     private Cursor mCursor = null;
-    
+
     private int[] buttonTypes;
 
     private TextToSpeech androidTts = null;
-	
+
 
     /*
      * *****************************************************************************
@@ -144,7 +140,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
 	@Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.popup);
 
@@ -156,13 +152,13 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         } else { // this activity was recreated after being destroyed
             initializeMessagesAndWake(bundle);
         }
-        
+
         Eula.show(this);
     }
 
     /*
      * *****************************************************************************
-     * Setup methods - these will mostly be run one time only 
+     * Setup methods - these will mostly be run one time only
      * *****************************************************************************
      */
 
@@ -184,7 +180,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
                 Defaults.PREFS_PRIVACY_SENDER);
         privacyAlways = mPrefs.getBoolean(getString(R.string.pref_privacy_always_key),
                 Defaults.PREFS_PRIVACY_ALWAYS);
-        
+
         if (privacySender && privacyMessage) {
             privacyMode = SmsPopupFragment.PRIVACY_MODE_HIDE_ALL;
         } else if (privacyMessage) {
@@ -192,8 +188,8 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         } else {
             privacyMode = SmsPopupFragment.PRIVACY_MODE_OFF;
         }
-        
-        useUnlockButton = mPrefs.getBoolean(
+
+        showUnlockButton = mPrefs.getBoolean(
                 getString(R.string.pref_useUnlockButton_key), Defaults.PREFS_USE_UNLOCK_BUTTON);
 
         // Fetch quick reply signature
@@ -211,40 +207,24 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         pagerIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
         pagerIndicator.setViewPager(smsPopupPager);
         smsPopupPager.setIndicator(pagerIndicator);
-        
-        RetainFragment mRetainFragment = 
+        smsPopupPager.setGestureListener(new SimpleOnGestureListener() {
+            @Override
+            public void onLongPress(MotionEvent e) {
+                smsPopupPager.showContextMenu();
+            }
+        });
+        registerForContextMenu(smsPopupPager);
+
+        RetainFragment mRetainFragment =
         		RetainFragment.findOrCreateRetainFragment(getSupportFragmentManager());
-        
+
         mBitmapCache = (LruCache<Uri, Bitmap>) mRetainFragment.getObject();
-        
+
         // Init cache
         if (mBitmapCache == null) {
             mBitmapCache = new LruCache<Uri, Bitmap>(BITMAP_CACHE_SIZE);
             mRetainFragment.setObject(mBitmapCache);
         }
-        
-//        mainLayout = (RelativeLayout) findViewById(R.id.MainLayout);
-//        buttonSwitcher = (ViewSwitcher) findViewById(R.id.ButtonViewSwitcher);
-
-        // Set privacy mode
-//        smsPopupPager.setPrivacy(privacyMode);
-        
-//        final Button unlockButton = (Button) findViewById(R.id.unlockButton);
-//        
-//        // If on ICS+ set button to fill_parent (this is set to wrap_content by default). This
-//        // matches better visually with ICS dialog buttons.
-//        if (SmsPopupUtils.isICS()) {
-//            final ViewGroup.LayoutParams unlockLayoutParams = unlockButton.getLayoutParams();
-//            unlockLayoutParams.width = LayoutParams.FILL_PARENT;
-//            unlockButton.setLayoutParams(unlockLayoutParams);
-//        }
-//        
-//        unlockButton.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                viewMessage();
-//            }
-//        });
 
         smsPopupPager.setOnMessageCountChanged(new MessageCountChanged() {
 
@@ -255,7 +235,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
                 } else if (total >= 2) {
                     pagerIndicator.setVisibility(View.VISIBLE);
                 }
-                
+
                 if (hasNotified) {
                     ManageNotification.update(SmsPopupActivity.this,
                             smsPopupPager.getMessage(current), total);
@@ -266,10 +246,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         // See if user wants to show buttons on the popup
         if (!mPrefs.getBoolean(getString(R.string.pref_show_buttons_key),
                 Defaults.PREFS_SHOW_BUTTONS)) {
-
-            // Hide button layout
-//            buttonSwitcher.setVisibility(View.GONE);
-
+            showButtons = false;
         } else {
 
         	buttonTypes = new int[] {
@@ -292,7 +269,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
 
     /**
      * Setup messages within the popup given an intent bundle
-     * 
+     *
      * @param b
      *            the incoming intent bundle
      * @param newIntent
@@ -304,20 +281,20 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         SmsMmsMessage message = new SmsMmsMessage(getApplicationContext(), b);
 
         if (newIntent) {
-            smsPopupPager.addMessage(message);   
+            smsPopupPager.addMessage(message);
             wakeApp();
         } else {
             if (message != null) {
                 new LoadUnreadMessagesAsyncTask().execute(message);
             }
-        }        
+        }
     }
-    
-    private class LoadUnreadMessagesAsyncTask extends AsyncTask<SmsMmsMessage, 
+
+    private class LoadUnreadMessagesAsyncTask extends AsyncTask<SmsMmsMessage,
             Void, ArrayList<SmsMmsMessage>> {
-        
+
         ProgressBar mProgressBar;
-                
+
         @Override
         protected void onPreExecute() {
             mProgressBar = (ProgressBar) findViewById(R.id.progress);
@@ -329,16 +306,16 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         protected ArrayList<SmsMmsMessage> doInBackground(SmsMmsMessage... arg) {
             ArrayList<SmsMmsMessage> messages = SmsPopupUtils.getUnreadMessages(
                     SmsPopupActivity.this, arg[0].getMessageId());
-            
+
             if (messages == null) {
                 messages = new ArrayList<SmsMmsMessage>(1);
             }
-            
+
             messages.add(arg[0]);
-                        
+
             return messages;
         }
-        
+
         @Override
         protected void onPostExecute(ArrayList<SmsMmsMessage> result) {
             disablePopupButtons(true);
@@ -348,51 +325,32 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
             wakeApp();
         }
     }
-    
+
     private void disablePopupButtons(boolean enabled) {
 //        findViewById(R.id.button1).setEnabled(enabled);
 //        findViewById(R.id.button2).setEnabled(enabled);
 //        findViewById(R.id.button3).setEnabled(enabled);
 //        findViewById(R.id.unlockButton).setEnabled(enabled);
     }
-    
+
     /*
      * *****************************************************************************
      * Methods that will be called several times throughout the life of the activity
      * *****************************************************************************
      */
     private void refreshViews() {
-        
-//        final int currentView = buttonSwitcher.getDisplayedChild();
-
         ManageKeyguard.initialize(this);
-        if (ManageKeyguard.inKeyguardRestrictedInputMode()) {
-            
-            if (useUnlockButton) {
-//                if (currentView != BUTTON_SWITCHER_UNLOCK_BUTTON) { 
-//                    // Show unlock button
-//                    buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_UNLOCK_BUTTON);
-//                }
-                // Disable long-press context menu
-                unregisterForContextMenu(smsPopupPager);
-            }
-            
-            
-
+        if ((ManageKeyguard.inKeyguardRestrictedInputMode() && showUnlockButton)
+                || privacyMode != SmsPopupFragment.PRIVACY_MODE_OFF) {
+            unregisterForContextMenu(smsPopupPager);
         } else {
-            
-//            if (currentView != BUTTON_SWITCHER_MAIN_BUTTONS) {
-//                // Show main popup buttons
-//                buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_MAIN_BUTTONS);
-//            }
-
+            showUnlockButton = false;
             // Enable long-press context menu
             registerForContextMenu(smsPopupPager);
-
-            if (!privacyAlways) {
-                // Now keyguard is off, disable privacy mode
-                setPrivacy(SmsPopupFragment.PRIVACY_MODE_OFF);
-            }
+//            if (!privacyAlways) {
+//                // Now keyguard is off, disable privacy mode
+//                setPrivacy(SmsPopupFragment.PRIVACY_MODE_OFF);
+//            }
         }
     }
 
@@ -409,7 +367,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
 
     /**
      * Wake up the activity, this will acquire the wakelock (turn on the screen) and sound the
-     * notification if needed. This is called once all preparation is done for this activity (end 
+     * notification if needed. This is called once all preparation is done for this activity (end
      * of onCreate()).
      */
     private void wakeApp() {
@@ -422,16 +380,16 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         inbox = false;
 
         SmsMmsMessage notifyMessage = smsPopupPager.shouldNotify();
-        
+
         // See if a notification is needed for this set of messages
         if (notifyMessage != null) {
-                       
+
             // Schedule a reminder notification
             ReminderService.scheduleReminder(this, notifyMessage);
 
             // Run the notification
             ManageNotification.show(this, notifyMessage, smsPopupPager.getPageCount());
-            
+
             hasNotified = true;
         }
     }
@@ -486,7 +444,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         super.onNewIntent(intent);
         if (BuildConfig.DEBUG)
             Log.v("SMSPopupActivity: onNewIntent()");
-        
+
         hasNotified = false;
 
         // Update intent held by activity
@@ -589,11 +547,11 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
             LayoutInflater factory = getLayoutInflater();
             final View qrLayout = factory.inflate(R.layout.message_quick_reply, null);
             qrEditText = (EditText) qrLayout.findViewById(R.id.QuickReplyEditText);
-            final TextView qrCounterTextView = 
+            final TextView qrCounterTextView =
                     (TextView) qrLayout.findViewById(R.id.QuickReplyCounterTextView);
             final Button qrSendButton = (Button) qrLayout.findViewById(R.id.send_button);
 
-            final ImageButton voiceRecognitionButton = 
+            final ImageButton voiceRecognitionButton =
                     (ImageButton) qrLayout.findViewById(R.id.SpeechRecogButton);
 
             voiceRecognitionButton.setOnClickListener(new OnClickListener() {
@@ -609,7 +567,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
                     List<ResolveInfo> list = packageManager.queryIntentActivities(intent, 0);
 
                     if (list.size() > 0) {
-                        // TODO: really should allow voice input here without unlocking first 
+                        // TODO: really should allow voice input here without unlocking first
                         // (quick replies without unlock are OK anyway)
                         exitingKeyguardSecurely = true;
                         ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
@@ -683,8 +641,8 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
 
             // Set the custom layout with no spacing at the bottom
             qrAlertDialog.setView(qrLayout, 0, SmsPopupUtils.pixelsToDip(getResources(), 5), 0, 0);
-            
-            qrAlertDialog.setOnCancelListener(new OnCancelListener() { 
+
+            qrAlertDialog.setOnCancelListener(new OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
                     removeDialog(DIALOG_QUICKREPLY);
@@ -752,7 +710,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
             AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_email)
                     .setTitle(R.string.pref_message_presets_title);
-            
+
             // If user has some presets defined ...
             if (mCursor != null && mCursor.getCount() > 0) {
 
@@ -813,7 +771,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
             final LayoutParams mLP = dialog.getWindow().getAttributes();
 
             // TODO: this should be limited in case the screen is large
-            mLP.width = LayoutParams.FILL_PARENT;            
+            mLP.width = LayoutParams.MATCH_PARENT;
             dialog.getWindow().setAttributes(mLP);
             break;
 
@@ -862,12 +820,12 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         // Save values from most recent bundle (ie. most recent message)
 //        outState.putAll(bundle);
     }
-    
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (BuildConfig.DEBUG)
-            Log.v("SMSPopupActivity: onRestoreInstanceState()");        
+            Log.v("SMSPopupActivity: onRestoreInstanceState()");
     }
 
     @Override
@@ -1011,11 +969,11 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
     private void replyToMessage(SmsMmsMessage message) {
         replyToMessage(message, true);
     }
-        
+
     private void replyToMessage(boolean replyToThread) {
         replyToMessage(smsPopupPager.getActiveMessage(), replyToThread);
     }
-    
+
     private void replyToMessage() {
         replyToMessage(smsPopupPager.getActiveMessage());
     }
@@ -1024,7 +982,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
      * View the private message (this basically just unlocks the keyguard and then updates the
      * privacy of the messages).
      */
-    private void viewMessage() {
+    private void unlockScreen() {
         exitingKeyguardSecurely = true;
         ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
             @Override
@@ -1032,9 +990,11 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
                 smsPopupPager.post(new Runnable() {
                     @Override
                     public void run() {
+                        refreshViews();
                         setPrivacy(SmsPopupFragment.PRIVACY_MODE_OFF);
-                    }  
-                });  
+                        smsPopupPagerAdapter.unlockScreen();
+                    }
+                });
             }
         });
     }
@@ -1059,7 +1019,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
      * Delete the current message from the system database
      */
     private void deleteMessage() {
-        Intent i = new Intent(SmsPopupActivity.this.getApplicationContext(), 
+        Intent i = new Intent(SmsPopupActivity.this.getApplicationContext(),
                 SmsPopupUtilsService.class);
         i.setAction(SmsPopupUtilsService.ACTION_DELETE_MESSAGE);
         i.putExtras(smsPopupPager.getActiveMessage().toBundle());
@@ -1083,7 +1043,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
                     Log.v("Sending message to " + quickReplySmsMessage.getContactName());
                 WakefulIntentService.sendWakefulWork(getApplicationContext(), i);
                 Toast.makeText(this, R.string.quickreply_sending_toast, Toast.LENGTH_LONG).show();
-                dismissDialog(DIALOG_QUICKREPLY);                
+                dismissDialog(DIALOG_QUICKREPLY);
                 removeActiveMessage();
             } else {
                 Toast.makeText(this, R.string.quickreply_nomessage_toast, Toast.LENGTH_LONG).show();
@@ -1156,7 +1116,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
     /**
      * Removes the active message
      */
-    private void removeActiveMessage() {        
+    private void removeActiveMessage() {
         final int status = smsPopupPager.removeActiveMessage();
         if (status == SmsPopupPager.STATUS_NO_MESSAGES_REMAINING)  {
             myFinish();
@@ -1165,7 +1125,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
 
     /*
      * *****************************************************************************
-     * Misc methods 
+     * Misc methods
      * *****************************************************************************
      */
 
@@ -1194,7 +1154,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         inputManager.hideSoftInputFromWindow(inputView.getApplicationWindowToken(), 0);
         inputView = null;
     }
-    
+
     private class SmsPopupPagerAdapter extends FragmentStatePagerAdapter {
 
         public SmsPopupPagerAdapter(FragmentManager fm) {
@@ -1205,11 +1165,12 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         public int getCount() {
             return smsPopupPager.getPageCount();
         }
-		
+
 		@Override
 		public Fragment getItem(int position) {
 			return SmsPopupFragment.newInstance(
-					smsPopupPager.getMessage(position), buttonTypes, privacyMode);
+					smsPopupPager.getMessage(position), buttonTypes, privacyMode,
+					showUnlockButton, showButtons);
 		}
 
         public void setPrivacy(int privacyMode) {
@@ -1218,6 +1179,14 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         			((SmsPopupFragment) mFragments.get(i)).setPrivacy(privacyMode);
         		}
         	}
+        }
+
+        public void unlockScreen() {
+            for (int i=0; i<mFragments.size(); i++) {
+                if (mFragments.get(i) != null) {
+                    ((SmsPopupFragment) mFragments.get(i)).setShowUnlockButton(false);
+                }
+            }
         }
 
         @Override
@@ -1229,10 +1198,11 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
             return idx;
         }
     }
-    
+
     private void setPrivacy(int mode) {
     	privacyMode = mode;
     	smsPopupPagerAdapter.setPrivacy(privacyMode);
+    	refreshViews();
     }
 
 	@Override
@@ -1271,9 +1241,12 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         case SmsPopupFragment.BUTTON_VIEW_MMS:
         	replyToMessage();
         	break;
+        case SmsPopupFragment.BUTTON_UNLOCK:
+            unlockScreen();
+            break;
         }
 	}
-	
+
 	@Override
 	public LruCache<Uri, Bitmap> getCache() {
 		return mBitmapCache;

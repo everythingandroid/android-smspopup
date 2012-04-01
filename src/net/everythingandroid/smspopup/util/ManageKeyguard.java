@@ -8,7 +8,7 @@ import android.content.Context;
 
 public class ManageKeyguard {
     private static KeyguardManager myKM = null;
-    private static KeyguardLock myKL = null;
+    private static KeyguardLock myKL = null; // TODO: change to FLAG_DISMISS_KEYGUARD/FLAG_SHOW_WHEN_LOCKED 
 
     public static synchronized void initialize(Context context) {
         if (myKM == null) {
