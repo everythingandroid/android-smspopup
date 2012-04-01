@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageNotification;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
@@ -27,7 +28,7 @@ public class SmsMonitorService extends Service {
     public void onCreate() {
         super.onCreate();
         context = this.getApplicationContext();
-        if (Log.DEBUG) Log.v("SmsMonitorService created");
+        if (BuildConfig.DEBUG) Log.v("SmsMonitorService created");
         registerSMSObserver();
     }
 
@@ -55,7 +56,7 @@ public class SmsMonitorService extends Service {
             observerSMS = new SmsContentObserver(new Handler());
             crSMS = getContentResolver();
             crSMS.registerContentObserver(uriSMS, true, observerSMS);
-            if (Log.DEBUG) Log.v("SMS Observer registered.");
+            if (BuildConfig.DEBUG) Log.v("SMS Observer registered.");
         }
     }
 
@@ -69,7 +70,7 @@ public class SmsMonitorService extends Service {
         if (observerSMS != null) {
             observerSMS = null;
         }
-        if (Log.DEBUG) Log.v("Unregistered SMS Observer");
+        if (BuildConfig.DEBUG) Log.v("Unregistered SMS Observer");
     }
 
     private class SmsContentObserver extends ContentObserver {
@@ -83,7 +84,7 @@ public class SmsMonitorService extends Service {
             // Cursor c = context.getContentResolver().query(SMS_CONTENT_URI,
             // null, "read = 0", null, null);
             int count = SmsPopupUtils.getUnreadMessagesCount(context);
-            if (Log.DEBUG) Log.v("getUnreadCount = " + count);
+            if (BuildConfig.DEBUG) Log.v("getUnreadCount = " + count);
             if (count == 0) {
                 ManageNotification.clearAll(context);
                 finishStartingService(SmsMonitorService.this);
@@ -98,7 +99,7 @@ public class SmsMonitorService extends Service {
      * Start the service to process that will run the content observer
      */
     public static void beginStartingService(Context context) {
-        if (Log.DEBUG) Log.v("SmsMonitorService: beginStartingService()");
+        if (BuildConfig.DEBUG) Log.v("SmsMonitorService: beginStartingService()");
         context.startService(new Intent(context, SmsMonitorService.class));
     }
 
@@ -107,7 +108,7 @@ public class SmsMonitorService extends Service {
      * releasing the wake lock if the service is now stopping.
      */
     public static void finishStartingService(Service service) {
-        if (Log.DEBUG) Log.v("SmsMonitorService: finishStartingService()");
+        if (BuildConfig.DEBUG) Log.v("SmsMonitorService: finishStartingService()");
         service.stopSelf();
     }
 

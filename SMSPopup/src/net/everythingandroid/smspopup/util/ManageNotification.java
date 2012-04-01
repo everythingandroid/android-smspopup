@@ -2,6 +2,7 @@ package net.everythingandroid.smspopup.util;
 
 import java.util.ArrayList;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
@@ -117,7 +118,7 @@ public class ManageNotification {
             // Seems this is needed for the number value to take effect on the Notification
             myNM.cancel(notif);
 
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("*** Notify running ***");
             myNM.notify(notif, notification);
         }
@@ -342,7 +343,7 @@ public class ManageNotification {
                         defaultRingtone,
                         ContactNotifications.RINGTONE));
 
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("Sounds URI = " + notifSoundUri.toString());
 
         // Fetch privacy settings
@@ -480,7 +481,7 @@ public class ManageNotification {
                     }
 
                 } catch (IllegalStateException e) {
-                    if (Log.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.v("MediaPlayer, IllegalStateException - " + e);
                 }
             }

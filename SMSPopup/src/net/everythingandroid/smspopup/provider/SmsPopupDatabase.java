@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup.provider;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
 import net.everythingandroid.smspopup.util.Log;
@@ -62,7 +63,7 @@ public class SmsPopupDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        if (Log.DEBUG) Log.v("SmsPopupDatabase: Creating Database");
+        if (BuildConfig.DEBUG) Log.v("SmsPopupDatabase: Creating Database");
         db.execSQL(CONTACTS_DB_CREATE);
         db.execSQL(CONTACTS_DB_INDEX_CREATE);
         db.execSQL(QUICKMESSAGES_DB_CREATE);
@@ -70,7 +71,7 @@ public class SmsPopupDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (Log.DEBUG) Log.v("SmsPopupDatabase: Upgrading Database");
+        if (BuildConfig.DEBUG) Log.v("SmsPopupDatabase: Upgrading Database");
         db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_DB_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + QUICKMESSAGES_DB_TABLE);
         onCreate(db);

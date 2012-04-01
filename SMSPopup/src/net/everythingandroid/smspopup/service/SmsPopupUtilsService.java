@@ -1,5 +1,6 @@
 package net.everythingandroid.smspopup.service;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.util.Log;
@@ -47,32 +48,32 @@ public class SmsPopupUtilsService extends WakefulIntentService {
      */
     @Override
     protected void doWakefulWork(Intent intent) {
-        if (Log.DEBUG) Log.v("SMSPopupUtilsService: doWakefulWork()");
+        if (BuildConfig.DEBUG) Log.v("SMSPopupUtilsService: doWakefulWork()");
 
         final String action = intent.getAction();
 
         if (ACTION_MARK_THREAD_READ.equals(action)) {
-            if (Log.DEBUG) Log.v("SMSPopupUtilsService: Marking thread read");
+            if (BuildConfig.DEBUG) Log.v("SMSPopupUtilsService: Marking thread read");
             SmsMmsMessage message = new SmsMmsMessage(this, intent.getExtras());
             message.setThreadRead();
         } else if (ACTION_MARK_MESSAGE_READ.equals(action)) {
-            if (Log.DEBUG) Log.v("SMSPopupUtilsService: Marking message read");
+            if (BuildConfig.DEBUG) Log.v("SMSPopupUtilsService: Marking message read");
             SmsMmsMessage message = new SmsMmsMessage(this, intent.getExtras());
             message.setMessageRead();
         } else if (ACTION_DELETE_MESSAGE.equals(action)) {
-            if (Log.DEBUG) Log.v("SMSPopupUtilsService: Deleting message");
+            if (BuildConfig.DEBUG) Log.v("SMSPopupUtilsService: Deleting message");
             SmsMmsMessage message = new SmsMmsMessage(this, intent.getExtras());
             message.delete();
         } else if (ACTION_QUICKREPLY.equals(action)) {
-            if (Log.DEBUG) Log.v("SMSPopupUtilsService: Quick Reply to message");
+            if (BuildConfig.DEBUG) Log.v("SMSPopupUtilsService: Quick Reply to message");
             SmsMmsMessage message = new SmsMmsMessage(this, intent.getExtras());
             // message.setThreadRead();
             message.replyToMessage(intent.getStringExtra(SmsMmsMessage.EXTRAS_QUICKREPLY));
         } else if (ACTION_UPDATE_NOTIFICATION.equals(action)) {
-            if (Log.DEBUG) Log.v("SMSPopupUtilsService: Updating notification");
+            if (BuildConfig.DEBUG) Log.v("SMSPopupUtilsService: Updating notification");
             updateNotification(intent);
         } else if (ACTION_SYNC_CONTACT_NAMES.equals(action)) {
-        	if (Log.DEBUG) Log.v("SMSPopupUtilsService: Sync'ing contact names");
+        	if (BuildConfig.DEBUG) Log.v("SMSPopupUtilsService: Sync'ing contact names");
         	syncContactNames(this);
         	
         }
@@ -135,7 +136,7 @@ public class SmsPopupUtilsService extends WakefulIntentService {
         	cursor.close();
         }
         
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
         	Log.v("Sync Contacts: " + updatedCount + " / " + count);
         
         return updatedCount;

@@ -3,12 +3,14 @@ package net.everythingandroid.smspopup.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.controls.FragmentStatePagerAdapter;
 import net.everythingandroid.smspopup.controls.QmTextWatcher;
+import net.everythingandroid.smspopup.controls.SmsPopupFragment;
+import net.everythingandroid.smspopup.controls.SmsPopupFragment.SmsPopupButtonsListener;
 import net.everythingandroid.smspopup.controls.SmsPopupPager;
 import net.everythingandroid.smspopup.controls.SmsPopupPager.MessageCountChanged;
-import net.everythingandroid.smspopup.controls.SmsPopupView;
-import net.everythingandroid.smspopup.controls.SmsPopupView.OnReactToMessage;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
@@ -22,8 +24,8 @@ import net.everythingandroid.smspopup.util.ManageKeyguard.LaunchOnKeyguardExit;
 import net.everythingandroid.smspopup.util.ManageNotification;
 import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
 import net.everythingandroid.smspopup.util.ManageWakeLock;
+import net.everythingandroid.smspopup.util.RetainFragment;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -37,8 +39,10 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -47,16 +51,19 @@ import android.provider.ContactsContract;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.util.LruCache;
+import android.support.v4.view.PagerAdapter;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -65,30 +72,29 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
-import android.widget.ViewSwitcher;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.viewpagerindicator.CirclePageIndicator;
 
-public class SmsPopupActivity extends Activity {
+public class SmsPopupActivity extends FragmentActivity implements SmsPopupButtonsListener {
 
     private boolean exitingKeyguardSecurely = false;
     private SharedPreferences mPrefs;
-    private InputMethodManager inputManager = null;
-    private View inputView = null;
+    private InputMethodManager inputManager;
+    private View inputView;
 
-    private EditText qrEditText = null;
-    private ProgressDialog mProgressDialog = null;
+    private EditText qrEditText;
+    private ProgressDialog mProgressDialog;
 
-    private LinearLayout mainLayout = null;
-    private ViewSwitcher buttonSwitcher = null;
-    private SmsPopupPager smsPopupPager = null;
-    private CirclePageIndicator pagerIndicator = null;
+    private SmsPopupPager smsPopupPager;
+    private SmsPopupPagerAdapter smsPopupPagerAdapter;
+    private CirclePageIndicator pagerIndicator;
+    private LruCache<Uri, Bitmap> mBitmapCache = null;
 
     private boolean wasVisible = false;
     private boolean replying = false;
@@ -100,7 +106,6 @@ public class SmsPopupActivity extends Activity {
     private boolean hasNotified = false;
 
     private static final double WIDTH = 0.9;
-    private static final int MAX_WIDTH = 640;
     private static final int DIALOG_DELETE = Menu.FIRST;
     private static final int DIALOG_QUICKREPLY = Menu.FIRST + 1;
     private static final int DIALOG_PRESET_MSG = Menu.FIRST + 2;
@@ -115,6 +120,8 @@ public class SmsPopupActivity extends Activity {
     private static final int CONTEXT_VIEWCONTACT_ID = Menu.FIRST + 6;
 
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 8888;
+    
+    private static final int BITMAP_CACHE_SIZE = 8;
 
     private static final int BUTTON_SWITCHER_MAIN_BUTTONS = 0;
     private static final int BUTTON_SWITCHER_UNLOCK_BUTTON = 1;
@@ -123,15 +130,18 @@ public class SmsPopupActivity extends Activity {
     private SmsMmsMessage quickReplySmsMessage;
 
     private Cursor mCursor = null;
+    
+    private int[] buttonTypes;
 
     private TextToSpeech androidTts = null;
+	
 
     /*
      * *****************************************************************************
      * Main onCreate override
      * *****************************************************************************
      */
-    @Override
+	@Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         
@@ -146,7 +156,7 @@ public class SmsPopupActivity extends Activity {
         } else { // this activity was recreated after being destroyed
             initializeMessagesAndWake(bundle);
         }
-
+        
         Eula.show(this);
     }
 
@@ -176,11 +186,11 @@ public class SmsPopupActivity extends Activity {
                 Defaults.PREFS_PRIVACY_ALWAYS);
         
         if (privacySender && privacyMessage) {
-            privacyMode = SmsPopupView.PRIVACY_MODE_HIDE_ALL;
+            privacyMode = SmsPopupFragment.PRIVACY_MODE_HIDE_ALL;
         } else if (privacyMessage) {
-            privacyMode = SmsPopupView.PRIVACY_MODE_HIDE_MESSAGE;
+            privacyMode = SmsPopupFragment.PRIVACY_MODE_HIDE_MESSAGE;
         } else {
-            privacyMode = SmsPopupView.PRIVACY_MODE_OFF;
+            privacyMode = SmsPopupFragment.PRIVACY_MODE_OFF;
         }
         
         useUnlockButton = mPrefs.getBoolean(
@@ -196,45 +206,45 @@ public class SmsPopupActivity extends Activity {
 
         // Find main views
         smsPopupPager = (SmsPopupPager) findViewById(R.id.SmsPopupPager);
+        smsPopupPagerAdapter = new SmsPopupPagerAdapter(getSupportFragmentManager());
+        smsPopupPager.setAdapter(smsPopupPagerAdapter);
         pagerIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
         pagerIndicator.setViewPager(smsPopupPager);
         smsPopupPager.setIndicator(pagerIndicator);
-        mainLayout = (LinearLayout) findViewById(R.id.MainLayout);
-        buttonSwitcher = (ViewSwitcher) findViewById(R.id.ButtonViewSwitcher);
-
-        // Set privacy mode
-        smsPopupPager.setPrivacy(privacyMode);
         
-        smsPopupPager.setOnReactToMessage(new OnReactToMessage() {
-
-            @Override
-            public void onViewMessage(SmsMmsMessage message) {
-                viewMessage();
-            }
-
-            @Override
-            public void onReplyToMessage(SmsMmsMessage message) {
-                replyToMessage(message);
-            }
-            
-        });
-
-        final Button unlockButton = (Button) findViewById(R.id.unlockButton);
+        RetainFragment mRetainFragment = 
+        		RetainFragment.findOrCreateRetainFragment(getSupportFragmentManager());
         
-        // If on ICS+ set button to fill_parent (this is set to wrap_content by default). This
-        // matches better visually with ICS dialog buttons.
-        if (SmsPopupUtils.isICS()) {
-            final ViewGroup.LayoutParams unlockLayoutParams = unlockButton.getLayoutParams();
-            unlockLayoutParams.width = LayoutParams.FILL_PARENT;
-            unlockButton.setLayoutParams(unlockLayoutParams);
+        mBitmapCache = (LruCache<Uri, Bitmap>) mRetainFragment.getObject();
+        
+        // Init cache
+        if (mBitmapCache == null) {
+            mBitmapCache = new LruCache<Uri, Bitmap>(BITMAP_CACHE_SIZE);
+            mRetainFragment.setObject(mBitmapCache);
         }
         
-        unlockButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewMessage();
-            }
-        });
+//        mainLayout = (RelativeLayout) findViewById(R.id.MainLayout);
+//        buttonSwitcher = (ViewSwitcher) findViewById(R.id.ButtonViewSwitcher);
+
+        // Set privacy mode
+//        smsPopupPager.setPrivacy(privacyMode);
+        
+//        final Button unlockButton = (Button) findViewById(R.id.unlockButton);
+//        
+//        // If on ICS+ set button to fill_parent (this is set to wrap_content by default). This
+//        // matches better visually with ICS dialog buttons.
+//        if (SmsPopupUtils.isICS()) {
+//            final ViewGroup.LayoutParams unlockLayoutParams = unlockButton.getLayoutParams();
+//            unlockLayoutParams.width = LayoutParams.FILL_PARENT;
+//            unlockButton.setLayoutParams(unlockLayoutParams);
+//        }
+//        
+//        unlockButton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                viewMessage();
+//            }
+//        });
 
         smsPopupPager.setOnMessageCountChanged(new MessageCountChanged() {
 
@@ -258,58 +268,18 @@ public class SmsPopupActivity extends Activity {
                 Defaults.PREFS_SHOW_BUTTONS)) {
 
             // Hide button layout
-            buttonSwitcher.setVisibility(View.GONE);
+//            buttonSwitcher.setVisibility(View.GONE);
 
         } else {
 
-            // Button 1
-            final Button button1 = (Button) findViewById(R.id.button1);
-            PopupButton button1Vals = new PopupButton(getApplicationContext(), 
-            		Integer.parseInt(mPrefs.getString(getString(R.string.pref_button1_key), 
-            				Defaults.PREFS_BUTTON1)));
-            button1.setOnClickListener(button1Vals);
-            button1.setText(button1Vals.buttonText);
-            button1.setVisibility(button1Vals.buttonVisibility);
-
-            // Button 2
-            final Button button2 = (Button) findViewById(R.id.button2);
-            PopupButton button2Vals = new PopupButton(getApplicationContext(), 
-            		Integer.parseInt(mPrefs.getString(getString(R.string.pref_button2_key),
-            				Defaults.PREFS_BUTTON2)));
-            button2.setOnClickListener(button2Vals);
-            button2.setText(button2Vals.buttonText);
-            button2.setVisibility(button2Vals.buttonVisibility);
-
-            // Button 3
-            final Button button3 = (Button) findViewById(R.id.button3);
-            PopupButton button3Vals = new PopupButton(getApplicationContext(), 
-            		Integer.parseInt(mPrefs.getString(getString(R.string.pref_button3_key), 
-            				Defaults.PREFS_BUTTON3)));
-            button3.setOnClickListener(button3Vals);
-            button3.setText(button3Vals.buttonText);
-            button3.setVisibility(button3Vals.buttonVisibility);
-
-            /*
-             * This is really hacky. There are two types of reply buttons (quick reply and reply).
-             * If the user has selected to show both the replies then the text on the buttons 
-             * should be different. If they only use one then the text can just be "Reply".
-             */
-            int numReplyButtons = 0;
-            if (button1Vals.isReplyButton)
-                numReplyButtons++;
-            if (button2Vals.isReplyButton)
-                numReplyButtons++;
-            if (button3Vals.isReplyButton)
-                numReplyButtons++;
-
-            if (numReplyButtons == 1) {
-                if (button1Vals.isReplyButton)
-                    button1.setText(R.string.button_reply);
-                if (button2Vals.isReplyButton)
-                    button2.setText(R.string.button_reply);
-                if (button3Vals.isReplyButton)
-                    button3.setText(R.string.button_reply);
-            }
+        	buttonTypes = new int[] {
+        			Integer.parseInt(mPrefs.getString(
+        					getString(R.string.pref_button1_key), Defaults.PREFS_BUTTON1)),
+        			Integer.parseInt(mPrefs.getString(
+        					getString(R.string.pref_button2_key), Defaults.PREFS_BUTTON2)),
+        			Integer.parseInt(mPrefs.getString(
+        					getString(R.string.pref_button3_key), Defaults.PREFS_BUTTON3)),
+        	};
         }
 
         refreshViews();
@@ -380,10 +350,10 @@ public class SmsPopupActivity extends Activity {
     }
     
     private void disablePopupButtons(boolean enabled) {
-        findViewById(R.id.button1).setEnabled(enabled);
-        findViewById(R.id.button2).setEnabled(enabled);
-        findViewById(R.id.button3).setEnabled(enabled);
-        findViewById(R.id.unlockButton).setEnabled(enabled);
+//        findViewById(R.id.button1).setEnabled(enabled);
+//        findViewById(R.id.button2).setEnabled(enabled);
+//        findViewById(R.id.button3).setEnabled(enabled);
+//        findViewById(R.id.unlockButton).setEnabled(enabled);
     }
     
     /*
@@ -393,16 +363,16 @@ public class SmsPopupActivity extends Activity {
      */
     private void refreshViews() {
         
-        final int currentView = buttonSwitcher.getDisplayedChild();
+//        final int currentView = buttonSwitcher.getDisplayedChild();
 
         ManageKeyguard.initialize(this);
         if (ManageKeyguard.inKeyguardRestrictedInputMode()) {
             
             if (useUnlockButton) {
-                if (currentView != BUTTON_SWITCHER_UNLOCK_BUTTON) { 
-                    // Show unlock button
-                    buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_UNLOCK_BUTTON);
-                }
+//                if (currentView != BUTTON_SWITCHER_UNLOCK_BUTTON) { 
+//                    // Show unlock button
+//                    buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_UNLOCK_BUTTON);
+//                }
                 // Disable long-press context menu
                 unregisterForContextMenu(smsPopupPager);
             }
@@ -411,17 +381,17 @@ public class SmsPopupActivity extends Activity {
 
         } else {
             
-            if (currentView != BUTTON_SWITCHER_MAIN_BUTTONS) {
-                // Show main popup buttons
-                buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_MAIN_BUTTONS);
-            }
+//            if (currentView != BUTTON_SWITCHER_MAIN_BUTTONS) {
+//                // Show main popup buttons
+//                buttonSwitcher.setDisplayedChild(BUTTON_SWITCHER_MAIN_BUTTONS);
+//            }
 
             // Enable long-press context menu
             registerForContextMenu(smsPopupPager);
 
             if (!privacyAlways) {
                 // Now keyguard is off, disable privacy mode
-                smsPopupPager.setPrivacy(SmsPopupView.PRIVACY_MODE_OFF);                
+                setPrivacy(SmsPopupFragment.PRIVACY_MODE_OFF);
             }
         }
     }
@@ -431,10 +401,10 @@ public class SmsPopupActivity extends Activity {
         // This sets the minimum width of the activity to a minimum of 80% of the screen
         // size only needed because the theme of this activity is "dialog" so it looks
         // like it's floating and doesn't seem to fill_parent like a regular activity
-        Display d = getWindowManager().getDefaultDisplay();
-        int width = d.getWidth() > MAX_WIDTH ? MAX_WIDTH : (int) (d.getWidth() * WIDTH);
-        mainLayout.setMinimumWidth(width);
-        mainLayout.invalidate();
+//        Display d = getWindowManager().getDefaultDisplay();
+//        int width = d.getWidth() > MAX_WIDTH ? MAX_WIDTH : (int) (d.getWidth() * WIDTH);
+//        mainLayout.setMinimumWidth(width);
+//        mainLayout.invalidate();
     }
 
     /**
@@ -471,7 +441,7 @@ public class SmsPopupActivity extends Activity {
      * reminders (as the user has interrupted the app).
      */
     private void myFinish() {
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("myFinish()");
 
         if (inbox) {
@@ -514,7 +484,7 @@ public class SmsPopupActivity extends Activity {
     protected void onNewIntent(Intent intent) {
 
         super.onNewIntent(intent);
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSPopupActivity: onNewIntent()");
         
         hasNotified = false;
@@ -529,7 +499,7 @@ public class SmsPopupActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSPopupActivity: onStart()");
         // ManageWakeLock.acquirePartial(getApplicationContext());
     }
@@ -537,7 +507,7 @@ public class SmsPopupActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSPopupActivity: onResume()");
         wasVisible = false;
         // Reset exitingKeyguardSecurely bool to false
@@ -547,7 +517,7 @@ public class SmsPopupActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSPopupActivity: onPause()");
 
         // Hide the soft keyboard in case it was shown via quick reply
@@ -573,7 +543,7 @@ public class SmsPopupActivity extends Activity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSPopupActivity: onStop()");
 
         // Cancel the receiver that will clear our locks
@@ -591,7 +561,7 @@ public class SmsPopupActivity extends Activity {
      */
     @Override
     protected Dialog onCreateDialog(int id) {
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("onCreateDialog()");
 
         switch (id) {
@@ -750,7 +720,7 @@ public class SmsPopupActivity extends Activity {
             qrAlertDialog.setOnDismissListener(new OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    if (Log.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.v("Quick Reply Dialog: onDissmiss()");
                 }
             });
@@ -789,7 +759,7 @@ public class SmsPopupActivity extends Activity {
                 mDialogBuilder.setCursor(mCursor, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
-                        if (Log.DEBUG)
+                        if (BuildConfig.DEBUG)
                             Log.v("Item clicked = " + item);
                         mCursor.moveToPosition(item);
                         quickReply(mCursor.getString(
@@ -828,7 +798,7 @@ public class SmsPopupActivity extends Activity {
     protected void onPrepareDialog(int id, Dialog dialog) {
         super.onPrepareDialog(id, dialog);
 
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("onPrepareDialog()");
         // User interacted so remove all locks and cancel reminders
         ClearAllReceiver.removeCancel(getApplicationContext());
@@ -858,12 +828,12 @@ public class SmsPopupActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("onActivityResult");
         if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
             ArrayList<String> matches =
                     data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (Log.DEBUG)
+            if (BuildConfig.DEBUG)
                 Log.v("Voice recog text: " + matches.get(0));
             quickReply(matches.get(0));
         }
@@ -872,7 +842,7 @@ public class SmsPopupActivity extends Activity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSPopupActivity: onWindowFocusChanged(" + hasFocus + ")");
         if (hasFocus) {
             // This is really hacky, basically a flag that is set if the message was at some
@@ -886,7 +856,7 @@ public class SmsPopupActivity extends Activity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSPopupActivity: onSaveInstanceState()");
 
         // Save values from most recent bundle (ie. most recent message)
@@ -896,14 +866,14 @@ public class SmsPopupActivity extends Activity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSPopupActivity: onRestoreInstanceState()");        
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (Log.DEBUG)
+        if (BuildConfig.DEBUG)
             Log.v("SMSPopupActivity: onConfigurationChanged()");
         resizeLayout();
     }
@@ -1062,7 +1032,7 @@ public class SmsPopupActivity extends Activity {
                 smsPopupPager.post(new Runnable() {
                     @Override
                     public void run() {
-                        smsPopupPager.setPrivacy(SmsPopupView.PRIVACY_MODE_OFF);
+                        setPrivacy(SmsPopupFragment.PRIVACY_MODE_OFF);
                     }  
                 });  
             }
@@ -1109,7 +1079,7 @@ public class SmsPopupActivity extends Activity {
                 i.setAction(SmsPopupUtilsService.ACTION_QUICKREPLY);
                 i.putExtras(quickReplySmsMessage.toBundle());
                 i.putExtra(SmsMmsMessage.EXTRAS_QUICKREPLY, quickReplyMessage);
-                if (Log.DEBUG)
+                if (BuildConfig.DEBUG)
                     Log.v("Sending message to " + quickReplySmsMessage.getContactName());
                 WakefulIntentService.sendWakefulWork(getApplicationContext(), i);
                 Toast.makeText(this, R.string.quickreply_sending_toast, Toast.LENGTH_LONG).show();
@@ -1167,7 +1137,7 @@ public class SmsPopupActivity extends Activity {
      * Refresh the quick reply view - update the edittext and the counter
      */
     private void updateQuickReplyView(String editText) {
-        if (Log.DEBUG) Log.v("updateQuickReplyView - '" + editText + "'");
+        if (BuildConfig.DEBUG) Log.v("updateQuickReplyView - '" + editText + "'");
         if (qrEditText != null && editText != null) {
             qrEditText.setText(editText + signatureText);
             qrEditText.setSelection(editText.length());
@@ -1203,7 +1173,7 @@ public class SmsPopupActivity extends Activity {
      * Show the soft keyboard and store the view that triggered it
      */
     private void showSoftKeyboard(View triggerView) {
-        if (Log.DEBUG) Log.v("showSoftKeyboard()");
+        if (BuildConfig.DEBUG) Log.v("showSoftKeyboard()");
         if (inputManager == null) {
             inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         }
@@ -1217,71 +1187,96 @@ public class SmsPopupActivity extends Activity {
     private void hideSoftKeyboard() {
         if (inputView == null)
             return;
-        if (Log.DEBUG) Log.v("hideSoftKeyboard()");
+        if (BuildConfig.DEBUG) Log.v("hideSoftKeyboard()");
         if (inputManager == null) {
             inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         }
         inputManager.hideSoftInputFromWindow(inputView.getApplicationWindowToken(), 0);
         inputView = null;
     }
+    
+    private class SmsPopupPagerAdapter extends FragmentStatePagerAdapter {
 
-    /*
-     * Inner class to handle dynamic button functions on popup
-     */
-    private class PopupButton implements OnClickListener {
-        private int buttonId;
-        public boolean isReplyButton;
-        public String buttonText;
-        public int buttonVisibility = View.VISIBLE;
+        public SmsPopupPagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
 
-        public PopupButton(Context mContext, int id) {
-            buttonId = id;
-            isReplyButton = false;
-            if (buttonId == ButtonListPreference.BUTTON_REPLY
-                    || buttonId == ButtonListPreference.BUTTON_QUICKREPLY
-                    || buttonId == ButtonListPreference.BUTTON_REPLY_BY_ADDRESS) {
-                isReplyButton = true;
-            }
-            String[] buttonTextArray = mContext.getResources().getStringArray(R.array.buttons_text);
-            buttonText = buttonTextArray[buttonId];
+		@Override
+        public int getCount() {
+            return smsPopupPager.getPageCount();
+        }
+		
+		@Override
+		public Fragment getItem(int position) {
+			return SmsPopupFragment.newInstance(
+					smsPopupPager.getMessage(position), buttonTypes, privacyMode);
+		}
 
-            if (buttonId == ButtonListPreference.BUTTON_DISABLED) { // Disabled
-                buttonVisibility = View.GONE;
-            }
+        public void setPrivacy(int privacyMode) {
+        	for (int i=0; i<mFragments.size(); i++) {
+        		if (mFragments.get(i) != null) {
+        			((SmsPopupFragment) mFragments.get(i)).setPrivacy(privacyMode);
+        		}
+        	}
         }
 
         @Override
-        public void onClick(View v) {
-            switch (buttonId) {
-            case ButtonListPreference.BUTTON_DISABLED: // Disabled
-                break;
-            case ButtonListPreference.BUTTON_CLOSE: // Close
-                closeMessage();
-                break;
-            case ButtonListPreference.BUTTON_DELETE: // Delete
-                showDialog(DIALOG_DELETE);
-                break;
-            case ButtonListPreference.BUTTON_DELETE_NO_CONFIRM:
-                // Delete no confirmation
-                deleteMessage();
-                break;
-            case ButtonListPreference.BUTTON_REPLY: // Reply
-                replyToMessage(true);
-                break;
-            case ButtonListPreference.BUTTON_QUICKREPLY: // Quick Reply
-                quickReply();
-                break;
-            case ButtonListPreference.BUTTON_REPLY_BY_ADDRESS: // Quick Reply
-                replyToMessage(false);
-                break;
-            case ButtonListPreference.BUTTON_INBOX: // Inbox
-                gotoInbox();
-                break;
-            case ButtonListPreference.BUTTON_TTS: // Text-to-Speech
-                speakMessage();
-                break;
+        public int getItemPosition(Object object) {
+            int idx = smsPopupPager.getMessages().indexOf(object);
+            if (idx == -1) {
+                return PagerAdapter.POSITION_NONE;
             }
+            return idx;
         }
     }
+    
+    private void setPrivacy(int mode) {
+    	privacyMode = mode;
+    	smsPopupPagerAdapter.setPrivacy(privacyMode);
+    }
+
+	@Override
+	public void onButtonClicked(int buttonType) {
+        switch (buttonType) {
+        case ButtonListPreference.BUTTON_DISABLED: // Disabled
+            break;
+        case ButtonListPreference.BUTTON_CLOSE: // Close
+            closeMessage();
+            break;
+        case ButtonListPreference.BUTTON_DELETE: // Delete
+            showDialog(DIALOG_DELETE);
+            break;
+        case ButtonListPreference.BUTTON_DELETE_NO_CONFIRM:
+            // Delete no confirmation
+            deleteMessage();
+            break;
+        case ButtonListPreference.BUTTON_REPLY: // Reply
+            replyToMessage(true);
+            break;
+        case ButtonListPreference.BUTTON_QUICKREPLY: // Quick Reply
+            quickReply();
+            break;
+        case ButtonListPreference.BUTTON_REPLY_BY_ADDRESS: // Quick Reply
+            replyToMessage(false);
+            break;
+        case ButtonListPreference.BUTTON_INBOX: // Inbox
+            gotoInbox();
+            break;
+        case ButtonListPreference.BUTTON_TTS: // Text-to-Speech
+            speakMessage();
+            break;
+        case SmsPopupFragment.BUTTON_VIEW:
+        	setPrivacy(SmsPopupFragment.PRIVACY_MODE_OFF);
+        	break;
+        case SmsPopupFragment.BUTTON_VIEW_MMS:
+        	replyToMessage();
+        	break;
+        }
+	}
+	
+	@Override
+	public LruCache<Uri, Bitmap> getCache() {
+		return mBitmapCache;
+	}
 
 }
