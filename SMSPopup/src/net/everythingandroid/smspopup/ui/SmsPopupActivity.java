@@ -348,8 +348,10 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         final int height = (int) getResources().getDimension(R.dimen.smspopup_pager_height);
         final int screenWidth = getResources().getDisplayMetrics().widthPixels;
         smsPopupPagerAdapter.resizeFragments(width, screenWidth);
-        smsPopupPager.setLayoutParams(
-                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+        RelativeLayout.LayoutParams params =
+                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        smsPopupPager.setLayoutParams(params);
         smsPopupPager.invalidate();
     }
 
