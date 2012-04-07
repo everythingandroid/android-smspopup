@@ -18,12 +18,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.LruCache;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -39,6 +42,7 @@ public class SmsPopupFragment extends Fragment {
     private TextView timestampTv;
     private TextView messageTv;
     private ViewFlipper contentFlipper;
+    private LinearLayout mainLayout;
 
     private int privacyMode = PRIVACY_MODE_OFF;
     private boolean showUnlockButton = false;
@@ -108,6 +112,7 @@ public class SmsPopupFragment extends Fragment {
         timestampTv = (TextView) v.findViewById(R.id.timestampTextView);
         contentFlipper = (ViewFlipper) v.findViewById(R.id.contentFlipper);
         buttonViewSwitcher = (ViewSwitcher) v.findViewById(R.id.buttonViewSwitcher);
+        mainLayout = (LinearLayout) v.findViewById(R.id.popupMessageMainlayout);
 
         // Find the QuickContactBadge view that will show the contact photo
         contactBadge = (QuickContactBadge) v.findViewById(R.id.contactBadge);
@@ -207,6 +212,11 @@ public class SmsPopupFragment extends Fragment {
 
         setPrivacy(privacyMode, true);
         refreshButtonViews();
+    }
+
+    public void resizeLayout(int newWidth, int screenWidth) {
+        mainLayout.setLayoutParams(
+                new LayoutParams(newWidth, LayoutParams.MATCH_PARENT, Gravity.CENTER_HORIZONTAL));
     }
 
     public void setShowUnlockButton(boolean show) {

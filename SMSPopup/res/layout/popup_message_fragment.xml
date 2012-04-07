@@ -6,6 +6,7 @@
     tools:ignore="UselessParent" >
 
     <LinearLayout
+        android:id="@+id/popupMessageMainlayout"
         android:layout_width="@dimen/smspopup_pager_width"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
