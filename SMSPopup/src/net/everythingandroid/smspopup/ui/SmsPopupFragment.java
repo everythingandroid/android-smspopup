@@ -18,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.LruCache;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -215,8 +214,9 @@ public class SmsPopupFragment extends Fragment {
     }
 
     public void resizeLayout(int newWidth, int screenWidth) {
-        mainLayout.setLayoutParams(
-                new LayoutParams(newWidth, LayoutParams.MATCH_PARENT, Gravity.CENTER_HORIZONTAL));
+        LayoutParams params = (LayoutParams) mainLayout.getLayoutParams();
+        params.width = newWidth;
+        mainLayout.setLayoutParams(params);
     }
 
     public void setShowUnlockButton(boolean show) {
