@@ -28,7 +28,6 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
     private CirclePageIndicator mPagerIndicator;
     private volatile boolean removingMessage = false;
     private GestureDetector mGestureDetector;
-    private SimpleOnGestureListener mOnGestureListener;
 
     public static int STATUS_MESSAGES_REMAINING = 0;
     public static int STATUS_NO_MESSAGES_REMAINING = 1;

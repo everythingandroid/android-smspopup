@@ -64,6 +64,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -73,6 +74,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -299,7 +301,6 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         protected void onPreExecute() {
             mProgressBar = (ProgressBar) findViewById(R.id.progress);
             mProgressBar.setVisibility(View.VISIBLE);
-            disablePopupButtons(false);
         }
 
         @Override
@@ -318,19 +319,11 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
 
         @Override
         protected void onPostExecute(ArrayList<SmsMmsMessage> result) {
-            disablePopupButtons(true);
             mProgressBar.setVisibility(View.GONE);
             smsPopupPager.addMessages(result);
             smsPopupPager.showLast();
             wakeApp();
         }
-    }
-
-    private void disablePopupButtons(boolean enabled) {
-//        findViewById(R.id.button1).setEnabled(enabled);
-//        findViewById(R.id.button2).setEnabled(enabled);
-//        findViewById(R.id.button3).setEnabled(enabled);
-//        findViewById(R.id.unlockButton).setEnabled(enabled);
     }
 
     /*
@@ -347,22 +340,17 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
             showUnlockButton = false;
             // Enable long-press context menu
             registerForContextMenu(smsPopupPager);
-//            if (!privacyAlways) {
-//                // Now keyguard is off, disable privacy mode
-//                setPrivacy(SmsPopupFragment.PRIVACY_MODE_OFF);
-//            }
         }
     }
 
     private void resizeLayout() {
-
-        // This sets the minimum width of the activity to a minimum of 80% of the screen
-        // size only needed because the theme of this activity is "dialog" so it looks
-        // like it's floating and doesn't seem to fill_parent like a regular activity
-//        Display d = getWindowManager().getDefaultDisplay();
-//        int width = d.getWidth() > MAX_WIDTH ? MAX_WIDTH : (int) (d.getWidth() * WIDTH);
-//        mainLayout.setMinimumWidth(width);
-//        mainLayout.invalidate();
+        final int width = (int) getResources().getDimension(R.dimen.smspopup_pager_width);
+        final int height = (int) getResources().getDimension(R.dimen.smspopup_pager_height);
+        final int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        smsPopupPagerAdapter.resizeFragments(width, screenWidth);
+        smsPopupPager.setLayoutParams(
+                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+        smsPopupPager.invalidate();
     }
 
     /**
@@ -758,6 +746,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
 
         if (BuildConfig.DEBUG)
             Log.v("onPrepareDialog()");
+
         // User interacted so remove all locks and cancel reminders
         ClearAllReceiver.removeCancel(getApplicationContext());
         ClearAllReceiver.clearAll(false);
@@ -765,17 +754,19 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
 
         switch (id) {
         case DIALOG_QUICKREPLY:
+            // Update dialog width to same size as popup message, this is incase the screen
+            // orientation changes and the dialog is left filling the whole width of the screen.
+            final LayoutParams quickreplyLP = dialog.getWindow().getAttributes();
+            quickreplyLP.width = (int) getResources().getDimension(R.dimen.smspopup_pager_width);
+            dialog.getWindow().setAttributes(quickreplyLP);
             showSoftKeyboard(qrEditText);
-
-            // Set width of dialog to fill_parent
-            final LayoutParams mLP = dialog.getWindow().getAttributes();
-
-            // TODO: this should be limited in case the screen is large
-            mLP.width = LayoutParams.MATCH_PARENT;
-            dialog.getWindow().setAttributes(mLP);
             break;
-
         case DIALOG_PRESET_MSG:
+            // Update dialog width to same size as popup message, this is incase the screen
+            // orientation changes and the dialog is left filling the whole width of the screen.
+            final LayoutParams presetLP = dialog.getWindow().getAttributes();
+            presetLP.width = (int) getResources().getDimension(R.dimen.smspopup_pager_width);
+            dialog.getWindow().setAttributes(presetLP);
             break;
         }
     }
@@ -1196,6 +1187,14 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
                 return PagerAdapter.POSITION_NONE;
             }
             return idx;
+        }
+
+        public void resizeFragments(int width, int height) {
+            for (int i=0; i<mFragments.size(); i++) {
+                if (mFragments.get(i) != null) {
+                    ((SmsPopupFragment) mFragments.get(i)).resizeLayout(width, height);
+                }
+            }
         }
     }
 
