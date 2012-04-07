@@ -64,7 +64,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -349,8 +348,8 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         final int screenWidth = getResources().getDisplayMetrics().widthPixels;
         smsPopupPagerAdapter.resizeFragments(width, screenWidth);
         RelativeLayout.LayoutParams params =
-                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+                (RelativeLayout.LayoutParams) smsPopupPager.getLayoutParams();
+        params.height = height;
         smsPopupPager.setLayoutParams(params);
         smsPopupPager.invalidate();
     }
