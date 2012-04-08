@@ -134,9 +134,9 @@ public class SmsPopupUtils {
 
         return null;
     }
-    
+
     /**
-     * Looks up a contacts display name by contact lookup key - if not found, 
+     * Looks up a contacts display name by contact lookup key - if not found,
      * the address (phone number) will be formatted and returned instead.
      * @param context Context.
      * @param lookupKey Contact lookup key.
@@ -147,11 +147,11 @@ public class SmsPopupUtils {
     }
 
     /**
-     * Looks up a contacts display name by contact lookup key - if not found, 
+     * Looks up a contacts display name by contact lookup key - if not found,
      * the address (phone number) will be formatted and returned instead.
      * @param context Context.
      * @param lookupKey Contact lookup key.
-     * @param address Address (phone number) that will be returned if the contact cannot be 
+     * @param address Address (phone number) that will be returned if the contact cannot be
      * 		found. The address will be formatted before it is returned.
      * @return Contact name or null if not found.
      */
@@ -293,14 +293,14 @@ public class SmsPopupUtils {
     }
 
     /**
-     * 
+     *
      * Looks up a contact photo by contact id, returns a Bitmap array that represents their photo
      * (or null if not found or there was an error.
-     * 
+     *
      * I do my own scaling and validation of sizes - Android supports any size for contact photos
      * and some apps are adding huge photos to contacts. Doing the scaling myself allows me more
      * control over how things play out in those cases.
-     * 
+     *
      * @param context
      *            the context
      * @param id
@@ -309,7 +309,7 @@ public class SmsPopupUtils {
      *            the max size the thumbnail can be
      * @return Bitmap of the contacts photo (null if none or an error)
      */
-    public static Bitmap getPersonPhoto(Context context, final Uri contactUri, 
+    public static Bitmap getPersonPhoto(Context context, final Uri contactUri,
     		final int thumbSize) {
 
         if (contactUri == null) {
@@ -388,7 +388,7 @@ public class SmsPopupUtils {
     /**
      * Opens an InputStream for the person's photo and returns the photo as a Bitmap. If the
      * person's photo isn't present returns the placeholderImageResource instead.
-     * 
+     *
      * @param context
      *            the Context
      * @param id
@@ -397,7 +397,7 @@ public class SmsPopupUtils {
      *            the decoding options, can be set to null
      */
     @SuppressLint("NewApi")
-    public static Bitmap loadContactPhoto(Context context, Uri contactUri, 
+    public static Bitmap loadContactPhoto(Context context, Uri contactUri,
     		BitmapFactory.Options options) {
 
         if (contactUri == null) {
@@ -417,10 +417,10 @@ public class SmsPopupUtils {
     }
 
     /**
-     * 
+     *
      * Tries to locate the message thread id given the address (phone or email) of the message
      * sender.
-     * 
+     *
      * @param context
      *            a context to use
      * @param address
@@ -460,15 +460,16 @@ public class SmsPopupUtils {
     /**
      * Marks a specific message as read
      */
-    synchronized public static void
-            setMessageRead(Context context, long messageId, int messageType) {
+    synchronized public static void setMessageRead(
+            Context context, long messageId, int messageType) {
 
         SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean markRead = myPrefs.getBoolean(
                 context.getString(R.string.pref_markread_key),
                 Defaults.PREFS_MARK_READ);
-        if (!markRead)
+        if (!markRead) {
             return;
+        }
 
         if (messageId > 0) {
             ContentValues values = new ContentValues(1);
@@ -583,7 +584,7 @@ public class SmsPopupUtils {
      * Tries to delete a message from the system database, given the thread id, the timestamp of the
      * message and the message type (sms/mms).
      */
-    public static void deleteMessage(Context context, long messageId, 
+    public static void deleteMessage(Context context, long messageId,
             long threadId, int messageType) {
 
         if (messageId > 0) {
@@ -623,13 +624,13 @@ public class SmsPopupUtils {
 
     /**
      * Fetches a list of unread messages from the system database
-     * 
+     *
      * @param context
      *            app context
      * @param ignoreMessageId
      *            message id to ignore (the one being displayed), setting this to 0 will return all
      *            unread messages
-     * 
+     *
      * @return ArrayList of SmsMmsMessage
      */
 
@@ -684,7 +685,7 @@ public class SmsPopupUtils {
                         address = cursor.getString(2);
                         timestamp = cursor.getLong(3);
                         body = cursor.getString(4);
-                        
+
                         message = new SmsMmsMessage(
                                 context, address, body, timestamp, threadId,
                                 count, messageId, SmsMmsMessage.MESSAGE_TYPE_SMS);
@@ -722,7 +723,7 @@ public class SmsPopupUtils {
 
     /**
      * Get system view sms thread Intent
-     * 
+     *
      * @param context
      *            context
      * @param threadId
@@ -754,7 +755,7 @@ public class SmsPopupUtils {
 
     /**
      * Get system sms-to Intent (normally "compose message" activity)
-     * 
+     *
      * @param context
      *            context
      * @param phoneNumber
@@ -912,7 +913,7 @@ public class SmsPopupUtils {
 
     /**
      * Return current unread message count from system db (sms and mms)
-     * 
+     *
      * @param context
      * @return unread sms+mms message count
      */
@@ -922,7 +923,7 @@ public class SmsPopupUtils {
 
     /**
      * Return current unread message count from system db (sms and mms)
-     * 
+     *
      * @param context
      * @param timestamp
      *            only messages before this timestamp will be counted
@@ -935,7 +936,7 @@ public class SmsPopupUtils {
 
     /**
      * Return current unread message count from system db (sms only)
-     * 
+     *
      * @param context
      * @return unread sms message count
      */
@@ -945,7 +946,7 @@ public class SmsPopupUtils {
 
     /**
      * Return current unread message count from system db (sms only)
-     * 
+     *
      * @param context
      * @param timestamp
      *            only messages before this timestamp will be counted
@@ -1012,7 +1013,7 @@ public class SmsPopupUtils {
 
     /**
      * Return current unread message count from system db (mms only)
-     * 
+     *
      * @param context
      * @return unread mms message count
      */
@@ -1304,7 +1305,7 @@ public class SmsPopupUtils {
     /**
      * Read the PDUs out of an {@link #SMS_RECEIVED_ACTION} or a {@link #DATA_SMS_RECEIVED_ACTION}
      * intent.
-     * 
+     *
      * @param intent
      *            the intent to read from
      * @return an array of SmsMessages for the PDUs
@@ -1341,10 +1342,10 @@ public class SmsPopupUtils {
 
         /*
          * These appear to be the 2 main intents that mean the user is using the messaging app
-         * 
+         *
          * action "android.intent.action.MAIN" data null class "com.android.mms.ui.ConversationList"
          * package "com.android.mms"
-         * 
+         *
          * action "android.intent.action.VIEW" data "content://mms-sms/threadID/3" class
          * "com.android.mms.ui.ComposeMessageActivity" package "com.android.mms"
          */
@@ -1411,7 +1412,7 @@ public class SmsPopupUtils {
 
     /**
      * Convert from pixels to density independent pixels.
-     * 
+     *
      * @param res
      *            Resources to fetch display metrics from.
      * @param pixels
