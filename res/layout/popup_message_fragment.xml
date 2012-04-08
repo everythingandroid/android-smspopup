@@ -141,7 +141,9 @@
             <ViewSwitcher
                 android:id="@+id/buttonViewSwitcher"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:inAnimation="@android:anim/fade_in"
+                android:outAnimation="@android:anim/fade_out" >
 
                 <LinearLayout
                     android:id="@+id/ButtonLayout"
@@ -180,17 +182,8 @@
                     style="@style/ButtonBar"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" >
-
-                    <Button
-                        android:id="@+id/unlockButton"
-                        style="@style/ButtonBarButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:minWidth="100dp"
-                        android:paddingLeft="30dp"
-                        android:paddingRight="30dp"
-                        android:text="@string/button_unlock" />
+                    
+                    <include layout="@layout/unlock_button" />
                 </RelativeLayout>
             </ViewSwitcher>
         </LinearLayout>
