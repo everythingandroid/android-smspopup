@@ -220,8 +220,10 @@ public class SmsPopupFragment extends Fragment {
     }
 
     public void setShowUnlockButton(boolean show) {
-        showUnlockButton = show;
-        refreshButtonViews();
+        if (show != showUnlockButton) {
+            showUnlockButton = show;
+            refreshButtonViews();
+        }
     }
 
     private void refreshButtonViews() {

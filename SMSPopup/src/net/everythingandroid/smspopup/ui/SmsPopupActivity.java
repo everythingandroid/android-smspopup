@@ -339,6 +339,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
             showUnlockButton = false;
             // Enable long-press context menu
             registerForContextMenu(smsPopupPager);
+            smsPopupPagerAdapter.unlockScreen();
         }
     }
 
@@ -1251,5 +1252,4 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
 	public LruCache<Uri, Bitmap> getCache() {
 		return mBitmapCache;
 	}
-
 }
