@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pref_other_key">other</string>
+    <string name="pref_enabled_key">enabled</string>
+    <string name="pref_about_key">about</string>
+    <string name="pref_faq_key">faq</string>
+    <string name="pref_timeout_key">timeout</string>
+    <string name="pref_dimscreen_key">dimscreen</string>
+    <string name="pref_privacy_key">privacy</string>
+    <string name="pref_privacy_sender_key">privacy_sender</string>
+    <string name="pref_privacy_always_key">privacy_always</string>
+    <string name="pref_markread_key">markread</string>
+    <string name="pref_onlyShowOnKeyguard_key">showonkeyguard</string>
+    <string name="pref_useUnlockButton_key">useunlock</string>
+    <string name="pref_show_buttons_key">showbuttons</string>
+    <string name="pref_notif_enabled_key">notification</string>
+    <string name="pref_popup_enabled_key">popup</string>
+    <string name="pref_notif_test_key">notiftest</string>
+    <string name="pref_notif_sound_key">notifsound</string>
+    <string name="pref_notifyOnCall_key">notifyoncall</string>
+    <string name="pref_notif_icon_key">notificon</string>
+    <string name="pref_vibrate_key">vibrate</string>
+    <string name="pref_vibrate_pattern_key">vibrate_pattern</string>
+    <string name="pref_vibrate_pattern_custom_key">vibrate_pattern_custom</string>
+    <string name="pref_flashled_key">flashled</string>
+    <string name="pref_flashled_color_key">flashled_color</string>
+    <string name="pref_flashled_color_custom_key">flashled_color_custom</string>
+    <string name="pref_flashled_pattern_key">flashled_pattern</string>
+    <string name="pref_flashled_pattern_custom_key">flashled_pattern_custom</string>
+    <string name="pref_notif_repeat_key">notif_repeat</string>
+    <string name="pref_notif_repeat_interval_key">notif_repeat_interval</string>
+    <string name="pref_notif_repeat_times_key">notif_repeat_num</string>
+    <string name="pref_notif_repeat_screen_on_key">notif_repeat_screen_on</string>
+    <string name="contacts_key">contacts_key</string>
+    <string name="c_pref_notif_enabled_key">c_notification</string>
+    <string name="c_pref_popup_enabled_key">c_popup</string>
+    <string name="c_pref_notif_test_key">c_notiftest</string>
+    <string name="c_pref_notif_sound_key">c_notifsound</string>
+    <string name="c_pref_vibrate_key">c_vibrate</string>
+    <string name="c_pref_vibrate_pattern_key">c_vibrate_pattern</string>
+    <string name="c_pref_vibrate_pattern_custom_key">c_vibrate_pattern_custom</string>
+    <string name="c_pref_flashled_key">c_flashled</string>
+    <string name="c_pref_flashled_color_key">c_flashled_color</string>
+    <string name="c_pref_flashled_color_custom_key">c_flashled_color_custom</string>
+    <string name="c_pref_flashled_pattern_key">c_flashled_pattern</string>
+    <string name="c_pref_flashled_pattern_custom_key">c_flashled_pattern_custom</string>
+    <string name="c_pref_category">c_pref_category</string>
+    <string name="pref_notif_help_key">notif_help</string>
+    <string name="quickmessages_key">quickmessages_key</string>
+    <string name="pref_reply_to_thread_key">replytype</string>
+    <string name="pref_button1_key">button1</string>
+    <string name="pref_button2_key">button2</string>
+    <string name="pref_button3_key">button3</string>
+    <string name="pref_donate_key">donate</string>
+    <string name="pref_donated_key">donated</string>
+    <string name="pref_quickreply_key">quickreply</string>
+    <string name="pref_quickreply_cat_key">qrcat</string>
+    <string name="pref_notif_signature_key">signature</string>
+    <string name="pref_delivery_report_key">deliveryreport</string>
+    <string name="pref_split_message_key">splitmessage</string>
+    <string name="pref_autorotate_key">autorotate</string>
+    <string name="pref_screen_on_key">screenon</string>
+    <string name="pref_docked_key">docked</string>
+
+    <!-- Value to set trigger custom dialogs -->
+    <string name="pref_custom_val">custom</string>
+
+</resources>

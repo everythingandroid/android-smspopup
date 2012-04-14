@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pref_timeout_default">30</string>
+    <bool name="pref_dimscreen_default">false</bool>
+    <bool name="pref_privacy_default">false</bool>
+    <bool name="pref_privacy_sender_default">false</bool>
+    <bool name="pref_privacy_always_default">false</bool>
+    <bool name="pref_markread_default">true</bool>
+    <bool name="pref_onlyShowOnKeyguard_default">false</bool>
+    <bool name="pref_useUnlockButton_default">false</bool>
+    <bool name="pref_show_buttons_default">true</bool>
+    <bool name="pref_notif_enabled_default">false</bool>
+    <bool name="pref_popup_enabled_default">true</bool>
+    <bool name="pref_notifyOnCall_default">false</bool>
+    <string name="pref_notif_icon_default">0</string>
+    <bool name="pref_vibrate_default">true</bool>
+    <string name="pref_vibrate_pattern_default">0,1200</string>
+    <bool name="pref_flashled_default">true</bool>
+    <string name="pref_flashled_pattern_default">1000,1000</string>
+    <string name="pref_flashled_color_default">Yellow</string>
+    <bool name="pref_notif_repeat_default">false</bool>
+    <string name="pref_notif_repeat_interval_default">5</string>
+    <string name="pref_notif_repeat_times_default">2</string>
+    <bool name="pref_notif_repeat_screen_on_default">false</bool>
+    <string name="pref_button1_default">1</string>
+    <string name="pref_button2_default">2</string>
+    <string name="pref_button3_default">5</string>
+    <bool name="pref_quickreply_default">true</bool>
+    <bool name="pref_delivery_report_default">false</bool>
+    <bool name="pref_split_message_default">false</bool>
+    <bool name="pref_autorotate_default">true</bool>
+    <bool name="pref_screen_on_default">true</bool>
+
+</resources>

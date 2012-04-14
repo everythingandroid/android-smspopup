@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="9dp" >
+
+    <EditText
+        android:id="@+id/QuickReplyEditText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textShortMessage|textAutoCorrect|textCapSentences|textMultiLine"
+        android:maxLength="1000"
+        android:maxLines="3" />
+
+    <TextView
+        android:id="@+id/QuickReplyCounterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="#88000000"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:textColor="#ffffffff"
+        android:textSize="11sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

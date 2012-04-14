@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:orientation="vertical"
+  android:id="@+id/LEDPatternLinearLayout"
+  android:layout_height="wrap_content"
+  android:paddingLeft="10dp"
+  android:paddingRight="10dp">
+  <TextView
+    android:layout_height="fill_parent"
+    android:id="@+id/LEDPatternTextView"
+    android:text="@string/pref_flashled_pattern_help"
+    android:paddingBottom="8dp"
+    android:layout_width="fill_parent" />
+  <LinearLayout
+    android:orientation="horizontal"
+    android:id="@+id/LEDPatternLinearLayout2"
+    android:paddingLeft="5dp"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:orientation="vertical"
+      android:layout_height="fill_parent"
+      android:id="@+id/LEDPatternLabelLinearLayout">
+      <TextView
+        android:layout_width="wrap_content"
+        android:text="@string/pref_flashled_pattern_help_on"
+        android:id="@+id/LEDOnTextView"
+        android:paddingRight="10dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:gravity="center" />
+      <TextView
+        android:layout_width="wrap_content"
+        android:text="@string/pref_flashled_pattern_help_off"
+        android:id="@+id/LEDOffTextView"
+        android:paddingRight="10dp"
+        android:layout_weight="1"
+        android:layout_height="fill_parent"
+        android:gravity="center" />
+    </LinearLayout>
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:orientation="vertical"
+      android:layout_height="fill_parent"
+      android:id="@+id/LEDPatternEditTextLinearLayout">
+      <EditText
+        android:id="@+id/LEDOnEditText"
+        android:layout_width="wrap_content"
+        android:selectAllOnFocus="true"
+        android:maxLength="5"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:inputType="number"
+        android:imeOptions="actionDone"
+        android:lines="1"
+        android:minWidth="80dp" />
+      <EditText
+        android:layout_height="wrap_content"
+        android:id="@+id/LEDOffEditText"
+        android:layout_width="wrap_content"
+        android:maxLength="5"
+        android:selectAllOnFocus="true"
+        android:layout_margin="1dp"
+        android:minWidth="80dp"
+        android:lines="1"
+        android:imeOptions="actionDone"
+        android:inputType="number" />
+    </LinearLayout>
+  </LinearLayout>
+</LinearLayout>

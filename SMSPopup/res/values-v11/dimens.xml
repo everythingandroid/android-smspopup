@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="contact_thumbnail_size">100dp</dimen>
+    <dimen name="contact_thumbnail_border">0dp</dimen>
+    <dimen name="contact_thumbnail_margin">2dp</dimen>
+
+</resources>

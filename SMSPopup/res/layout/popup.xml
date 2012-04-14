@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/MainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <net.everythingandroid.smspopup.controls.SmsPopupPager
+        android:id="@+id/SmsPopupPager"
+        android:layout_width="match_parent"
+        android:layout_height="@+dimen/smspopup_pager_height"
+        android:layout_centerInParent="true" >
+    </net.everythingandroid.smspopup.controls.SmsPopupPager>
+
+    <com.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SmsPopupPager"
+        android:layout_gravity="center_horizontal|bottom"
+        android:paddingTop="4dp" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+</RelativeLayout>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/CustomLEDColorScrollView"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp" >
+
+    <LinearLayout
+        android:id="@+id/ScrollViewLinearLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="2dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="2dp" >
+
+        <LinearLayout
+            android:id="@+id/PreviewLinearLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center" >
+
+            <TextView
+                android:id="@+id/PreviewTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="right"
+                android:paddingRight="15dp"
+                android:text="@string/pref_flashled_color_custom_dialog_preview" />
+
+            <ImageView
+                android:id="@+id/PreviewImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:maxHeight="30dp"
+                android:maxWidth="50dp"
+                android:minHeight="30dp"
+                android:minWidth="50dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/RedTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="@string/pref_flashled_color_custom_dialog_red" />
+
+        <SeekBar
+            android:id="@+id/RedSeekBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="255" />
+
+        <TextView
+            android:id="@+id/GreenTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="@string/pref_flashled_color_custom_dialog_green" />
+
+        <SeekBar
+            android:id="@+id/GreenSeekBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="255" />
+
+        <TextView
+            android:id="@+id/BlueTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="@string/pref_flashled_color_custom_dialog_blue" />
+
+        <SeekBar
+            android:id="@+id/BlueSeekBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:max="255" />
+    </LinearLayout>
+
+</ScrollView>

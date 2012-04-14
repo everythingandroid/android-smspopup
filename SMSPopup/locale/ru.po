@@ -1,0 +1,988 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2012-03-04 18:33-0500\n"
+"PO-Revision-Date: 2012-02-02 08:25+0000\n"
+"Last-Translator: Vyacheslav Sharmanov <Unknown>\n"
+"Language-Team: ru <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2012-03-08 00:16+0000\n"
+"X-Generator: Launchpad (build 14907)\n"
+"Generated-By: Babel 1.0\n"
+
+#. Notification Strings
+msgctxt "notification_multiple_title"
+msgid "New messages"
+msgstr "Новые сообщения"
+
+#, c-format
+msgctxt "notification_multiple_text"
+msgid "%d unread messages."
+msgstr "%d непрочитанное(ых) сообщение(й)."
+
+#, c-format
+msgctxt "notification_scroll_privacy"
+msgid "New message from: %s"
+msgstr "Новое сообщение от: %s"
+
+msgctxt "notification_scroll_privacy_no_name"
+msgid "New message"
+msgstr ""
+
+#. Button Strings
+msgctxt "button_close"
+msgid "Close"
+msgstr "Закрыть"
+
+msgctxt "button_reply"
+msgid "Reply"
+msgstr "Ответить"
+
+msgctxt "button_inbox"
+msgid "Inbox"
+msgstr "Входящие"
+
+msgctxt "button_view"
+msgid "View"
+msgstr "Просмотр"
+
+msgctxt "button_view_mms"
+msgid "View MMS"
+msgstr "Просмотр MMS"
+
+msgctxt "button_delete"
+msgid "Delete"
+msgstr "Удалить"
+
+msgctxt "button_unlock"
+msgid "Unlock"
+msgstr "Разблокировать"
+
+msgctxt "button_tts"
+msgid "Text-to-speech"
+msgstr "Произнести текст"
+
+msgctxt "button_speak"
+msgid "Speak"
+msgstr "Говорите"
+
+msgctxt "button_delete_noconfirm"
+msgid "Delete (no confirmation)"
+msgstr "Удалить (без подтверждения)"
+
+msgctxt "button_quickreply"
+msgid "Quick Reply"
+msgstr "Быстрый ответ"
+
+msgctxt "button_disabled"
+msgid "Disabled"
+msgstr "Отключено"
+
+#. Main Preferences
+msgctxt "pref_config_title"
+msgid "SMS Popup Configuration"
+msgstr "Установки SMS Popup"
+
+msgctxt "pref_other_title"
+msgid "Other"
+msgstr "Другие"
+
+msgctxt "pref_enabled_title"
+msgid "Enable SMS Popup"
+msgstr "Включить SMS Popup"
+
+msgctxt "pref_enabled_summaryon"
+msgid "SMS Popup is enabled"
+msgstr "SMS Popup включен"
+
+msgctxt "pref_enabled_summaryoff"
+msgid "SMS Popup is disabled"
+msgstr "SMS Popup выключен"
+
+msgctxt "pref_about_title"
+msgid "About"
+msgstr "О программе"
+
+msgctxt "pref_about_summary"
+msgid "About SMS Popup"
+msgstr "О SMS Popup"
+
+msgctxt "pref_faq_title"
+msgid "FAQ"
+msgstr "FAQ"
+
+msgctxt "pref_faq_summary"
+msgid "Frequently Asked Questions"
+msgstr "Часто Задаваемые Вопросы (FAQ)"
+
+msgctxt "pref_sendemail_title"
+msgid "E-mail the Developer"
+msgstr "E-mail Разработчика"
+
+msgctxt "pref_sendemail_dialog"
+msgid ""
+"Can I include your system information in the e-mail (this will help me "
+"troubleshoot bugs easier)?"
+msgstr ""
+"Могу я добавить информацию о вашей системе в e-mail (это позволяет мне "
+"эффективней устранять ошибки)?"
+
+msgctxt "pref_sendemail_buttonok"
+msgid "Sure"
+msgstr "Да, согласен"
+
+msgctxt "pref_sendemail_buttoncancel"
+msgid "No way"
+msgstr "Нет"
+
+#. Additional Preferences
+msgctxt "pref_additional_title"
+msgid "Additional Settings"
+msgstr "Дополнительные настройки"
+
+msgctxt "pref_additional_summary"
+msgid "Additional SMS Popup configuration"
+msgstr "Дополнительные установки SMS Popup"
+
+msgctxt "pref_timeout_title"
+msgid "Screen Timeout"
+msgstr "Время ожидания экрана"
+
+msgctxt "pref_timeout_summary"
+msgid "The screen will sleep after this time"
+msgstr "Экран перейдет в спящий режим спустя заданное время"
+
+msgctxt "pref_dimscreen_title"
+msgid "Dim Popup Screen"
+msgstr "Снизить яркость окна"
+
+msgctxt "pref_dimscreen_summaryon"
+msgid "Popup screen will be dim (saves battery)"
+msgstr "Тусклый экран уведомления (экономия батареи)"
+
+msgctxt "pref_dimscreen_summaryoff"
+msgid "Popup screen will be bright"
+msgstr "Яркий экран уведомления"
+
+msgctxt "pref_privacy_category"
+msgid "Privacy"
+msgstr ""
+
+msgctxt "pref_privacy_title"
+msgid "Privacy Mode"
+msgstr "Режим приватности"
+
+msgctxt "pref_privacy_summaryon"
+msgid "Popup will use privacy mode"
+msgstr ""
+
+msgctxt "pref_privacy_summaryoff"
+msgid "Popup will show all message details"
+msgstr ""
+
+msgctxt "pref_privacy_sender_title"
+msgid "Hide Contact Name"
+msgstr ""
+
+msgctxt "pref_privacy_sender_summaryon"
+msgid "Message sender name will also be hidden"
+msgstr ""
+
+msgctxt "pref_privacy_sender_summaryoff"
+msgid "Message sender name will be shown"
+msgstr ""
+
+msgctxt "pref_privacy_always_title"
+msgid "Always Use Privacy Mode"
+msgstr ""
+
+msgctxt "pref_privacy_always_summaryon"
+msgid "Privacy mode will always be used"
+msgstr ""
+
+msgctxt "pref_privacy_always_summaryoff"
+msgid "Only use privacy mode when screen is locked"
+msgstr ""
+
+msgctxt "pref_markread_title"
+msgid "Mark Read"
+msgstr "Отметить прочитанным"
+
+msgctxt "pref_markread_summaryon"
+msgid "Messages will be marked as read when clicking \"Close\""
+msgstr "При нажатии на \"Закрыть\", сообщение будет отмечено как прочитанное"
+
+msgctxt "pref_markread_summaryoff"
+msgid "Messages will not be marked as read when clicking \"Close\""
+msgstr ""
+"При нажатии на \"Закрыть\", сообщение не будет отмечено как прочитанное"
+
+msgctxt "pref_onlyShowOnKeyguard_title"
+msgid "Restrict Popup"
+msgstr "Ограничить вывод окна"
+
+msgctxt "pref_onlyShowOnKeyguard_summaryon"
+msgid "Popup window will only show when keyguard is engaged"
+msgstr "Всплывающее окно только при включенной блокировке"
+
+msgctxt "pref_onlyShowOnKeyguard_summaryoff"
+msgid "Popup will always show"
+msgstr "Всплывающее окно всегда выводится"
+
+msgctxt "pref_useUnlockButton_title"
+msgid "Show Unlock Button"
+msgstr ""
+
+msgctxt "pref_useUnlockButton_summaryon"
+msgid "Unlock button will show when screen is locked"
+msgstr ""
+
+msgctxt "pref_useUnlockButton_summaryoff"
+msgid "Regular buttons will show when screen is locked"
+msgstr ""
+
+msgctxt "pref_show_buttons_title"
+msgid "Show Buttons On Popup"
+msgstr "Показывать кнопки в окне"
+
+msgctxt "pref_show_buttons_summaryon"
+msgid "Buttons on popup are visible"
+msgstr "Видимые кнопки в окне"
+
+msgctxt "pref_show_buttons_summaryoff"
+msgid "Buttons are hidden in long press menu"
+msgstr "Кнопки скрыты в меню по длительному нажатию"
+
+#. Notification Preferences
+msgctxt "pref_notif_title"
+msgid "Notifications"
+msgstr "Уведомления"
+
+msgctxt "pref_notif_summary"
+msgid "Notification configuration"
+msgstr "Установки уведомлений"
+
+#. Category headings
+msgctxt "pref_notif_category_title"
+msgid "Notification Configuration"
+msgstr "Установки уведомлений"
+
+msgctxt "pref_vibrate_category_title"
+msgid "Vibrate Configuration"
+msgstr "Вибро"
+
+msgctxt "pref_flashled_category_title"
+msgid "LED Configuration"
+msgstr "светодиодом"
+
+msgctxt "pref_reminder_category_title"
+msgid "Reminder Configuration"
+msgstr "Напоминания"
+
+#. General Notification Preferences
+msgctxt "pref_notif_enabled_title"
+msgid "Enable Notifications"
+msgstr "Включить уведомления"
+
+msgctxt "pref_notif_enabled_summaryon"
+msgid "Notifications are enabled"
+msgstr "Уведомления включены"
+
+msgctxt "pref_notif_enabled_summaryoff"
+msgid "Notifications are disabled"
+msgstr "Уведомления выключены"
+
+msgctxt "pref_notif_enabled_warning"
+msgid ""
+"To avoid conflicts and multiple alerts, please disable the system SMS "
+"notifications and any other apps that provide a notification when a SMS is "
+"received.\n"
+"\n"
+"To turn off the system notification, go to the messaging app, hit menu -&gt; "
+"settings and un-check notifications."
+msgstr ""
+"Во избежание конфликтов и дуюлирования оповещений, отключите системные SMS "
+"уведомления и любые иные приложения для уведомления о входящих SMS.\n"
+"\n"
+"Чтобы выключить системные уведомления, зайдите в сообщения, нажмите меню -"
+"&gt; настройки и снимите галочку с уведомлений."
+
+msgctxt "pref_popup_enabled_title"
+msgid "Show a Popup"
+msgstr "Показать окно"
+
+msgctxt "pref_popup_enabled_summaryon"
+msgid "Message will open in a popup"
+msgstr "Сообщение откроется в окне"
+
+msgctxt "pref_popup_enabled_summaryoff"
+msgid "Message will only show in notification area"
+msgstr ""
+
+msgctxt "pref_notif_test_title"
+msgid "Test Notification"
+msgstr "Тест уведомления"
+
+msgctxt "pref_notif_test_summary"
+msgid "Test out your notification"
+msgstr "Протестировать ваше уведомление"
+
+msgctxt "pref_notif_test_message"
+msgid "Testing your notification now!"
+msgstr "Идет тест уведомления!"
+
+msgctxt "pref_notif_sound_title"
+msgid "Notification Sound"
+msgstr "Звук уведомления"
+
+msgctxt "pref_notif_sound_summary"
+msgid "This sound will play when a message is received"
+msgstr "Этот звук будет воспроизводиться при входящем сообщении"
+
+msgctxt "pref_notifyOnCall_title"
+msgid "Notify On Call"
+msgstr ""
+
+msgctxt "pref_notifyOnCall_summaryon"
+msgid "Sound will play while on a call"
+msgstr ""
+
+msgctxt "pref_notifyOnCall_summaryoff"
+msgid "Sound will not play while on a call"
+msgstr ""
+
+msgctxt "pref_notif_icon_title"
+msgid "Notification Icon"
+msgstr ""
+
+msgctxt "pref_notif_icon_summary"
+msgid "Change the notification area icon"
+msgstr ""
+
+msgctxt "pref_vibrate_title"
+msgid "Vibrate"
+msgstr "Вибро"
+
+msgctxt "pref_vibrate_summaryon"
+msgid "Vibrate is on"
+msgstr "Вибро включено"
+
+msgctxt "pref_vibrate_summaryoff"
+msgid "Vibrate is off"
+msgstr "Вибро выключено"
+
+#. Vibrate Preferences
+msgctxt "pref_vibrate_pattern_title"
+msgid "Vibrate Pattern"
+msgstr "Шаблон вибро"
+
+msgctxt "pref_vibrate_pattern_summary"
+msgid "Set the vibration pattern"
+msgstr "Установить шаблон вибро"
+
+msgctxt "pref_vibrate_pattern_ok"
+msgid "Custom vibrate pattern set"
+msgstr "Установка собственного шаблона вибро"
+
+msgctxt "pref_vibrate_pattern_bad"
+msgid "Custom vibrate pattern invalid"
+msgstr "Шаблон вибро задан некорректно, включен шаблон по умолчанию"
+
+msgctxt "pref_vibrate_pattern_help"
+msgid ""
+"Enter a custom vibrate pattern, in the format:\n"
+"millisOff, millisOn, etc.\n"
+"\n"
+"For example:\n"
+"0,1000\n"
+"0,500,200,500,200,500"
+msgstr ""
+"Введите собственный шаблон, в формате:\n"
+"мсекВыкл, мсекВкл, и т.д..\n"
+"\n"
+"Пример:\n"
+"0,1000\n"
+"0,500,200,500,200,500"
+
+#. LED Preferences
+msgctxt "pref_flashled_title"
+msgid "Blink LED"
+msgstr "Мигание светодиодом"
+
+msgctxt "pref_flashled_summaryon"
+msgid "Blink LED when a message is received"
+msgstr "Мигать светодиодом при входящем сообщении"
+
+msgctxt "pref_flashled_summaryoff"
+msgid "Do not blink LED when a message is received"
+msgstr "Не использовать светодиод для оповещения"
+
+msgctxt "pref_flashled_color_title"
+msgid "LED Color"
+msgstr "Цвет светодиода"
+
+msgctxt "pref_flashled_color_summary"
+msgid "The color of the LED"
+msgstr "Цвет светодиода"
+
+msgctxt "pref_flashled_color_custom_dialog_red"
+msgid "Red:"
+msgstr "Красный:"
+
+msgctxt "pref_flashled_color_custom_dialog_green"
+msgid "Green:"
+msgstr "Зеленый:"
+
+msgctxt "pref_flashled_color_custom_dialog_blue"
+msgid "Blue:"
+msgstr "Синий:"
+
+msgctxt "pref_flashled_color_custom_dialog_preview"
+msgid "Preview:"
+msgstr "Просмотр:"
+
+msgctxt "pref_flashled_color_custom_set"
+msgid "Custom LED color set"
+msgstr "Установка цвета светодиода"
+
+msgctxt "pref_flashled_pattern_title"
+msgid "LED Blink Rate"
+msgstr "Частота мигания светодиода"
+
+msgctxt "pref_flashled_pattern_summary"
+msgid "Set the speed the LED blinks"
+msgstr "Установите скорость мигания светодиода"
+
+msgctxt "pref_flashled_pattern_ok"
+msgid "Custom LED blink rate set"
+msgstr "Установка частоты мигания светодиода"
+
+msgctxt "pref_flashled_pattern_bad"
+msgid "Custom LED blink rate is invalid"
+msgstr ""
+"Задана некорректная частота мигания, используется частота по умолчанию"
+
+msgctxt "pref_flashled_pattern_help"
+msgid "Enter the time in milliseconds to turn the LED on and off"
+msgstr "Введите время в миллисекундах для включения и выключения светодиода"
+
+msgctxt "pref_flashled_pattern_help_on"
+msgid "Time on:"
+msgstr "Время вкл:"
+
+msgctxt "pref_flashled_pattern_help_off"
+msgid "Time off:"
+msgstr "Время выкл:"
+
+#. Notification Repeat Preferences
+msgctxt "pref_notif_repeat_title"
+msgid "Enable Reminders"
+msgstr "Включить напоминания"
+
+msgctxt "pref_notif_repeat_summaryon"
+msgid "Unread message reminders are enabled"
+msgstr "Напоминания о непрочитанных сообщениях включены"
+
+msgctxt "pref_notif_repeat_summaryoff"
+msgid "Unread message reminders are disabled"
+msgstr "Напоминания о непрочитанных сообщениях выключены"
+
+msgctxt "pref_notif_repeat_interval_title"
+msgid "Reminder Interval"
+msgstr "Интервал напоминаний"
+
+msgctxt "pref_notif_repeat_interval_summary"
+msgid "The time period between notification reminders"
+msgstr "Время между включениями напоминаний"
+
+msgctxt "pref_notif_repeat_interval_dialogTitle"
+msgid "Interval (minutes)"
+msgstr "Интервал (минуты)"
+
+msgctxt "pref_notif_repeat_times_title"
+msgid "Number of Reminders"
+msgstr "Количество напоминаний"
+
+msgctxt "pref_notif_repeat_times_summary"
+msgid "The number of reminder notifications to play"
+msgstr "Кол-во напоминаний, которые будут сделаны"
+
+msgctxt "pref_notif_repeat_screen_on_title"
+msgid "Screen On for Reminders"
+msgstr "Включить экран для напоминаний"
+
+msgctxt "pref_notif_repeat_screen_on_summaryon"
+msgid "Reminders will turn screen on again"
+msgstr "Напоминания снова включат экран"
+
+msgctxt "pref_notif_repeat_screen_on_summaryoff"
+msgid "Reminders will not turn screen on"
+msgstr "Напоминания не включат экран"
+
+#. Contact Notification Customization Strings
+msgctxt "pref_notif_default_title"
+msgid "Default Notifications"
+msgstr "По умолчанию"
+
+msgctxt "pref_notif_default_summary"
+msgid "Notifications for all contacts without an individual customization"
+msgstr "Уведомления для всех контактов без индивидуальных настроек"
+
+msgctxt "pref_contacts_title"
+msgid "Contacts Notifications"
+msgstr "Уведомления для контактов"
+
+msgctxt "pref_contacts_summary"
+msgid "Individual contact customization"
+msgstr "Индивидуальные уведомления для контактов"
+
+msgctxt "pref_notif_help_title"
+msgid "Help - I'm confused!"
+msgstr "Помогите - Не получается!"
+
+msgctxt "pref_notif_help_summary"
+msgid "Notifications Help"
+msgstr "Помощь по уведомлениям"
+
+msgctxt "pref_notif_help_message"
+msgid ""
+"SMS Popup offers the ability to customize notifications on a per contact "
+"basis. When a new message comes in, SMS Popup will first check if the "
+"contact has a customized notification. If so, those settings are used, "
+"otherwise the default notifications are used.\n"
+"\n"
+"Using this functionality, you could set things up so only a few contacts "
+"show a popup while the rest trigger a regular notification. You could also "
+"ignore certain contacts by setting their notification to silent."
+msgstr ""
+
+msgctxt "contact_customization_add"
+msgid "Add Custom Notifications"
+msgstr "Добавить свое уведомление"
+
+msgctxt "contact_customization_edit"
+msgid "Edit Custom Notification"
+msgstr "Редактировать свои уведомления"
+
+msgctxt "contact_customization_remove"
+msgid "Remove Custom Notification"
+msgstr "Удалить свое уведомление"
+
+msgctxt "contact_customization_save"
+msgid "Save"
+msgstr "Сохранить"
+
+#, c-format
+msgctxt "contact_customization_title"
+msgid "Notifications for %s"
+msgstr "Уведомления для %s"
+
+#, c-format
+msgctxt "contact_customization_enabled"
+msgid "Notifications are enabled for %s"
+msgstr "Уведомления включены для %s"
+
+#, c-format
+msgctxt "contact_customization_disabled"
+msgid "Notifications are disabled for %s"
+msgstr "Уведомления отключены для %s"
+
+msgctxt "contact_customization_add_hint"
+msgid "Add/Edit contact notifications…"
+msgstr ""
+
+msgctxt "ringtone_silent"
+msgid "Silent"
+msgstr "Тишина"
+
+#. Preset Quick Reply Message Strings
+msgctxt "pref_message_presets_title"
+msgid "Preset Messages"
+msgstr "Шаблоны"
+
+msgctxt "pref_message_presets_summary"
+msgid "Configure preset messages for quick replies"
+msgstr "Задать шаблоны для быстрого ответа"
+
+msgctxt "message_presets_add"
+msgid "Add Preset Message"
+msgstr "Добавить шаблон"
+
+msgctxt "message_presets_edit"
+msgid "Edit Preset Message"
+msgstr "Изменить шаблон"
+
+msgctxt "message_presets_add_text"
+msgid "Create"
+msgstr "Создать"
+
+msgctxt "message_presets_save_text"
+msgid "Save"
+msgstr "Сохранить"
+
+msgctxt "message_presets_delete_text"
+msgid "Remove"
+msgstr "Удалить"
+
+msgctxt "message_presets_edit_text"
+msgid "Edit"
+msgstr "Изменить"
+
+msgctxt "message_presets_reorder_text"
+msgid "Move to top"
+msgstr "Переместить наверх"
+
+msgctxt "message_presets_empty_text"
+msgid "No presets defined"
+msgstr "Шаблон не определен"
+
+msgctxt "message_presets_add_toast"
+msgid "Message preset added"
+msgstr "Шаблон добавлен"
+
+msgctxt "message_presets_save_toast"
+msgid "Message preset updated"
+msgstr "Шаблон обновлен"
+
+msgctxt "message_presets_delete_toast"
+msgid "Message preset deleted"
+msgstr "Шаблон удален"
+
+msgctxt "message_presets_reorder_toast"
+msgid "Message preset moved to top"
+msgstr "Шаблон перемещен наверх"
+
+msgctxt "message_presets_error_toast"
+msgid "Error - please try again"
+msgstr "Ошибка - Попробуйте еще раз"
+
+#. Quick Reply Strings
+msgctxt "quickreply_title"
+msgid "Quick Reply"
+msgstr "Быстрый ответ"
+
+#, c-format
+msgctxt "quickreply_from_text"
+msgid "To: %s"
+msgstr "Кому: %s"
+
+msgctxt "quickreply_preset_button"
+msgid "Presets"
+msgstr "Шаблоны"
+
+msgctxt "quickreply_send_button"
+msgid "Send"
+msgstr "Отправить"
+
+msgctxt "quickreply_sending_toast"
+msgid "Sending message…"
+msgstr ""
+
+msgctxt "quickreply_nomessage_toast"
+msgid "Send"
+msgstr "Отправить"
+
+#. Text-To-Speech and Voice Transcription Strings
+msgctxt "loading_message"
+msgid "Loading…"
+msgstr ""
+
+msgctxt "error_message"
+msgid "Error"
+msgstr "Ошибка"
+
+msgctxt "error_no_voice_recognition"
+msgid "Voice recognition not available on this device"
+msgstr "Распознование голоса не доступно на этом устройстве"
+
+#. Popup Button Configuration
+msgctxt "pref_button_config_title"
+msgid "Button Configuration"
+msgstr "Настройка кнопки"
+
+msgctxt "pref_button_config_summary"
+msgid "Popup button configuration"
+msgstr "Настройка кнопки всплывающего окна"
+
+#, c-format
+msgctxt "pref_button_summary"
+msgid "Current Setting: %s"
+msgstr "Текущие настройки: %s"
+
+msgctxt "pref_button1_title"
+msgid "Button 1 Configuration"
+msgstr "Настройка кнопки 1"
+
+msgctxt "pref_button2_title"
+msgid "Button 2 Configuration"
+msgstr "Настройка кнопки 2"
+
+msgctxt "pref_button3_title"
+msgid "Button 3 Configuration"
+msgstr "Настройка кнопки 3"
+
+#. Donate Strings (not used right now)
+msgctxt "pref_donate_title"
+msgid "Donate to SMS Popup"
+msgstr "Пожертвовать для SMS Popup"
+
+msgctxt "pref_donate_text"
+msgid ""
+"SMS Popup is a free application that I work on in my spare time. If you find "
+"it useful, and can spare a few bucks, a donation would be much appreciated.\n"
+"\n"
+"Thanks!"
+msgstr ""
+"SMS Popup - это бесплатная программа, над которой я работаю в свое свободное "
+"время. Если она вам понравилась и у вас есть пара лишних долларов, я буду "
+"признателен за ваши пожертвования.\n"
+"\n"
+"Спасибо!"
+
+msgctxt "pref_donate_market_button"
+msgid "Donate via Android Market"
+msgstr "Пожертвовать через Android Market"
+
+msgctxt "pref_donate_paypal_button"
+msgid "Donate via PayPal"
+msgstr "Пожертвовать через PayPal"
+
+#. Misc missing string
+msgctxt "view_contact"
+msgid "View Contact"
+msgstr "Посмотреть контакт"
+
+#. Quick Reply Checkbox Preference
+msgctxt "pref_quickreply_title"
+msgid "Quick Reply"
+msgstr "Быстрый ответ"
+
+msgctxt "pref_quickreply_summaryon"
+msgid "Quick Reply is enabled"
+msgstr "Быстрый ответ включён"
+
+msgctxt "pref_quickreply_summaryoff"
+msgid "Quick Reply is disabled"
+msgstr "Быстрый ответ выключен"
+
+msgctxt "pref_quickreply_bothreplybuttons"
+msgid ""
+"Both reply buttons are already active, to configure them please go to the "
+"Button Configuration screen"
+msgstr ""
+"Обе кнопки ответа уже активны, для их конфигурации откройте окно \"Настройка "
+"кнопок\""
+
+msgctxt "pref_quickreply_noreplybuttons"
+msgid ""
+"No reply buttons are currently active, to configure them please go to the "
+"Button Configuration screen"
+msgstr ""
+"Нет активных кнопок ответа, для их конфигурации откройте окно \"Настройка "
+"кнопок\""
+
+#. Misc missing string
+msgctxt "button_replybyaddress"
+msgid "Reply (to phone number)"
+msgstr "Ответить (на телефонный номер)"
+
+#. Quick Reply Signature pref
+msgctxt "pref_notif_signature_title"
+msgid "Quick Reply Signature"
+msgstr "Подпись для быстрого ответа"
+
+msgctxt "pref_notif_signature_summary"
+msgid "Appears at the end of every quick reply"
+msgstr "Появляется в конце любого быстрого ответа"
+
+#. Eula Strings
+msgctxt "eula_title"
+msgid "SMS Popup License Agreement"
+msgstr "Пользовательское соглашение SMS Popup"
+
+msgctxt "eula_accept"
+msgid "Accept"
+msgstr "Принять"
+
+msgctxt "eula_refuse"
+msgid "Uninstall"
+msgstr "Удалить"
+
+#. Send message prefs
+msgctxt "pref_delivery_report_title"
+msgid "Delivery Reports"
+msgstr "Сообщения о доставке"
+
+msgctxt "pref_delivery_report_summary"
+msgid "Request a delivery report for each message you send via quick reply"
+msgstr ""
+"Запрашивать подтверждение о доставке для каждого сообщения отправленного при "
+"помощи быстрого ответа"
+
+msgctxt "pref_split_message_title"
+msgid "Split Long Messages"
+msgstr "Разбивать длинные сообщения"
+
+msgctxt "pref_split_message_summaryon"
+msgid "Long messages will be split up (only needed for some CDMA carriers)"
+msgstr ""
+"Длинные сообщения будут разбиты на части (нужно только для некоторых "
+"устройств CDMA)"
+
+msgctxt "pref_split_message_summaryoff"
+msgid ""
+"Long messages will not be split up (only needed for some CDMA carriers)"
+msgstr ""
+"Длинные сообщения не будут разбиты на части (нужно только для некоторых "
+"устройств CDMA)"
+
+#. Other new prefs
+msgctxt "pref_autorotate_title"
+msgid "Autorotate Always On"
+msgstr "Автопрокрутка Всегда Включена"
+
+msgctxt "pref_autorotate_summaryon"
+msgid "Popup will always autorotate"
+msgstr "Всплывающее окно будет всегда автоматически меняться"
+
+msgctxt "pref_autorotate_summaryoff"
+msgid "Popup will auto-rotate based on the screen behind it"
+msgstr "Всплывающее окно будет автоматически меняться на экране позади этого"
+
+msgctxt "pref_screen_on_title"
+msgid "Screen On for Popup"
+msgstr "Включить экран для сообщений"
+
+msgctxt "pref_screen_on_summaryon"
+msgid "Screen will turn on when popup shows"
+msgstr "Экран будет включен при показе сообщений"
+
+msgctxt "pref_screen_on_summaryoff"
+msgid "Screen will not turn on when popup shows"
+msgstr "Экран не будет включен при показе сообщений"
+
+msgctxt "pref_screen_category"
+msgid "Screen Control"
+msgstr "Управление экраном"
+
+#. Other new Quick Reply prefs
+msgctxt "pref_show_delete_button_dialog_title"
+msgid "Delete Message"
+msgstr "Удалить сообщение"
+
+msgctxt "pref_show_delete_button_dialog_text"
+msgid "Are you sure?"
+msgstr "Вы уверены?"
+
+msgctxt "quickreply_sent_toast"
+msgid "Message Sent"
+msgstr "Сообщение отправлено"
+
+msgctxt "quickreply_failed_send_later"
+msgid ""
+"Currently unable to send your message. It will be sent when the service "
+"becomes available."
+msgstr ""
+"Сейчас невозможно отправить Ваше сообщение. Оно будет отправлено, когда "
+"сервис будет снова доступен."
+
+msgctxt "quickreply_failed"
+msgid "Message failed to send"
+msgstr "Невозможно отправить сообщение"
+
+#. Arrays texts
+msgctxt "pref_custom"
+msgid "Custom"
+msgstr "Другое"
+
+msgctxt "pref_notif_repeat_times_entries_keep_repeting"
+msgid "Keep repeating"
+msgstr "Продолжать повторять"
+
+msgctxt "pref_timeout_entries_10s"
+msgid "10 seconds"
+msgstr "10 секунд"
+
+msgctxt "pref_timeout_entries_20s"
+msgid "20 seconds"
+msgstr "20 секунд"
+
+msgctxt "pref_timeout_entries_30s"
+msgid "30 seconds"
+msgstr "30 секунд"
+
+msgctxt "pref_timeout_entries_1m"
+msgid "1 minute"
+msgstr "1 минута"
+
+msgctxt "pref_timeout_entries_2m"
+msgid "2 minutes"
+msgstr "2 минуты"
+
+msgctxt "pref_timeout_entries_5m"
+msgid "5 minutes"
+msgstr "5 минут"
+
+msgctxt "pref_timeout_entries_10m"
+msgid "10 minutes"
+msgstr "10 минут"
+
+msgctxt "pref_vibrate_pattern_entries_normal"
+msgid "Normal"
+msgstr "Обычное"
+
+msgctxt "pref_vibrate_pattern_entries_long"
+msgid "Long Vibrate"
+msgstr "Длинная вибрация"
+
+msgctxt "pref_vibrate_pattern_entries_multiple_short"
+msgid "Multiple Short"
+msgstr "Множество коротких"
+
+msgctxt "pref_vibrate_pattern_entries_multiple_long"
+msgid "Multiple Long"
+msgstr "Множество длинных"
+
+msgctxt "pref_led_color_blue"
+msgid "Blue"
+msgstr "Синий"
+
+msgctxt "pref_led_color_green"
+msgid "Green"
+msgstr "Зеленый"
+
+msgctxt "pref_led_color_red"
+msgid "Red"
+msgstr "Красный"
+
+msgctxt "pref_led_color_yellow"
+msgid "Yellow"
+msgstr "Желтый"
+
+msgctxt "pref_led_color_magenta"
+msgid "Magenta"
+msgstr "Фиолетовый"
+
+msgctxt "pref_led_color_cyan"
+msgid "Cyan"
+msgstr "Бирюзовый"
+
+msgctxt "pref_led_pattern_entries_fast"
+msgid "Fast"
+msgstr "Быстро"
+
+msgctxt "pref_led_pattern_entries_normal"
+msgid "Normal"
+msgstr "Нормально"
+
+msgctxt "pref_led_pattern_entries_slow"
+msgid "Slow"
+msgstr "Медленно"

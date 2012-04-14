@@ -1,0 +1,974 @@
+# Turkish translations for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2012-03-04 18:33-0500\n"
+"PO-Revision-Date: 2011-11-10 21:57+0000\n"
+"Last-Translator: BouRock <Unknown>\n"
+"Language-Team: tr <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2012-03-08 00:16+0000\n"
+"X-Generator: Launchpad (build 14907)\n"
+"Generated-By: Babel 1.0\n"
+
+#, c-format
+msgctxt "notification_multiple_text"
+msgid "%d unread messages."
+msgstr "%d okunmamış ileti."
+
+#, c-format
+msgctxt "notification_scroll_privacy"
+msgid "New message from: %s"
+msgstr "Yeni ileti gönderen: %s"
+
+#. Button Strings
+msgctxt "button_close"
+msgid "Close"
+msgstr "Kapat"
+
+msgctxt "button_inbox"
+msgid "Inbox"
+msgstr "Gelen Kutusu"
+
+msgctxt "pref_quickreply_summaryon"
+msgid "Quick Reply is enabled"
+msgstr "Hızlı Yanıt etkin"
+
+msgctxt "pref_timeout_entries_10s"
+msgid "10 seconds"
+msgstr "10 saniye"
+
+msgctxt "pref_timeout_entries_20s"
+msgid "20 seconds"
+msgstr "20 saniye"
+
+msgctxt "pref_timeout_entries_30s"
+msgid "30 seconds"
+msgstr "30 saniye"
+
+msgctxt "pref_timeout_entries_1m"
+msgid "1 minute"
+msgstr "1 dakika"
+
+msgctxt "pref_timeout_entries_2m"
+msgid "2 minutes"
+msgstr "2 dakika"
+
+msgctxt "pref_timeout_entries_5m"
+msgid "5 minutes"
+msgstr "5 dakika"
+
+msgctxt "pref_timeout_entries_10m"
+msgid "10 minutes"
+msgstr "10 dakika"
+
+msgctxt "pref_vibrate_pattern_entries_normal"
+msgid "Normal"
+msgstr "Normal"
+
+msgctxt "pref_vibrate_pattern_entries_long"
+msgid "Long Vibrate"
+msgstr "Uzun Titreşim"
+
+msgctxt "pref_led_color_blue"
+msgid "Blue"
+msgstr "Mavi"
+
+msgctxt "pref_led_color_green"
+msgid "Green"
+msgstr "Yeşil"
+
+msgctxt "pref_led_color_red"
+msgid "Red"
+msgstr "Kırmızı"
+
+msgctxt "pref_led_color_yellow"
+msgid "Yellow"
+msgstr "Sarı"
+
+msgctxt "pref_led_pattern_entries_fast"
+msgid "Fast"
+msgstr "Hızlı"
+
+msgctxt "pref_led_pattern_entries_normal"
+msgid "Normal"
+msgstr "Normal"
+
+#. Notification Strings
+msgctxt "notification_multiple_title"
+msgid "New messages"
+msgstr "Yeni iletiler"
+
+msgctxt "notification_scroll_privacy_no_name"
+msgid "New message"
+msgstr ""
+
+msgctxt "button_reply"
+msgid "Reply"
+msgstr "Cevapla"
+
+msgctxt "button_view"
+msgid "View"
+msgstr "Görünüm"
+
+msgctxt "button_view_mms"
+msgid "View MMS"
+msgstr "MMS Göster"
+
+msgctxt "button_delete"
+msgid "Delete"
+msgstr "Sil"
+
+msgctxt "button_unlock"
+msgid "Unlock"
+msgstr "Kilidi Aç"
+
+msgctxt "button_tts"
+msgid "Text-to-speech"
+msgstr "Metin Okuma"
+
+msgctxt "button_speak"
+msgid "Speak"
+msgstr "Konuş"
+
+msgctxt "button_delete_noconfirm"
+msgid "Delete (no confirmation)"
+msgstr "Sil (onaylama yapılmayacak)"
+
+msgctxt "button_quickreply"
+msgid "Quick Reply"
+msgstr "Hızlı Cevap"
+
+msgctxt "button_disabled"
+msgid "Disabled"
+msgstr "Devre dışı"
+
+#. Main Preferences
+msgctxt "pref_config_title"
+msgid "SMS Popup Configuration"
+msgstr "Açılan SMS Yapılandırma"
+
+msgctxt "pref_other_title"
+msgid "Other"
+msgstr "Diğer"
+
+msgctxt "pref_enabled_title"
+msgid "Enable SMS Popup"
+msgstr "Açılan SMS'i etkinleştir"
+
+msgctxt "pref_enabled_summaryon"
+msgid "SMS Popup is enabled"
+msgstr "Açılan SMS etkin"
+
+msgctxt "pref_enabled_summaryoff"
+msgid "SMS Popup is disabled"
+msgstr "Açılan SMS devre dışı"
+
+msgctxt "pref_about_title"
+msgid "About"
+msgstr "Hakkında"
+
+msgctxt "pref_about_summary"
+msgid "About SMS Popup"
+msgstr "Açılan SMS Hakkında"
+
+msgctxt "pref_faq_title"
+msgid "FAQ"
+msgstr "S.S.S"
+
+msgctxt "pref_faq_summary"
+msgid "Frequently Asked Questions"
+msgstr "Sıkça Sorulan Sorular"
+
+msgctxt "pref_sendemail_title"
+msgid "E-mail the Developer"
+msgstr "Geliştiriciye E-Posta Yolla"
+
+msgctxt "pref_sendemail_dialog"
+msgid ""
+"Can I include your system information in the e-mail (this will help me "
+"troubleshoot bugs easier)?"
+msgstr ""
+"Sistem biliginizi e-postaya dahil edebilirmiyim? (bu hataları daha kolay "
+"çözmeme yardımcı olacak)"
+
+msgctxt "pref_sendemail_buttonok"
+msgid "Sure"
+msgstr "Kesinlikle"
+
+msgctxt "pref_sendemail_buttoncancel"
+msgid "No way"
+msgstr "İmkansız"
+
+#. Additional Preferences
+msgctxt "pref_additional_title"
+msgid "Additional Settings"
+msgstr "Ek Ayarlar"
+
+msgctxt "pref_additional_summary"
+msgid "Additional SMS Popup configuration"
+msgstr "İlave Açılan SMS yapılandırması"
+
+msgctxt "pref_timeout_title"
+msgid "Screen Timeout"
+msgstr "Ekran Zaman Aşımı"
+
+msgctxt "pref_timeout_summary"
+msgid "The screen will sleep after this time"
+msgstr "Ekran bu zamandan sonra uyku moduna geçecek"
+
+msgctxt "pref_dimscreen_title"
+msgid "Dim Popup Screen"
+msgstr "Loş Açılan Ekran"
+
+msgctxt "pref_dimscreen_summaryon"
+msgid "Popup screen will be dim (saves battery)"
+msgstr "Açılan Ekran loş olacak(bataryadan tassarruf sağlar)"
+
+msgctxt "pref_dimscreen_summaryoff"
+msgid "Popup screen will be bright"
+msgstr "Açılan ekran parlak olacak"
+
+msgctxt "pref_privacy_category"
+msgid "Privacy"
+msgstr ""
+
+msgctxt "pref_privacy_title"
+msgid "Privacy Mode"
+msgstr "Gizlilik Modu"
+
+msgctxt "pref_privacy_summaryon"
+msgid "Popup will use privacy mode"
+msgstr ""
+
+msgctxt "pref_privacy_summaryoff"
+msgid "Popup will show all message details"
+msgstr ""
+
+msgctxt "pref_privacy_sender_title"
+msgid "Hide Contact Name"
+msgstr ""
+
+msgctxt "pref_privacy_sender_summaryon"
+msgid "Message sender name will also be hidden"
+msgstr ""
+
+msgctxt "pref_privacy_sender_summaryoff"
+msgid "Message sender name will be shown"
+msgstr ""
+
+msgctxt "pref_privacy_always_title"
+msgid "Always Use Privacy Mode"
+msgstr ""
+
+msgctxt "pref_privacy_always_summaryon"
+msgid "Privacy mode will always be used"
+msgstr ""
+
+msgctxt "pref_privacy_always_summaryoff"
+msgid "Only use privacy mode when screen is locked"
+msgstr ""
+
+msgctxt "pref_markread_title"
+msgid "Mark Read"
+msgstr "Mark Read"
+
+msgctxt "pref_markread_summaryon"
+msgid "Messages will be marked as read when clicking \"Close\""
+msgstr "Messages will be marked as read when clicking \"Close\""
+
+msgctxt "pref_markread_summaryoff"
+msgid "Messages will not be marked as read when clicking \"Close\""
+msgstr "Messages will not be marked as read when clicking \"Close\""
+
+msgctxt "pref_onlyShowOnKeyguard_title"
+msgid "Restrict Popup"
+msgstr "Popup'u sınırla"
+
+msgctxt "pref_onlyShowOnKeyguard_summaryon"
+msgid "Popup window will only show when keyguard is engaged"
+msgstr "Popup window will only show when keyguard is engaged"
+
+msgctxt "pref_onlyShowOnKeyguard_summaryoff"
+msgid "Popup will always show"
+msgstr "Popup will always show"
+
+msgctxt "pref_useUnlockButton_title"
+msgid "Show Unlock Button"
+msgstr ""
+
+msgctxt "pref_useUnlockButton_summaryon"
+msgid "Unlock button will show when screen is locked"
+msgstr ""
+
+msgctxt "pref_useUnlockButton_summaryoff"
+msgid "Regular buttons will show when screen is locked"
+msgstr ""
+
+msgctxt "pref_show_buttons_title"
+msgid "Show Buttons On Popup"
+msgstr "Show Buttons On Popup"
+
+msgctxt "pref_show_buttons_summaryon"
+msgid "Buttons on popup are visible"
+msgstr "Buttons on popup are visible"
+
+msgctxt "pref_show_buttons_summaryoff"
+msgid "Buttons are hidden in long press menu"
+msgstr "Buttons are hidden in long press menu"
+
+#. Notification Preferences
+msgctxt "pref_notif_title"
+msgid "Notifications"
+msgstr "Bildiriler"
+
+msgctxt "pref_notif_summary"
+msgid "Notification configuration"
+msgstr "Bildirim yapılandırma"
+
+#. Category headings
+msgctxt "pref_notif_category_title"
+msgid "Notification Configuration"
+msgstr "Bildirim Yapılandırması"
+
+msgctxt "pref_vibrate_category_title"
+msgid "Vibrate Configuration"
+msgstr "Vibrate Configuration"
+
+msgctxt "pref_flashled_category_title"
+msgid "LED Configuration"
+msgstr "LED Yapılandırma"
+
+msgctxt "pref_reminder_category_title"
+msgid "Reminder Configuration"
+msgstr "Hatırlatma Yapılandırma"
+
+#. General Notification Preferences
+msgctxt "pref_notif_enabled_title"
+msgid "Enable Notifications"
+msgstr "Bildirimleri Etkinleştir"
+
+msgctxt "pref_notif_enabled_summaryon"
+msgid "Notifications are enabled"
+msgstr "Notifications are enabled"
+
+msgctxt "pref_notif_enabled_summaryoff"
+msgid "Notifications are disabled"
+msgstr "Notifications are disabled"
+
+msgctxt "pref_notif_enabled_warning"
+msgid ""
+"To avoid conflicts and multiple alerts, please disable the system SMS "
+"notifications and any other apps that provide a notification when a SMS is "
+"received.\n"
+"\n"
+"To turn off the system notification, go to the messaging app, hit menu -&gt; "
+"settings and un-check notifications."
+msgstr ""
+"To avoid conflicts and multiple alerts, please disable the system SMS "
+"notifications and any other apps that provide a notification when a SMS is "
+"received.\n"
+"\n"
+"To turn off the system notification, go to the messaging app, hit menu -&gt; "
+"settings and un-check notifications."
+
+msgctxt "pref_popup_enabled_title"
+msgid "Show a Popup"
+msgstr "Show a Popup"
+
+msgctxt "pref_popup_enabled_summaryon"
+msgid "Message will open in a popup"
+msgstr "Message will open in a popup"
+
+msgctxt "pref_popup_enabled_summaryoff"
+msgid "Message will only show in notification area"
+msgstr ""
+
+msgctxt "pref_notif_test_title"
+msgid "Test Notification"
+msgstr "Test Bildirim"
+
+msgctxt "pref_notif_test_summary"
+msgid "Test out your notification"
+msgstr "Test out your notification"
+
+msgctxt "pref_notif_test_message"
+msgid "Testing your notification now!"
+msgstr "Testing your notification now!"
+
+msgctxt "pref_notif_sound_title"
+msgid "Notification Sound"
+msgstr "Bildirim Sesi"
+
+msgctxt "pref_notif_sound_summary"
+msgid "This sound will play when a message is received"
+msgstr "Bu ses mesaj alındığında oynayacak"
+
+msgctxt "pref_notifyOnCall_title"
+msgid "Notify On Call"
+msgstr ""
+
+msgctxt "pref_notifyOnCall_summaryon"
+msgid "Sound will play while on a call"
+msgstr ""
+
+msgctxt "pref_notifyOnCall_summaryoff"
+msgid "Sound will not play while on a call"
+msgstr ""
+
+msgctxt "pref_notif_icon_title"
+msgid "Notification Icon"
+msgstr ""
+
+msgctxt "pref_notif_icon_summary"
+msgid "Change the notification area icon"
+msgstr ""
+
+msgctxt "pref_vibrate_title"
+msgid "Vibrate"
+msgstr "Vibrate"
+
+msgctxt "pref_vibrate_summaryon"
+msgid "Vibrate is on"
+msgstr "Titreşim açık"
+
+msgctxt "pref_vibrate_summaryoff"
+msgid "Vibrate is off"
+msgstr "Vibrate is off"
+
+#. Vibrate Preferences
+msgctxt "pref_vibrate_pattern_title"
+msgid "Vibrate Pattern"
+msgstr "Vibrate Pattern"
+
+msgctxt "pref_vibrate_pattern_summary"
+msgid "Set the vibration pattern"
+msgstr "Set the vibration pattern"
+
+msgctxt "pref_vibrate_pattern_ok"
+msgid "Custom vibrate pattern set"
+msgstr "Custom vibrate pattern set"
+
+msgctxt "pref_vibrate_pattern_bad"
+msgid "Custom vibrate pattern invalid"
+msgstr "Custom vibrate pattern invalid, using default"
+
+msgctxt "pref_vibrate_pattern_help"
+msgid ""
+"Enter a custom vibrate pattern, in the format:\n"
+"millisOff, millisOn, etc.\n"
+"\n"
+"For example:\n"
+"0,1000\n"
+"0,500,200,500,200,500"
+msgstr ""
+"Enter a custom vibrate pattern, in the format:\n"
+"millisOff, millisOn, etc.\n"
+"\n"
+"For example:\n"
+"0,1000\n"
+"0,500,200,500,200,500"
+
+#. LED Preferences
+msgctxt "pref_flashled_title"
+msgid "Blink LED"
+msgstr "Blink LED"
+
+msgctxt "pref_flashled_summaryon"
+msgid "Blink LED when a message is received"
+msgstr "Blink LED when a message is received"
+
+msgctxt "pref_flashled_summaryoff"
+msgid "Do not blink LED when a message is received"
+msgstr "Do not blink LED when a message is received"
+
+msgctxt "pref_flashled_color_title"
+msgid "LED Color"
+msgstr "LED Color"
+
+msgctxt "pref_flashled_color_summary"
+msgid "The color of the LED"
+msgstr "The color of the LED"
+
+msgctxt "pref_flashled_color_custom_dialog_red"
+msgid "Red:"
+msgstr "Kırmızı:"
+
+msgctxt "pref_flashled_color_custom_dialog_green"
+msgid "Green:"
+msgstr "Yeşil:"
+
+msgctxt "pref_flashled_color_custom_dialog_blue"
+msgid "Blue:"
+msgstr "Mavi:"
+
+msgctxt "pref_flashled_color_custom_dialog_preview"
+msgid "Preview:"
+msgstr "Önizleme:"
+
+msgctxt "pref_flashled_color_custom_set"
+msgid "Custom LED color set"
+msgstr "Custom LED color set"
+
+msgctxt "pref_flashled_pattern_title"
+msgid "LED Blink Rate"
+msgstr "LED Blink Rate"
+
+msgctxt "pref_flashled_pattern_summary"
+msgid "Set the speed the LED blinks"
+msgstr "Set the speed the LED blinks"
+
+msgctxt "pref_flashled_pattern_ok"
+msgid "Custom LED blink rate set"
+msgstr "Custom LED blink rate set"
+
+msgctxt "pref_flashled_pattern_bad"
+msgid "Custom LED blink rate is invalid"
+msgstr "Custom LED blink rate is invalid, using default"
+
+msgctxt "pref_flashled_pattern_help"
+msgid "Enter the time in milliseconds to turn the LED on and off"
+msgstr "Enter the time in milliseconds to turn the LED on and off"
+
+msgctxt "pref_flashled_pattern_help_on"
+msgid "Time on:"
+msgstr "Time on:"
+
+msgctxt "pref_flashled_pattern_help_off"
+msgid "Time off:"
+msgstr "Time off:"
+
+#. Notification Repeat Preferences
+msgctxt "pref_notif_repeat_title"
+msgid "Enable Reminders"
+msgstr "Anımsatıcıları Etkinleştir"
+
+msgctxt "pref_notif_repeat_summaryon"
+msgid "Unread message reminders are enabled"
+msgstr "Unread message reminders are enabled"
+
+msgctxt "pref_notif_repeat_summaryoff"
+msgid "Unread message reminders are disabled"
+msgstr "Unread message reminders are disabled"
+
+msgctxt "pref_notif_repeat_interval_title"
+msgid "Reminder Interval"
+msgstr "Hatırlatma Aralığı"
+
+msgctxt "pref_notif_repeat_interval_summary"
+msgid "The time period between notification reminders"
+msgstr "The time period between notification reminders"
+
+msgctxt "pref_notif_repeat_interval_dialogTitle"
+msgid "Interval (minutes)"
+msgstr "Interval (minutes)"
+
+msgctxt "pref_notif_repeat_times_title"
+msgid "Number of Reminders"
+msgstr "Number of Reminders"
+
+msgctxt "pref_notif_repeat_times_summary"
+msgid "The number of reminder notifications to play"
+msgstr "The number of reminder notifications to play"
+
+msgctxt "pref_notif_repeat_screen_on_title"
+msgid "Screen On for Reminders"
+msgstr "Screen on for Reminders"
+
+msgctxt "pref_notif_repeat_screen_on_summaryon"
+msgid "Reminders will turn screen on again"
+msgstr "Reminders will turn screen on again"
+
+msgctxt "pref_notif_repeat_screen_on_summaryoff"
+msgid "Reminders will not turn screen on"
+msgstr "Reminders will not turn screen on"
+
+#. Contact Notification Customization Strings
+msgctxt "pref_notif_default_title"
+msgid "Default Notifications"
+msgstr "Varsayılan Bildirimler"
+
+msgctxt "pref_notif_default_summary"
+msgid "Notifications for all contacts without an individual customization"
+msgstr "Kişisel özelleştirmesi olmayan tüm kişiler için bildirimler"
+
+msgctxt "pref_contacts_title"
+msgid "Contacts Notifications"
+msgstr "Kişi Bildirimleri"
+
+msgctxt "pref_contacts_summary"
+msgid "Individual contact customization"
+msgstr "Kişisel kişi özelleştirmesi"
+
+msgctxt "pref_notif_help_title"
+msgid "Help - I'm confused!"
+msgstr "Yardım - Kafam karıştı!"
+
+msgctxt "pref_notif_help_summary"
+msgid "Notifications Help"
+msgstr "Bildirim Yardımı"
+
+msgctxt "pref_notif_help_message"
+msgid ""
+"SMS Popup offers the ability to customize notifications on a per contact "
+"basis. When a new message comes in, SMS Popup will first check if the "
+"contact has a customized notification. If so, those settings are used, "
+"otherwise the default notifications are used.\n"
+"\n"
+"Using this functionality, you could set things up so only a few contacts "
+"show a popup while the rest trigger a regular notification. You could also "
+"ignore certain contacts by setting their notification to silent."
+msgstr ""
+
+msgctxt "contact_customization_add"
+msgid "Add Custom Notifications"
+msgstr "Özel Bildirim Ekle"
+
+msgctxt "contact_customization_edit"
+msgid "Edit Custom Notification"
+msgstr "Özel Bildirimi Düzenle"
+
+msgctxt "contact_customization_remove"
+msgid "Remove Custom Notification"
+msgstr "Özel Bildirimi Kaldır"
+
+msgctxt "contact_customization_save"
+msgid "Save"
+msgstr "Kaydet"
+
+#, c-format
+msgctxt "contact_customization_title"
+msgid "Notifications for %s"
+msgstr "%s için bildirimler"
+
+#, c-format
+msgctxt "contact_customization_enabled"
+msgid "Notifications are enabled for %s"
+msgstr "%s için bildirimler etkinleştirildi"
+
+#, c-format
+msgctxt "contact_customization_disabled"
+msgid "Notifications are disabled for %s"
+msgstr "%s için bildirimler etkisizleştirildi"
+
+msgctxt "contact_customization_add_hint"
+msgid "Add/Edit contact notifications…"
+msgstr ""
+
+msgctxt "ringtone_silent"
+msgid "Silent"
+msgstr "Sessiz"
+
+#. Preset Quick Reply Message Strings
+msgctxt "pref_message_presets_title"
+msgid "Preset Messages"
+msgstr "Hazır Mesajlar"
+
+msgctxt "pref_message_presets_summary"
+msgid "Configure preset messages for quick replies"
+msgstr "Hızlı yanıtlar için hazır mesajları yapılandır"
+
+msgctxt "message_presets_add"
+msgid "Add Preset Message"
+msgstr "Hazır Mesaj Ekle"
+
+msgctxt "message_presets_edit"
+msgid "Edit Preset Message"
+msgstr "Hazır Mesajı Düzenle"
+
+msgctxt "message_presets_add_text"
+msgid "Create"
+msgstr "Oluştur"
+
+msgctxt "message_presets_save_text"
+msgid "Save"
+msgstr "Kaydet"
+
+msgctxt "message_presets_delete_text"
+msgid "Remove"
+msgstr "Kaldır"
+
+msgctxt "message_presets_edit_text"
+msgid "Edit"
+msgstr "Düzenle"
+
+msgctxt "message_presets_reorder_text"
+msgid "Move to top"
+msgstr "En üste taşı"
+
+msgctxt "message_presets_empty_text"
+msgid "No presets defined"
+msgstr "Tanımlı hazır mesaj yok"
+
+msgctxt "message_presets_add_toast"
+msgid "Message preset added"
+msgstr "Hazır mesaj eklendi"
+
+msgctxt "message_presets_save_toast"
+msgid "Message preset updated"
+msgstr "Hazır mesaj güncellendi"
+
+msgctxt "message_presets_delete_toast"
+msgid "Message preset deleted"
+msgstr "Mesaj öntanımı silindi"
+
+msgctxt "message_presets_reorder_toast"
+msgid "Message preset moved to top"
+msgstr "Mesaj öntanımını en üste taşı"
+
+msgctxt "message_presets_error_toast"
+msgid "Error - please try again"
+msgstr "Hata - lütfen tekrar deneyin"
+
+#. Quick Reply Strings
+msgctxt "quickreply_title"
+msgid "Quick Reply"
+msgstr "Hızlı Yanıt"
+
+#, c-format
+msgctxt "quickreply_from_text"
+msgid "To: %s"
+msgstr "Kime: %s"
+
+msgctxt "quickreply_preset_button"
+msgid "Presets"
+msgstr "Öntanımlar"
+
+msgctxt "quickreply_send_button"
+msgid "Send"
+msgstr "Gönder"
+
+msgctxt "quickreply_sending_toast"
+msgid "Sending message…"
+msgstr ""
+
+msgctxt "quickreply_nomessage_toast"
+msgid "Send"
+msgstr "Gönder"
+
+#. Text-To-Speech and Voice Transcription Strings
+msgctxt "loading_message"
+msgid "Loading…"
+msgstr ""
+
+msgctxt "error_message"
+msgid "Error"
+msgstr "Hata"
+
+msgctxt "error_no_voice_recognition"
+msgid "Voice recognition not available on this device"
+msgstr "Bu aygıtta ses tanıma yok"
+
+#. Popup Button Configuration
+msgctxt "pref_button_config_title"
+msgid "Button Configuration"
+msgstr "Düğme Yapılandırması"
+
+msgctxt "pref_button_config_summary"
+msgid "Popup button configuration"
+msgstr "Açılır Pencere düğmesi yapılandırması"
+
+#, c-format
+msgctxt "pref_button_summary"
+msgid "Current Setting: %s"
+msgstr "Şu Anki Ayar: %s"
+
+msgctxt "pref_button1_title"
+msgid "Button 1 Configuration"
+msgstr "Düğme 1 Yapılandırması"
+
+msgctxt "pref_button2_title"
+msgid "Button 2 Configuration"
+msgstr "Düğme 2 Yapılandırması"
+
+msgctxt "pref_button3_title"
+msgid "Button 3 Configuration"
+msgstr "Düğme 3 Yapılandırması"
+
+#. Donate Strings (not used right now)
+msgctxt "pref_donate_title"
+msgid "Donate to SMS Popup"
+msgstr "SMS Popup'a bağış yapın"
+
+msgctxt "pref_donate_text"
+msgid ""
+"SMS Popup is a free application that I work on in my spare time. If you find "
+"it useful, and can spare a few bucks, a donation would be much appreciated.\n"
+"\n"
+"Thanks!"
+msgstr ""
+
+msgctxt "pref_donate_market_button"
+msgid "Donate via Android Market"
+msgstr "Android Market yoluyla bağış yapın"
+
+msgctxt "pref_donate_paypal_button"
+msgid "Donate via PayPal"
+msgstr "PayPal yoluyla bağış yapın"
+
+#. Misc missing string
+msgctxt "view_contact"
+msgid "View Contact"
+msgstr "Kişiyi Göster"
+
+#. Quick Reply Checkbox Preference
+msgctxt "pref_quickreply_title"
+msgid "Quick Reply"
+msgstr "Hızlı Yanıt"
+
+msgctxt "pref_quickreply_summaryoff"
+msgid "Quick Reply is disabled"
+msgstr "Hızlı Yanıt etkisiz"
+
+msgctxt "pref_quickreply_bothreplybuttons"
+msgid ""
+"Both reply buttons are already active, to configure them please go to the "
+"Button Configuration screen"
+msgstr ""
+
+msgctxt "pref_quickreply_noreplybuttons"
+msgid ""
+"No reply buttons are currently active, to configure them please go to the "
+"Button Configuration screen"
+msgstr ""
+
+#. Misc missing string
+msgctxt "button_replybyaddress"
+msgid "Reply (to phone number)"
+msgstr "Yanıtla (telefon numarasına)"
+
+#. Quick Reply Signature pref
+msgctxt "pref_notif_signature_title"
+msgid "Quick Reply Signature"
+msgstr "Hızlı Yanıt İmzası"
+
+msgctxt "pref_notif_signature_summary"
+msgid "Appears at the end of every quick reply"
+msgstr ""
+
+#. Eula Strings
+msgctxt "eula_title"
+msgid "SMS Popup License Agreement"
+msgstr "SMS Popup Lisans Anlaşması"
+
+msgctxt "eula_accept"
+msgid "Accept"
+msgstr "Kabul Et"
+
+msgctxt "eula_refuse"
+msgid "Uninstall"
+msgstr "Kaldır"
+
+#. Send message prefs
+msgctxt "pref_delivery_report_title"
+msgid "Delivery Reports"
+msgstr "Teslim Raporları"
+
+msgctxt "pref_delivery_report_summary"
+msgid "Request a delivery report for each message you send via quick reply"
+msgstr "Hızlı yanıt yoluyla gönderdiğiniz her mesaj için teslim raporu iste"
+
+msgctxt "pref_split_message_title"
+msgid "Split Long Messages"
+msgstr "Uzun Mesajları Böl"
+
+msgctxt "pref_split_message_summaryon"
+msgid "Long messages will be split up (only needed for some CDMA carriers)"
+msgstr ""
+"Uzun mesajlar bölünecektir (sadece bazı CDMA taşıyıcıları için gerekir)"
+
+msgctxt "pref_split_message_summaryoff"
+msgid ""
+"Long messages will not be split up (only needed for some CDMA carriers)"
+msgstr ""
+"Uzun mesajlar bölünmeyecektir (sadece bazı CDMA taşıyıcıları için gerekir)"
+
+#. Other new prefs
+msgctxt "pref_autorotate_title"
+msgid "Autorotate Always On"
+msgstr "Otomatik Döndürme Daima Açık"
+
+msgctxt "pref_autorotate_summaryon"
+msgid "Popup will always autorotate"
+msgstr "Açılır Pencere daima otomatik dönecek"
+
+msgctxt "pref_autorotate_summaryoff"
+msgid "Popup will auto-rotate based on the screen behind it"
+msgstr ""
+
+msgctxt "pref_screen_on_title"
+msgid "Screen On for Popup"
+msgstr "Açılır Pencere için Ekranı Aç"
+
+msgctxt "pref_screen_on_summaryon"
+msgid "Screen will turn on when popup shows"
+msgstr "Açılır Pencere göründüğünde ekran açılacak"
+
+msgctxt "pref_screen_on_summaryoff"
+msgid "Screen will not turn on when popup shows"
+msgstr "Açılır pencere göründüğünde ekran açılmayacak"
+
+msgctxt "pref_screen_category"
+msgid "Screen Control"
+msgstr "Ekran Denetimi"
+
+#. Other new Quick Reply prefs
+msgctxt "pref_show_delete_button_dialog_title"
+msgid "Delete Message"
+msgstr "İletiyi Sil"
+
+msgctxt "pref_show_delete_button_dialog_text"
+msgid "Are you sure?"
+msgstr "Emin misiniz?"
+
+msgctxt "quickreply_sent_toast"
+msgid "Message Sent"
+msgstr "Mesaj Gönderildi"
+
+msgctxt "quickreply_failed_send_later"
+msgid ""
+"Currently unable to send your message. It will be sent when the service "
+"becomes available."
+msgstr ""
+"Şu an mesajınız gönderilemez. Hizmet kullanılabilir olduğunda "
+"gönderilecektir."
+
+msgctxt "quickreply_failed"
+msgid "Message failed to send"
+msgstr "Mesaj gönderme başarısız oldu"
+
+#. Arrays texts
+msgctxt "pref_custom"
+msgid "Custom"
+msgstr "Özel"
+
+msgctxt "pref_notif_repeat_times_entries_keep_repeting"
+msgid "Keep repeating"
+msgstr "Tekrarlamayı sürdür"
+
+msgctxt "pref_vibrate_pattern_entries_multiple_short"
+msgid "Multiple Short"
+msgstr ""
+
+msgctxt "pref_vibrate_pattern_entries_multiple_long"
+msgid "Multiple Long"
+msgstr "Çoklu Uzunluk"
+
+msgctxt "pref_led_color_magenta"
+msgid "Magenta"
+msgstr ""
+
+msgctxt "pref_led_color_cyan"
+msgid "Cyan"
+msgstr ""
+
+msgctxt "pref_led_pattern_entries_slow"
+msgid "Slow"
+msgstr "Yavaş"

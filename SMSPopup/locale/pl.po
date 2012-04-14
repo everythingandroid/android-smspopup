@@ -1,0 +1,986 @@
+# Polish translation for smspopup
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the smspopup package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: smspopup\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2012-03-04 18:33-0500\n"
+"PO-Revision-Date: 2010-08-20 07:41+0000\n"
+"Last-Translator: luki.r <Unknown>\n"
+"Language-Team: Polish <pl@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2012-03-08 00:16+0000\n"
+"X-Generator: Launchpad (build 14907)\n"
+
+#. Notification Strings
+msgctxt "notification_multiple_title"
+msgid "New messages"
+msgstr "Nowe wiadomości"
+
+#, c-format
+msgctxt "notification_multiple_text"
+msgid "%d unread messages."
+msgstr "%d nieprzeczytanych wiadomości"
+
+#, c-format
+msgctxt "notification_scroll_privacy"
+msgid "New message from: %s"
+msgstr "Nowa wiadomość od: %s"
+
+msgctxt "notification_scroll_privacy_no_name"
+msgid "New message"
+msgstr ""
+
+#. Button Strings
+msgctxt "button_close"
+msgid "Close"
+msgstr "Zamknij"
+
+msgctxt "button_reply"
+msgid "Reply"
+msgstr "Odpowiedz"
+
+msgctxt "button_inbox"
+msgid "Inbox"
+msgstr "Odebrane"
+
+msgctxt "button_view"
+msgid "View"
+msgstr "Pokaż"
+
+msgctxt "button_view_mms"
+msgid "View MMS"
+msgstr "Pokaż MMS"
+
+msgctxt "button_delete"
+msgid "Delete"
+msgstr "Usuń"
+
+msgctxt "button_unlock"
+msgid "Unlock"
+msgstr "Odblokuj"
+
+msgctxt "button_tts"
+msgid "Text-to-speech"
+msgstr "Tekst-na-mowę"
+
+msgctxt "button_speak"
+msgid "Speak"
+msgstr "Powiedz"
+
+msgctxt "button_delete_noconfirm"
+msgid "Delete (no confirmation)"
+msgstr "Usuń (bez potwierdzenia)"
+
+msgctxt "button_quickreply"
+msgid "Quick Reply"
+msgstr "Szybka odpowiedź"
+
+msgctxt "button_disabled"
+msgid "Disabled"
+msgstr "Wyłączone"
+
+#. Main Preferences
+msgctxt "pref_config_title"
+msgid "SMS Popup Configuration"
+msgstr "Konfiguracja SMS Popup"
+
+msgctxt "pref_other_title"
+msgid "Other"
+msgstr "Inne"
+
+msgctxt "pref_enabled_title"
+msgid "Enable SMS Popup"
+msgstr "Włącz SMS Popup"
+
+msgctxt "pref_enabled_summaryon"
+msgid "SMS Popup is enabled"
+msgstr "SMS Popup jest włączony"
+
+msgctxt "pref_enabled_summaryoff"
+msgid "SMS Popup is disabled"
+msgstr "SMS Popup jest wyłączony"
+
+msgctxt "pref_about_title"
+msgid "About"
+msgstr "O programie"
+
+msgctxt "pref_about_summary"
+msgid "About SMS Popup"
+msgstr "Więcej o SMS Popup"
+
+msgctxt "pref_faq_title"
+msgid "FAQ"
+msgstr "FAQ"
+
+msgctxt "pref_faq_summary"
+msgid "Frequently Asked Questions"
+msgstr "Najczęściej zadawane pytania"
+
+msgctxt "pref_sendemail_title"
+msgid "E-mail the Developer"
+msgstr "Wyślij e-mail do programisty"
+
+msgctxt "pref_sendemail_dialog"
+msgid ""
+"Can I include your system information in the e-mail (this will help me "
+"troubleshoot bugs easier)?"
+msgstr ""
+"Czy mogę przesłać informacje o Twoim systemie poprzez e-mail (ułatwi mi to "
+"poprawianie błędów)?"
+
+msgctxt "pref_sendemail_buttonok"
+msgid "Sure"
+msgstr "Oczywiście"
+
+msgctxt "pref_sendemail_buttoncancel"
+msgid "No way"
+msgstr "Nie ma mowy"
+
+#. Additional Preferences
+msgctxt "pref_additional_title"
+msgid "Additional Settings"
+msgstr "Ustawienia dodatkowe"
+
+msgctxt "pref_additional_summary"
+msgid "Additional SMS Popup configuration"
+msgstr "Ustawienia dodatkowe dla SMS Popup"
+
+msgctxt "pref_timeout_title"
+msgid "Screen Timeout"
+msgstr "Czas wygaśnięcia"
+
+msgctxt "pref_timeout_summary"
+msgid "The screen will sleep after this time"
+msgstr "Po tym czasie ekran się wyłączy"
+
+msgctxt "pref_dimscreen_title"
+msgid "Dim Popup Screen"
+msgstr "Wygaszanie ekranu"
+
+msgctxt "pref_dimscreen_summaryon"
+msgid "Popup screen will be dim (saves battery)"
+msgstr "Ekran z powiadomieniem się wygasi (oszczędza baterie)"
+
+msgctxt "pref_dimscreen_summaryoff"
+msgid "Popup screen will be bright"
+msgstr "Ekran z powiadomieniem będzie się świecił"
+
+msgctxt "pref_privacy_category"
+msgid "Privacy"
+msgstr ""
+
+msgctxt "pref_privacy_title"
+msgid "Privacy Mode"
+msgstr "Tryb prywatny"
+
+msgctxt "pref_privacy_summaryon"
+msgid "Popup will use privacy mode"
+msgstr ""
+
+msgctxt "pref_privacy_summaryoff"
+msgid "Popup will show all message details"
+msgstr ""
+
+msgctxt "pref_privacy_sender_title"
+msgid "Hide Contact Name"
+msgstr ""
+
+msgctxt "pref_privacy_sender_summaryon"
+msgid "Message sender name will also be hidden"
+msgstr ""
+
+msgctxt "pref_privacy_sender_summaryoff"
+msgid "Message sender name will be shown"
+msgstr ""
+
+msgctxt "pref_privacy_always_title"
+msgid "Always Use Privacy Mode"
+msgstr ""
+
+msgctxt "pref_privacy_always_summaryon"
+msgid "Privacy mode will always be used"
+msgstr ""
+
+msgctxt "pref_privacy_always_summaryoff"
+msgid "Only use privacy mode when screen is locked"
+msgstr ""
+
+msgctxt "pref_markread_title"
+msgid "Mark Read"
+msgstr "Oznacz jako przeczytane"
+
+msgctxt "pref_markread_summaryon"
+msgid "Messages will be marked as read when clicking \"Close\""
+msgstr ""
+"Wiadomości zostaną oznaczone jako przeczytane po naciśnięciu \"Zamknij\""
+
+msgctxt "pref_markread_summaryoff"
+msgid "Messages will not be marked as read when clicking \"Close\""
+msgstr ""
+"Wiadomości nie zostaną oznaczone jako przeczytane po naciśnięciu \"Zamknij\""
+
+msgctxt "pref_onlyShowOnKeyguard_title"
+msgid "Restrict Popup"
+msgstr "Ograniczenia dla powiadomień"
+
+msgctxt "pref_onlyShowOnKeyguard_summaryon"
+msgid "Popup window will only show when keyguard is engaged"
+msgstr "Powiadomienie pojawia się tylko gdy telefon jest zablokowany"
+
+msgctxt "pref_onlyShowOnKeyguard_summaryoff"
+msgid "Popup will always show"
+msgstr "Powiadomienie zawsze się pojawia"
+
+msgctxt "pref_useUnlockButton_title"
+msgid "Show Unlock Button"
+msgstr ""
+
+msgctxt "pref_useUnlockButton_summaryon"
+msgid "Unlock button will show when screen is locked"
+msgstr ""
+
+msgctxt "pref_useUnlockButton_summaryoff"
+msgid "Regular buttons will show when screen is locked"
+msgstr ""
+
+msgctxt "pref_show_buttons_title"
+msgid "Show Buttons On Popup"
+msgstr "Pokaż przyciski przy powiadomieniu"
+
+msgctxt "pref_show_buttons_summaryon"
+msgid "Buttons on popup are visible"
+msgstr "Przyciski powiadomienia są widoczne"
+
+msgctxt "pref_show_buttons_summaryoff"
+msgid "Buttons are hidden in long press menu"
+msgstr "Długie przyciśnięcie menu odkrywa przyciski"
+
+#. Notification Preferences
+msgctxt "pref_notif_title"
+msgid "Notifications"
+msgstr "Powiadomienia"
+
+msgctxt "pref_notif_summary"
+msgid "Notification configuration"
+msgstr "Ustawienia powiadomień"
+
+#. Category headings
+msgctxt "pref_notif_category_title"
+msgid "Notification Configuration"
+msgstr "Ustawienia powiadomień"
+
+msgctxt "pref_vibrate_category_title"
+msgid "Vibrate Configuration"
+msgstr "Ustawienia wibracji"
+
+msgctxt "pref_flashled_category_title"
+msgid "LED Configuration"
+msgstr "Ustawienia diody LED"
+
+msgctxt "pref_reminder_category_title"
+msgid "Reminder Configuration"
+msgstr "Przypomnienie o ustawieniach"
+
+#. General Notification Preferences
+msgctxt "pref_notif_enabled_title"
+msgid "Enable Notifications"
+msgstr "Włącz powiadomienia"
+
+msgctxt "pref_notif_enabled_summaryon"
+msgid "Notifications are enabled"
+msgstr "Powiadomienia włączone"
+
+msgctxt "pref_notif_enabled_summaryoff"
+msgid "Notifications are disabled"
+msgstr "Powiadomienia wyłączone"
+
+msgctxt "pref_notif_enabled_warning"
+msgid ""
+"To avoid conflicts and multiple alerts, please disable the system SMS "
+"notifications and any other apps that provide a notification when a SMS is "
+"received.\n"
+"\n"
+"To turn off the system notification, go to the messaging app, hit menu -&gt; "
+"settings and un-check notifications."
+msgstr ""
+"By zapobiec konfliktom i wielokrotnym alarmom, proszę wyłącz systemowe "
+"powiadomienia SMS i jakiekolwiek inne aplikacje, które wysyłają "
+"powiadomienie o nadejściu SMS.\n"
+"By wyłączyć systemowe powiadomienia, uruchom aplikację zarządzającą SMS a "
+"następnie naciśnij menu, ustawienia i odznacz \"powiadomienia\"."
+
+msgctxt "pref_popup_enabled_title"
+msgid "Show a Popup"
+msgstr "Pokaż okienko Popup"
+
+msgctxt "pref_popup_enabled_summaryon"
+msgid "Message will open in a popup"
+msgstr "Wiadomość otworzy się w okienku Popup"
+
+msgctxt "pref_popup_enabled_summaryoff"
+msgid "Message will only show in notification area"
+msgstr ""
+
+msgctxt "pref_notif_test_title"
+msgid "Test Notification"
+msgstr "Powiadomienie testowe"
+
+msgctxt "pref_notif_test_summary"
+msgid "Test out your notification"
+msgstr "Sprawdź swoje powiadomienia"
+
+msgctxt "pref_notif_test_message"
+msgid "Testing your notification now!"
+msgstr "Sprawdzanie twoich powiadomień"
+
+msgctxt "pref_notif_sound_title"
+msgid "Notification Sound"
+msgstr "Dźwięk powiadomienia"
+
+msgctxt "pref_notif_sound_summary"
+msgid "This sound will play when a message is received"
+msgstr "Ten dźwięk oznacza otrzymanie nowej wiadomości"
+
+msgctxt "pref_notifyOnCall_title"
+msgid "Notify On Call"
+msgstr ""
+
+msgctxt "pref_notifyOnCall_summaryon"
+msgid "Sound will play while on a call"
+msgstr ""
+
+msgctxt "pref_notifyOnCall_summaryoff"
+msgid "Sound will not play while on a call"
+msgstr ""
+
+msgctxt "pref_notif_icon_title"
+msgid "Notification Icon"
+msgstr ""
+
+msgctxt "pref_notif_icon_summary"
+msgid "Change the notification area icon"
+msgstr ""
+
+msgctxt "pref_vibrate_title"
+msgid "Vibrate"
+msgstr "Wibracja"
+
+msgctxt "pref_vibrate_summaryon"
+msgid "Vibrate is on"
+msgstr "Wibracja włączona"
+
+msgctxt "pref_vibrate_summaryoff"
+msgid "Vibrate is off"
+msgstr "Wibracja wyłączona"
+
+#. Vibrate Preferences
+msgctxt "pref_vibrate_pattern_title"
+msgid "Vibrate Pattern"
+msgstr "Typ wibracji"
+
+msgctxt "pref_vibrate_pattern_summary"
+msgid "Set the vibration pattern"
+msgstr "Ustaw typ wibracji"
+
+msgctxt "pref_vibrate_pattern_ok"
+msgid "Custom vibrate pattern set"
+msgstr "Ustaw własny typ wibracji"
+
+msgctxt "pref_vibrate_pattern_bad"
+msgid "Custom vibrate pattern invalid"
+msgstr "Niewłaściwy typ własnej wibracji"
+
+msgctxt "pref_vibrate_pattern_help"
+msgid ""
+"Enter a custom vibrate pattern, in the format:\n"
+"millisOff, millisOn, etc.\n"
+"\n"
+"For example:\n"
+"0,1000\n"
+"0,500,200,500,200,500"
+msgstr ""
+"Wprowadź własny typ wibracji, w takim formacie:\n"
+"milisekundy włączone, milisekundy wyłączone\n"
+"\n"
+"Przykład:\n"
+"0.1000\n"
+"0.500,200,500,200,500"
+
+#. LED Preferences
+msgctxt "pref_flashled_title"
+msgid "Blink LED"
+msgstr "Migająca dioda LED"
+
+msgctxt "pref_flashled_summaryon"
+msgid "Blink LED when a message is received"
+msgstr "Dioda LED miga gdy nadejdzie wiadomość"
+
+msgctxt "pref_flashled_summaryoff"
+msgid "Do not blink LED when a message is received"
+msgstr "Dioda LED nie będzie migać gdy nadejdzie wiadomość"
+
+msgctxt "pref_flashled_color_title"
+msgid "LED Color"
+msgstr "Kolor diody LED"
+
+msgctxt "pref_flashled_color_summary"
+msgid "The color of the LED"
+msgstr "Kolor diody LED"
+
+msgctxt "pref_flashled_color_custom_dialog_red"
+msgid "Red:"
+msgstr "Czerwony:"
+
+msgctxt "pref_flashled_color_custom_dialog_green"
+msgid "Green:"
+msgstr "Zielony:"
+
+msgctxt "pref_flashled_color_custom_dialog_blue"
+msgid "Blue:"
+msgstr "Niebieski:"
+
+msgctxt "pref_flashled_color_custom_dialog_preview"
+msgid "Preview:"
+msgstr "Podgląd:"
+
+msgctxt "pref_flashled_color_custom_set"
+msgid "Custom LED color set"
+msgstr "Własne ustawienia koloru diody LED"
+
+msgctxt "pref_flashled_pattern_title"
+msgid "LED Blink Rate"
+msgstr "Szybkość migania diody LED"
+
+msgctxt "pref_flashled_pattern_summary"
+msgid "Set the speed the LED blinks"
+msgstr "Ustaw prędkość migania diody LED"
+
+msgctxt "pref_flashled_pattern_ok"
+msgid "Custom LED blink rate set"
+msgstr "Własne ustawienia szybkości migania diody LED"
+
+msgctxt "pref_flashled_pattern_bad"
+msgid "Custom LED blink rate is invalid"
+msgstr "Niewłaściwe ustawienia szybkości migania diody LED"
+
+msgctxt "pref_flashled_pattern_help"
+msgid "Enter the time in milliseconds to turn the LED on and off"
+msgstr "Wprowadź czas w milisekundach do włączania i wyłączania diody LED"
+
+msgctxt "pref_flashled_pattern_help_on"
+msgid "Time on:"
+msgstr "Czas włączania"
+
+msgctxt "pref_flashled_pattern_help_off"
+msgid "Time off:"
+msgstr "Czas wyłączania"
+
+#. Notification Repeat Preferences
+msgctxt "pref_notif_repeat_title"
+msgid "Enable Reminders"
+msgstr "Włącz przypomnienia"
+
+msgctxt "pref_notif_repeat_summaryon"
+msgid "Unread message reminders are enabled"
+msgstr "Włączone przypomnienia nieprzeczytanych wiadomości"
+
+msgctxt "pref_notif_repeat_summaryoff"
+msgid "Unread message reminders are disabled"
+msgstr "Wyłączone przypomnienia nieprzeczytanych wiadomości"
+
+msgctxt "pref_notif_repeat_interval_title"
+msgid "Reminder Interval"
+msgstr "Odstęp pomiędzy przypomnieniami"
+
+msgctxt "pref_notif_repeat_interval_summary"
+msgid "The time period between notification reminders"
+msgstr "Czas pomiędzy przypomnieniami"
+
+msgctxt "pref_notif_repeat_interval_dialogTitle"
+msgid "Interval (minutes)"
+msgstr "Przerwa (w minutach)"
+
+msgctxt "pref_notif_repeat_times_title"
+msgid "Number of Reminders"
+msgstr "Liczba przypomnień"
+
+msgctxt "pref_notif_repeat_times_summary"
+msgid "The number of reminder notifications to play"
+msgstr "Ilość przypomnień do odtworzenia"
+
+msgctxt "pref_notif_repeat_screen_on_title"
+msgid "Screen On for Reminders"
+msgstr "Ekran włączony podczas przypomnień"
+
+msgctxt "pref_notif_repeat_screen_on_summaryon"
+msgid "Reminders will turn screen on again"
+msgstr "Przypomnienia ponownie włączą ekran"
+
+msgctxt "pref_notif_repeat_screen_on_summaryoff"
+msgid "Reminders will not turn screen on"
+msgstr "Przypomnienia nie włączą ekranu"
+
+#. Contact Notification Customization Strings
+msgctxt "pref_notif_default_title"
+msgid "Default Notifications"
+msgstr "Domyślne powiadomienia"
+
+msgctxt "pref_notif_default_summary"
+msgid "Notifications for all contacts without an individual customization"
+msgstr "Powiadomienia dla wszystkich kontaktów bez indywidualnych ustawień"
+
+msgctxt "pref_contacts_title"
+msgid "Contacts Notifications"
+msgstr "Powiadomienia dla kontaktów"
+
+msgctxt "pref_contacts_summary"
+msgid "Individual contact customization"
+msgstr "Ustawienie powiadomienia dla kontaktu"
+
+msgctxt "pref_notif_help_title"
+msgid "Help - I'm confused!"
+msgstr "Pomocy - nie wiem o co chodzi?"
+
+msgctxt "pref_notif_help_summary"
+msgid "Notifications Help"
+msgstr "Powiadomienia - pomoc"
+
+msgctxt "pref_notif_help_message"
+msgid ""
+"SMS Popup offers the ability to customize notifications on a per contact "
+"basis. When a new message comes in, SMS Popup will first check if the "
+"contact has a customized notification. If so, those settings are used, "
+"otherwise the default notifications are used.\n"
+"\n"
+"Using this functionality, you could set things up so only a few contacts "
+"show a popup while the rest trigger a regular notification. You could also "
+"ignore certain contacts by setting their notification to silent."
+msgstr ""
+
+msgctxt "contact_customization_add"
+msgid "Add Custom Notifications"
+msgstr "Dodaj zmodyfikowane powiadomienia"
+
+msgctxt "contact_customization_edit"
+msgid "Edit Custom Notification"
+msgstr "Edytuj zmodyfikowane powiadomienia"
+
+msgctxt "contact_customization_remove"
+msgid "Remove Custom Notification"
+msgstr "Usuń zmodyfikowane powiadomienia"
+
+msgctxt "contact_customization_save"
+msgid "Save"
+msgstr "Zapisz"
+
+#, c-format
+msgctxt "contact_customization_title"
+msgid "Notifications for %s"
+msgstr "Powiadomienia dla %s"
+
+#, c-format
+msgctxt "contact_customization_enabled"
+msgid "Notifications are enabled for %s"
+msgstr "Powiadomienia są dostępne dla %s"
+
+#, c-format
+msgctxt "contact_customization_disabled"
+msgid "Notifications are disabled for %s"
+msgstr "Powiadomienia są niedostępne dla %s"
+
+msgctxt "contact_customization_add_hint"
+msgid "Add/Edit contact notifications…"
+msgstr ""
+
+msgctxt "ringtone_silent"
+msgid "Silent"
+msgstr "Cichy"
+
+#. Preset Quick Reply Message Strings
+msgctxt "pref_message_presets_title"
+msgid "Preset Messages"
+msgstr "Wiadomości predefiniowane."
+
+msgctxt "pref_message_presets_summary"
+msgid "Configure preset messages for quick replies"
+msgstr "Ustaw wiadomości predefiniowane do szybkich odpowiedzi."
+
+msgctxt "message_presets_add"
+msgid "Add Preset Message"
+msgstr "Dodaj wiadomość predefiniowaną."
+
+msgctxt "message_presets_edit"
+msgid "Edit Preset Message"
+msgstr "Zmień wiadomość predefiniowaną."
+
+msgctxt "message_presets_add_text"
+msgid "Create"
+msgstr "Utwórz"
+
+msgctxt "message_presets_save_text"
+msgid "Save"
+msgstr "Zapisz"
+
+msgctxt "message_presets_delete_text"
+msgid "Remove"
+msgstr "Usuń"
+
+msgctxt "message_presets_edit_text"
+msgid "Edit"
+msgstr "Edytuj"
+
+msgctxt "message_presets_reorder_text"
+msgid "Move to top"
+msgstr "Przesuń na początek"
+
+msgctxt "message_presets_empty_text"
+msgid "No presets defined"
+msgstr "Brak wiadomości predefiniowanych."
+
+msgctxt "message_presets_add_toast"
+msgid "Message preset added"
+msgstr "Wiadomość predefiniowana została dodana."
+
+msgctxt "message_presets_save_toast"
+msgid "Message preset updated"
+msgstr "Wiadomość predefiniowana została zmieniona."
+
+msgctxt "message_presets_delete_toast"
+msgid "Message preset deleted"
+msgstr "Wiadomość predefiniowana została skasowana."
+
+msgctxt "message_presets_reorder_toast"
+msgid "Message preset moved to top"
+msgstr "Wiadomość predefiniowana została przesunięta na szczyt listy."
+
+msgctxt "message_presets_error_toast"
+msgid "Error - please try again"
+msgstr "Błąd - spróbuj jeszcze raz"
+
+#. Quick Reply Strings
+msgctxt "quickreply_title"
+msgid "Quick Reply"
+msgstr "Szybka odpowiedź"
+
+#, c-format
+msgctxt "quickreply_from_text"
+msgid "To: %s"
+msgstr "Do: %s"
+
+msgctxt "quickreply_preset_button"
+msgid "Presets"
+msgstr "Gotowe ustawienia"
+
+msgctxt "quickreply_send_button"
+msgid "Send"
+msgstr "Wyślij"
+
+msgctxt "quickreply_sending_toast"
+msgid "Sending message…"
+msgstr ""
+
+msgctxt "quickreply_nomessage_toast"
+msgid "Send"
+msgstr "Wyślij"
+
+#. Text-To-Speech and Voice Transcription Strings
+msgctxt "loading_message"
+msgid "Loading…"
+msgstr ""
+
+msgctxt "error_message"
+msgid "Error"
+msgstr "Błąd"
+
+msgctxt "error_no_voice_recognition"
+msgid "Voice recognition not available on this device"
+msgstr "Funkcja rozpoznawania głosu jest niedostępna w tym urządzeniu"
+
+#. Popup Button Configuration
+msgctxt "pref_button_config_title"
+msgid "Button Configuration"
+msgstr "Programowanie przycisków"
+
+msgctxt "pref_button_config_summary"
+msgid "Popup button configuration"
+msgstr "Konfiguracja przycisku Popup."
+
+#, c-format
+msgctxt "pref_button_summary"
+msgid "Current Setting: %s"
+msgstr "Aktualne ustawienia: %s"
+
+msgctxt "pref_button1_title"
+msgid "Button 1 Configuration"
+msgstr "Ustawienia przycisku 1"
+
+msgctxt "pref_button2_title"
+msgid "Button 2 Configuration"
+msgstr "Ustawienia przycisku 2"
+
+msgctxt "pref_button3_title"
+msgid "Button 3 Configuration"
+msgstr "Ustawienia przycisku 3"
+
+#. Donate Strings (not used right now)
+msgctxt "pref_donate_title"
+msgid "Donate to SMS Popup"
+msgstr "Wsparcie dla SMS Popup"
+
+msgctxt "pref_donate_text"
+msgid ""
+"SMS Popup is a free application that I work on in my spare time. If you find "
+"it useful, and can spare a few bucks, a donation would be much appreciated.\n"
+"\n"
+"Thanks!"
+msgstr ""
+"SMS Popup jest darmową aplikacją nad którą pracuję w wolnym czasie. Jeśli "
+"uważasz że jest przydatna i możesz wydać kilka dolców, będę wdzieczny za "
+"dotację.\n"
+"\n"
+"Dzięki!"
+
+msgctxt "pref_donate_market_button"
+msgid "Donate via Android Market"
+msgstr "Wsparcie przez Android Market"
+
+msgctxt "pref_donate_paypal_button"
+msgid "Donate via PayPal"
+msgstr "Wsparcie przez PayPal"
+
+#. Misc missing string
+msgctxt "view_contact"
+msgid "View Contact"
+msgstr "Pokaż kontakt"
+
+#. Quick Reply Checkbox Preference
+msgctxt "pref_quickreply_title"
+msgid "Quick Reply"
+msgstr "Szybka odpowiedź"
+
+msgctxt "pref_quickreply_summaryon"
+msgid "Quick Reply is enabled"
+msgstr "Szybka odpowiedź jest aktywna"
+
+msgctxt "pref_quickreply_summaryoff"
+msgid "Quick Reply is disabled"
+msgstr "Szybka odpowiedź jest nieaktywna"
+
+msgctxt "pref_quickreply_bothreplybuttons"
+msgid ""
+"Both reply buttons are already active, to configure them please go to the "
+"Button Configuration screen"
+msgstr ""
+"Obydwa przyciski odpowiedzi są już aktywne, aby je skonfigurować przejdź do "
+"ekranu Konfiguracji Przycisków."
+
+msgctxt "pref_quickreply_noreplybuttons"
+msgid ""
+"No reply buttons are currently active, to configure them please go to the "
+"Button Configuration screen"
+msgstr ""
+"Żaden przycisk odpowiedzi nie jest obecnie aktywny, aby je skonfigurować "
+"przejdź do ekranu Konfiguracji Przycisków."
+
+#. Misc missing string
+msgctxt "button_replybyaddress"
+msgid "Reply (to phone number)"
+msgstr "Odpowiedz(do numeru telefonu)"
+
+#. Quick Reply Signature pref
+msgctxt "pref_notif_signature_title"
+msgid "Quick Reply Signature"
+msgstr "Podpis dla szybkiej odpowiedzi"
+
+msgctxt "pref_notif_signature_summary"
+msgid "Appears at the end of every quick reply"
+msgstr "Pojawia się na końcu każdej szybkiej odpowiedzi"
+
+#. Eula Strings
+msgctxt "eula_title"
+msgid "SMS Popup License Agreement"
+msgstr "Umowa licencyjna SMS Popup."
+
+msgctxt "eula_accept"
+msgid "Accept"
+msgstr "Zaakceptuj"
+
+msgctxt "eula_refuse"
+msgid "Uninstall"
+msgstr "Odinstaluj"
+
+#. Send message prefs
+msgctxt "pref_delivery_report_title"
+msgid "Delivery Reports"
+msgstr "Raporty dostarczenia"
+
+msgctxt "pref_delivery_report_summary"
+msgid "Request a delivery report for each message you send via quick reply"
+msgstr ""
+"Czy chcesz otrzymać raport doręczenia po każdej wiadomości wysłanej przez "
+"szybką odpowiedź?"
+
+msgctxt "pref_split_message_title"
+msgid "Split Long Messages"
+msgstr "Podziel długie wiadomości"
+
+msgctxt "pref_split_message_summaryon"
+msgid "Long messages will be split up (only needed for some CDMA carriers)"
+msgstr ""
+"Długie wiadomości będą podzielone (wymagane przy niektórych operatorów CDMA)."
+
+msgctxt "pref_split_message_summaryoff"
+msgid ""
+"Long messages will not be split up (only needed for some CDMA carriers)"
+msgstr ""
+"Długie wiadomości nie będą dzielone (wymagane przy niektórych operatorów "
+"CDMA)."
+
+#. Other new prefs
+msgctxt "pref_autorotate_title"
+msgid "Autorotate Always On"
+msgstr "Autorotacja zawsze włączona"
+
+msgctxt "pref_autorotate_summaryon"
+msgid "Popup will always autorotate"
+msgstr "Popup będzie zawsze używał funkcji autorotacji"
+
+msgctxt "pref_autorotate_summaryoff"
+msgid "Popup will auto-rotate based on the screen behind it"
+msgstr "Popup będzie się obracał zgodnie z ustawieniami ekranu w tle"
+
+msgctxt "pref_screen_on_title"
+msgid "Screen On for Popup"
+msgstr "Włącz ekran kiedy przyjdzie wiadomość."
+
+msgctxt "pref_screen_on_summaryon"
+msgid "Screen will turn on when popup shows"
+msgstr "Ekran włączy się po pojawieniu się okienka z wiadomością"
+
+msgctxt "pref_screen_on_summaryoff"
+msgid "Screen will not turn on when popup shows"
+msgstr "Kiedy przyjdzie wiadomość, ekran nie zostanie włączony."
+
+msgctxt "pref_screen_category"
+msgid "Screen Control"
+msgstr "Ustawienia ekranu"
+
+#. Other new Quick Reply prefs
+msgctxt "pref_show_delete_button_dialog_title"
+msgid "Delete Message"
+msgstr "Usuń wiadomość"
+
+msgctxt "pref_show_delete_button_dialog_text"
+msgid "Are you sure?"
+msgstr "Czy jesteś pewny/a?"
+
+msgctxt "quickreply_sent_toast"
+msgid "Message Sent"
+msgstr "Wiadomość wysłana"
+
+msgctxt "quickreply_failed_send_later"
+msgid ""
+"Currently unable to send your message. It will be sent when the service "
+"becomes available."
+msgstr ""
+"W tym momencie nie mogę wysłać twojej wiadomości. Zostanie wysłana kiedy "
+"usługa będzie możliwa."
+
+msgctxt "quickreply_failed"
+msgid "Message failed to send"
+msgstr "Nie udało się wysłać wiadomości"
+
+#. Arrays texts
+msgctxt "pref_custom"
+msgid "Custom"
+msgstr "Własne"
+
+msgctxt "pref_notif_repeat_times_entries_keep_repeting"
+msgid "Keep repeating"
+msgstr "Powtarzaj."
+
+msgctxt "pref_timeout_entries_10s"
+msgid "10 seconds"
+msgstr "10 sekund"
+
+msgctxt "pref_timeout_entries_20s"
+msgid "20 seconds"
+msgstr "20 sekund"
+
+msgctxt "pref_timeout_entries_30s"
+msgid "30 seconds"
+msgstr "30 sekund"
+
+msgctxt "pref_timeout_entries_1m"
+msgid "1 minute"
+msgstr "1 minuta"
+
+msgctxt "pref_timeout_entries_2m"
+msgid "2 minutes"
+msgstr "2 minuty"
+
+msgctxt "pref_timeout_entries_5m"
+msgid "5 minutes"
+msgstr "5 minut"
+
+msgctxt "pref_timeout_entries_10m"
+msgid "10 minutes"
+msgstr "10 minut"
+
+msgctxt "pref_vibrate_pattern_entries_normal"
+msgid "Normal"
+msgstr "Normalne"
+
+msgctxt "pref_vibrate_pattern_entries_long"
+msgid "Long Vibrate"
+msgstr "Długa wibracja"
+
+msgctxt "pref_vibrate_pattern_entries_multiple_short"
+msgid "Multiple Short"
+msgstr "Wielokrotne krótkie."
+
+msgctxt "pref_vibrate_pattern_entries_multiple_long"
+msgid "Multiple Long"
+msgstr "Wielokrotne długie."
+
+msgctxt "pref_led_color_blue"
+msgid "Blue"
+msgstr "Niebieski"
+
+msgctxt "pref_led_color_green"
+msgid "Green"
+msgstr "Zielony"
+
+msgctxt "pref_led_color_red"
+msgid "Red"
+msgstr "Czerwony"
+
+msgctxt "pref_led_color_yellow"
+msgid "Yellow"
+msgstr "Żółty"
+
+msgctxt "pref_led_color_magenta"
+msgid "Magenta"
+msgstr "Purpurowy"
+
+msgctxt "pref_led_color_cyan"
+msgid "Cyan"
+msgstr "Cyan"
+
+msgctxt "pref_led_pattern_entries_fast"
+msgid "Fast"
+msgstr "Szybki"
+
+msgctxt "pref_led_pattern_entries_normal"
+msgid "Normal"
+msgstr "Normalnie"
+
+msgctxt "pref_led_pattern_entries_slow"
+msgid "Slow"
+msgstr "Wolno"

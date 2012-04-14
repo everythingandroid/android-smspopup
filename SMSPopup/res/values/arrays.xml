@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="pref_notif_repeat_interval_entries">
+        <item>1</item>
+        <item>2</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+    </string-array>
+    <string-array name="pref_notif_repeat_times_entries">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>10</item>
+        <item>@string/pref_notif_repeat_times_entries_keep_repeting</item>
+    </string-array>
+    <string-array name="pref_notif_repeat_times_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>10</item>
+        <item>-1</item>
+    </string-array>
+    <string-array name="buttons_text">
+        <item>@string/button_disabled</item>
+        <item>@string/button_close</item>
+        <item>@string/button_delete</item>
+        <item>@string/button_delete</item>
+        <item>@string/button_reply</item>
+        <item>@string/button_quickreply</item>
+        <item>@string/button_inbox</item>
+        <item>@string/button_speak</item>
+        <item>@string/button_reply</item>
+    </string-array>
+    <string-array name="pref_buttons_entries">
+        <item>@string/button_close</item>
+        <item>@string/button_delete</item>
+        <item>@string/button_delete_noconfirm</item>
+        <item>@string/button_reply</item>
+        <item>@string/button_quickreply</item>
+        <item>@string/button_replybyaddress</item>
+        <item>@string/button_inbox</item>
+        <item>@string/button_tts</item>
+        <item>@string/button_disabled</item>
+    </string-array>
+
+    <array name="button_drawables">
+        <item>@null</item>
+        <item>@android:drawable/ic_menu_close_clear_cancel</item>
+        <item>@android:drawable/ic_menu_delete</item>
+        <item>@android:drawable/ic_menu_delete</item>
+        <item>@android:drawable/ic_menu_revert</item>
+        <item>@android:drawable/ic_menu_revert</item>
+        <item>@android:drawable/ic_menu_revert</item>
+        <item>@android:drawable/ic_btn_speak_now</item>
+        <item>@android:drawable/ic_menu_revert</item>
+    </array>
+
+    <string-array name="pref_buttons_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>8</item>
+        <item>6</item>
+        <item>7</item>
+        <item>0</item>
+    </string-array>
+    <string-array name="pref_timeout_entries">
+        <item>@string/pref_timeout_entries_10s</item>
+        <item>@string/pref_timeout_entries_20s</item>
+        <item>@string/pref_timeout_entries_30s</item>
+        <item>@string/pref_timeout_entries_1m</item>
+        <item>@string/pref_timeout_entries_2m</item>
+        <item>@string/pref_timeout_entries_5m</item>
+        <item>@string/pref_timeout_entries_10m</item>
+    </string-array>
+    <string-array name="pref_timeout_values">
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>300</item>
+        <item>600</item>
+    </string-array>
+    <string-array name="pref_vibrate_pattern_values">
+        <item>0,1200</item>
+        <item>0,2500</item>
+        <item>0,300,100,300,100,300,100,300,100,300</item>
+        <item>0,800,200,800,200,800</item>
+        <item>@string/pref_custom_val</item>
+    </string-array>
+    <string-array name="pref_vibrate_pattern_entries">
+        <item>@string/pref_vibrate_pattern_entries_normal</item>
+        <item>@string/pref_vibrate_pattern_entries_long</item>
+        <item>@string/pref_vibrate_pattern_entries_multiple_short</item>
+        <item>@string/pref_vibrate_pattern_entries_multiple_long</item>
+        <item>@string/pref_custom</item>
+    </string-array>
+    <string-array name="pref_led_color_values">
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Red</item>
+        <item>Yellow</item>
+        <item>Magenta</item>
+        <item>Cyan</item>
+        <item>@string/pref_custom_val</item>
+    </string-array>
+    <string-array name="pref_led_color_entries">
+        <item>@string/pref_led_color_blue</item>
+        <item>@string/pref_led_color_green</item>
+        <item>@string/pref_led_color_red</item>
+        <item>@string/pref_led_color_yellow</item>
+        <item>@string/pref_led_color_magenta</item>
+        <item>@string/pref_led_color_cyan</item>
+        <item>@string/pref_custom</item>
+    </string-array>
+    <string-array name="pref_led_pattern_values">
+        <item>300,300</item>
+        <item>1000,1000</item>
+        <item>3000,3000</item>
+        <item>@string/pref_custom_val</item>
+    </string-array>
+    <string-array name="pref_led_pattern_entries">
+        <item>@string/pref_led_pattern_entries_fast</item>
+        <item>@string/pref_led_pattern_entries_normal</item>
+        <item>@string/pref_led_pattern_entries_slow</item>
+        <item>@string/pref_custom</item>
+    </string-array>
+    <string-array name="pref_notif_icon_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+    </string-array>
+    <string-array name="pref_notif_icon_entries">
+        <item>Android</item>
+        <item>Android (Old)</item>
+        <item>HTC</item>
+        <item>Motorola</item>
+        <item>Android Blue</item>
+        <item>Android Gray</item>
+        <item>Android Green</item>
+        <item>Android Light Blue</item>
+        <item>Android Orange</item>
+        <item>Android Pink</item>
+        <item>Android Purple</item>
+        <item>Android Red</item>
+        <item>Android White</item>
+        <item>Android Yellow</item>
+        <item>Android (Old) Blue</item>
+        <item>Android (Old) Gray</item>
+        <item>Android (Old) Green</item>
+        <item>Android (Old) Light Blue</item>
+        <item>Android (Old) Orange</item>
+        <item>Android (Old) Pink</item>
+        <item>Android (Old) Purple</item>
+        <item>Android (Old) Red</item>
+        <item>Android (Old) White</item>
+        <item>Android (Old) Yellow</item>
+        <item>HTC Blue</item>
+        <item>HTC Gray</item>
+        <item>HTC Green</item>
+        <item>HTC Light Blue</item>
+        <item>HTC Orange</item>
+        <item>HTC Pink</item>
+        <item>HTC Purple</item>
+        <item>HTC Red</item>
+        <item>HTC White</item>
+        <item>HTC Yellow</item>
+        <item>Motorola Blue</item>
+        <item>Motorola Gray</item>
+        <item>Motorola Green</item>
+        <item>Motorola Light Blue</item>
+        <item>Motorola Orange</item>
+        <item>Motorola Pink</item>
+        <item>Motorola Purple</item>
+        <item>Motorola Red</item>
+        <item>Motorola White</item>
+        <item>Motorola Yellow</item>
+    </string-array>
+
+</resources>

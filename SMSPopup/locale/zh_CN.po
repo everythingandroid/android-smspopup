@@ -1,0 +1,968 @@
+# Chinese (China) translations for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2012-03-04 18:33-0500\n"
+"PO-Revision-Date: 2012-01-10 08:52+0000\n"
+"Last-Translator: Wentao Han <Unknown>\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2012-03-08 00:16+0000\n"
+"X-Generator: Launchpad (build 14907)\n"
+"Generated-By: Babel 1.0\n"
+
+#. Notification Strings
+msgctxt "notification_multiple_title"
+msgid "New messages"
+msgstr "新短信"
+
+#, c-format
+msgctxt "notification_multiple_text"
+msgid "%d unread messages."
+msgstr "%d 个未读短信。"
+
+#, c-format
+msgctxt "notification_scroll_privacy"
+msgid "New message from: %s"
+msgstr "新短信来源: %s"
+
+msgctxt "notification_scroll_privacy_no_name"
+msgid "New message"
+msgstr ""
+
+#. Button Strings
+msgctxt "button_close"
+msgid "Close"
+msgstr "关闭"
+
+msgctxt "button_reply"
+msgid "Reply"
+msgstr "回复"
+
+msgctxt "button_inbox"
+msgid "Inbox"
+msgstr "收件箱"
+
+msgctxt "button_view"
+msgid "View"
+msgstr "查看"
+
+msgctxt "button_view_mms"
+msgid "View MMS"
+msgstr "查看彩信"
+
+msgctxt "button_delete"
+msgid "Delete"
+msgstr "删除"
+
+msgctxt "button_unlock"
+msgid "Unlock"
+msgstr "解锁"
+
+msgctxt "button_tts"
+msgid "Text-to-speech"
+msgstr "语音信息"
+
+msgctxt "button_speak"
+msgid "Speak"
+msgstr "说话"
+
+msgctxt "button_delete_noconfirm"
+msgid "Delete (no confirmation)"
+msgstr "删除 (没有确认框)"
+
+msgctxt "button_quickreply"
+msgid "Quick Reply"
+msgstr "快速回复"
+
+msgctxt "button_disabled"
+msgid "Disabled"
+msgstr "禁用"
+
+#. Main Preferences
+msgctxt "pref_config_title"
+msgid "SMS Popup Configuration"
+msgstr "SMS Popup设置"
+
+msgctxt "pref_other_title"
+msgid "Other"
+msgstr "其他"
+
+msgctxt "pref_enabled_title"
+msgid "Enable SMS Popup"
+msgstr "启用SMS Popup"
+
+msgctxt "pref_enabled_summaryon"
+msgid "SMS Popup is enabled"
+msgstr "SMS Popup已启用"
+
+msgctxt "pref_enabled_summaryoff"
+msgid "SMS Popup is disabled"
+msgstr "SMS Popup已关闭"
+
+msgctxt "pref_about_title"
+msgid "About"
+msgstr "关于"
+
+msgctxt "pref_about_summary"
+msgid "About SMS Popup"
+msgstr "关于SMS Popup"
+
+msgctxt "pref_faq_title"
+msgid "FAQ"
+msgstr "常见问题"
+
+msgctxt "pref_faq_summary"
+msgid "Frequently Asked Questions"
+msgstr "常见问题"
+
+msgctxt "pref_sendemail_title"
+msgid "E-mail the Developer"
+msgstr "给开发者发E-mail"
+
+msgctxt "pref_sendemail_dialog"
+msgid ""
+"Can I include your system information in the e-mail (this will help me "
+"troubleshoot bugs easier)?"
+msgstr "是否允许我把您的系统信息添加至e-mail中(这将帮助我更快修复bug)?"
+
+msgctxt "pref_sendemail_buttonok"
+msgid "Sure"
+msgstr "同意"
+
+msgctxt "pref_sendemail_buttoncancel"
+msgid "No way"
+msgstr "拒绝"
+
+#. Additional Preferences
+msgctxt "pref_additional_title"
+msgid "Additional Settings"
+msgstr "更多设置"
+
+msgctxt "pref_additional_summary"
+msgid "Additional SMS Popup configuration"
+msgstr "其他 SMS Popup 设置"
+
+msgctxt "pref_timeout_title"
+msgid "Screen Timeout"
+msgstr "屏幕超时"
+
+msgctxt "pref_timeout_summary"
+msgid "The screen will sleep after this time"
+msgstr "超过此事件屏幕将进入睡眠状态"
+
+msgctxt "pref_dimscreen_title"
+msgid "Dim Popup Screen"
+msgstr "半亮弹出窗口"
+
+msgctxt "pref_dimscreen_summaryon"
+msgid "Popup screen will be dim (saves battery)"
+msgstr "半亮显示弹出窗口(节省电量)"
+
+msgctxt "pref_dimscreen_summaryoff"
+msgid "Popup screen will be bright"
+msgstr "全亮显示弹出窗口"
+
+msgctxt "pref_privacy_category"
+msgid "Privacy"
+msgstr ""
+
+msgctxt "pref_privacy_title"
+msgid "Privacy Mode"
+msgstr "隐私模式"
+
+msgctxt "pref_privacy_summaryon"
+msgid "Popup will use privacy mode"
+msgstr ""
+
+msgctxt "pref_privacy_summaryoff"
+msgid "Popup will show all message details"
+msgstr ""
+
+msgctxt "pref_privacy_sender_title"
+msgid "Hide Contact Name"
+msgstr ""
+
+msgctxt "pref_privacy_sender_summaryon"
+msgid "Message sender name will also be hidden"
+msgstr ""
+
+msgctxt "pref_privacy_sender_summaryoff"
+msgid "Message sender name will be shown"
+msgstr ""
+
+msgctxt "pref_privacy_always_title"
+msgid "Always Use Privacy Mode"
+msgstr ""
+
+msgctxt "pref_privacy_always_summaryon"
+msgid "Privacy mode will always be used"
+msgstr ""
+
+msgctxt "pref_privacy_always_summaryoff"
+msgid "Only use privacy mode when screen is locked"
+msgstr ""
+
+msgctxt "pref_markread_title"
+msgid "Mark Read"
+msgstr "标记已读"
+
+msgctxt "pref_markread_summaryon"
+msgid "Messages will be marked as read when clicking \"Close\""
+msgstr "点击\"关闭\"后，标记短信为已读"
+
+msgctxt "pref_markread_summaryoff"
+msgid "Messages will not be marked as read when clicking \"Close\""
+msgstr "点击\"关闭\"后，不标记短信为已读"
+
+msgctxt "pref_onlyShowOnKeyguard_title"
+msgid "Restrict Popup"
+msgstr "禁止弹出"
+
+msgctxt "pref_onlyShowOnKeyguard_summaryon"
+msgid "Popup window will only show when keyguard is engaged"
+msgstr "仅在解锁后显示弹出窗口"
+
+msgctxt "pref_onlyShowOnKeyguard_summaryoff"
+msgid "Popup will always show"
+msgstr "总是弹出"
+
+msgctxt "pref_useUnlockButton_title"
+msgid "Show Unlock Button"
+msgstr ""
+
+msgctxt "pref_useUnlockButton_summaryon"
+msgid "Unlock button will show when screen is locked"
+msgstr ""
+
+msgctxt "pref_useUnlockButton_summaryoff"
+msgid "Regular buttons will show when screen is locked"
+msgstr ""
+
+msgctxt "pref_show_buttons_title"
+msgid "Show Buttons On Popup"
+msgstr "在弹出框上显示按钮"
+
+msgctxt "pref_show_buttons_summaryon"
+msgid "Buttons on popup are visible"
+msgstr "弹出框上的按钮可见"
+
+msgctxt "pref_show_buttons_summaryoff"
+msgid "Buttons are hidden in long press menu"
+msgstr "长按菜单时隐藏按钮"
+
+#. Notification Preferences
+msgctxt "pref_notif_title"
+msgid "Notifications"
+msgstr "通知"
+
+msgctxt "pref_notif_summary"
+msgid "Notification configuration"
+msgstr "通知设置"
+
+#. Category headings
+msgctxt "pref_notif_category_title"
+msgid "Notification Configuration"
+msgstr "通知设置"
+
+msgctxt "pref_vibrate_category_title"
+msgid "Vibrate Configuration"
+msgstr "振动设置"
+
+msgctxt "pref_flashled_category_title"
+msgid "LED Configuration"
+msgstr "LED灯设置"
+
+msgctxt "pref_reminder_category_title"
+msgid "Reminder Configuration"
+msgstr "提醒设置"
+
+#. General Notification Preferences
+msgctxt "pref_notif_enabled_title"
+msgid "Enable Notifications"
+msgstr "启用通知"
+
+msgctxt "pref_notif_enabled_summaryon"
+msgid "Notifications are enabled"
+msgstr "已启用通知"
+
+msgctxt "pref_notif_enabled_summaryoff"
+msgid "Notifications are disabled"
+msgstr "已关闭通知"
+
+msgctxt "pref_notif_enabled_warning"
+msgid ""
+"To avoid conflicts and multiple alerts, please disable the system SMS "
+"notifications and any other apps that provide a notification when a SMS is "
+"received.\n"
+"\n"
+"To turn off the system notification, go to the messaging app, hit menu -&gt; "
+"settings and un-check notifications."
+msgstr ""
+"为避免冲突和多次通知，请关闭系统短信通知以及其他收到短信时进行通知的软件。\n"
+"\n"
+"关闭系统短信通知步骤：打开短信程序，点击菜单 -&gt; 设置并取消通知。"
+
+msgctxt "pref_popup_enabled_title"
+msgid "Show a Popup"
+msgstr "显示一个弹出框"
+
+msgctxt "pref_popup_enabled_summaryon"
+msgid "Message will open in a popup"
+msgstr "信息将会在弹出框中打开"
+
+msgctxt "pref_popup_enabled_summaryoff"
+msgid "Message will only show in notification area"
+msgstr ""
+
+msgctxt "pref_notif_test_title"
+msgid "Test Notification"
+msgstr "测试通知"
+
+msgctxt "pref_notif_test_summary"
+msgid "Test out your notification"
+msgstr "测试通知"
+
+msgctxt "pref_notif_test_message"
+msgid "Testing your notification now!"
+msgstr "正在测试通知！"
+
+msgctxt "pref_notif_sound_title"
+msgid "Notification Sound"
+msgstr "通知声"
+
+msgctxt "pref_notif_sound_summary"
+msgid "This sound will play when a message is received"
+msgstr "收到短信时播放此铃音"
+
+msgctxt "pref_notifyOnCall_title"
+msgid "Notify On Call"
+msgstr ""
+
+msgctxt "pref_notifyOnCall_summaryon"
+msgid "Sound will play while on a call"
+msgstr ""
+
+msgctxt "pref_notifyOnCall_summaryoff"
+msgid "Sound will not play while on a call"
+msgstr ""
+
+msgctxt "pref_notif_icon_title"
+msgid "Notification Icon"
+msgstr ""
+
+msgctxt "pref_notif_icon_summary"
+msgid "Change the notification area icon"
+msgstr ""
+
+msgctxt "pref_vibrate_title"
+msgid "Vibrate"
+msgstr "振动"
+
+msgctxt "pref_vibrate_summaryon"
+msgid "Vibrate is on"
+msgstr "振动已开启"
+
+msgctxt "pref_vibrate_summaryoff"
+msgid "Vibrate is off"
+msgstr "振动已关闭"
+
+#. Vibrate Preferences
+msgctxt "pref_vibrate_pattern_title"
+msgid "Vibrate Pattern"
+msgstr "振动模式"
+
+msgctxt "pref_vibrate_pattern_summary"
+msgid "Set the vibration pattern"
+msgstr "设置振动模式"
+
+msgctxt "pref_vibrate_pattern_ok"
+msgid "Custom vibrate pattern set"
+msgstr "自定义振动模式"
+
+msgctxt "pref_vibrate_pattern_bad"
+msgid "Custom vibrate pattern invalid"
+msgstr "自定义振动模式不可用, 使用默认"
+
+msgctxt "pref_vibrate_pattern_help"
+msgid ""
+"Enter a custom vibrate pattern, in the format:\n"
+"millisOff, millisOn, etc.\n"
+"\n"
+"For example:\n"
+"0,1000\n"
+"0,500,200,500,200,500"
+msgstr ""
+"输入自定义振动模式格式:\n"
+"停止振动毫秒数, 开始振动毫秒数, 等等.\n"
+"\n"
+"例如:\n"
+"0,1000\n"
+"0,500,200,500,200,500"
+
+#. LED Preferences
+msgctxt "pref_flashled_title"
+msgid "Blink LED"
+msgstr "LED灯闪烁"
+
+msgctxt "pref_flashled_summaryon"
+msgid "Blink LED when a message is received"
+msgstr "收到短信时LED灯闪烁"
+
+msgctxt "pref_flashled_summaryoff"
+msgid "Do not blink LED when a message is received"
+msgstr "收到短信时LED灯不闪烁"
+
+msgctxt "pref_flashled_color_title"
+msgid "LED Color"
+msgstr "LED灯颜色"
+
+msgctxt "pref_flashled_color_summary"
+msgid "The color of the LED"
+msgstr "LED灯的颜色"
+
+msgctxt "pref_flashled_color_custom_dialog_red"
+msgid "Red:"
+msgstr "红:"
+
+msgctxt "pref_flashled_color_custom_dialog_green"
+msgid "Green:"
+msgstr "绿:"
+
+msgctxt "pref_flashled_color_custom_dialog_blue"
+msgid "Blue:"
+msgstr "蓝:"
+
+msgctxt "pref_flashled_color_custom_dialog_preview"
+msgid "Preview:"
+msgstr "预览:"
+
+msgctxt "pref_flashled_color_custom_set"
+msgid "Custom LED color set"
+msgstr "自定义LED灯颜色"
+
+msgctxt "pref_flashled_pattern_title"
+msgid "LED Blink Rate"
+msgstr "LED灯闪烁频率"
+
+msgctxt "pref_flashled_pattern_summary"
+msgid "Set the speed the LED blinks"
+msgstr "设置LED灯闪烁频率"
+
+msgctxt "pref_flashled_pattern_ok"
+msgid "Custom LED blink rate set"
+msgstr "自定义LED灯闪烁频率"
+
+msgctxt "pref_flashled_pattern_bad"
+msgid "Custom LED blink rate is invalid"
+msgstr "自定义LED灯闪烁频率无效,使用默认"
+
+msgctxt "pref_flashled_pattern_help"
+msgid "Enter the time in milliseconds to turn the LED on and off"
+msgstr "输入LED灯开关的毫秒数"
+
+msgctxt "pref_flashled_pattern_help_on"
+msgid "Time on:"
+msgstr "开启时间:"
+
+msgctxt "pref_flashled_pattern_help_off"
+msgid "Time off:"
+msgstr "关闭时间:"
+
+#. Notification Repeat Preferences
+msgctxt "pref_notif_repeat_title"
+msgid "Enable Reminders"
+msgstr "启用提醒"
+
+msgctxt "pref_notif_repeat_summaryon"
+msgid "Unread message reminders are enabled"
+msgstr "在有未读短信时进行提醒"
+
+msgctxt "pref_notif_repeat_summaryoff"
+msgid "Unread message reminders are disabled"
+msgstr "在有未读短信时不进行提醒"
+
+msgctxt "pref_notif_repeat_interval_title"
+msgid "Reminder Interval"
+msgstr "提醒间隔"
+
+msgctxt "pref_notif_repeat_interval_summary"
+msgid "The time period between notification reminders"
+msgstr "两次提醒间的时间间隔"
+
+msgctxt "pref_notif_repeat_interval_dialogTitle"
+msgid "Interval (minutes)"
+msgstr "间隔 (分钟)"
+
+msgctxt "pref_notif_repeat_times_title"
+msgid "Number of Reminders"
+msgstr "提醒次数"
+
+msgctxt "pref_notif_repeat_times_summary"
+msgid "The number of reminder notifications to play"
+msgstr "出现提醒通知的次数"
+
+msgctxt "pref_notif_repeat_screen_on_title"
+msgid "Screen On for Reminders"
+msgstr "提醒时开启屏幕"
+
+msgctxt "pref_notif_repeat_screen_on_summaryon"
+msgid "Reminders will turn screen on again"
+msgstr "提醒时屏幕变亮"
+
+msgctxt "pref_notif_repeat_screen_on_summaryoff"
+msgid "Reminders will not turn screen on"
+msgstr "提醒时屏幕不变亮"
+
+#. Contact Notification Customization Strings
+msgctxt "pref_notif_default_title"
+msgid "Default Notifications"
+msgstr "默认通知"
+
+msgctxt "pref_notif_default_summary"
+msgid "Notifications for all contacts without an individual customization"
+msgstr "没有单独定制的联系人的默认通知"
+
+msgctxt "pref_contacts_title"
+msgid "Contacts Notifications"
+msgstr "联系人通知"
+
+msgctxt "pref_contacts_summary"
+msgid "Individual contact customization"
+msgstr "联系人单独定制"
+
+msgctxt "pref_notif_help_title"
+msgid "Help - I'm confused!"
+msgstr "帮助 - 我很困惑!"
+
+msgctxt "pref_notif_help_summary"
+msgid "Notifications Help"
+msgstr "通知帮助"
+
+msgctxt "pref_notif_help_message"
+msgid ""
+"SMS Popup offers the ability to customize notifications on a per contact "
+"basis. When a new message comes in, SMS Popup will first check if the "
+"contact has a customized notification. If so, those settings are used, "
+"otherwise the default notifications are used.\n"
+"\n"
+"Using this functionality, you could set things up so only a few contacts "
+"show a popup while the rest trigger a regular notification. You could also "
+"ignore certain contacts by setting their notification to silent."
+msgstr ""
+
+msgctxt "contact_customization_add"
+msgid "Add Custom Notifications"
+msgstr "添加定制通知"
+
+msgctxt "contact_customization_edit"
+msgid "Edit Custom Notification"
+msgstr "编辑定制通知"
+
+msgctxt "contact_customization_remove"
+msgid "Remove Custom Notification"
+msgstr "删除定制通知"
+
+msgctxt "contact_customization_save"
+msgid "Save"
+msgstr "保存"
+
+#, c-format
+msgctxt "contact_customization_title"
+msgid "Notifications for %s"
+msgstr "%s 的通知"
+
+#, c-format
+msgctxt "contact_customization_enabled"
+msgid "Notifications are enabled for %s"
+msgstr "%s 的通知已启用"
+
+#, c-format
+msgctxt "contact_customization_disabled"
+msgid "Notifications are disabled for %s"
+msgstr "%s 的通知已禁用"
+
+msgctxt "contact_customization_add_hint"
+msgid "Add/Edit contact notifications…"
+msgstr ""
+
+msgctxt "ringtone_silent"
+msgid "Silent"
+msgstr "静音"
+
+#. Preset Quick Reply Message Strings
+msgctxt "pref_message_presets_title"
+msgid "Preset Messages"
+msgstr "预设信息"
+
+msgctxt "pref_message_presets_summary"
+msgid "Configure preset messages for quick replies"
+msgstr "设置快速回复的预设信息"
+
+msgctxt "message_presets_add"
+msgid "Add Preset Message"
+msgstr "添加预设信息"
+
+msgctxt "message_presets_edit"
+msgid "Edit Preset Message"
+msgstr "编辑预设信息"
+
+msgctxt "message_presets_add_text"
+msgid "Create"
+msgstr "创建"
+
+msgctxt "message_presets_save_text"
+msgid "Save"
+msgstr "保存"
+
+msgctxt "message_presets_delete_text"
+msgid "Remove"
+msgstr "删除"
+
+msgctxt "message_presets_edit_text"
+msgid "Edit"
+msgstr "编辑"
+
+msgctxt "message_presets_reorder_text"
+msgid "Move to top"
+msgstr "上移到顶部"
+
+msgctxt "message_presets_empty_text"
+msgid "No presets defined"
+msgstr "没有定义预设"
+
+msgctxt "message_presets_add_toast"
+msgid "Message preset added"
+msgstr "预设信息已添加"
+
+msgctxt "message_presets_save_toast"
+msgid "Message preset updated"
+msgstr "预设信息已更新"
+
+msgctxt "message_presets_delete_toast"
+msgid "Message preset deleted"
+msgstr "预设信息已删除"
+
+msgctxt "message_presets_reorder_toast"
+msgid "Message preset moved to top"
+msgstr "预设信息已移动到顶部"
+
+msgctxt "message_presets_error_toast"
+msgid "Error - please try again"
+msgstr "错误 - 请重试"
+
+#. Quick Reply Strings
+msgctxt "quickreply_title"
+msgid "Quick Reply"
+msgstr "快速回复"
+
+#, c-format
+msgctxt "quickreply_from_text"
+msgid "To: %s"
+msgstr "到: %s"
+
+msgctxt "quickreply_preset_button"
+msgid "Presets"
+msgstr "预设"
+
+msgctxt "quickreply_send_button"
+msgid "Send"
+msgstr "发送"
+
+msgctxt "quickreply_sending_toast"
+msgid "Sending message…"
+msgstr ""
+
+msgctxt "quickreply_nomessage_toast"
+msgid "Send"
+msgstr "发送"
+
+#. Text-To-Speech and Voice Transcription Strings
+msgctxt "loading_message"
+msgid "Loading…"
+msgstr ""
+
+msgctxt "error_message"
+msgid "Error"
+msgstr "错误"
+
+msgctxt "error_no_voice_recognition"
+msgid "Voice recognition not available on this device"
+msgstr "此设备上声音识别不可用"
+
+#. Popup Button Configuration
+msgctxt "pref_button_config_title"
+msgid "Button Configuration"
+msgstr "按钮配置"
+
+msgctxt "pref_button_config_summary"
+msgid "Popup button configuration"
+msgstr "弹出按钮配置"
+
+#, c-format
+msgctxt "pref_button_summary"
+msgid "Current Setting: %s"
+msgstr "当前设置: %s"
+
+msgctxt "pref_button1_title"
+msgid "Button 1 Configuration"
+msgstr "按钮 1 配置"
+
+msgctxt "pref_button2_title"
+msgid "Button 2 Configuration"
+msgstr "按钮 2 配置"
+
+msgctxt "pref_button3_title"
+msgid "Button 3 Configuration"
+msgstr "按钮 3 配置"
+
+#. Donate Strings (not used right now)
+msgctxt "pref_donate_title"
+msgid "Donate to SMS Popup"
+msgstr "捐赠 SMS Popup"
+
+msgctxt "pref_donate_text"
+msgid ""
+"SMS Popup is a free application that I work on in my spare time. If you find "
+"it useful, and can spare a few bucks, a donation would be much appreciated.\n"
+"\n"
+"Thanks!"
+msgstr ""
+"SMS Popup 是我在业余时间制作的一款免费的程序。如果您感觉它很有用，可以捐赠我的开发。\n"
+"\n"
+"感谢支持!"
+
+msgctxt "pref_donate_market_button"
+msgid "Donate via Android Market"
+msgstr "通过Android Market捐赠"
+
+msgctxt "pref_donate_paypal_button"
+msgid "Donate via PayPal"
+msgstr "通过PayPal捐赠"
+
+#. Misc missing string
+msgctxt "view_contact"
+msgid "View Contact"
+msgstr "查看联络"
+
+#. Quick Reply Checkbox Preference
+msgctxt "pref_quickreply_title"
+msgid "Quick Reply"
+msgstr "快速回复"
+
+msgctxt "pref_quickreply_summaryon"
+msgid "Quick Reply is enabled"
+msgstr "快速回复已启动"
+
+msgctxt "pref_quickreply_summaryoff"
+msgid "Quick Reply is disabled"
+msgstr "快速回复未启动"
+
+msgctxt "pref_quickreply_bothreplybuttons"
+msgid ""
+"Both reply buttons are already active, to configure them please go to the "
+"Button Configuration screen"
+msgstr "两个回复按键都已启动，请回按键设置界面修改"
+
+msgctxt "pref_quickreply_noreplybuttons"
+msgid ""
+"No reply buttons are currently active, to configure them please go to the "
+"Button Configuration screen"
+msgstr "回复按键未启动，请回按键设置界面修改"
+
+#. Misc missing string
+msgctxt "button_replybyaddress"
+msgid "Reply (to phone number)"
+msgstr "回复（电话号码）"
+
+#. Quick Reply Signature pref
+msgctxt "pref_notif_signature_title"
+msgid "Quick Reply Signature"
+msgstr "快速签名回复"
+
+msgctxt "pref_notif_signature_summary"
+msgid "Appears at the end of every quick reply"
+msgstr "出现在每次快速回复里"
+
+#. Eula Strings
+msgctxt "eula_title"
+msgid "SMS Popup License Agreement"
+msgstr "SMS Popup 许可协议"
+
+msgctxt "eula_accept"
+msgid "Accept"
+msgstr "接受"
+
+msgctxt "eula_refuse"
+msgid "Uninstall"
+msgstr "卸载"
+
+#. Send message prefs
+msgctxt "pref_delivery_report_title"
+msgid "Delivery Reports"
+msgstr "报告信息"
+
+msgctxt "pref_delivery_report_summary"
+msgid "Request a delivery report for each message you send via quick reply"
+msgstr "在每次快速回复信息时发送报告"
+
+msgctxt "pref_split_message_title"
+msgid "Split Long Messages"
+msgstr "信息分段"
+
+msgctxt "pref_split_message_summaryon"
+msgid "Long messages will be split up (only needed for some CDMA carriers)"
+msgstr "信息将自动分段（仅为某些CDMA公司）"
+
+msgctxt "pref_split_message_summaryoff"
+msgid ""
+"Long messages will not be split up (only needed for some CDMA carriers)"
+msgstr "信息将不会自动分段（仅为某些CDMA公司）"
+
+#. Other new prefs
+msgctxt "pref_autorotate_title"
+msgid "Autorotate Always On"
+msgstr "自动旋转启动"
+
+msgctxt "pref_autorotate_summaryon"
+msgid "Popup will always autorotate"
+msgstr "Popup将自动旋转"
+
+msgctxt "pref_autorotate_summaryoff"
+msgid "Popup will auto-rotate based on the screen behind it"
+msgstr "Popup将根据屏幕自动旋转"
+
+msgctxt "pref_screen_on_title"
+msgid "Screen On for Popup"
+msgstr "为Popup启动荧屏"
+
+msgctxt "pref_screen_on_summaryon"
+msgid "Screen will turn on when popup shows"
+msgstr "当Popup出现屏幕将会启动"
+
+msgctxt "pref_screen_on_summaryoff"
+msgid "Screen will not turn on when popup shows"
+msgstr "当Popup出现屏幕将不会启动"
+
+msgctxt "pref_screen_category"
+msgid "Screen Control"
+msgstr "屏幕控制"
+
+#. Other new Quick Reply prefs
+msgctxt "pref_show_delete_button_dialog_title"
+msgid "Delete Message"
+msgstr "删除短信"
+
+msgctxt "pref_show_delete_button_dialog_text"
+msgid "Are you sure?"
+msgstr "确定？"
+
+msgctxt "quickreply_sent_toast"
+msgid "Message Sent"
+msgstr "信息已发送"
+
+msgctxt "quickreply_failed_send_later"
+msgid ""
+"Currently unable to send your message. It will be sent when the service "
+"becomes available."
+msgstr "信息无法发送，当网络服务恢复后将再次发送。"
+
+msgctxt "quickreply_failed"
+msgid "Message failed to send"
+msgstr "信息发送失败"
+
+#. Arrays texts
+msgctxt "pref_custom"
+msgid "Custom"
+msgstr "自定义"
+
+msgctxt "pref_notif_repeat_times_entries_keep_repeting"
+msgid "Keep repeating"
+msgstr "继续重复"
+
+msgctxt "pref_timeout_entries_10s"
+msgid "10 seconds"
+msgstr "10 秒"
+
+msgctxt "pref_timeout_entries_20s"
+msgid "20 seconds"
+msgstr "20 秒"
+
+msgctxt "pref_timeout_entries_30s"
+msgid "30 seconds"
+msgstr "30 秒"
+
+msgctxt "pref_timeout_entries_1m"
+msgid "1 minute"
+msgstr "1 分钟"
+
+msgctxt "pref_timeout_entries_2m"
+msgid "2 minutes"
+msgstr "2 分钟"
+
+msgctxt "pref_timeout_entries_5m"
+msgid "5 minutes"
+msgstr "5 分钟"
+
+msgctxt "pref_timeout_entries_10m"
+msgid "10 minutes"
+msgstr "10 分钟"
+
+msgctxt "pref_vibrate_pattern_entries_normal"
+msgid "Normal"
+msgstr "正常"
+
+msgctxt "pref_vibrate_pattern_entries_long"
+msgid "Long Vibrate"
+msgstr "单次长性振动"
+
+msgctxt "pref_vibrate_pattern_entries_multiple_short"
+msgid "Multiple Short"
+msgstr "多次短性振动"
+
+msgctxt "pref_vibrate_pattern_entries_multiple_long"
+msgid "Multiple Long"
+msgstr "多次长性振动"
+
+msgctxt "pref_led_color_blue"
+msgid "Blue"
+msgstr "蓝色"
+
+msgctxt "pref_led_color_green"
+msgid "Green"
+msgstr "绿色"
+
+msgctxt "pref_led_color_red"
+msgid "Red"
+msgstr "红色"
+
+msgctxt "pref_led_color_yellow"
+msgid "Yellow"
+msgstr "黄色"
+
+msgctxt "pref_led_color_magenta"
+msgid "Magenta"
+msgstr "洋红色"
+
+msgctxt "pref_led_color_cyan"
+msgid "Cyan"
+msgstr "青色"
+
+msgctxt "pref_led_pattern_entries_fast"
+msgid "Fast"
+msgstr "快速"
+
+msgctxt "pref_led_pattern_entries_normal"
+msgid "Normal"
+msgstr "正常"
+
+msgctxt "pref_led_pattern_entries_slow"
+msgid "Slow"
+msgstr "慢速"

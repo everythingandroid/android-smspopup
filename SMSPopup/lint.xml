@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="MissingTranslation" severity="warning">
+        <ignore path="res\values\arrays.xml" />
+        <ignore path="res\values\defaults.xml" />
+        <ignore path="res\values\keys.xml" />
+        <ignore path="res\values\strings_no_translate.xml" />
+    </issue>
+</lint>
