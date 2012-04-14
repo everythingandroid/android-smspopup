@@ -44,22 +44,25 @@ public class TestNotificationDialogPreference extends DialogPreference {
 
         // Create a test SmsMmsMessage
         String testPhone = "123-456-7890";
+        String contactLookup = null;
 
         // If contactId is set, use it's phone else just use a default.
         if (contactId != null) {
             // Cursor contactCursor = mDbAdapter.fetchContact(Long.valueOf(contactId));
             Cursor contactCursor = context.getContentResolver().query(
-		    		ContactNotifications.buildContactUri(contactId), 
+		    		ContactNotifications.buildContactUri(contactId),
 		    		null, null, null, null);
             if (contactCursor != null && contactCursor.moveToFirst()) {
                 testPhone = contactCursor.getString(
                 		contactCursor.getColumnIndexOrThrow(ContactNotifications.CONTACT_NAME));
+                contactLookup = contactCursor.getString(
+                        contactCursor.getColumnIndexOrThrow(ContactNotifications.CONTACT_LOOKUPKEY));
                 contactCursor.close();
             }
         }
 
-        SmsMmsMessage message = new SmsMmsMessage(context, testPhone, 
-				context.getString(R.string.pref_notif_test_title), 0, contactId, null, 
+        SmsMmsMessage message = new SmsMmsMessage(context, testPhone,
+				context.getString(R.string.pref_notif_test_title), 0, contactId, contactLookup,
 				testPhone, 1, 0, SmsMmsMessage.MESSAGE_TYPE_SMS);
 
         // Show notification
