@@ -123,16 +123,16 @@ public class ManageNotification {
             myNM.notify(notif, notification);
         }
     }
-    
+
     /*
      * Default to NOTIFICATION_ALERT if notif is left out
      */
     public static void show(Context context, SmsMmsMessage message) {
         show(context, message, 1);
     }
-    
+
     public static void show(Context context, SmsMmsMessage message, int messageCount) {
-        show(context, message, messageCount, NOTIFICATION_ALERT);   
+        show(context, message, messageCount, NOTIFICATION_ALERT);
     }
 
     /*
@@ -143,13 +143,13 @@ public class ManageNotification {
     public static void show(Context context, SmsMmsMessage message, int messageCount, int notif) {
         notify(context, message, messageCount, false, notif);
     }
-    
+
     /*
      * Only update the notification given the SmsMmsMessage (ie. do not play the vibrate/sound, just
      * update the text).
      */
     public static void update(Context context, SmsMmsMessage message, int messageCount) {
-        
+
         // TODO: can I just use Notification.setLatestEventInfo() to update instead?
         if (message != null && messageCount > 0) {
             notify(context, message, messageCount, true, NOTIFICATION_ALERT);
@@ -158,17 +158,17 @@ public class ManageNotification {
             ManageNotification.clearAll(context, true);
         }
     }
-    
+
     /*
      * The main notify method
      */
-    private static void notify(Context context, SmsMmsMessage message, int messageCount, 
+    private static void notify(Context context, SmsMmsMessage message, int messageCount,
             boolean onlyUpdate, int notif) {
-        
+
         if (message == null || messageCount < 1) {
             return;
         }
-                
+
         final String messageBody = message.getMessageBody();
         final String contactName = message.getContactName();
         final long timestamp = message.getTimestamp();
@@ -194,9 +194,9 @@ public class ManageNotification {
 
         // If we're in privacy mode and the keyguard is on then just display
         // the name of the person, otherwise scroll the name and message
-        if (n.privacyMode && 
+        if (n.privacyMode &&
                 (ManageKeyguard.inKeyguardRestrictedInputMode() || n.privacyAlways)) {
-            
+
             if (n.privacySender) {
                 scrollText = new SpannableString(context.getString(
                         R.string.notification_scroll_privacy_no_name));
@@ -205,15 +205,15 @@ public class ManageNotification {
                 scrollText = new SpannableString(context.getString(
                         R.string.notification_scroll_privacy, contactName));
                 contentTitle = contactName;
-                contentText = context.getString(R.string.notification_scroll_privacy_no_name);                    
+                contentText = context.getString(R.string.notification_scroll_privacy_no_name);
             }
 
         } else {
-            
+
             contentTitle = contactName;
             contentText = messageBody;
 
-            scrollText = new SpannableString(context.getString(R.string.notification_scroll, 
+            scrollText = new SpannableString(context.getString(R.string.notification_scroll,
                     contactName, messageBody));
 
             // Set contact name as bold
@@ -221,12 +221,12 @@ public class ManageNotification {
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         }
-        
+
         // If updating don't set scroll text
         if (onlyUpdate) {
             scrollText = null;
         }
-        
+
         // Flag that a notification has been sent for this message
         message.setNotify(false);
 
@@ -360,6 +360,10 @@ public class ManageNotification {
         int notifIcon =
                 Integer.valueOf(mPrefs.getString(R.string.pref_notif_icon_key,
                         Defaults.PREFS_NOTIF_ICON));
+        if (notifIcon < 0 || notifIcon >= NOTIF_ICON_RES.length) {
+            notifIcon = Integer.valueOf(Defaults.PREFS_NOTIF_ICON);
+            mPrefs.putString(R.string.pref_notif_icon_key, String.valueOf(notifIcon));
+        }
 
         boolean replyToThread =
                 mPrefs.getBoolean(R.string.pref_reply_to_thread_key, Defaults.PREFS_REPLY_TO_THREAD);
@@ -500,8 +504,8 @@ public class ManageNotification {
         popupNotification.privacyMode = privacyMode;
         popupNotification.privacySender = privacySender;
         popupNotification.privacyAlways = privacyAlways;
-        popupNotification.notifIcon = notifIcon == -1 ? 0 : NOTIF_ICON_RES[notifIcon][NOTIFY];
-        popupNotification.notifFailedIcon = notifIcon == -1 ? 0 : NOTIF_ICON_RES[notifIcon][FAILED];
+        popupNotification.notifIcon = NOTIF_ICON_RES[notifIcon][NOTIFY];
+        popupNotification.notifFailedIcon = NOTIF_ICON_RES[notifIcon][FAILED];
 
         return popupNotification;
     }
@@ -546,7 +550,7 @@ public class ManageNotification {
 
     /**
      * Parse the user provided custom vibrate pattern into a long[]
-     * 
+     *
      */
     // TODO: tidy this up
     public static long[] parseVibratePattern(String stringPattern) {
@@ -587,7 +591,7 @@ public class ManageNotification {
 
     /**
      * Parse LED pattern string into int[]
-     * 
+     *
      * @param stringPattern
      * @return
      */
