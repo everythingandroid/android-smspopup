@@ -169,10 +169,14 @@ public class ManagePreferences {
             mContext.getContentResolver().update(
                     ContactNotifications.buildContactUri(mRowId), vals, null, null);
         } else {
-            SharedPreferences.Editor settings = mPrefs.edit();
-            settings.putString(mContext.getString(resPrefId), newVal);
-            settings.commit();
+            putString(resPrefId, newVal);
         }
+    }
+
+    public void putString(int resPrefId, String newVal) {
+        SharedPreferences.Editor settings = mPrefs.edit();
+        settings.putString(mContext.getString(resPrefId), newVal);
+        settings.commit();
     }
 
     public int getInt(String pref, int defaultVal) {
