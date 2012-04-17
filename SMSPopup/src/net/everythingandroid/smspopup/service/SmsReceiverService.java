@@ -17,7 +17,6 @@ import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,19 +24,18 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
-import android.os.PowerManager;
-import android.os.Process;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.telephony.SmsMessage.MessageClass;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
-public class SmsReceiverService extends Service {
+import com.commonsware.cwac.wakeful.WakefulIntentService;
+
+public class SmsReceiverService extends WakefulIntentService {
+    private static final String TAG = SmsReceiverService.class.getName();
+
     private static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private static final String ACTION_MMS_RECEIVED =
             "android.provider.Telephony.WAP_PUSH_RECEIVED";
@@ -56,67 +54,32 @@ public class SmsReceiverService extends Service {
     private static final int MESSAGE_RETRY_PAUSE = 1000;
 
     private Context context;
-    private ServiceHandler mServiceHandler;
-    private Looper mServiceLooper;
     private int mResultCode;
-
-    private static final Object mStartingServiceSync = new Object();
-    private static PowerManager.WakeLock mStartingService;
 
     private static final int TOAST_HANDLER_MESSAGE_SENT = 0;
     private static final int TOAST_HANDLER_MESSAGE_SEND_LATER = 1;
     private static final int TOAST_HANDLER_MESSAGE_FAILED = 2;
 
+    public SmsReceiverService() {
+        super(TAG);
+    }
+
     @Override
     public void onCreate() {
-        if (BuildConfig.DEBUG)
-            Log.v("SMSReceiverService: onCreate()");
-        HandlerThread thread = new HandlerThread(Log.LOGTAG, Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
+        super.onCreate();
         context = getApplicationContext();
-        mServiceLooper = thread.getLooper();
-        mServiceHandler = new ServiceHandler(mServiceLooper);
     }
 
     @Override
-    public void onStart(Intent intent, int startId) {
+    protected void doWakefulWork(Intent intent) {
         if (BuildConfig.DEBUG)
-            Log.v("SMSReceiverService: onStart()");
+            Log.v("SMSReceiverService: doWakefulWork()");
 
-        mResultCode = intent != null ? intent.getIntExtra("result", 0) : 0;
-
-        Message msg = mServiceHandler.obtainMessage();
-        msg.arg1 = startId;
-        msg.obj = intent;
-        mServiceHandler.sendMessage(msg);
-    }
-
-    @Override
-    public void onDestroy() {
-        if (BuildConfig.DEBUG)
-            Log.v("SMSReceiverService: onDestroy()");
-        mServiceLooper.quit();
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    private final class ServiceHandler extends Handler {
-        public ServiceHandler(Looper looper) {
-            super(looper);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            if (BuildConfig.DEBUG)
-                Log.v("SMSReceiverService: handleMessage()");
-
-            int serviceId = msg.arg1;
-            Intent intent = (Intent) msg.obj;
-            String action = intent.getAction();
-            String dataType = intent.getType();
+        mResultCode = 0;
+        if (intent != null) {
+            mResultCode = intent.getIntExtra("result", 0);
+            final String action = intent.getAction();
+            final String dataType = intent.getType();
 
             if (ACTION_SMS_RECEIVED.equals(action)) {
                 handleSmsReceived(intent);
@@ -127,10 +90,6 @@ public class SmsReceiverService extends Service {
             } else if (ACTION_MESSAGE_RECEIVED.equals(action)) {
                 handleMessageReceived(intent);
             }
-
-            // NOTE: We MUST not call stopSelf() directly, since we need to
-            // make sure the wake lock acquired by AlertReceiver is released.
-            finishStartingService(SmsReceiverService.this, serviceId);
         }
     }
 
@@ -163,7 +122,8 @@ public class SmsReceiverService extends Service {
         }
 
         // Fetch preferences
-        ManagePreferences mPrefs = new ManagePreferences(context, message.getContactLookupKey());
+        ManagePreferences mPrefs = new ManagePreferences(
+                context, message.getContactId(), message.getContactLookupKey());
 
         // Whether or not the popup should only show when keyguard is on
         boolean onlyShowOnKeyguard =
@@ -183,12 +143,12 @@ public class SmsReceiverService extends Service {
                         ContactNotifications.ENABLED);
 
         // get docked state of phone
-        boolean docked = mPrefs.getInt(R.string.pref_docked_key, Intent.EXTRA_DOCK_STATE_UNDOCKED) 
+        boolean docked = mPrefs.getInt(R.string.pref_docked_key, Intent.EXTRA_DOCK_STATE_UNDOCKED)
         		!= Intent.EXTRA_DOCK_STATE_UNDOCKED;
 
         mPrefs.close();
 
-        // Fetch call state, if the user is in a call or the phone is ringing we don't want 
+        // Fetch call state, if the user is in a call or the phone is ringing we don't want
         // to show the popup
         TelephonyManager mTM =
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -268,7 +228,7 @@ public class SmsReceiverService extends Service {
         /*
          * FROM: ContactURI -or- display name and display address -or- display address MESSAGE BODY:
          * message body TIMESTAMP: optional (will use system timestamp)
-         * 
+         *
          * QUICK REPLY INTENT: REPLY INTENT: DELETE INTENT:
          */
 
@@ -382,17 +342,6 @@ public class SmsReceiverService extends Service {
         }
 
         /*
-         * Now let's forward the same intent onto the system app to make sure things there are
-         * processed correctly
-         */
-        // sysIntent = intent.setClassName(
-        // SmsMessageSender.MMS_PACKAGE_NAME,
-        // SmsMessageSender.MMS_SENT_CLASS_NAME);
-
-        // Log.v("sysIntent = " + sysIntent.toString());
-        // Log.v("bundle = " + sysIntent.getExtras().toString());
-
-        /*
          * Start the broadcast via PendingIntent so result code is passed over correctly
          */
         if (forwardToSystemApp) {
@@ -404,40 +353,4 @@ public class SmsReceiverService extends Service {
             }
         }
     }
-
-    /**
-     * Start the service to process the current event notifications, acquiring the wake lock before
-     * returning to ensure that the service will run.
-     */
-    public static void beginStartingService(Context context, Intent intent) {
-        synchronized (mStartingServiceSync) {
-            if (BuildConfig.DEBUG)
-                Log.v("SMSReceiverService: beginStartingService()");
-            if (mStartingService == null) {
-                PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-                mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                        Log.LOGTAG + ".SmsReceiverService");
-                mStartingService.setReferenceCounted(false);
-            }
-            mStartingService.acquire();
-            context.startService(intent);
-        }
-    }
-
-    /**
-     * Called back by the service when it has finished processing notifications, releasing the wake
-     * lock if the service is now stopping.
-     */
-    public static void finishStartingService(Service service, int startId) {
-        synchronized (mStartingServiceSync) {
-            if (BuildConfig.DEBUG)
-                Log.v("SMSReceiverService: finishStartingService()");
-            if (mStartingService != null) {
-                if (service.stopSelfResult(startId)) {
-                    mStartingService.release();
-                }
-            }
-        }
-    }
-
 }

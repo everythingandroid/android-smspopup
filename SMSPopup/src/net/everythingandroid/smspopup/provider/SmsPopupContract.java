@@ -11,6 +11,7 @@ public class SmsPopupContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     interface ContactNotificationsColumns {
+        String CONTACT_ID = "contact_id";
         String CONTACT_LOOKUPKEY = "contact_lookupkey";
         String CONTACT_NAME = "contact_displayname";
         String ENABLED = "contact_enabled";
@@ -51,25 +52,26 @@ public class SmsPopupContract {
         public static Uri buildContactUri(String id) {
             return CONTENT_URI.buildUpon().appendPath(id).build();
         }
-        
+
         public static Uri buildContactUri(long id) {
             return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
-        }        
+        }
 
         public static String getContactId(Uri uri) {
-            if (uri.getPathSegments().size() == 2) {
+            final int size = uri.getPathSegments().size();
+            if (size >= 2 && size <= 3) {
                 return uri.getLastPathSegment();
             }
             return null;
         }
-        
+
         public static Uri buildLookupUri(String lookupKey) {
             return buildLookupUri(null, lookupKey);
         }
 
         public static Uri buildLookupUri(String contactId, String lookupKey) {
             if (lookupKey == null) {
-                return CONTENT_LOOKUP_URI.buildUpon().appendPath(contactId).build();
+                return null;
             }
             if (contactId == null) {
                 return CONTENT_LOOKUP_URI.buildUpon().appendPath(lookupKey).build();
@@ -81,7 +83,9 @@ public class SmsPopupContract {
         public static String getLookupKey(Uri uri) {
             final List<String> segments = uri.getPathSegments();
             if (segments.size() > 1) {
-                return uri.getPathSegments().get(1);
+                // getPathSegments() decodes the segment, so we need to encode again as we want
+                // to keep LOOKUP_URI in encoded format
+                return Uri.encode(uri.getPathSegments().get(1));
             }
             return null;
         }
@@ -90,10 +94,10 @@ public class SmsPopupContract {
     public static class QuickMessages implements QuickMessagesColumns, BaseColumns {
     	public static final String PATH_QUICKMESSAGES = "quickmessages";
         public static final String PATH_QUICKMESSAGES_UPDATE_ORDER = "updateorder";
-        
+
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_QUICKMESSAGES).build();
-        
+
         public static final Uri UPDATE_ORDER_URI =
         		BASE_CONTENT_URI.buildUpon().appendPath(PATH_QUICKMESSAGES)
         				.appendPath(PATH_QUICKMESSAGES_UPDATE_ORDER).build();
@@ -102,7 +106,7 @@ public class SmsPopupContract {
                 "vnd.android.cursor.dir/vnd.everythingandroid.quickmessage";
         public static final String CONTENT_ITEM_TYPE =
                 "vnd.android.cursor.item/vnd.everythingandroid.quickmessage";
-        
+
         public static final String DEFAULT_SORT = ORDER + ", " + _ID;
 
         public static Uri buildQuickMessageUri(String quickMessageId) {
@@ -113,14 +117,10 @@ public class SmsPopupContract {
         	final List<String> segments = uri.getPathSegments();
             return segments.get(segments.size() - 1);
         }
-        
+
         public static Uri buildQuickMessageOrderUpdateUri(String quickMessageId) {
             return UPDATE_ORDER_URI.buildUpon().appendPath(quickMessageId).build();
         }
-
-//        public static String getQuickMessageId(Uri uri) {
-//            return uri.getPathSegments().get(1);
-//        }
     }
 
 }

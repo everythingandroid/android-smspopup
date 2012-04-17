@@ -52,7 +52,6 @@ public class ManagePreferences {
         public static final String PREFS_NOTIF_REPEAT_INTERVAL = "5";
         public static final String PREFS_NOTIF_REPEAT_TIMES = "2";
         public static final Boolean PREFS_NOTIF_REPEAT_SCREEN_ON = false;
-
     }
 
     /**
@@ -89,15 +88,18 @@ public class ManagePreferences {
      * @param context a context.
      * @param contactLookupKey the contact lookup key.
      */
-    public ManagePreferences(Context context, String contactLookupKey) {
+    public ManagePreferences(Context context, String contactId, String contactLookupKey) {
         mContext = context;
         useDatabase = false;
 
-        if (BuildConfig.DEBUG) Log.v("contactId = " + mRowId);
+        if (BuildConfig.DEBUG) {
+            Log.v("Notification prefs for lookup_key = " + contactLookupKey);
+        }
 
-        if (contactLookupKey != null) {
+        if (contactLookupKey != null && contactId != null) {
             mCursor = mContext.getContentResolver().query(
-                    ContactNotifications.buildLookupUri(contactLookupKey), null, null, null, null);
+                    ContactNotifications.buildLookupUri(contactId, contactLookupKey),
+                    null, null, null, null);
             if (mCursor != null && mCursor.moveToFirst()) {
                 if (BuildConfig.DEBUG) Log.v("Contact found - using database");
                 mRowId = mCursor.getLong(mCursor.getColumnIndexOrThrow(ContactNotifications._ID));
@@ -106,8 +108,10 @@ public class ManagePreferences {
                 mCursor = null;
                 useDatabase = false;
             }
-        } else {
-            if (BuildConfig.DEBUG) Log.v("Contact NOT found - using prefs");
+        }
+
+        if (BuildConfig.DEBUG && !useDatabase) {
+            Log.v("Contact NOT found - using prefs");
         }
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);

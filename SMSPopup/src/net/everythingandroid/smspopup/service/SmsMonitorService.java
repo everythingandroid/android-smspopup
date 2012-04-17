@@ -1,5 +1,9 @@
 package net.everythingandroid.smspopup.service;
 
+import net.everythingandroid.smspopup.BuildConfig;
+import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.ManageNotification;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -8,11 +12,6 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
-
-import net.everythingandroid.smspopup.BuildConfig;
-import net.everythingandroid.smspopup.util.Log;
-import net.everythingandroid.smspopup.util.ManageNotification;
-import net.everythingandroid.smspopup.util.SmsPopupUtils;
 
 public class SmsMonitorService extends Service {
     private static Uri uriSMS = Uri.parse("content://mms-sms/conversations/");
@@ -33,8 +32,9 @@ public class SmsMonitorService extends Service {
     }
 
     @Override
-    public void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     @Override

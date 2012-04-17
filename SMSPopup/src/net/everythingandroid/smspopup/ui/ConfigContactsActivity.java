@@ -2,8 +2,6 @@ package net.everythingandroid.smspopup.ui;
 
 import java.util.List;
 
-import com.commonsware.cwac.wakeful.WakefulIntentService;
-
 import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
@@ -42,6 +40,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.commonsware.cwac.wakeful.WakefulIntentService;
+
 public class ConfigContactsActivity extends FragmentActivity {
     private static final int REQ_CODE_CHOOSE_CONTACT = 0;
 
@@ -51,6 +51,7 @@ public class ConfigContactsActivity extends FragmentActivity {
             Contacts.LOOKUP_KEY
     };
 
+    private static final int COLUMN_CONTACT_ID = 0;
     private static final int COLUMN_DISPLAY_NAME = 1;
     private static final int COLUMN_LOOKUP_KEY = 2;
 
@@ -58,11 +59,11 @@ public class ConfigContactsActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         if (SmsPopupUtils.isHoneycomb()) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(android.R.id.content, new ConfigContactsListFragment());
         ft.commit();
@@ -81,8 +82,9 @@ public class ConfigContactsActivity extends FragmentActivity {
             if (resultCode == -1) { // Success, contact chosen
                 final List<String> segments = data.getData().getPathSegments();
                 final String lookupKey = segments.get(segments.size() - 2);
+                final String contactId = segments.get(segments.size() - 1);
                 startActivity(getConfigPerContactIntent(getApplicationContext(),
-                        ContactNotifications.buildLookupUri(lookupKey)));
+                        ContactNotifications.buildLookupUri(contactId, lookupKey)));
             }
             break;
         }
@@ -116,7 +118,7 @@ public class ConfigContactsActivity extends FragmentActivity {
     /**
      * Get intent that starts the notification config for a contact - no params means add new (ie.
      * it will prompt for the user to pick a contact).
-     * 
+     *
      * @return the intent that can be started
      */
     private static Intent getConfigPerContactIntent(Context context) {
@@ -125,9 +127,9 @@ public class ConfigContactsActivity extends FragmentActivity {
     }
 
     /**
-     * Get intent that starts the notification config for a contact. contactId is the system id of
-     * the contact to edit
-     * 
+     * Get intent that starts the notification config for a contact. rowId is the SMS Popup
+     * contacts table row of the contact to pass through.
+     *
      * @return the intent that can be started
      */
     private static Intent getConfigPerContactIntent(Context context, long rowId) {
@@ -190,7 +192,7 @@ public class ConfigContactsActivity extends FragmentActivity {
 
         private static final int CONTEXT_MENU_DELETE_ID = Menu.FIRST;
         private static final int CONTEXT_MENU_EDIT_ID = Menu.FIRST + 1;
-        
+
         private static final int LOADER_CONTACT_NOTIFICATIONS = 0;
         private static final int LOADER_SYSTEM_CONTACTS = 1;
 
@@ -201,7 +203,7 @@ public class ConfigContactsActivity extends FragmentActivity {
             super.onListItemClick(l, v, position, id);
             startActivity(getConfigPerContactIntent(getActivity(), id));
         }
-        
+
         @Override
         public boolean onContextItemSelected(MenuItem item) {
             AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
@@ -256,13 +258,13 @@ public class ConfigContactsActivity extends FragmentActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     final Cursor c = (Cursor) mSystemContactsAdapter.getItem(position);
-                    final Uri uri = Uri.withAppendedPath(ContactNotifications.CONTENT_LOOKUP_URI,
-                    		c.getString(COLUMN_LOOKUP_KEY));
+                    final Uri uri = ContactNotifications.buildLookupUri(
+                            c.getString(COLUMN_CONTACT_ID), c.getString(COLUMN_LOOKUP_KEY));
                     startActivity(getConfigPerContactIntent(getActivity(), uri));
                     contactsAutoComplete.setText("");
                 }
             });
-            
+
             // Adapter from/to mapping
             final String[] from =
                     new String[] { ContactNotifications.CONTACT_NAME, ContactNotifications.SUMMARY };
@@ -274,7 +276,7 @@ public class ConfigContactsActivity extends FragmentActivity {
             setListAdapter(mContactNotififcationsAdapter);
 
             // Initialize the two loaders
-            getLoaderManager().initLoader(LOADER_CONTACT_NOTIFICATIONS, null, this);  
+            getLoaderManager().initLoader(LOADER_CONTACT_NOTIFICATIONS, null, this);
             getLoaderManager().initLoader(LOADER_SYSTEM_CONTACTS, null, this);
 
             return v;
@@ -301,7 +303,7 @@ public class ConfigContactsActivity extends FragmentActivity {
                 return new CursorLoader(getActivity(), ContactNotifications.CONTENT_URI,
                         ContactNotifications.PROJECTION_SUMMARY, null, null, null);
         	case LOADER_SYSTEM_CONTACTS:
-        		return new CursorLoader(getActivity(), Contacts.CONTENT_URI, 
+        		return new CursorLoader(getActivity(), Contacts.CONTENT_URI,
         				CONTACT_PROJECTION, null, null, null);
         	}
         	return null;
