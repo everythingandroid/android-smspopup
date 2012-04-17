@@ -8,7 +8,7 @@ import android.content.Context;
 
 public class ManageKeyguard {
     private static KeyguardManager myKM = null;
-    private static KeyguardLock myKL = null; // TODO: change to FLAG_DISMISS_KEYGUARD/FLAG_SHOW_WHEN_LOCKED 
+    private static KeyguardLock myKL = null; // TODO: change to FLAG_DISMISS_KEYGUARD/FLAG_SHOW_WHEN_LOCKED
 
     public static synchronized void initialize(Context context) {
         if (myKM == null) {
@@ -17,8 +17,6 @@ public class ManageKeyguard {
     }
 
     public static synchronized void disableKeyguard(Context context) {
-        // myKM = (KeyguardManager)
-        // context.getSystemService(Context.KEYGUARD_SERVICE);
         initialize(context);
 
         if (myKM.inKeyguardRestrictedInputMode()) {
@@ -56,6 +54,7 @@ public class ManageKeyguard {
             if (BuildConfig.DEBUG)
                 Log.v("--Trying to exit keyguard securely");
             myKM.exitKeyguardSecurely(new OnKeyguardExitResult() {
+                @Override
                 public void onKeyguardExitResult(boolean success) {
                     reenableKeyguard();
                     if (success) {

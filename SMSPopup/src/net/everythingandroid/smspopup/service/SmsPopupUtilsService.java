@@ -19,29 +19,24 @@ public class SmsPopupUtilsService extends WakefulIntentService {
 
     public static final String ACTION_MARK_THREAD_READ =
             "net.everythingandroid.smspopup.ACTION_MARK_THREAD_READ";
-
     public static final String ACTION_MARK_MESSAGE_READ =
             "net.everythingandroid.smspopup.ACTION_MARK_MESSAGE_READ";
-
     public static final String ACTION_DELETE_MESSAGE =
             "net.everythingandroid.smspopup.ACTION_DELETE_MESSAGE";
-
     public static final String ACTION_UPDATE_NOTIFICATION =
             "net.everythingandroid.smspopup.ACTION_UPDATE_NOTIFICATION";
-
     public static final String ACTION_QUICKREPLY =
             "net.everythingandroid.smspopup.ACTION_QUICKREPLY";
-    
     public static final String ACTION_SYNC_CONTACT_NAMES =
             "net.everythingandroid.smspopup.ACTION_SYNC_CONTACT_NAMES";
-    
+
     public SmsPopupUtilsService() {
         super(TAG);
     }
-    
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.commonsware.cwac.wakeful.WakefulIntentService#doWakefulWork(android
      * .content.Intent)
@@ -75,10 +70,9 @@ public class SmsPopupUtilsService extends WakefulIntentService {
         } else if (ACTION_SYNC_CONTACT_NAMES.equals(action)) {
         	if (BuildConfig.DEBUG) Log.v("SMSPopupUtilsService: Sync'ing contact names");
         	syncContactNames(this);
-        	
         }
     }
-    
+
     /**
      * Any custom contact notifications are stored in a local database, including the contact names
      * so we can quickly display them on the configuration screens. This function will loop through
@@ -89,19 +83,19 @@ public class SmsPopupUtilsService extends WakefulIntentService {
      * @return The number of rows updated with a new name.
      */
     private int syncContactNames(Context context) {
-    	
+
     	final ContentResolver contentResolver = context.getContentResolver();
         final Cursor cursor = contentResolver.query(
                 ContactNotifications.CONTENT_URI, null, null, null, null);
-        
+
         if (cursor == null) {
         	return 0;
         }
-        
+
         if (cursor.getCount() == 0) {
         	return 0;
         }
-        
+
         int count = 0;
         int updatedCount = 0;
         String contactId;
@@ -121,7 +115,7 @@ public class SmsPopupUtilsService extends WakefulIntentService {
                     cursor.getColumnIndexOrThrow(ContactNotifications.CONTACT_LOOKUPKEY));
 
             sysContactName = SmsPopupUtils.getPersonNameByLookup(context, contactLookup);
-            
+
             if (sysContactName != null && !sysContactName.equals(contactName)) {
             	ContentValues vals = new ContentValues();
             	vals.put(ContactNotifications.CONTACT_NAME, sysContactName);
@@ -131,14 +125,14 @@ public class SmsPopupUtilsService extends WakefulIntentService {
             	}
             }
         }
-        
+
         if (cursor != null) {
         	cursor.close();
         }
-        
+
         if (BuildConfig.DEBUG)
         	Log.v("Sync Contacts: " + updatedCount + " / " + count);
-        
+
         return updatedCount;
     }
 
@@ -162,7 +156,7 @@ public class SmsPopupUtilsService extends WakefulIntentService {
         SmsMmsMessage recentMessage = SmsPopupUtils.getRecentMessage(this, message);
 
         // Update the notification in the status bar
-        ManageNotification.update(this, recentMessage, 
+        ManageNotification.update(this, recentMessage,
                 recentMessage == null ? 0 : recentMessage.getUnreadCount());
     }
 

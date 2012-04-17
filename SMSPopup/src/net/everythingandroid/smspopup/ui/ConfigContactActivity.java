@@ -1,11 +1,13 @@
 package net.everythingandroid.smspopup.ui;
 
+import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.preferences.CustomLEDColorListPreference;
 import net.everythingandroid.smspopup.preferences.CustomLEDPatternListPreference;
 import net.everythingandroid.smspopup.preferences.CustomVibrateListPreference;
 import net.everythingandroid.smspopup.preferences.TestNotificationDialogPreference;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageNotification;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.annotation.SuppressLint;
@@ -38,11 +40,11 @@ public class ConfigContactActivity extends PreferenceActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         if (SmsPopupUtils.isHoneycomb()) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        
+
         // Create and setup preferences
         createOrFetchContactPreferences();
     }
@@ -55,7 +57,7 @@ public class ConfigContactActivity extends PreferenceActivity {
         final Uri ringtoneUri = Uri.parse(myPrefs.getString(getString(R.string.c_pref_notif_sound_key),
                 ManageNotification.defaultRingtone));
         final Ringtone mRingtone = RingtoneManager.getRingtone(this, ringtoneUri);
-        
+
         if (mRingtone == null) {
             ringtonePref.setSummary(getString(R.string.ringtone_silent));
         } else {
@@ -68,6 +70,10 @@ public class ConfigContactActivity extends PreferenceActivity {
         // This Uri can be built by either ContactNotifications.buildContactUri() or
         // ContactNotifications.buildLookupUri().
         final Uri contactNotificationsUri = getIntent().getParcelableExtra(EXTRA_CONTACT_URI);
+
+        if (BuildConfig.DEBUG) {
+            Log.v("EXTRA_CONTACT_URI = " + contactNotificationsUri);
+        }
 
         Cursor c = getContentResolver().query(contactNotificationsUri, null, null, null, null);
 
@@ -83,7 +89,7 @@ public class ConfigContactActivity extends PreferenceActivity {
 
         // check cursor again, as we may have created a new contact notification
         if (c == null || c.getCount() != 1) {
-        	
+
         	// something went really wrong now
             if (c != null) {
                 c.close(); // close up cursor again
@@ -172,6 +178,7 @@ public class ConfigContactActivity extends PreferenceActivity {
      * All preferences will trigger this when changed
      */
     private OnPreferenceChangeListener onPrefChangeListener = new OnPreferenceChangeListener() {
+        @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             return storePreferences(preference, newValue);
         }
@@ -307,15 +314,16 @@ public class ConfigContactActivity extends PreferenceActivity {
         return false;
     }
 
-    private Cursor createContact(String contactLookupKey) {
+    private Cursor createContact(String contactId, String contactLookupKey) {
         final String contactName =
-                SmsPopupUtils.getPersonNameByLookup(this, contactLookupKey, null);
+                SmsPopupUtils.getPersonNameByLookup(this, contactLookupKey);
         if (contactName == null) {
             return null;
         }
 
         final ContentValues vals = new ContentValues();
         vals.put(ContactNotifications.CONTACT_NAME, contactName.trim());
+        vals.put(ContactNotifications.CONTACT_ID, contactId);
         vals.put(ContactNotifications.CONTACT_LOOKUPKEY, contactLookupKey);
 
         final Uri contactUri = getContentResolver().insert(ContactNotifications.CONTENT_URI, vals);
@@ -324,7 +332,9 @@ public class ConfigContactActivity extends PreferenceActivity {
     }
 
     private Cursor createContact(Uri contactUri) {
-        return createContact(ContactNotifications.getLookupKey(contactUri));
+        return createContact(
+                ContactNotifications.getContactId(contactUri),
+                ContactNotifications.getLookupKey(contactUri));
     }
 
 }

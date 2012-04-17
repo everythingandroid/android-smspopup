@@ -140,30 +140,15 @@ public class SmsPopupUtils {
      * the address (phone number) will be formatted and returned instead.
      * @param context Context.
      * @param lookupKey Contact lookup key.
-     * @return Contact name or null if not found.
-     */
-    public static String getPersonNameByLookup(Context context, String lookupKey) {
-    	return getPersonNameByLookup(context, lookupKey, null);
-    }
-
-    /**
-     * Looks up a contacts display name by contact lookup key - if not found,
-     * the address (phone number) will be formatted and returned instead.
-     * @param context Context.
-     * @param lookupKey Contact lookup key.
      * @param address Address (phone number) that will be returned if the contact cannot be
      * 		found. The address will be formatted before it is returned.
      * @return Contact name or null if not found.
      */
-    public static String getPersonNameByLookup(Context context, String lookupKey, String address) {
+    public static String getPersonNameByLookup(Context context, String lookupKey) {
 
         // Check for id, if null return the formatting phone number as the name
         if (lookupKey == null) {
-            if (address != null) {
-                return PhoneNumberUtils.formatNumber(address);
-            } else {
                 return null;
-            }
         }
 
         Cursor cursor = context.getContentResolver().query(
@@ -182,10 +167,6 @@ public class SmsPopupUtils {
             } finally {
                 cursor.close();
             }
-        }
-
-        if (address != null) {
-            return PhoneNumberUtils.formatNumber(address);
         }
 
         return null;
@@ -210,9 +191,12 @@ public class SmsPopupUtils {
      * Looks up a contacts id, given their address (phone number in this case). Returns null if not
      * found
      */
-    public static ContactIdentification getPersonIdFromPhoneNumber(Context context, String address) {
-        if (address == null)
+    public static ContactIdentification getPersonIdFromPhoneNumber(
+            Context context, String address) {
+
+        if (address == null) {
             return null;
+        }
 
         Cursor cursor = null;
         try {
@@ -379,6 +363,9 @@ public class SmsPopupUtils {
     }
 
     public static Bitmap getPersonPhoto(Context context, Uri contactUri) {
+        if (context == null) {
+            return null;
+        }
         final Resources res = context.getResources();
         final int thumbSize = (int) res.getDimension(R.dimen.contact_thumbnail_size);
         final int thumbBorder = (int) res.getDimension(R.dimen.contact_thumbnail_border);

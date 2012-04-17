@@ -972,7 +972,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
     }
 
     /**
-     * View the private message (this basically just unlocks the keyguard and then updates the
+     * View the private message (this basically just unlocks the keyg   uard and then updates the
      * privacy of the messages).
      */
     private void unlockScreen() {
@@ -980,12 +980,10 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
             @Override
             public void LaunchOnKeyguardExitSuccess() {
-                smsPopupPager.post(new Runnable() {
+                SmsPopupActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        refreshViews();
                         setPrivacy(SmsPopupFragment.PRIVACY_MODE_OFF);
-                        smsPopupPagerAdapter.unlockScreen();
                     }
                 });
             }
@@ -1237,7 +1235,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
             speakMessage();
             break;
         case SmsPopupFragment.BUTTON_VIEW:
-        	setPrivacy(SmsPopupFragment.PRIVACY_MODE_OFF);
+        	unlockScreen();
         	break;
         case SmsPopupFragment.BUTTON_VIEW_MMS:
         	replyToMessage();

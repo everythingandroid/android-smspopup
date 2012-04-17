@@ -14,11 +14,11 @@ public class SmsPopupDatabase extends SQLiteOpenHelper {
     public static final String CONTACTS_DB_TABLE = "contacts";
     public static final String QUICKMESSAGES_DB_TABLE = "quickmessages";
     public static final int QUICKMESSAGE_ORDER_DEFAULT = 100;
-    
+
     private static final String DATABASE_NAME = "data";
-    private static final int DATABASE_VERSION = 2;
-    
-	public static final String QUICKMESSAGES_UPDATE_ORDER_SQL = "update " 
+    private static final int DATABASE_VERSION = 3;
+
+	public static final String QUICKMESSAGES_UPDATE_ORDER_SQL = "update "
 			+ QUICKMESSAGES_DB_TABLE + " set " + QuickMessages.ORDER + "="
 			+ QuickMessages.ORDER + "+" + QUICKMESSAGE_ORDER_DEFAULT;
 
@@ -26,6 +26,7 @@ public class SmsPopupDatabase extends SQLiteOpenHelper {
     private static final String CONTACTS_DB_CREATE =
         "create table " + CONTACTS_DB_TABLE + " (" +
         ContactNotifications._ID                    + " integer primary key autoincrement, " +
+        ContactNotifications.CONTACT_ID             + " integer, " +
         ContactNotifications.CONTACT_LOOKUPKEY      + " text, " +
         ContactNotifications.CONTACT_NAME           + " text default 'Unknown', " +
         ContactNotifications.ENABLED                + " integer default 1, " +
@@ -42,12 +43,12 @@ public class SmsPopupDatabase extends SQLiteOpenHelper {
         ContactNotifications.LED_COLOR              + " text default 'Yellow', " +
         ContactNotifications.LED_COLOR_CUSTOM       + " text null, " +
         ContactNotifications.SUMMARY                + " text default 'Default notifications', " +
-        "UNIQUE (" + ContactNotifications.CONTACT_LOOKUPKEY + ") ON CONFLICT IGNORE" +
+        "UNIQUE (" + ContactNotifications.CONTACT_ID + ") ON CONFLICT REPLACE" +
         ");";
-    
-    private static final String CONTACTS_DB_INDEX_CREATE = 
-            "create index lookup_idx ON " + CONTACTS_DB_TABLE + 
-            "(" + ContactNotifications.CONTACT_LOOKUPKEY + ");";
+
+    private static final String CONTACTS_DB_INDEX_CREATE =
+            "create index lookup_idx ON " + CONTACTS_DB_TABLE +
+            "(" + ContactNotifications.CONTACT_ID + ");";
 
     // Table creation sql statement
     private static final String QUICKMESSAGES_DB_CREATE =
@@ -72,8 +73,13 @@ public class SmsPopupDatabase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (BuildConfig.DEBUG) Log.v("SmsPopupDatabase: Upgrading Database");
-        db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_DB_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + QUICKMESSAGES_DB_TABLE);
-        onCreate(db);
+        if (oldVersion == 2 && newVersion == 3) {
+            db.execSQL("ALTER TABLE " + CONTACTS_DB_TABLE + " ADD COLUMN " +
+                    ContactNotifications.CONTACT_ID  + " integer");
+        } else {
+            db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_DB_TABLE);
+            db.execSQL("DROP TABLE IF EXISTS " + QUICKMESSAGES_DB_TABLE);
+            onCreate(db);
+        }
     }
 }

@@ -2,7 +2,6 @@ package net.everythingandroid.smspopup.provider;
 
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
-import net.everythingandroid.smspopup.util.Log;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
@@ -35,9 +34,10 @@ public class SmsPopupContentProvider extends ContentProvider {
         matcher.addURI(authority, contactsPath, CONTACTS);
         matcher.addURI(authority, contactsPath + "/*", CONTACTS_ID);
         matcher.addURI(authority, contactsLookupPath + "/*", CONTACTS_LOOKUP);
+        matcher.addURI(authority, contactsLookupPath + "/*/#", CONTACTS_LOOKUP);
         matcher.addURI(authority, quickMessagesPath, QUICKMESSAGES);
         matcher.addURI(authority, quickMessagesPath + "/#", QUICKMESSAGES_ID);
-        matcher.addURI(authority, quickMessagesPath + "/" + quickMessagesUpdateOrderPath + "/#", 
+        matcher.addURI(authority, quickMessagesPath + "/" + quickMessagesUpdateOrderPath + "/#",
         		QUICKMESSAGES_UPDATE_ORDER);
 
         return matcher;
@@ -106,22 +106,22 @@ public class SmsPopupContentProvider extends ContentProvider {
             updateContactNotificationSummary(newUri);
             break;
         case QUICKMESSAGES:
-        	
+
         	// Fetch max of quick message order column
-        	Cursor c = db.query(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, 
-        			new String[] { "max(" + QuickMessages.ORDER + ")" }, 
+        	Cursor c = db.query(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE,
+        			new String[] { "max(" + QuickMessages.ORDER + ")" },
         			null, null, null, null, null);
-        	
+
         	int highestOrder = SmsPopupDatabase.QUICKMESSAGE_ORDER_DEFAULT;
         	if (c != null && c.moveToFirst()) {
         		highestOrder = c.getInt(0) + 1;
         	}
-        	
+
         	if (c != null) {
         		c.close();
         	}
 
-            values.put(QuickMessages.ORDER, highestOrder);        	
+            values.put(QuickMessages.ORDER, highestOrder);
 
             id = db.insertOrThrow(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, null, values);
             newUri = QuickMessages.buildQuickMessageUri(String.valueOf(id));
@@ -129,11 +129,11 @@ public class SmsPopupContentProvider extends ContentProvider {
         default:
             throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        
+
         if (id == -1) {
             return null;
         }
-        
+
         getContext().getContentResolver().notifyChange(newUri, null);
 
         return newUri;
@@ -164,8 +164,23 @@ public class SmsPopupContentProvider extends ContentProvider {
         case CONTACTS_LOOKUP:
             sqlBuilder.setTables(SmsPopupDatabase.CONTACTS_DB_TABLE);
             sqlBuilder.appendWhere(
-                    ContactNotifications.CONTACT_LOOKUPKEY + " = '" + 
+                    ContactNotifications.CONTACT_LOOKUPKEY + " = '" +
                             ContactNotifications.getLookupKey(uri) + "'");
+            final String contactId = ContactNotifications.getContactId(uri);
+            if (contactId != null) {
+                sqlBuilder.appendWhere(
+                        " OR " + ContactNotifications.CONTACT_ID + " = " + contactId);
+            }
+            final Cursor cc =
+                    sqlBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+            if (cc != null) {
+                final int count = cc.getCount();
+                if (count > 1) {
+                    dothis();
+                }
+                cc.close();
+            }
+
             break;
         case QUICKMESSAGES:
             sqlBuilder.setTables(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE);
@@ -208,7 +223,7 @@ public class SmsPopupContentProvider extends ContentProvider {
             }
             break;
         case QUICKMESSAGES:
-            count = db.update(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, values, 
+            count = db.update(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, values,
                     selection, selectionArgs);
             break;
         case QUICKMESSAGES_ID:
@@ -228,42 +243,42 @@ public class SmsPopupContentProvider extends ContentProvider {
 
         return count;
     }
-    
+
     private int updateQuickMessageOrder(SQLiteDatabase db, String id) {
     	// Fetch minimum of quick message order column
-    	Cursor c = db.query(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, 
+    	Cursor c = db.query(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE,
     			new String[] { "min(" + QuickMessages.ORDER + ")" }, null, null, null, null, null);
-    	
+
     	if (c != null && c.moveToFirst()) {
-    		
-    		// Reduce by one so ordering will place this on top 
+
+    		// Reduce by one so ordering will place this on top
     		int lowestOrder = c.getInt(0) - 1;
-    		
+
     		c.close();
-    		    		
+
     		// If we're at zero, then we need to update all rows to make some space
     		if (lowestOrder == 0) {
     			db.execSQL(SmsPopupDatabase.QUICKMESSAGES_UPDATE_ORDER_SQL);
     			lowestOrder += SmsPopupDatabase.QUICKMESSAGE_ORDER_DEFAULT;
     		}
-    		
+
     		// Update the row with new ordering value
     		final ContentValues vals = new ContentValues();
     		vals.put(QuickMessages.ORDER, lowestOrder);
-    		return db.update(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE, 
+    		return db.update(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE,
     				vals, QuickMessages._ID + " = ?", new String[] { id });
     	}
-    	
+
     	if (c != null) {
     		c.close();
     	}
-    	
+
         return 0;
     }
 
     /**
      * Update the custom contact notification summary field.
-     * 
+     *
      * @param uri
      */
     private void updateContactNotificationSummary(Uri uri) {
@@ -293,14 +308,13 @@ public class SmsPopupContentProvider extends ContentProvider {
             summary.append("disabled");
         } else {
             summary.append("enabled");
-            if (one.equals(c.getString(c
-                    .getColumnIndexOrThrow(ContactNotifications.VIBRATE_ENABLED)))) {
+            if (one.equals(c.getString(
+                    c.getColumnIndexOrThrow(ContactNotifications.VIBRATE_ENABLED)))) {
                 summary.append(", Vibrate on");
             }
             if (one.equals(c.getString(c.getColumnIndexOrThrow(ContactNotifications.LED_ENABLED)))) {
                 String ledColor =
                         c.getString(c.getColumnIndexOrThrow(ContactNotifications.LED_COLOR));
-                Log.v("ledColor = " + ledColor);
                 if ("custom".equals(ledColor)) {
                     ledColor = "Custom";
                 }
