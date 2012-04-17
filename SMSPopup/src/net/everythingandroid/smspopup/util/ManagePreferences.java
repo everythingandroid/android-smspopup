@@ -64,20 +64,19 @@ public class ManagePreferences {
         mContext = context;
         useDatabase = false;
 
-        if (BuildConfig.DEBUG) Log.v("rowId = " + mRowId);
+        if (BuildConfig.DEBUG) Log.v("ManagePreferences init, rowId = " + mRowId);
 
         if (mRowId > 0) {
             mCursor = mContext.getContentResolver().query(
                     ContactNotifications.buildContactUri(mRowId), null, null, null, null);
             if (mCursor != null && mCursor.moveToFirst()) {
-                if (BuildConfig.DEBUG) Log.v("Contact found - using database");
+                if (BuildConfig.DEBUG) Log.v("Single contact found (rowId) - using database");
                 useDatabase = true;
-            } else {
-                mCursor = null;
-                useDatabase = false;
             }
-        } else {
-            if (BuildConfig.DEBUG) Log.v("Contact NOT found - using prefs");
+        }
+
+        if (BuildConfig.DEBUG && !useDatabase) {
+            Log.v("Contact NOT found - using prefs");
         }
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -100,13 +99,16 @@ public class ManagePreferences {
             mCursor = mContext.getContentResolver().query(
                     ContactNotifications.buildLookupUri(contactId, contactLookupKey),
                     null, null, null, null);
-            if (mCursor != null && mCursor.moveToFirst()) {
-                if (BuildConfig.DEBUG) Log.v("Contact found - using database");
-                mRowId = mCursor.getLong(mCursor.getColumnIndexOrThrow(ContactNotifications._ID));
+            if (mCursor != null && mCursor.getCount() > 0) {
                 useDatabase = true;
-            } else {
-                mCursor = null;
-                useDatabase = false;
+                if (mCursor.getCount() == 1) {
+                    if (BuildConfig.DEBUG) Log.v("Single contact found - using database");
+                    mCursor.moveToFirst();
+                    mRowId = mCursor.getLong(mCursor.getColumnIndexOrThrow(ContactNotifications._ID));
+                } else { // Multiple hits in contact notifications database
+                    if (BuildConfig.DEBUG) Log.v("Multiple contacts found - using database");
+                    TODO
+                }
             }
         }
 

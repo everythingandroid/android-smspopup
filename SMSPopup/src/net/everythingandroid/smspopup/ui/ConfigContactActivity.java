@@ -10,6 +10,7 @@ import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotificat
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageNotification;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
+import net.everythingandroid.smspopup.util.SmsPopupUtils.ContactIdentification;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
@@ -315,8 +316,11 @@ public class ConfigContactActivity extends PreferenceActivity {
     }
 
     private Cursor createContact(String contactId, String contactLookupKey) {
-        final String contactName =
-                SmsPopupUtils.getPersonNameByLookup(this, contactLookupKey);
+        ContactIdentification contactInfo =
+                SmsPopupUtils.getPersonNameByLookup(this, contactLookupKey, contactId);
+
+        final String contactName = contactInfo.contactName;
+
         if (contactName == null) {
             return null;
         }
