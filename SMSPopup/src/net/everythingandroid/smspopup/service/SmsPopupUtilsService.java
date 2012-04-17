@@ -6,6 +6,7 @@ import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotificat
 import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageNotification;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
+import net.everythingandroid.smspopup.util.SmsPopupUtils.ContactIdentification;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -98,29 +99,34 @@ public class SmsPopupUtilsService extends WakefulIntentService {
 
         int count = 0;
         int updatedCount = 0;
-        String contactId;
+        String id;
         String contactName;
         String contactLookup;
-        String sysContactName;
+        String contactId;
 
         // loop through the local sms popup contact notifications table
         while (cursor.moveToNext()) {
             count++;
 
+            id = cursor.getString(
+                    cursor.getColumnIndexOrThrow(ContactNotifications._ID));
             contactName = cursor.getString(
                     cursor.getColumnIndexOrThrow(ContactNotifications.CONTACT_NAME));
             contactId = cursor.getString(
-                    cursor.getColumnIndexOrThrow(ContactNotifications._ID));
+                    cursor.getColumnIndexOrThrow(ContactNotifications.CONTACT_ID));
             contactLookup = cursor.getString(
                     cursor.getColumnIndexOrThrow(ContactNotifications.CONTACT_LOOKUPKEY));
 
-            sysContactName = SmsPopupUtils.getPersonNameByLookup(context, contactLookup);
+            ContactIdentification contactInfo =
+                    SmsPopupUtils.getPersonNameByLookup(context, contactLookup, contactId);
 
-            if (sysContactName != null && !sysContactName.equals(contactName)) {
+            if (contactInfo != null && !contactName.equals(contactInfo.contactName)) {
             	ContentValues vals = new ContentValues();
-            	vals.put(ContactNotifications.CONTACT_NAME, sysContactName);
+            	vals.put(ContactNotifications.CONTACT_NAME, contactInfo.contactName);
+            	vals.put(ContactNotifications.CONTACT_ID, contactInfo.contactId);
+            	vals.put(ContactNotifications.CONTACT_LOOKUPKEY, contactInfo.contactLookup);
             	if (1 == contentResolver.update(
-            			ContactNotifications.buildContactUri(contactId), vals, null, null)) {
+            			ContactNotifications.buildContactUri(id), vals, null, null)) {
             		updatedCount++;
             	}
             }

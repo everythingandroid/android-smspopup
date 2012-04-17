@@ -144,25 +144,34 @@ public class SmsPopupUtils {
      * 		found. The address will be formatted before it is returned.
      * @return Contact name or null if not found.
      */
-    public static String getPersonNameByLookup(Context context, String lookupKey) {
+    public static ContactIdentification getPersonNameByLookup(Context context, String lookupKey,
+            String contactId) {
 
         // Check for id, if null return the formatting phone number as the name
         if (lookupKey == null) {
-                return null;
+            return null;
         }
 
+        Uri.Builder builder = Contacts.CONTENT_LOOKUP_URI.buildUpon();
+        builder.appendPath(lookupKey);
+        if (contactId != null) {
+            builder.appendPath(contactId);
+        }
+        Uri uri = builder.build();
+
         Cursor cursor = context.getContentResolver().query(
-                Uri.withAppendedPath(Contacts.CONTENT_LOOKUP_URI, lookupKey),
-                new String[] { Contacts.DISPLAY_NAME },
+                uri,
+                new String[] { Contacts._ID, Contacts.LOOKUP_KEY, Contacts.DISPLAY_NAME },
                 null, null, null);
 
         if (cursor != null) {
             try {
                 if (cursor.moveToFirst()) {
-                    String name = cursor.getString(0);
-                    if (BuildConfig.DEBUG)
-                        Log.v("Contact Display Name: " + name);
-                    return name;
+                    final String newId = cursor.getString(0);
+                    final String newLookup = cursor.getString(1);
+                    final String contactName = cursor.getString(2);
+                    if (BuildConfig.DEBUG)Log.v("Contact Display Name: " + contactName);
+                    return new ContactIdentification(newId, newLookup, contactName);
                 }
             } finally {
                 cursor.close();
@@ -1060,12 +1069,6 @@ public class SmsPopupUtils {
                 count = cursor.getCount();
                 if (count > 0) {
                     cursor.moveToFirst();
-
-                    // String[] columns = cursor.getColumnNames();
-                    // for (int i=0; i<columns.length; i++) {
-                    // Log.v("columns " + i + ": " + columns[i] + ": "
-                    // + cursor.getString(i));
-                    // }
 
                     long messageId = cursor.getLong(0);
                     long threadId = cursor.getLong(1);

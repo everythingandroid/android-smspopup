@@ -121,6 +121,12 @@ public class SmsReceiverService extends WakefulIntentService {
             return;
         }
 
+        // Unknown sender and empty body, ignore
+        if (context.getString(android.R.string.unknownName).equals(message.getContactName())
+                && "".equals(message.getMessageBody())) {
+            return;
+        }
+
         // Fetch preferences
         ManagePreferences mPrefs = new ManagePreferences(
                 context, message.getContactId(), message.getContactLookupKey());

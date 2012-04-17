@@ -171,16 +171,6 @@ public class SmsPopupContentProvider extends ContentProvider {
                 sqlBuilder.appendWhere(
                         " OR " + ContactNotifications.CONTACT_ID + " = " + contactId);
             }
-            final Cursor cc =
-                    sqlBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
-            if (cc != null) {
-                final int count = cc.getCount();
-                if (count > 1) {
-                    dothis();
-                }
-                cc.close();
-            }
-
             break;
         case QUICKMESSAGES:
             sqlBuilder.setTables(SmsPopupDatabase.QUICKMESSAGES_DB_TABLE);
