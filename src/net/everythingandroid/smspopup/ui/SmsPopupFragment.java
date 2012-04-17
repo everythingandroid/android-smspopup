@@ -67,6 +67,7 @@ public class SmsPopupFragment extends Fragment {
     public static final int BUTTON_VIEW = 100;
     public static final int BUTTON_VIEW_MMS = 101;
     public static final int BUTTON_UNLOCK = 102;
+    public static final int BUTTON_PRIVACY = 103;
 
     private static final int CONTACT_IMAGE_FADE_DURATION = 300;
 
@@ -176,7 +177,6 @@ public class SmsPopupFragment extends Fragment {
                 new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setPrivacy(PRIVACY_MODE_OFF);
                         mButtonsListener.onButtonClicked(BUTTON_VIEW);
                     }
                 });
@@ -330,17 +330,20 @@ public class SmsPopupFragment extends Fragment {
 
         @Override
         protected Bitmap doInBackground(Uri... params) {
-            if (BuildConfig.DEBUG)
-                Log.v("Loading contact photo in background...");
-            final Bitmap bitmap = SmsPopupUtils.getPersonPhoto(getActivity(), params[0]);
-        	if (mButtonsListener != null && bitmap != null) {
-        		final LruCache<Uri, Bitmap> cache = mButtonsListener.getCache();
-        		if (cache != null) {
-        			cache.put(params[0], bitmap);
-        		}
-        	}
+            if (isAdded()) {
+                if (BuildConfig.DEBUG)
+                    Log.v("Loading contact photo in background...");
+                final Bitmap bitmap = SmsPopupUtils.getPersonPhoto(getActivity(), params[0]);
+            	if (mButtonsListener != null && bitmap != null) {
+            		final LruCache<Uri, Bitmap> cache = mButtonsListener.getCache();
+            		if (cache != null) {
+            			cache.put(params[0], bitmap);
+            		}
+            	}
 
-            return bitmap;
+                return bitmap;
+            }
+            return null;
         }
 
         @Override

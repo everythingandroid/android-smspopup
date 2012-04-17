@@ -174,7 +174,8 @@ public class ManageNotification {
         final long timestamp = message.getTimestamp();
 
         final PopupNotification n =
-                buildNotification(context, message.getContactLookupKey(), onlyUpdate, notif);
+                buildNotification(context, message.getContactId(), message.getContactLookupKey(),
+                        onlyUpdate, notif);
 
         if (n == null) {
             return;
@@ -271,10 +272,10 @@ public class ManageNotification {
     /*
      * Build the notification from user preferences
      */
-    private static PopupNotification buildNotification(Context context, String contactLookupKey,
-            boolean onlyUpdate, int notif) {
+    private static PopupNotification buildNotification(Context context, String contactId,
+            String contactLookupKey, boolean onlyUpdate, int notif) {
 
-        ManagePreferences mPrefs = new ManagePreferences(context, contactLookupKey);
+        ManagePreferences mPrefs = new ManagePreferences(context, contactId, contactLookupKey);
         AudioManager mAM = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
         // Check if notifications are enabled - if not, we're done :)
@@ -527,7 +528,7 @@ public class ManageNotification {
      */
     private static PopupNotification buildNotification(Context context,
             boolean onlyUpdate, int notif) {
-        return buildNotification(context, null, onlyUpdate, notif);
+        return buildNotification(context, null, null, onlyUpdate, notif);
     }
 
     public static void clearAll(Context context, boolean reply) {
