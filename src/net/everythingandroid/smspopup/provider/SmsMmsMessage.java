@@ -127,10 +127,6 @@ public class SmsMmsMessage {
         }
 
         unreadCount = SmsPopupUtils.getUnreadMessagesCount(context, timestamp, messageBody);
-
-        if (contactName == null) {
-            contactName = context.getString(android.R.string.unknownName);
-        }
     }
 
     /**
@@ -152,11 +148,11 @@ public class SmsMmsMessage {
         fromEmailGateway = false;
 
         contactName = PhoneNumberUtils.formatNumber(fromAddress);
-        
+
         // Look up by phone number first
-        ContactIdentification contactIdentify = 
+        ContactIdentification contactIdentify =
                 SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
-        
+
         if (contactIdentify == null) {
             // Lookup by email
             contactIdentify = SmsPopupUtils.getPersonIdFromEmail(context, fromAddress);
@@ -208,10 +204,6 @@ public class SmsMmsMessage {
         unreadCount = _unreadCount;
         threadId = _threadId;
         messageId = _messageId;
-
-        if (contactName == null) {
-            contactName = context.getString(android.R.string.unknownName);
-        }
     }
 
     /**
@@ -283,10 +275,10 @@ public class SmsMmsMessage {
 
     /**
      * Fetch the "reply to" message intent
-     * 
+     *
      * @param replyToThread whether or not to reply using the message threadId
      *        or using the sender address
-     * 
+     *
      * @return the intent to pass to startActivity()
      */
     public Intent getReplyIntent(boolean replyToThread) {
@@ -372,11 +364,11 @@ public class SmsMmsMessage {
     public int getMessageType() {
         return messageType;
     }
-    
+
     public boolean isSms() {
         return messageType == MESSAGE_TYPE_SMS;
     }
-    
+
     public boolean isMms() {
         return messageType == MESSAGE_TYPE_MMS;
     }
@@ -384,7 +376,7 @@ public class SmsMmsMessage {
     public void setNotify(boolean mNotify) {
         notify = mNotify;
     }
-    
+
     public boolean shouldNotify() {
         if (BuildConfig.DEBUG) Log.v("shouldNotify() - notify is " + notify);
         return notify;
@@ -462,7 +454,7 @@ public class SmsMmsMessage {
 
     /**
      * Sned a reply to this message
-     * 
+     *
      * @param quickreply the message to send
      * @return true of the message was sent, false otherwise
      */
