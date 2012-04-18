@@ -40,8 +40,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.commonsware.cwac.wakeful.WakefulIntentService;
-
 public class ConfigContactsActivity extends FragmentActivity {
     private static final int REQ_CODE_CHOOSE_CONTACT = 0;
 
@@ -69,9 +67,7 @@ public class ConfigContactsActivity extends FragmentActivity {
         ft.commit();
 
         // Kick off the contact names sync background task.
-        Intent i = new Intent(getApplicationContext(), SmsPopupUtilsService.class);
-        i.setAction(SmsPopupUtilsService.ACTION_SYNC_CONTACT_NAMES);
-        WakefulIntentService.sendWakefulWork(getApplicationContext(), i);
+        SmsPopupUtilsService.startSyncContactNames(getApplicationContext());
     }
 
     @Override

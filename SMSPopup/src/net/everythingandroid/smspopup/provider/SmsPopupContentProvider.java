@@ -32,7 +32,7 @@ public class SmsPopupContentProvider extends ContentProvider {
         final String quickMessagesPath = QuickMessages.PATH_QUICKMESSAGES;
         final String quickMessagesUpdateOrderPath = QuickMessages.PATH_QUICKMESSAGES_UPDATE_ORDER;
         matcher.addURI(authority, contactsPath, CONTACTS);
-        matcher.addURI(authority, contactsPath + "/*", CONTACTS_ID);
+        matcher.addURI(authority, contactsPath + "/#", CONTACTS_ID);
         matcher.addURI(authority, contactsLookupPath + "/*", CONTACTS_LOOKUP);
         matcher.addURI(authority, contactsLookupPath + "/*/#", CONTACTS_LOOKUP);
         matcher.addURI(authority, quickMessagesPath, QUICKMESSAGES);
