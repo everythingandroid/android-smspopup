@@ -120,12 +120,26 @@ public class SmsPopupUtilsService extends WakefulIntentService {
             ContactIdentification contactInfo =
                     SmsPopupUtils.getPersonNameByLookup(context, contactLookup, contactId);
 
-            if (contactInfo != null && !contactName.equals(contactInfo.contactName)) {
+            if (contactInfo != null) {
+                boolean runUpdate = false;
             	ContentValues vals = new ContentValues();
-            	vals.put(ContactNotifications.CONTACT_NAME, contactInfo.contactName);
-            	vals.put(ContactNotifications.CONTACT_ID, contactInfo.contactId);
-            	vals.put(ContactNotifications.CONTACT_LOOKUPKEY, contactInfo.contactLookup);
-            	if (1 == contentResolver.update(
+
+            	if (contactName == null || !contactName.equals(contactInfo.contactName)) {
+            	    vals.put(ContactNotifications.CONTACT_NAME, contactInfo.contactName);
+            	    runUpdate = true;
+            	}
+
+            	if (contactId == null || !contactId.equals(contactInfo.contactId)) {
+            	    vals.put(ContactNotifications.CONTACT_ID, contactInfo.contactId);
+            	    runUpdate = true;
+            	}
+
+            	if (contactLookup == null || !contactLookup.equals(contactInfo.contactLookup)) {
+            	    vals.put(ContactNotifications.CONTACT_LOOKUPKEY, contactInfo.contactLookup);
+            	    runUpdate = true;
+            	}
+
+            	if (runUpdate && 1 == contentResolver.update(
             			ContactNotifications.buildContactUri(id), vals, null, null)) {
             		updatedCount++;
             	}
@@ -140,6 +154,12 @@ public class SmsPopupUtilsService extends WakefulIntentService {
         	Log.v("Sync Contacts: " + updatedCount + " / " + count);
 
         return updatedCount;
+    }
+
+    public static void startSyncContactNames(Context context) {
+        Intent i = new Intent(context, SmsPopupUtilsService.class);
+        i.setAction(SmsPopupUtilsService.ACTION_SYNC_CONTACT_NAMES);
+        WakefulIntentService.sendWakefulWork(context, i);
     }
 
     private void updateNotification(Intent intent) {

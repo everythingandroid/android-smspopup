@@ -3,8 +3,6 @@
 
     <style name="DialogTheme" parent="android:Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
-		
-
     </style>
 
     <style name="ButtonBar">
