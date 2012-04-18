@@ -665,17 +665,11 @@ public class SmsPopupUtils {
         SmsMmsMessage message;
 
         if (cursor != null) {
-
             try {
-
                 int count = cursor.getCount();
-
                 if (count > 0) {
-
                     messages = new ArrayList<SmsMmsMessage>(count);
-
                     while (cursor.moveToNext()) {
-
                         messageId = cursor.getLong(0);
                         threadId = cursor.getLong(1);
                         address = cursor.getString(2);
@@ -690,13 +684,10 @@ public class SmsPopupUtils {
                         messages.add(message);
                     }
                 }
-
             } finally {
-
                 cursor.close();
             }
         }
-
         return messages;
     }
 

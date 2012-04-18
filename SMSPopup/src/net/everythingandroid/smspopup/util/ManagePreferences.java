@@ -3,6 +3,7 @@ package net.everythingandroid.smspopup.util;
 import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.preferences.ButtonListPreference;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+import net.everythingandroid.smspopup.service.SmsPopupUtilsService;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -85,29 +86,34 @@ public class ManagePreferences {
     /**
      * Create an instance of ManagePreferences by contact lookup key.
      * @param context a context.
-     * @param contactLookupKey the contact lookup key.
+     * @param contactId the system _id from the contacts table
+     * @param contactLookupKey the system contact lookup key.
      */
     public ManagePreferences(Context context, String contactId, String contactLookupKey) {
         mContext = context;
         useDatabase = false;
 
         if (BuildConfig.DEBUG) {
-            Log.v("Notification prefs for lookup_key = " + contactLookupKey);
+            Log.v("Notification prefs for contactId = " + contactId
+                    + ", lookup_key = " + contactLookupKey);
         }
 
         if (contactLookupKey != null && contactId != null) {
             mCursor = mContext.getContentResolver().query(
                     ContactNotifications.buildLookupUri(contactId, contactLookupKey),
-                    null, null, null, null);
+                    null, // all rows are required
+                    null, null, null);
             if (mCursor != null && mCursor.getCount() > 0) {
                 useDatabase = true;
-                if (mCursor.getCount() == 1) {
-                    if (BuildConfig.DEBUG) Log.v("Single contact found - using database");
+                if (mCursor.getCount() > 0) {
                     mCursor.moveToFirst();
+                    if (BuildConfig.DEBUG) Log.v("Contact(s) found in contact prefs - using database");
                     mRowId = mCursor.getLong(mCursor.getColumnIndexOrThrow(ContactNotifications._ID));
-                } else { // Multiple hits in contact notifications database
-                    if (BuildConfig.DEBUG) Log.v("Multiple contacts found - using database");
-                    TODO
+                    final String lookup = mCursor.getString(mCursor.getColumnIndexOrThrow(ContactNotifications.CONTACT_LOOKUPKEY));
+                    if (mCursor.getCount() > 1 || !contactLookupKey.equals(lookup)) {
+                        if (BuildConfig.DEBUG) Log.v("Multiple contacts found or lookup key mismatch - stil using database but starting contact sync");
+                        SmsPopupUtilsService.startSyncContactNames(context);
+                    }
                 }
             }
         }

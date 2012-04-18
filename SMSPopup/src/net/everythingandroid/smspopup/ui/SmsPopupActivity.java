@@ -1095,10 +1095,6 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         }
         if (quickreplyTextView != null) {
 
-            if (quickReplySmsMessage == null) {
-                quickReplySmsMessage = smsPopupPager.getActiveMessage();
-            }
-
             quickreplyTextView.setText(getString(R.string.quickreply_from_text,
                     quickReplySmsMessage.getContactName()));
         }
