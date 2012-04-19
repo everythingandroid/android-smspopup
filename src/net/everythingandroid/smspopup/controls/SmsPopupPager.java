@@ -99,10 +99,13 @@ public class SmsPopupPager extends ViewPager implements OnPageChangeListener {
 
         final int totalMessages = getPageCount();
 
-        if (totalMessages <= 1)
+        if (totalMessages <= 1) {
             return STATUS_NO_MESSAGES_REMAINING;
-        if (numMessage >= totalMessages || numMessage < 0)
+        }
+
+        if (numMessage >= totalMessages || numMessage < 0) {
             return STATUS_NO_MESSAGES_REMAINING;
+        }
 
         Animation mAnimation = AnimationUtils.loadAnimation(mContext, R.anim.shrink_fade_out_center);
         mAnimation.setAnimationListener(new AnimationListener() {
