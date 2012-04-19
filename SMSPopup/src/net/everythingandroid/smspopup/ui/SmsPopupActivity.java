@@ -72,6 +72,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -347,6 +348,12 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         final int width = (int) getResources().getDimension(R.dimen.smspopup_pager_width);
         final int height = (int) getResources().getDimension(R.dimen.smspopup_pager_height);
         final int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        final int bottom_padding = (int) getResources().getDimension(R.dimen.smspopup_bottom_margin);
+        final View marginView = findViewById(R.id.popup_bottom_margin_view);
+        LinearLayout.LayoutParams marginParams =
+                (LinearLayout.LayoutParams) marginView.getLayoutParams();
+        marginParams.height = bottom_padding;
+        marginView.setLayoutParams(marginParams);
         smsPopupPagerAdapter.resizeFragments(width, screenWidth);
         RelativeLayout.LayoutParams params =
                 (RelativeLayout.LayoutParams) smsPopupPager.getLayoutParams();
@@ -923,8 +930,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
 
         } else {
             androidTts.speak(smsPopupPager.getActiveMessage().getMessageBody(),
-                    TextToSpeech.QUEUE_FLUSH,
-                    null);
+                    TextToSpeech.QUEUE_FLUSH, null);
         }
     }
 

@@ -8,8 +8,8 @@
     <LinearLayout
         android:id="@+id/popupMessageMainlayout"
         android:layout_width="@dimen/smspopup_pager_width"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
         android:background="@drawable/dialog_background"
         android:orientation="vertical" >
 
@@ -76,9 +76,10 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:fillViewport="true"
-                android:paddingBottom="8dp"
-                android:paddingTop="6dp" >
+                android:paddingBottom="9dp"
+                android:paddingTop="5dp" >
 
                 <TextView
                     android:id="@+id/messageTextView"
