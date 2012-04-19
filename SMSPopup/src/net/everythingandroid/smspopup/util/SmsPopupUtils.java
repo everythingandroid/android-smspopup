@@ -538,6 +538,7 @@ public class SmsPopupUtils {
 
         long id = 0;
         String selection = "body = " + DatabaseUtils.sqlEscapeString(body != null ? body : "");
+        selection += " and " + UNREAD_CONDITION;
         final String sortOrder = "date DESC";
         final String[] projection = new String[] { "_id", "date", "thread_id", "body" };
 
@@ -550,9 +551,6 @@ public class SmsPopupUtils {
                 selection += " and date = " + (timestamp / 1000);
             }
 
-            // Log.v("Where is: " + where);
-            // Log.v("ThreadId is: " + threadId);
-
             Cursor cursor = context.getContentResolver().query(
                     ContentUris.withAppendedId(CONVERSATION_CONTENT_URI, threadId),
                     projection,
@@ -560,19 +558,22 @@ public class SmsPopupUtils {
                     null,
                     sortOrder);
 
-            if (cursor != null) {
-                try {
-                    if (cursor.moveToFirst()) {
-                        id = cursor.getLong(0);
-                        if (BuildConfig.DEBUG)
-                            Log.v("Message id found = " + id);
-                        // Log.v("Timestamp = " + cursor.getLong(1));
-                    }
-                } finally {
-                    cursor.close();
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    id = cursor.getLong(0);
+                    if (BuildConfig.DEBUG)
+                        Log.v("Message id found = " + id);
+                    // Log.v("Timestamp = " + cursor.getLong(1));
                 }
+            } finally {
+                cursor.close();
             }
         }
+
+        if (BuildConfig.DEBUG && id == 0) {
+            Log.v("Message id could not be found");
+        }
+
         return id;
     }
 
