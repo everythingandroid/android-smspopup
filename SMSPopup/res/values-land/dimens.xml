@@ -5,4 +5,5 @@
 	<dimen name="smspopup_pager_height">280dp</dimen>
 	<dimen name="smspopup_pager_width">420dp</dimen>
 
+	<dimen name="smspopup_bottom_margin">25dp</dimen>
 </resources>
