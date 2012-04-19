@@ -63,7 +63,6 @@ public class SmsPopupUtilsService extends WakefulIntentService {
         } else if (ACTION_QUICKREPLY.equals(action)) {
             if (BuildConfig.DEBUG) Log.v("SMSPopupUtilsService: Quick Reply to message");
             SmsMmsMessage message = new SmsMmsMessage(this, intent.getExtras());
-            // message.setThreadRead();
             message.replyToMessage(intent.getStringExtra(SmsMmsMessage.EXTRAS_QUICKREPLY));
         } else if (ACTION_UPDATE_NOTIFICATION.equals(action)) {
             if (BuildConfig.DEBUG) Log.v("SMSPopupUtilsService: Updating notification");

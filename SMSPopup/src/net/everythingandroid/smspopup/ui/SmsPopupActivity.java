@@ -283,6 +283,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         SmsMmsMessage message = new SmsMmsMessage(getApplicationContext(), b);
 
         if (newIntent) {
+            message.locateMessageId();
             smsPopupPager.addMessage(message);
             wakeApp();
         } else {
@@ -305,8 +306,8 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
 
         @Override
         protected ArrayList<SmsMmsMessage> doInBackground(SmsMmsMessage... arg) {
-            ArrayList<SmsMmsMessage> messages = SmsPopupUtils.getUnreadMessages(
-                    SmsPopupActivity.this, arg[0].getMessageId());
+            ArrayList<SmsMmsMessage> messages =
+                    SmsPopupUtils.getUnreadMessages(SmsPopupActivity.this, arg[0].getMessageId());
 
             if (messages == null) {
                 messages = new ArrayList<SmsMmsMessage>(1);
