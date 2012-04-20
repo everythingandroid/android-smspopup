@@ -316,8 +316,12 @@ public class ConfigContactActivity extends PreferenceActivity {
     }
 
     private Cursor createContact(String contactId, String contactLookupKey) {
-        ContactIdentification contactInfo =
+        final ContactIdentification contactInfo =
                 SmsPopupUtils.getPersonNameByLookup(this, contactLookupKey, contactId);
+
+        if (contactInfo == null) {
+            return null;
+        }
 
         final String contactName = contactInfo.contactName;
 
