@@ -1,22 +1,5 @@
 package net.everythingandroid.smspopup.util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import net.everythingandroid.smspopup.BuildConfig;
-import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.provider.SmsMmsMessage;
-import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
-import net.everythingandroid.smspopup.receiver.SmsReceiver;
-import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
@@ -42,6 +25,24 @@ import android.provider.ContactsContract.PhoneLookup;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsMessage;
 import android.text.TextUtils;
+
+import net.everythingandroid.smspopup.BuildConfig;
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.provider.SmsMmsMessage;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+import net.everythingandroid.smspopup.receiver.SmsReceiver;
+import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SmsPopupUtils {
     // Content URIs for SMS app, these may change in future SDK
@@ -631,11 +632,7 @@ public class SmsPopupUtils {
      * @return ArrayList of SmsMmsMessage
      */
 
-    public static ArrayList<SmsMmsMessage> getUnreadMessages(Context context, long ignoreMessageId) {
-
-        if (BuildConfig.DEBUG)
-            Log.v("getUnreadMessages(), ignore id: " + ignoreMessageId);
-
+    public static ArrayList<SmsMmsMessage> getUnreadMessages(Context context) {
         ArrayList<SmsMmsMessage> messages = null;
 
         final String[] projection =
@@ -643,12 +640,6 @@ public class SmsPopupUtils {
         String selection = UNREAD_CONDITION;
         String[] selectionArgs = null;
         final String sortOrder = "date DESC";
-
-        // Ignore message id if set
-        if (ignoreMessageId > 0) {
-            selection += " and _id != ?";
-            selectionArgs = new String[] { String.valueOf(ignoreMessageId) };
-        }
 
         // Create cursor
         Cursor cursor = context.getContentResolver().query(
