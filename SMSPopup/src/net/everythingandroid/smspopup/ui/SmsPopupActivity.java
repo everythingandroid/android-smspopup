@@ -1,30 +1,5 @@
 package net.everythingandroid.smspopup.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.everythingandroid.smspopup.BuildConfig;
-import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.controls.FragmentStatePagerAdapter;
-import net.everythingandroid.smspopup.controls.QmTextWatcher;
-import net.everythingandroid.smspopup.controls.SmsPopupPager;
-import net.everythingandroid.smspopup.controls.SmsPopupPager.MessageCountChanged;
-import net.everythingandroid.smspopup.preferences.ButtonListPreference;
-import net.everythingandroid.smspopup.provider.SmsMmsMessage;
-import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
-import net.everythingandroid.smspopup.receiver.ClearAllReceiver;
-import net.everythingandroid.smspopup.service.ReminderService;
-import net.everythingandroid.smspopup.service.SmsPopupUtilsService;
-import net.everythingandroid.smspopup.ui.SmsPopupFragment.SmsPopupButtonsListener;
-import net.everythingandroid.smspopup.util.Eula;
-import net.everythingandroid.smspopup.util.Log;
-import net.everythingandroid.smspopup.util.ManageKeyguard;
-import net.everythingandroid.smspopup.util.ManageKeyguard.LaunchOnKeyguardExit;
-import net.everythingandroid.smspopup.util.ManageNotification;
-import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
-import net.everythingandroid.smspopup.util.ManageWakeLock;
-import net.everythingandroid.smspopup.util.RetainFragment;
-import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -81,6 +56,32 @@ import android.widget.Toast;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.viewpagerindicator.CirclePageIndicator;
+
+import net.everythingandroid.smspopup.BuildConfig;
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.controls.FragmentStatePagerAdapter;
+import net.everythingandroid.smspopup.controls.QmTextWatcher;
+import net.everythingandroid.smspopup.controls.SmsPopupPager;
+import net.everythingandroid.smspopup.controls.SmsPopupPager.MessageCountChanged;
+import net.everythingandroid.smspopup.preferences.ButtonListPreference;
+import net.everythingandroid.smspopup.provider.SmsMmsMessage;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
+import net.everythingandroid.smspopup.receiver.ClearAllReceiver;
+import net.everythingandroid.smspopup.service.ReminderService;
+import net.everythingandroid.smspopup.service.SmsPopupUtilsService;
+import net.everythingandroid.smspopup.ui.SmsPopupFragment.SmsPopupButtonsListener;
+import net.everythingandroid.smspopup.util.Eula;
+import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.ManageKeyguard;
+import net.everythingandroid.smspopup.util.ManageKeyguard.LaunchOnKeyguardExit;
+import net.everythingandroid.smspopup.util.ManageNotification;
+import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
+import net.everythingandroid.smspopup.util.ManageWakeLock;
+import net.everythingandroid.smspopup.util.RetainFragment;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SmsPopupActivity extends FragmentActivity implements SmsPopupButtonsListener {
 
@@ -281,9 +282,9 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
 
         // Create message from bundle
         SmsMmsMessage message = new SmsMmsMessage(getApplicationContext(), b);
+        message.locateMessageId();
 
         if (newIntent) {
-            message.locateMessageId();
             smsPopupPager.addMessage(message);
             wakeApp();
         } else {
@@ -305,15 +306,43 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         }
 
         @Override
-        protected ArrayList<SmsMmsMessage> doInBackground(SmsMmsMessage... arg) {
+        protected ArrayList<SmsMmsMessage> doInBackground(SmsMmsMessage... args) {
+
+            final SmsMmsMessage newMessage = args[0];
+
+            // Get all unread messages
             ArrayList<SmsMmsMessage> messages =
-                    SmsPopupUtils.getUnreadMessages(SmsPopupActivity.this, arg[0].getMessageId());
+                    SmsPopupUtils.getUnreadMessages(SmsPopupActivity.this);
 
             if (messages == null) {
+                // If no messages found, add the new message and we're done
                 messages = new ArrayList<SmsMmsMessage>(1);
+                messages.add(newMessage);
+            } else {
+                // Otherwise we now have an array of unread messages
+                final long messageId = newMessage.getMessageId();
+                // We have to deal with a system race condition now, what if the new message isn't
+                // yet in the system database? In that case, messageId will be 0 still and we need
+                // to manually add the message to our list.
+                if (messageId == 0) {
+                    // Add the new message as it wouldn't have been found in the system database
+                    messages.add(newMessage);
+                } else {
+                    // Otherwise we need to check if getUnreadMessages() found the new message,
+                    // there's a chance it didn't.
+                    boolean found = false;
+                    for (int i = 0; i < messages.size(); i++) {
+                        if (messages.get(i).getMessageId() == messageId) {
+                            // It was found in the getUnreadMessages() query
+                            found = true;
+                        }
+                    }
+                    if (!found) {
+                        // If it wasn't found, add it manually to the list
+                        messages.add(newMessage);
+                    }
+                }
             }
-
-            messages.add(arg[0]);
 
             return messages;
         }
