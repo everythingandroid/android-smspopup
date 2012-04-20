@@ -639,7 +639,7 @@ public class SmsPopupUtils {
                 new String[] { "_id", "thread_id", "address", "date", "body" };
         String selection = UNREAD_CONDITION;
         String[] selectionArgs = null;
-        final String sortOrder = "date DESC";
+        final String sortOrder = "date ASC";
 
         // Create cursor
         Cursor cursor = context.getContentResolver().query(
