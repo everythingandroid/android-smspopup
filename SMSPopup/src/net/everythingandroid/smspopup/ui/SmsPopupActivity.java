@@ -29,6 +29,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.util.LruCache;
 import android.support.v4.view.PagerAdapter;
+import android.telephony.PhoneNumberUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -1111,11 +1112,14 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
     private void viewContact() {
         Intent contactIntent = new Intent(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT);
 
-        SmsMmsMessage message = smsPopupPager.getActiveMessage();
-        if (message.isMms() || message.isEmail()) {
-            contactIntent.setData(Uri.fromParts("mailto", message.getAddress(), null));
-        } else {
-            contactIntent.setData(Uri.fromParts("tel", message.getAddress(), null));
+        final String address = smsPopupPager.getActiveMessage().getAddress();
+        final boolean fromEmail = smsPopupPager.getActiveMessage().isEmail();
+        if (address != null) {
+            if (PhoneNumberUtils.isWellFormedSmsAddress(address)) {
+                contactIntent.setData(Uri.fromParts("tel", address, null));
+            } else if (fromEmail) {
+                contactIntent.setData(Uri.fromParts("mailto", address, null));
+            }
         }
         startActivity(contactIntent);
     }
@@ -1129,8 +1133,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
             qrEditText.setText(editText + signatureText);
             qrEditText.setSelection(editText.length());
         }
-        if (quickreplyTextView != null) {
-
+        if (quickreplyTextView != null && quickReplySmsMessage != null) {
             quickreplyTextView.setText(getString(R.string.quickreply_from_text,
                     quickReplySmsMessage.getContactName()));
         }
