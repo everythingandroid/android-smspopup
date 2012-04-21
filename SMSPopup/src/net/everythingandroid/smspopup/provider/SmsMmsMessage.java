@@ -62,6 +62,7 @@ public class SmsMmsMessage {
     private long messageId = 0;
     private boolean fromEmailGateway = false;
     private MessageClass messageClass = null;
+    private String replyText = "";
 
     // Sprint vars to check for special voicemail messages
     private static final String SPRINT_BRAND = "sprint";
@@ -450,6 +451,14 @@ public class SmsMmsMessage {
 
     public boolean isEmail() {
         return fromEmailGateway;
+    }
+
+    public String getReplyText() {
+        return replyText;
+    }
+
+    public void setReplyText(String text) {
+        replyText = text;
     }
 
     /**

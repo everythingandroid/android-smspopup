@@ -672,6 +672,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
             qrAlertDialog.setOnCancelListener(new OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
+                    storeQuickReplyText(qrEditText.getText().toString());
                     removeDialog(DIALOG_QUICKREPLY);
                 }
             });
@@ -707,23 +708,16 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
                 public void onDismiss(DialogInterface dialog) {
                     if (BuildConfig.DEBUG)
                         Log.v("Quick Reply Dialog: onDissmiss()");
+                    storeQuickReplyText(qrEditText.getText().toString());
                 }
             });
 
             // Update quick reply views now that they have been created
-            updateQuickReplyView("");
-
-            /*
-             * TODO: due to what seems like a bug, setting selection to 0 here doesn't seem to work
-             * but setting it to 1 first then back to 0 does. I couldn't find a way around this :|
-             * To reproduce, comment out the below line and set a quick reply signature, when
-             * clicking Quick Reply the cursor will be positioned at the end of the EditText rather
-             * than the start.
-             */
-            if (qrEditText.getText().toString().length() > 0)
-                qrEditText.setSelection(1);
-
-            qrEditText.setSelection(0);
+            if (quickReplySmsMessage != null) {
+                updateQuickReplyView(quickReplySmsMessage.getReplyText());
+            } else {
+                updateQuickReplyView("");
+            }
 
             return qrAlertDialog;
 
@@ -1083,7 +1077,8 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
      * SmsMmsMessage (in case another message comes in)
      */
     private void quickReply() {
-        quickReply("");
+        quickReplySmsMessage = smsPopupPager.getActiveMessage();
+        quickReply(quickReplySmsMessage.getReplyText());
     }
 
     /**
@@ -1091,17 +1086,14 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
      * SmsMmsMessage (in case another message comes in)
      */
     private void quickReply(String text) {
-        final SmsMmsMessage message = smsPopupPager.getActiveMessage();
-
         // If this is a MMS or a SMS from email gateway then use regular reply
-        if (message.isMms() || message.isEmail()) {
-            replyToMessage();
-        } else { // Else show the quick reply dialog
-            if (text == null || "".equals(text)) {
-                quickReplySmsMessage = message;
+        if (quickReplySmsMessage != null) {
+            if (quickReplySmsMessage.isMms() || quickReplySmsMessage.isEmail()) {
+                replyToMessage();
+            } else { // Else show the quick reply dialog
+                updateQuickReplyView(text);
+                showDialog(DIALOG_QUICKREPLY);
             }
-            updateQuickReplyView(text);
-            showDialog(DIALOG_QUICKREPLY);
         }
     }
 
@@ -1135,6 +1127,19 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         if (quickreplyTextView != null && quickReplySmsMessage != null) {
             quickreplyTextView.setText(getString(R.string.quickreply_from_text,
                     quickReplySmsMessage.getContactName()));
+        }
+    }
+
+    private void storeQuickReplyText(String text) {
+        if (text != null) {
+            // Remove signature if present
+            if (signatureText != null && !"".equals(signatureText) &&
+                    text.endsWith(signatureText)) {
+                smsPopupPager.getActiveMessage().setReplyText(
+                        text.substring(0, text.lastIndexOf(signatureText)));
+            } else {
+                smsPopupPager.getActiveMessage().setReplyText(text);
+            }
         }
     }
 
