@@ -49,6 +49,8 @@ public class SmsPopupContract {
         public static final String[] PROJECTION_SUMMARY =
                 new String[] { _ID, CONTACT_NAME, SUMMARY };
 
+        public static final String DEFAULT_SORT = CONTACT_NAME + ", " + _ID;
+
         public static Uri buildContactUri(String id) {
             return CONTENT_URI.buildUpon().appendPath(id).build();
         }

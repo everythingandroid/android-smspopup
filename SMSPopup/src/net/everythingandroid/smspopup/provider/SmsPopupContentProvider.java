@@ -155,6 +155,9 @@ public class SmsPopupContentProvider extends ContentProvider {
         switch (match) {
         case CONTACTS:
             sqlBuilder.setTables(SmsPopupDatabase.CONTACTS_DB_TABLE);
+            if (sortOrder == null) {
+                sortOrder = ContactNotifications.DEFAULT_SORT;
+            }
             break;
         case CONTACTS_ID:
             sqlBuilder.setTables(SmsPopupDatabase.CONTACTS_DB_TABLE);
