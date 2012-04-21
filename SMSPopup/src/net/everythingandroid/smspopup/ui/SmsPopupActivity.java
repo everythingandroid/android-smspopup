@@ -1,5 +1,30 @@
 package net.everythingandroid.smspopup.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.everythingandroid.smspopup.BuildConfig;
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.controls.FragmentStatePagerAdapter;
+import net.everythingandroid.smspopup.controls.QmTextWatcher;
+import net.everythingandroid.smspopup.controls.SmsPopupPager;
+import net.everythingandroid.smspopup.controls.SmsPopupPager.MessageCountChanged;
+import net.everythingandroid.smspopup.preferences.ButtonListPreference;
+import net.everythingandroid.smspopup.provider.SmsMmsMessage;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
+import net.everythingandroid.smspopup.receiver.ClearAllReceiver;
+import net.everythingandroid.smspopup.service.ReminderService;
+import net.everythingandroid.smspopup.service.SmsPopupUtilsService;
+import net.everythingandroid.smspopup.ui.SmsPopupFragment.SmsPopupButtonsListener;
+import net.everythingandroid.smspopup.util.Eula;
+import net.everythingandroid.smspopup.util.Log;
+import net.everythingandroid.smspopup.util.ManageKeyguard;
+import net.everythingandroid.smspopup.util.ManageKeyguard.LaunchOnKeyguardExit;
+import net.everythingandroid.smspopup.util.ManageNotification;
+import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
+import net.everythingandroid.smspopup.util.ManageWakeLock;
+import net.everythingandroid.smspopup.util.RetainFragment;
+import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -58,32 +83,6 @@ import android.widget.Toast;
 import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.viewpagerindicator.CirclePageIndicator;
 
-import net.everythingandroid.smspopup.BuildConfig;
-import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.controls.FragmentStatePagerAdapter;
-import net.everythingandroid.smspopup.controls.QmTextWatcher;
-import net.everythingandroid.smspopup.controls.SmsPopupPager;
-import net.everythingandroid.smspopup.controls.SmsPopupPager.MessageCountChanged;
-import net.everythingandroid.smspopup.preferences.ButtonListPreference;
-import net.everythingandroid.smspopup.provider.SmsMmsMessage;
-import net.everythingandroid.smspopup.provider.SmsPopupContract.QuickMessages;
-import net.everythingandroid.smspopup.receiver.ClearAllReceiver;
-import net.everythingandroid.smspopup.service.ReminderService;
-import net.everythingandroid.smspopup.service.SmsPopupUtilsService;
-import net.everythingandroid.smspopup.ui.SmsPopupFragment.SmsPopupButtonsListener;
-import net.everythingandroid.smspopup.util.Eula;
-import net.everythingandroid.smspopup.util.Log;
-import net.everythingandroid.smspopup.util.ManageKeyguard;
-import net.everythingandroid.smspopup.util.ManageKeyguard.LaunchOnKeyguardExit;
-import net.everythingandroid.smspopup.util.ManageNotification;
-import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
-import net.everythingandroid.smspopup.util.ManageWakeLock;
-import net.everythingandroid.smspopup.util.RetainFragment;
-import net.everythingandroid.smspopup.util.SmsPopupUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class SmsPopupActivity extends FragmentActivity implements SmsPopupButtonsListener {
 
     private boolean exitingKeyguardSecurely = false;
@@ -134,7 +133,6 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
     private int[] buttonTypes;
 
     private TextToSpeech androidTts = null;
-
 
     /*
      * *****************************************************************************
@@ -336,6 +334,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
                         if (messages.get(i).getMessageId() == messageId) {
                             // It was found in the getUnreadMessages() query
                             found = true;
+                            messages.get(i).setNotify(true);
                         }
                     }
                     if (!found) {
