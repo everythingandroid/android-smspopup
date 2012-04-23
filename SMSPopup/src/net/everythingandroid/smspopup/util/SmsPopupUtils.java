@@ -1,5 +1,22 @@
 package net.everythingandroid.smspopup.util;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import net.everythingandroid.smspopup.BuildConfig;
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.provider.SmsMmsMessage;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+import net.everythingandroid.smspopup.receiver.SmsReceiver;
+import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
@@ -25,24 +42,6 @@ import android.provider.ContactsContract.PhoneLookup;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsMessage;
 import android.text.TextUtils;
-
-import net.everythingandroid.smspopup.BuildConfig;
-import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.provider.SmsMmsMessage;
-import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
-import net.everythingandroid.smspopup.receiver.SmsReceiver;
-import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SmsPopupUtils {
     // Content URIs for SMS app, these may change in future SDK
@@ -1117,11 +1116,6 @@ public class SmsPopupUtils {
                 count = cursor.getCount();
                 if (count > 0) {
                     cursor.moveToFirst();
-                    // String[] columns = cursor.getColumnNames();
-                    // for (int i=0; i<columns.length; i++) {
-                    // Log.v("columns " + i + ": " + columns[i] + ": "
-                    // + cursor.getString(i));
-                    // }
                     long messageId = cursor.getLong(0);
                     long threadId = cursor.getLong(1);
                     long timestamp = cursor.getLong(2) * 1000;
@@ -1144,7 +1138,8 @@ public class SmsPopupUtils {
 
     public static String getMmsAddress(Context context, long messageId) {
         final String[] projection = new String[] { "address", "contact_id", "charset", "type" };
-        final String selection = "type=137"; // "type="+ PduHeaders.FROM,
+//        final String selection = "type=137"; // "type="+ PduHeaders.FROM,
+        final String selection = null;
 
         Uri.Builder builder = MMS_CONTENT_URI.buildUpon();
         builder.appendPath(String.valueOf(messageId)).appendPath("addr");

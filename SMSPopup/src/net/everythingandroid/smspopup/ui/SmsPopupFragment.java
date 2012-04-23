@@ -73,6 +73,7 @@ public class SmsPopupFragment extends Fragment {
 
     private static final int BUTTON_SWITCHER_MAIN_BUTTONS = 0;
     private static final int BUTTON_SWITCHER_UNLOCK_BUTTON = 1;
+    private static final String EMPTY_MMS_SUBJECT = "no subject";
 
     public static SmsPopupFragment newInstance(SmsMmsMessage newMessage, int[] buttons,
     		int privacyMode, boolean showUnlockButton, boolean showButtons) {
@@ -168,9 +169,18 @@ public class SmsPopupFragment extends Fragment {
             });
         }
 
-        // The ViewMMS button
-        ((Button) v.findViewById(R.id.viewMmsButton)).setOnClickListener(
-                new PopupButton(BUTTON_VIEW_MMS, buttonText));
+        if (message.isMms()) {
+            // The ViewMMS button
+            ((Button) v.findViewById(R.id.viewMmsButton)).setOnClickListener(
+                    new PopupButton(BUTTON_VIEW_MMS, buttonText));
+            final String mmsSubject = message.getMessageBody();
+            final TextView mmsSubjectTV = ((TextView) v.findViewById(R.id.mmsSubjectTextView));
+            if (mmsSubject != null && !"".equals(mmsSubject) && !EMPTY_MMS_SUBJECT.equals(mmsSubject)) {
+                mmsSubjectTV.setText(message.getMessageBody());
+            } else {
+                mmsSubjectTV.setVisibility(View.GONE);
+            }
+        }
 
         // The privacy view message button
         ((ImageButton) v.findViewById(R.id.viewButton)).setOnClickListener(
