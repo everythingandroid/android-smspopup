@@ -56,6 +56,7 @@ public class SmsReceiverService extends WakefulIntentService {
 
     private Context context;
     private int mResultCode;
+    private boolean serviceRestarted = false;
 
     private static final int TOAST_HANDLER_MESSAGE_SENT = 0;
     private static final int TOAST_HANDLER_MESSAGE_SEND_LATER = 1;
@@ -73,6 +74,10 @@ public class SmsReceiverService extends WakefulIntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        serviceRestarted = false;
+        if ((flags & START_FLAG_REDELIVERY) !=0) {
+            serviceRestarted = true;
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -82,7 +87,7 @@ public class SmsReceiverService extends WakefulIntentService {
             Log.v("SMSReceiverService: doWakefulWork()");
 
         mResultCode = 0;
-        if (intent != null) {
+        if (intent != null && !serviceRestarted) {
             mResultCode = intent.getIntExtra("result", 0);
             final String action = intent.getAction();
             final String dataType = intent.getType();
