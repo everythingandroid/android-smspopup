@@ -127,6 +127,10 @@ public class SmsMmsMessage {
             contactName = contactIdentify.contactName;
         }
 
+        final long smscTimestamp = sms.getTimestampMillis();
+
+        SmsPopupUtils.updateSmscTimestampDrift(context, timestamp, smscTimestamp);
+
         unreadCount = SmsPopupUtils.getUnreadMessagesCount(context, timestamp, messageBody);
     }
 
@@ -329,8 +333,16 @@ public class SmsMmsMessage {
         return unreadCount;
     }
 
+    public void setTimestamp(long newTimestamp) {
+        timestamp = newTimestamp;
+    }
+
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public void adjustTimestamp(long adjustment) {
+        timestamp -= adjustment;
     }
 
     public MessageClass getMessageClass() {

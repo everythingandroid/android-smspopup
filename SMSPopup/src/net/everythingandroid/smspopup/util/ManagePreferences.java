@@ -17,6 +17,7 @@ public class ManagePreferences {
     private boolean useDatabase;
     private SharedPreferences mPrefs;
     private static final String one = "1";
+    public static final String SMSC_TIME_DRIFT = "smsc_time_drift";
 
     /*
      * Define all default preferences in this static class. Unfortunately these are also stored in
