@@ -1,5 +1,7 @@
 package net.everythingandroid.smspopup.service;
 
+import java.util.ArrayList;
+
 import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
 import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
@@ -167,22 +169,31 @@ public class SmsPopupUtilsService extends WakefulIntentService {
         // calculating the unread messages to show in the status notification
         boolean ignoreThread = intent.getBooleanExtra(SmsMmsMessage.EXTRAS_REPLYING, false);
 
-        SmsMmsMessage message;
+        long threadId = 0;
         if (ignoreThread) {
             // If ignoring messages from the thread, pass the full message over
-            message = new SmsMmsMessage(this, intent.getExtras());
-        } else {
-            // Otherwise we can just calculate unread messages by checking the
-            // database as normal
-            message = null;
+            final SmsMmsMessage message = new SmsMmsMessage(this, intent.getExtras());
+            threadId = message.getThreadId();
         }
 
         // Get the most recent message + total message counts
-        SmsMmsMessage recentMessage = SmsPopupUtils.getRecentMessage(this, message);
+        final ArrayList<SmsMmsMessage> messages = SmsPopupUtils.getUnreadMessages(this);
 
-        // Update the notification in the status bar
-        ManageNotification.update(this, recentMessage,
-                recentMessage == null ? 0 : recentMessage.getUnreadCount());
+        if (messages != null) {
+            if (threadId > 0) {
+                for (int i=0; i<messages.size(); i++) {
+                    if (messages.get(i).getThreadId() == threadId) {
+                        messages.remove(i);
+                    }
+                }
+            }
+            final int numMessags = messages.size();
+
+            // Update the notification in the status bar
+            ManageNotification.update(this, messages.get(numMessags - 1), numMessags);
+        } else {
+            ManageNotification.clearAll(this);
+        }
     }
 
 }

@@ -1,10 +1,9 @@
 package net.everythingandroid.smspopup.util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +39,6 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.PhoneLookup;
-import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsMessage;
 import android.text.TextUtils;
 
@@ -95,47 +93,6 @@ public class SmsPopupUtils {
         // Can use static final constants like ICS, declared in later versions
         // of the OS since they are inlined at compile time. This is guaranteed behavior.
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
-    }
-
-    /**
-     * Looks up a contacts display name by contact id - if not found, the address (phone number)
-     * will be formatted and returned instead.
-     */
-    public static String getPersonName(Context context, String id, String address) {
-
-        // Check for id, if null return the formatting phone number as the name
-        if (id == null) {
-            if (address != null) {
-                return PhoneNumberUtils.formatNumber(address);
-            } else {
-                return null;
-            }
-        }
-
-        Cursor cursor = context.getContentResolver().query(
-                Uri.withAppendedPath(Contacts.CONTENT_URI, id),
-                new String[] { Contacts.DISPLAY_NAME },
-                null, null, null);
-
-        if (cursor != null) {
-            try {
-                if (cursor.getCount() > 0) {
-                    cursor.moveToFirst();
-                    String name = cursor.getString(0);
-                    if (BuildConfig.DEBUG)
-                        Log.v("Contact Display Name: " + name);
-                    return name;
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        if (address != null) {
-            return PhoneNumberUtils.formatNumber(address);
-        }
-
-        return null;
     }
 
     /**
@@ -426,7 +383,7 @@ public class SmsPopupUtils {
      *            phone number or email address of sender
      * @return the thread id (or 0 if there was a problem)
      */
-    synchronized public static long findThreadIdFromAddress(Context context, String address) {
+    public static long findThreadIdFromAddress(Context context, String address) {
         if (address == null)
             return 0;
 
@@ -459,7 +416,7 @@ public class SmsPopupUtils {
     /**
      * Marks a specific message as read
      */
-    synchronized public static void setMessageRead(
+    public static void setMessageRead(
             Context context, long messageId, int messageType) {
 
         SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -504,7 +461,7 @@ public class SmsPopupUtils {
     /**
      * Marks a specific message thread as read - all messages in the thread will be marked read
      */
-    synchronized public static void setThreadRead(Context context, long threadId) {
+    public static void setThreadRead(Context context, long threadId) {
         SharedPreferences myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean markRead = myPrefs.getBoolean(
                 context.getString(R.string.pref_markread_key),
@@ -536,7 +493,7 @@ public class SmsPopupUtils {
      * Tries to locate the message id (from the system database), given the message thread id, the
      * timestamp of the message and the type of message (sms/mms)
      */
-    synchronized public static long findMessageId(Context context, long threadId, long timestamp,
+    public static long findMessageId(Context context, long threadId, long timestamp,
             String body, int messageType) {
 
         long id = 0;
@@ -622,6 +579,32 @@ public class SmsPopupUtils {
         }
     }
 
+    public static ArrayList<SmsMmsMessage> getUnreadMessages(Context context) {
+        final ArrayList<SmsMmsMessage> messages = getUnreadSms(context);
+        final ArrayList<SmsMmsMessage> mmsMessages = getUnreadMms(context);
+
+        if (messages == null && mmsMessages == null) {
+            return null;
+        } else if (messages != null && mmsMessages == null) {
+            return messages;
+        } else if (messages == null && mmsMessages != null) {
+            return mmsMessages;
+        }
+        messages.addAll(mmsMessages);
+        Collections.sort(messages, new Comparator<SmsMmsMessage>(){
+            @Override
+            public int compare(SmsMmsMessage lhs, SmsMmsMessage rhs) {
+                if (lhs.getTimestamp() < rhs.getTimestamp()) {
+                    return -1;
+                }
+                return 1;
+            }
+        });
+        messages.trimToSize();
+        final String a = "1";
+        return messages;
+    }
+
     /**
      * Fetches a list of unread messages from the system database
      *
@@ -633,8 +616,7 @@ public class SmsPopupUtils {
      *
      * @return ArrayList of SmsMmsMessage
      */
-
-    public static ArrayList<SmsMmsMessage> getUnreadMessages(Context context) {
+    public static ArrayList<SmsMmsMessage> getUnreadSms(Context context) {
         ArrayList<SmsMmsMessage> messages = null;
 
         final String[] projection =
@@ -687,9 +669,56 @@ public class SmsPopupUtils {
         return messages;
     }
 
+    public static ArrayList<SmsMmsMessage> getUnreadMms(Context context) {
+        ArrayList<SmsMmsMessage> messages = null;
+
+        final String[] projection = new String[] { "_id", "thread_id", "date", "sub", "sub_cs" };
+        String selection = UNREAD_CONDITION;
+        String[] selectionArgs = null;
+        final String sortOrder = "date ASC";
+        int count = 0;
+
+//        if (ignoreThreadId > 0) {
+//            selection += " and thread_id != ?";
+//            selectionArgs = new String[] { String.valueOf(ignoreThreadId) };
+//        }
+
+        Cursor cursor = context.getContentResolver().query(
+                MMS_INBOX_CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                sortOrder);
+
+        SmsMmsMessage message;
+        if (cursor != null) {
+            try {
+                count = cursor.getCount();
+                if (count > 0) {
+                    messages = new ArrayList<SmsMmsMessage>(count);
+                    while (cursor.moveToNext()) {
+                        long messageId = cursor.getLong(0);
+                        long threadId = cursor.getLong(1);
+                        long timestamp = cursor.getLong(2) * 1000;
+                        String subject = cursor.getString(3);
+
+                        message = new SmsMmsMessage(context, messageId, threadId, timestamp,
+                                subject, count, SmsMmsMessage.MESSAGE_TYPE_MMS);
+                        message.setNotify(false);
+                        messages.add(message);
+                    }
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return messages;
+    }
+
     /**
-   *
-   */
+     *
+     * @return
+     */
     public static Intent getSmsInboxIntent() {
         Intent conversations = new Intent(Intent.ACTION_MAIN);
         // conversations.addCategory(Intent.CATEGORY_DEFAULT);
@@ -800,7 +829,6 @@ public class SmsPopupUtils {
                     context.getString(R.string.pref_button1_key),
                     context.getString(R.string.pref_button2_key),
                     context.getString(R.string.pref_button3_key),
-                    // context.getString(R.string.pref_blur_key),
                     context.getString(R.string.pref_popup_enabled_key),
                     context.getString(R.string.pref_notif_enabled_key),
                     context.getString(R.string.pref_notif_sound_key),
@@ -858,242 +886,26 @@ public class SmsPopupUtils {
     }
 
     /**
-     * Fetch output from logcat, dump it in a file and return the URI to the file
-     */
-    public static Uri collectLogs(Context context) {
-        final String logfile = "log.txt";
-
-        try {
-            ArrayList<String> commandLine = new ArrayList<String>();
-            commandLine.add("logcat");
-            commandLine.add("-d");
-            commandLine.add("AndroidRuntime:E");
-            commandLine.add(Log.LOGTAG + ":V");
-            commandLine.add("*:S");
-
-            BufferedInputStream fin = new BufferedInputStream(
-                    Runtime.getRuntime().exec(commandLine.toArray(new String[0])).getInputStream());
-            BufferedOutputStream fout = new BufferedOutputStream(
-                    context.openFileOutput(logfile, Context.MODE_WORLD_READABLE));
-
-            // Copy output to a log file
-            int i;
-            do {
-                i = fin.read();
-                if (i != -1)
-                    fout.write(i);
-            } while (i != -1);
-            fin.close();
-            fout.close();
-        } catch (IOException e) {
-            return null;
-        } catch (SecurityException e) {
-            return null;
-        }
-
-        return Uri.fromFile(context.getFileStreamPath(logfile));
-    }
-
-    /**
      * Return current unread message count from system db (sms and mms)
      *
      * @param context
      * @return unread sms+mms message count
      */
     public static int getUnreadMessagesCount(Context context) {
-        return getUnreadMessagesCount(context, 0, null);
+        final ArrayList<SmsMmsMessage> messages = getUnreadMessages(context);
+        if (messages != null) {
+            return messages.size();
+        }
+        return 0;
     }
 
     /**
-     * Return current unread message count from system db (sms and mms)
      *
      * @param context
-     * @param timestamp
-     *            only messages before this timestamp will be counted
-     * @return unread sms+mms message count
+     * @param ignoreThreadId
+     * @return
      */
-    synchronized public static int getUnreadMessagesCount(Context context, long timestamp,
-            String messageBody) {
-        return getUnreadSmsCount(context, timestamp, messageBody) + getUnreadMmsCount(context);
-    }
-
-    /**
-     * Return current unread message count from system db (sms only)
-     *
-     * @param context
-     * @return unread sms message count
-     */
-    public static int getUnreadSmsCount(Context context) {
-        return getUnreadSmsCount(context, 0, null);
-    }
-
-    /**
-     * Return current unread message count from system db (sms only)
-     *
-     * @param context
-     * @param timestamp
-     *            only messages before this timestamp will be counted
-     * @return unread sms message count
-     */
-    private static int getUnreadSmsCount(Context context, long timestamp, String messageBody) {
-
-        if (BuildConfig.DEBUG)
-            Log.v("getUnreadSmsCount()");
-
-        final String[] projection = new String[] { SMSMMS_ID, "body" };
-        final String selection = UNREAD_CONDITION;
-        final String[] selectionArgs = null;
-        final String sortOrder = "date DESC";
-
-        int count = 0;
-
-        Cursor cursor = context.getContentResolver().query(
-                SMS_INBOX_CONTENT_URI,
-                projection,
-                selection,
-                selectionArgs,
-                sortOrder);
-
-        if (cursor != null) {
-            try {
-                count = cursor.getCount();
-
-                /*
-                 * We need to check if the message received matches the most recent one in the db or
-                 * not (to find out if our code ran before the system code or vice-versa)
-                 */
-                if (messageBody != null && count > 0) {
-                    if (cursor.moveToFirst()) {
-                        /*
-                         * Check the most recent message, if the body does not match then it hasn't
-                         * yet been inserted into the system database, therefore we need to add one
-                         * to our total count
-                         */
-                        if (!messageBody.equals(cursor.getString(1))) {
-                            if (BuildConfig.DEBUG)
-                                Log.v("getUnreadSmsCount(): most recent message did not match body, adding 1 to count");
-                            count++;
-                        }
-                    }
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        /*
-         * If count is still 0 and timestamp is set then its likely the system db had not updated
-         * when this code ran, therefore let's add 1 so the notify will run correctly.
-         */
-        if (count == 0 && timestamp > 0) {
-            count = 1;
-        }
-
-        if (BuildConfig.DEBUG)
-            Log.v("getUnreadSmsCount(): unread count = " + count);
-        return count;
-    }
-
-    /**
-     * Return current unread message count from system db (mms only)
-     *
-     * @param context
-     * @return unread mms message count
-     */
-    private static int getUnreadMmsCount(Context context) {
-
-        final String selection = UNREAD_CONDITION;
-        final String[] projection = new String[] { SMSMMS_ID };
-
-        int count = 0;
-
-        Cursor cursor = context.getContentResolver().query(
-                MMS_INBOX_CONTENT_URI,
-                projection,
-                selection, null, null);
-
-        if (cursor != null) {
-            try {
-                count = cursor.getCount();
-            } finally {
-                cursor.close();
-            }
-        }
-        if (BuildConfig.DEBUG)
-            Log.v("mms unread count = " + count);
-        return count;
-    }
-
-    /*
-   *
-   */
-    synchronized public static SmsMmsMessage getSmsDetails(Context context,
-            long ignoreThreadId, boolean unreadOnly) {
-
-        final String[] projection =
-                new String[] { "_id", "thread_id", "address", "date", "body" };
-        String selection = "date>0 and body is not null and body != ''";
-        if (unreadOnly) {
-            selection = selection + " and " + UNREAD_CONDITION;
-        }
-        String[] selectionArgs = null;
-        final String sortOrder = "date DESC";
-
-        int count = 0;
-
-        if (ignoreThreadId > 0) {
-            selection = (selection == null) ? "" : selection + " and ";
-            selection += "thread_id != ?";
-            selectionArgs = new String[] { String.valueOf(ignoreThreadId) };
-        }
-
-        Cursor cursor = context.getContentResolver().query(
-                SMS_INBOX_CONTENT_URI,
-                projection,
-                selection,
-                selectionArgs,
-                sortOrder);
-
-        if (cursor != null) {
-            try {
-                count = cursor.getCount();
-                if (count > 0) {
-                    cursor.moveToFirst();
-
-                    long messageId = cursor.getLong(0);
-                    long threadId = cursor.getLong(1);
-                    String address = cursor.getString(2);
-                    long timestamp = cursor.getLong(3);
-                    String body = cursor.getString(4);
-
-                    if (!unreadOnly) {
-                        count = 0;
-                    }
-
-                    if (!TextUtils.isEmpty(address) && !TextUtils.isEmpty(body)
-                            && timestamp > 0) {
-                        SmsMmsMessage smsMessage = new SmsMmsMessage(
-                                context, address, body, timestamp, threadId,
-                                count, messageId, SmsMmsMessage.MESSAGE_TYPE_SMS);
-                        return smsMessage;
-                    }
-
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        return null;
-    }
-
-    public static SmsMmsMessage getSmsDetails(Context context, long ignoreThreadId) {
-        return getSmsDetails(context, ignoreThreadId, true);
-    }
-
-    /*
-   *
-   */
-    synchronized public static SmsMmsMessage getMmsDetails(Context context, long ignoreThreadId) {
+    public static SmsMmsMessage getMmsDetails(Context context, long ignoreThreadId) {
 
         final String[] projection = new String[] { "_id", "thread_id", "date", "sub", "sub_cs" };
         String selection = UNREAD_CONDITION;
@@ -1207,86 +1019,6 @@ public class SmsPopupUtils {
             return match.group(1);
         }
         return displayString;
-    }
-
-    /**
-     * Get the display name of an email address. If the address already contains the name, parse and
-     * return it. Otherwise, query the contact database. Cache query results for repeated queries.
-     */
-    public static String getDisplayName(Context context, String email) {
-        Matcher match = NAME_ADDR_EMAIL_PATTERN.matcher(email);
-        if (match.matches()) {
-            // email has display name, return that
-            return getEmailDisplayName(match.group(1));
-        }
-
-        // otherwise let's check the contacts list for a user with this email
-        // Cursor cursor = context.getContentResolver().query(
-        // ContactWrapper.getEmailContentUri(),
-        // new String[] { Contacts.ContactMethods.NAME },
-        // Contacts.ContactMethods.DATA + " = ?",
-        // new String[] { email }, null);
-        Cursor cursor = context.getContentResolver().query(
-                Uri.withAppendedPath(Email.CONTENT_LOOKUP_URI, Uri.encode(email)),
-                new String[] { Contacts.DISPLAY_NAME },
-                null, null, null);
-
-        if (cursor != null) {
-            try {
-                // int columnIndex =
-                // cursor.getColumnIndexOrThrow(Contacts.ContactMethods.NAME);
-                while (cursor.moveToNext()) {
-                    // String name = cursor.getString(columnIndex);
-                    String name = cursor.getString(0);
-                    if (!TextUtils.isEmpty(name)) {
-                        return name;
-                    }
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        return email;
-    }
-
-    /*
-     * Get the most recent unread message, returning in a SmsMmsMessage which is suitable for
-     * updating the notification. Optional param is the message object: we can pull out the thread
-     * id of this message in the case the user is "replying" to the message and we should ignore all
-     * messages in the thread when working out what to display in the notification bar (as these
-     * messages will soon be marked read but we can't be sure when the messaging app will actually
-     * start).
-     */
-    public static SmsMmsMessage getRecentMessage(Context context, SmsMmsMessage ignoreMessage) {
-        long ignoreThreadId = 0;
-
-        if (ignoreMessage != null) {
-            ignoreThreadId = ignoreMessage.getThreadId();
-        }
-
-        SmsMmsMessage smsMessage = getSmsDetails(context, ignoreThreadId);
-        SmsMmsMessage mmsMessage = getMmsDetails(context, ignoreThreadId);
-
-        if (mmsMessage == null && smsMessage != null) {
-            return smsMessage;
-        }
-
-        if (mmsMessage != null && smsMessage == null) {
-            return mmsMessage;
-        }
-
-        if (mmsMessage != null && smsMessage != null) {
-            if (mmsMessage.getTimestamp() < smsMessage.getTimestamp()) {
-                return mmsMessage;
-            }
-            return smsMessage;
-        }
-
-        return null;
-    }
-
-    public static SmsMmsMessage getRecentMessage(Context context) {
-        return getRecentMessage(context, null);
     }
 
     /**
