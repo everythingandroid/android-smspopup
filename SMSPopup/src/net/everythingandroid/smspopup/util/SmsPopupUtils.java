@@ -82,6 +82,8 @@ public class SmsPopupUtils {
     public static final Uri DONATE_MARKET_URI =
             Uri.parse("market://details?id=net.everythingandroid.smspopupdonate");
 
+    public static final String SAMSUNG_OEM_NAME = "samsung";
+
     public static boolean isHoneycomb() {
         // Can use static final constants like HONEYCOMB, declared in later versions
         // of the OS since they are inlined at compile time. This is guaranteed behavior.
@@ -1320,28 +1322,23 @@ public class SmsPopupUtils {
 
         ActivityManager mAM = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
-        List<RunningTaskInfo> mRunningTaskList = mAM.getRunningTasks(1);
-        Iterator<RunningTaskInfo> mIterator = mRunningTaskList.iterator();
-
+        final List<RunningTaskInfo> mRunningTaskList = mAM.getRunningTasks(1);
+        final Iterator<RunningTaskInfo> mIterator = mRunningTaskList.iterator();
+        RunningTaskInfo mRunningTask;
         if (mIterator.hasNext()) {
-            RunningTaskInfo mRunningTask = mIterator.next();
+            mRunningTask = mIterator.next();
             if (mRunningTask != null) {
-                ComponentName runningTaskComponent = mRunningTask.baseActivity;
-
-                // Log.v("baseActivity = " + mRunningTask.baseActivity.toString());
-                // Log.v("topActivity = " + mRunningTask.topActivity.toString());
-
-                if (SmsMessageSender.MESSAGING_PACKAGE_NAME.equals(runningTaskComponent
-                        .getPackageName())
-                        &&
-                        (SmsMessageSender.MESSAGING_CONVO_CLASS_NAME.equals(runningTaskComponent
-                                .getClassName()))
-                        ||
-                        SmsMessageSender.MESSAGING_COMPOSE_CLASS_NAME.equals(runningTaskComponent
-                                .getClassName())) {
-                    if (BuildConfig.DEBUG)
-                        Log.v("User in messaging app - from running task");
-                    return true;
+                final ComponentName runningTaskComponent = mRunningTask.baseActivity;
+                if (SmsMessageSender.MESSAGING_PACKAGE_NAME.equals(
+                        runningTaskComponent.getPackageName())) {
+                    final String runClassName = runningTaskComponent.getClassName();
+                    for (int i=0; i<SmsMessageSender.MESSAGING_APP_ACTIVITIES.length; i++) {
+                        if (SmsMessageSender.MESSAGING_APP_ACTIVITIES[i].equals(runClassName)) {
+                            if (BuildConfig.DEBUG)
+                                Log.v("User in messaging app - from running task");
+                            return true;
+                        }
+                    }
                 }
             }
         }
