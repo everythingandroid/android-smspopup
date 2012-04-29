@@ -639,7 +639,7 @@ public class SmsPopupUtils {
 
         final String[] projection =
                 new String[] { "_id", "thread_id", "address", "date", "body" };
-        String selection = UNREAD_CONDITION;
+        String selection = UNREAD_CONDITION + " and date>0 and body is not null and body != ''";
         String[] selectionArgs = null;
         final String sortOrder = "date ASC";
 
@@ -670,12 +670,14 @@ public class SmsPopupUtils {
                         timestamp = cursor.getLong(3);
                         body = cursor.getString(4);
 
-                        message = new SmsMmsMessage(
-                                context, address, body, timestamp, threadId,
-                                count, messageId, SmsMmsMessage.MESSAGE_TYPE_SMS);
-                        message.setNotify(false);
-
-                        messages.add(message);
+                        if (!TextUtils.isEmpty(address) && !TextUtils.isEmpty(body)
+                                && timestamp > 0) {
+                            message = new SmsMmsMessage(
+                                    context, address, body, timestamp, threadId,
+                                    count, messageId, SmsMmsMessage.MESSAGE_TYPE_SMS);
+                            message.setNotify(false);
+                            messages.add(message);
+                        }
                     }
                 }
             } finally {
@@ -1030,7 +1032,10 @@ public class SmsPopupUtils {
 
         final String[] projection =
                 new String[] { "_id", "thread_id", "address", "date", "body" };
-        String selection = unreadOnly ? UNREAD_CONDITION : null;
+        String selection = "date>0 and body is not null and body != ''";
+        if (unreadOnly) {
+            selection = selection + " and " + UNREAD_CONDITION;
+        }
         String[] selectionArgs = null;
         final String sortOrder = "date DESC";
 
@@ -1065,11 +1070,13 @@ public class SmsPopupUtils {
                         count = 0;
                     }
 
-                    SmsMmsMessage smsMessage = new SmsMmsMessage(
-                            context, address, body, timestamp, threadId,
-                            count, messageId, SmsMmsMessage.MESSAGE_TYPE_SMS);
-
-                    return smsMessage;
+                    if (!TextUtils.isEmpty(address) && !TextUtils.isEmpty(body)
+                            && timestamp > 0) {
+                        SmsMmsMessage smsMessage = new SmsMmsMessage(
+                                context, address, body, timestamp, threadId,
+                                count, messageId, SmsMmsMessage.MESSAGE_TYPE_SMS);
+                        return smsMessage;
+                    }
 
                 }
             } finally {
@@ -1077,14 +1084,6 @@ public class SmsPopupUtils {
             }
         }
         return null;
-    }
-
-    public static SmsMmsMessage getSmsDetails(Context context) {
-        return getSmsDetails(context, 0);
-    }
-
-    public static SmsMmsMessage getSmsDetails(Context context, boolean unreadOnly) {
-        return getSmsDetails(context, 0, unreadOnly);
     }
 
     public static SmsMmsMessage getSmsDetails(Context context, long ignoreThreadId) {
@@ -1175,6 +1174,23 @@ public class SmsPopupUtils {
 
     public static final Pattern QUOTED_STRING_PATTERN =
             Pattern.compile("\\s*\"([^\"]*)\"\\s*");
+
+    public static final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
+            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+            "\\@" +
+            "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+            "(" +
+            "\\." +
+            "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+            ")+"
+        );
+
+    public static boolean isEmailAddress(String email) {
+        if (email == null) {
+            return false;
+        }
+        return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
+    }
 
     private static String extractAddrSpec(String address) {
         Matcher match = NAME_ADDR_EMAIL_PATTERN.matcher(address);

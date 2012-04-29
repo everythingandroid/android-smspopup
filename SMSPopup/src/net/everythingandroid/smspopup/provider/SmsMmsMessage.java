@@ -190,14 +190,14 @@ public class SmsMmsMessage {
 
         ContactIdentification contactIdentify = null;
 
-        if (PhoneNumberUtils.isWellFormedSmsAddress(fromAddress)) {
-            contactIdentify = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
-            contactName = PhoneNumberUtils.formatNumber(fromAddress);
-            fromEmailGateway = false;
-        } else {
+        contactName = PhoneNumberUtils.formatNumber(fromAddress);
+
+        if (SmsPopupUtils.isEmailAddress(fromAddress)) {
             contactIdentify = SmsPopupUtils.getPersonIdFromEmail(context, fromAddress);
-            contactName = fromAddress;
             fromEmailGateway = true;
+        } else {
+            contactIdentify = SmsPopupUtils.getPersonIdFromPhoneNumber(context, fromAddress);
+            fromEmailGateway = false;
         }
 
         if (contactIdentify != null) {
