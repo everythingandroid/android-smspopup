@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -68,6 +69,11 @@ public class SmsReceiverService extends WakefulIntentService {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -293,14 +299,33 @@ public class SmsReceiverService extends WakefulIntentService {
                 SmsMessageSender.MESSAGING_PACKAGE_NAME,
                 SmsMessageSender.MESSAGING_RECEIVER_CLASS_NAME);
 
-        tempIntent.setAction(SmsReceiverService.MESSAGE_SENT_ACTION);
-
         receiverList = pm.queryBroadcastReceivers(tempIntent, 0);
 
         if (receiverList.size() > 0) {
-            if (BuildConfig.DEBUG)
+            if (BuildConfig.DEBUG) {
                 Log.v("SMSReceiver: Found system messaging app - " + receiverList.get(0).toString());
+            }
+
             sysIntent = tempIntent;
+
+            // This is quite a hack - it seems most OEMs will replace the stock android messaging
+            // app, however Samsung changes it but keeps the same package name. One change is that
+            // it won't finish moving the messaging from "outbox" to "sent" or "failed" for us so
+            // this checks to see if the modified samsung app is there and if so, we'll handle the
+            // final move of the message ourselves.
+            if (Build.MANUFACTURER != null &&
+                    Build.MANUFACTURER.toLowerCase().equals(SmsPopupUtils.SAMSUNG_OEM_NAME)) {
+
+                // Only the samsung sms/mms apk has this modified compose class
+                tempIntent.setClassName(
+                        SmsMessageSender.MESSAGING_PACKAGE_NAME,
+                        SmsMessageSender.SAMSUNG_MESSAGING_COMPOSE_CLASS_NAME);
+                receiverList = pm.queryIntentActivities(tempIntent, 0);
+                if (receiverList.size() > 0) {
+                    // no system intent found to finish the message move
+                    sysIntent = null;
+                }
+            }
         }
 
         /*

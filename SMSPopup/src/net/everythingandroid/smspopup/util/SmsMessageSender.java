@@ -131,10 +131,6 @@ public class SmsMessageSender {
     private static final String[] SERVICE_CENTER_PROJECTION =
             new String[] { REPLY_PATH_PRESENT, SERVICE_CENTER, };
 
-    // private static final String[] DATE_PROJECTION = new String[] {
-    // DATE
-    // };
-
     private static final int COLUMN_REPLY_PATH_PRESENT = 0;
     private static final int COLUMN_SERVICE_CENTER = 1;
 
@@ -149,25 +145,17 @@ public class SmsMessageSender {
     public static final String MESSAGING_CONVO_CLASS_NAME = "com.android.mms.ui.ConversationList";
     public static final String MESSAGING_COMPOSE_CLASS_NAME =
             "com.android.mms.ui.ComposeMessageActivity";
-
-    // Bad idea, commenting out for now
-    /*
-     * public static final String[][] MMS_APP_LIST = { { // Stock Android messaging app (the bulk of
-     * phones use the same class/package names) MESSAGING_PACKAGE_NAME, MESSAGING_PACKAGE_NAME +
-     * ".transaction.SmsReceiver", SmsReceiverService.MESSAGE_SENT_ACTION,
-     * MESSAGING_STATUS_CLASS_NAME, MESSAGING_STATUS_RECEIVED_ACTION,
-     * 
-     * }, { // Motoblur phones like Droid X "com.motorola.blur.conversations",
-     * "com.motorola.blur.conversations.transaction.SmsReceiver",
-     * "com.motorola.blur.conversations.transaction.MESSAGE_SENT",
-     * "com.motorola.blur.conversations.transaction.MessageStatusReceiver",
-     * "com.motorola.blur.conversations.transaction.MessageStatusReceiver.MESSAGE_STATUS_RECEIVED",
-     * }, };
-     */
+    public static final String SAMSUNG_MESSAGING_COMPOSE_CLASS_NAME =
+            "com.android.mms.ui.ConversationComposer";
+    public static final String[] MESSAGING_APP_ACTIVITIES = {
+        MESSAGING_CONVO_CLASS_NAME,
+        MESSAGING_COMPOSE_CLASS_NAME,
+        SAMSUNG_MESSAGING_COMPOSE_CLASS_NAME,
+    };
 
     /**
      * Send a message via the system app and system db
-     * 
+     *
      * @param context
      *            the context
      * @param dests
@@ -298,11 +286,11 @@ public class SmsMessageSender {
 
     /**
      * Get the service center to use for a reply.
-     * 
+     *
      * The rule from TS 23.040 D.6 is that we send reply messages to the service center of the
      * message to which we're replying, but only if we haven't already replied to that message and
      * only if <code>TP-Reply-Path</code> was set in that message.
-     * 
+     *
      * Therefore, return the service center from the most recent message in the conversation, but
      * only if it is a message from the other party, and only if <code>TP-Reply-Path</code> is set.
      * Otherwise, return null.
@@ -336,7 +324,7 @@ public class SmsMessageSender {
 
     /**
      * Add an SMS to the Out box.
-     * 
+     *
      * @param resolver
      *            the content resolver to use
      * @param address
@@ -365,7 +353,7 @@ public class SmsMessageSender {
 
     /**
      * Add an SMS to the given URI with thread_id specified.
-     * 
+     *
      * @param resolver
      *            the content resolver to use
      * @param uri
@@ -410,7 +398,7 @@ public class SmsMessageSender {
 
     /**
      * Move a message to the given folder.
-     * 
+     *
      * @param context
      *            the context to use
      * @param uri
