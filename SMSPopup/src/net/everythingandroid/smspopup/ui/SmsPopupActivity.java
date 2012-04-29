@@ -21,6 +21,7 @@ import net.everythingandroid.smspopup.util.Log;
 import net.everythingandroid.smspopup.util.ManageKeyguard;
 import net.everythingandroid.smspopup.util.ManageKeyguard.LaunchOnKeyguardExit;
 import net.everythingandroid.smspopup.util.ManageNotification;
+import net.everythingandroid.smspopup.util.ManagePreferences;
 import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
 import net.everythingandroid.smspopup.util.ManageWakeLock;
 import net.everythingandroid.smspopup.util.RetainFragment;
@@ -335,8 +336,18 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
                             // It was found in the getUnreadMessages() query
                             found = true;
                             messages.get(i).setNotify(true);
+                            break;
                         }
                     }
+
+                    // See {@link SmsPopupUtils.updateSmscTimestampDrift} for why this is needed.
+                    final long smscTimeDrift = mPrefs.getLong(ManagePreferences.SMSC_TIME_DRIFT, 0);
+                    if (smscTimeDrift > 0) {
+                        for (int i = 0; i < messages.size(); i++) {
+                            messages.get(i).adjustTimestamp(smscTimeDrift);
+                        }
+                    }
+
                     if (!found) {
                         // If it wasn't found, add it manually to the list
                         messages.add(newMessage);

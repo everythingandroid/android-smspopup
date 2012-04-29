@@ -27,6 +27,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -1302,6 +1303,35 @@ public class SmsPopupUtils {
             msgs[i] = SmsMessage.createFromPdu(pdus[i]);
         }
         return msgs;
+    }
+
+    /**
+     * Yet another hack to work with the undocumented SMS APIs. Some devices (and it seems to be
+     * those running on CDMA networks) store a timestamp that is off by several hours - it seems
+     * to be related to how the carrier sets up the SMS service center. This method checks for
+     * substantial drift (30mins+) and stores a preference to indicate this which can be used later
+     * to display the correct timestamp to the user.
+     * @param context Context for fetching prefs
+     * @param timestamp The system timestamp of when this message was received
+     * @param smscTimestamp The service center timestamp
+     * @return The calculated timestamp drift in millis
+     */
+    public static long updateSmscTimestampDrift(
+            Context context, long timestamp, long smscTimestamp) {
+        final int thirtyMins = 30 * 60 * 1000;
+        long timeDrift = 0;
+        final long timeDiff30Mins =
+                Math.round((smscTimestamp - timestamp) / thirtyMins);
+
+        if (Math.abs(timeDiff30Mins) > 0) {
+            timeDrift = timeDiff30Mins * thirtyMins;
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            Editor editor = prefs.edit();
+            editor.putLong(ManagePreferences.SMSC_TIME_DRIFT, timeDrift);
+            editor.commit();
+        }
+
+        return timeDrift;
     }
 
     /**
