@@ -1,5 +1,7 @@
 package net.everythingandroid.smspopup.provider;
 
+import java.util.ArrayList;
+
 import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.ui.SmsPopupActivity;
 import net.everythingandroid.smspopup.util.Log;
@@ -131,7 +133,23 @@ public class SmsMmsMessage {
 
         SmsPopupUtils.updateSmscTimestampDrift(context, timestamp, smscTimestamp);
 
-        unreadCount = SmsPopupUtils.getUnreadMessagesCount(context, timestamp, messageBody);
+        // We need to find the total unread message count here, however we have to deal with a race
+        // condition. This message may or may not have already appeared in the system db. First we
+        // find all unread messages in the system db, then look to see if this message is in that
+        // list. If so, we have all unread messages, if not, we need to add one to the count.
+        locateMessageId();
+        unreadCount = 0;
+        final ArrayList<SmsMmsMessage> unreadMessages = SmsPopupUtils.getUnreadMessages(context);
+        if (unreadMessages != null) {
+            final int size = unreadMessages.size();
+            boolean found = false;
+            for (int i=0; i<size; i++) {
+                if (unreadMessages.get(i).messageId == messageId) {
+                    found = true;
+                }
+            }
+            unreadCount = found ? size : size + 1;
+        }
     }
 
     /**
@@ -503,8 +521,23 @@ public class SmsMmsMessage {
                 return true;
             }
         }
-
         return false;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("SmsMmsMessage: ");
+        sb.append(isSms() ? "SMS, " : "MMS, ");
+        sb.append(messageId);
+        sb.append(", ");
+        sb.append(timestamp);
+        sb.append(", ");
+        sb.append(fromAddress);
+        sb.append(", ");
+        sb.append("{");
+        sb.append(messageBody);
+        sb.append("}");
+        return sb.toString();
+    }
 }
