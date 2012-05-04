@@ -61,6 +61,7 @@ public class SmsReceiverService extends WakefulIntentService {
     private static final int TOAST_HANDLER_MESSAGE_SENT = 0;
     private static final int TOAST_HANDLER_MESSAGE_SEND_LATER = 1;
     private static final int TOAST_HANDLER_MESSAGE_FAILED = 2;
+    private static final int TOAST_HANDLER_MESSAGE_CUSTOM = 3;
 
     public SmsReceiverService() {
         super(TAG);
@@ -255,6 +256,11 @@ public class SmsReceiverService extends WakefulIntentService {
         }
     }
 
+    public void showToast(String message) {
+        mToastHandler.sendMessage(
+                Message.obtain(mToastHandler, TOAST_HANDLER_MESSAGE_CUSTOM, message));
+    }
+
     /*
      * Handler to deal with showing Toast messages for message sent status
      */
@@ -279,6 +285,11 @@ public class SmsReceiverService extends WakefulIntentService {
                 case TOAST_HANDLER_MESSAGE_FAILED:
                     Toast.makeText(SmsReceiverService.this,
                             SmsReceiverService.this.getString(R.string.quickreply_failed),
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case TOAST_HANDLER_MESSAGE_CUSTOM:
+                    Toast.makeText(SmsReceiverService.this,
+                            msg.obj.toString(),
                             Toast.LENGTH_SHORT).show();
                     break;
                 }
@@ -311,7 +322,7 @@ public class SmsReceiverService extends WakefulIntentService {
                 Log.v("SMSReceiver: Found system messaging app - " + receiverList.get(0).toString());
             }
 
-            sysIntent = tempIntent;
+            sysIntent = new Intent(tempIntent);
 
             // This is quite a hack - it seems most OEMs will replace the stock android messaging
             // app, however Samsung changes it but keeps the same package name. One change is that
@@ -333,6 +344,8 @@ public class SmsReceiverService extends WakefulIntentService {
             }
         }
 
+        sysIntent = null;
+
         /*
          * No system messaging app was found to forward this intent to, therefore we will need to do
          * the final piece of this ourselves which is basically moving the message to the correct
@@ -345,13 +358,17 @@ public class SmsReceiverService extends WakefulIntentService {
 
             Uri uri = intent.getData();
 
+            showToast("SMS Result Code: " + mResultCode);
             if (mResultCode == Activity.RESULT_OK) {
+                showToast("Moving to 'sent'");
                 SmsMessageSender.moveMessageToFolder(this, uri, SmsMessageSender.MESSAGE_TYPE_SENT);
             } else if ((mResultCode == SmsManager.RESULT_ERROR_RADIO_OFF) ||
                     (mResultCode == SmsManager.RESULT_ERROR_NO_SERVICE)) {
+                showToast("Moving to 'queued'");
                 SmsMessageSender.moveMessageToFolder(this, uri,
                         SmsMessageSender.MESSAGE_TYPE_QUEUED);
             } else {
+                showToast("Moving to 'failed'");
                 SmsMessageSender.moveMessageToFolder(this, uri,
                         SmsMessageSender.MESSAGE_TYPE_FAILED);
             }
