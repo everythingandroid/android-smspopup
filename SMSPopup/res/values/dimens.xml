@@ -6,7 +6,7 @@
     <dimen name="contact_thumbnail_margin">3dp</dimen>
     
     <dimen name="smspopup_pager_width">318dp</dimen>
-    <dimen name="smspopup_pager_height">300dp</dimen>
+    <dimen name="smspopup_pager_height">320dp</dimen>
     <dimen name="smspopup_pager_margin">70dp</dimen>
 
     <dimen name="smspopup_bottom_margin">50dp</dimen>
