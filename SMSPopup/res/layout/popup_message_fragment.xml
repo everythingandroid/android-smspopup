@@ -65,85 +65,85 @@
 
         <include layout="@layout/popup_divider" />
 
-        <ViewFlipper
-            android:id="@+id/contentFlipper"
+        <ScrollView
+            android:id="@+id/contentMessage"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:minHeight="85dp"
+            android:paddingBottom="9dp"
+            android:paddingTop="5dp" >
+
+            <TextView
+                android:id="@+id/messageTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Text here"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?android:attr/textColorPrimaryDisableOnly"
+                android:textColorLink="?android:attr/textColorPrimaryDisableOnly"
+                tools:ignore="HardcodedText" />
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/contentMms"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:inAnimation="@anim/grow_fade_in_center_high"
-            android:outAnimation="@anim/shrink_fade_out_center_high" >
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:paddingBottom="12dp"
+            android:paddingTop="12dp" >
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <TextView
+                android:id="@+id/mmsSubjectTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:gravity="center"
+                android:paddingBottom="12dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Mms subject here"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?android:attr/textColorPrimaryDisableOnly"
+                android:textColorLink="?android:attr/textColorPrimaryDisableOnly"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/viewMmsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fillViewport="true"
-                android:paddingBottom="9dp"
-                android:paddingTop="5dp" >
+                android:minWidth="140dp"
+                android:text="@string/button_view_mms" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/messageTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autoLink="all"
-                    android:gravity="center"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="Text here"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="?android:attr/textColorPrimaryDisableOnly"
-                    android:textColorLink="?android:attr/textColorPrimaryDisableOnly"
-                    tools:ignore="HardcodedText" />
-            </ScrollView>
+        <LinearLayout
+            android:id="@+id/contentPrivacy"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone"
+            android:paddingBottom="12dp"
+            android:paddingTop="12dp" >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingBottom="12dp"
-                android:paddingTop="12dp" >
-                
-                <TextView
-                    android:id="@+id/mmsSubjectTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:autoLink="all"
-                    android:gravity="center"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="Mms subject here"
-                    android:paddingBottom="12dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="?android:attr/textColorPrimaryDisableOnly"
-                    android:textColorLink="?android:attr/textColorPrimaryDisableOnly"
-                    tools:ignore="HardcodedText" />                
-
-                <Button
-                    android:id="@+id/viewMmsButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:minWidth="140dp"
-                    android:text="@string/button_view_mms" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingBottom="12dp"
-                android:paddingTop="12dp" >
-
-                <ImageButton
-                    android:id="@+id/viewButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/button_view"
-                    android:padding="8dp"
-                    android:src="@android:drawable/ic_menu_view" />
-            </LinearLayout>
-        </ViewFlipper>
+            <ImageButton
+                android:id="@+id/viewButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/button_view"
+                android:padding="8dp"
+                android:src="@android:drawable/ic_menu_view" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/buttonPanel"
@@ -199,7 +199,7 @@
                     style="@style/ButtonBar"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" >
-                    
+
                     <include layout="@layout/unlock_button" />
                 </RelativeLayout>
             </ViewSwitcher>

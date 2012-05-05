@@ -27,8 +27,8 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.QuickContactBadge;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 import android.widget.ViewSwitcher;
 
 public class SmsPopupFragment extends Fragment {
@@ -40,8 +40,11 @@ public class SmsPopupFragment extends Fragment {
     private TextView fromTv;
     private TextView timestampTv;
     private TextView messageTv;
-    private ViewFlipper contentFlipper;
     private LinearLayout mainLayout;
+    private ScrollView contentMessage;
+    private LinearLayout contentMms;
+    private LinearLayout contentPrivacy;
+    private int contentNum = 0;
 
     private int privacyMode = PRIVACY_MODE_OFF;
     private boolean showUnlockButton = false;
@@ -111,7 +114,10 @@ public class SmsPopupFragment extends Fragment {
         fromTv = (TextView) v.findViewById(R.id.fromTextView);
         messageTv = (TextView) v.findViewById(R.id.messageTextView);
         timestampTv = (TextView) v.findViewById(R.id.timestampTextView);
-        contentFlipper = (ViewFlipper) v.findViewById(R.id.contentFlipper);
+        contentMessage = (ScrollView) v.findViewById(R.id.contentMessage);
+        contentMms = (LinearLayout) v.findViewById(R.id.contentMms);
+        contentPrivacy = (LinearLayout) v.findViewById(R.id.contentPrivacy);
+
         buttonViewSwitcher = (ViewSwitcher) v.findViewById(R.id.buttonViewSwitcher);
         mainLayout = (LinearLayout) v.findViewById(R.id.popupMessageMainlayout);
 
@@ -261,44 +267,55 @@ public class SmsPopupFragment extends Fragment {
 
     private void setPrivacy(int newMode, boolean initial) {
 
-    	if ((newMode != privacyMode || initial) && message != null && contentFlipper != null) {
+        if ((newMode != privacyMode || initial) && message != null) {
 	        final int viewPrivacy =
 	                message.isSms() ? VIEW_PRIVACY_SMS : VIEW_PRIVACY_MMS;
 
 	        final int viewPrivacyOff =
 	                message.isSms() ? VIEW_SMS : VIEW_MMS;
 
-	        final int currentView = contentFlipper.getDisplayedChild();
-
 	        if (newMode == PRIVACY_MODE_OFF) {
-
-	            if (currentView != viewPrivacyOff) {
-	                contentFlipper.setDisplayedChild(viewPrivacyOff);
-	            }
+                updateContentView(viewPrivacyOff);
 	            fromTv.setVisibility(View.VISIBLE);
 	            messageViewed = true;
-
 	            if (initial || privacyMode == PRIVACY_MODE_HIDE_ALL) {
 	            	loadContactPhoto();
 	            }
-
 	        } else if (newMode == PRIVACY_MODE_HIDE_MESSAGE) {
-
-	            if (currentView != viewPrivacy) {
-	                contentFlipper.setDisplayedChild(viewPrivacy);
-	            }
+                updateContentView(viewPrivacy);
 	            fromTv.setVisibility(View.VISIBLE);
 	            loadContactPhoto();
-
 	        } else if (newMode == PRIVACY_MODE_HIDE_ALL) {
-
-	            if (currentView != viewPrivacy) {
-	                contentFlipper.setDisplayedChild(viewPrivacy);
-	            }
+	            updateContentView(viewPrivacy);
 	            fromTv.setVisibility(View.GONE);
 	        }
     	}
     	privacyMode = newMode;
+    }
+
+    private void updateContentView(int mode) {
+        if (contentMessage != null && contentMms != null && contentPrivacy != null) {
+            if (contentNum != mode) {
+                contentNum = mode;
+                switch (mode) {
+                case VIEW_SMS:
+                    contentMessage.setVisibility(View.VISIBLE);
+                    contentMms.setVisibility(View.GONE);
+                    contentPrivacy.setVisibility(View.GONE);
+                    break;
+                case VIEW_MMS:
+                    contentMessage.setVisibility(View.GONE);
+                    contentMms.setVisibility(View.VISIBLE);
+                    contentPrivacy.setVisibility(View.GONE);
+                    break;
+                case VIEW_PRIVACY_SMS:
+                    contentMessage.setVisibility(View.GONE);
+                    contentMms.setVisibility(View.GONE);
+                    contentPrivacy.setVisibility(View.VISIBLE);
+                    break;
+                }
+            }
+        }
     }
 
     private void loadContactPhoto() {
