@@ -187,10 +187,14 @@ public class SmsPopupUtilsService extends WakefulIntentService {
                     }
                 }
             }
-            final int numMessags = messages.size();
+            final int numMessages = messages.size();
 
+            if (numMessages > 0) {
             // Update the notification in the status bar
-            ManageNotification.update(this, messages.get(numMessags - 1), numMessags);
+            ManageNotification.update(this, messages.get(numMessages - 1), numMessages);
+            } else {
+                ManageNotification.clearAll(this);
+            }
         } else {
             ManageNotification.clearAll(this);
         }
