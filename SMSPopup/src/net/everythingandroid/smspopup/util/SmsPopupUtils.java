@@ -134,7 +134,9 @@ public class SmsPopupUtils {
                     return new ContactIdentification(newId, newLookup, contactName);
                 }
             } finally {
-                cursor.close();
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         }
 
@@ -195,7 +197,9 @@ public class SmsPopupUtils {
                     return new ContactIdentification(contactId, contactLookup, contactName);
                 }
             } finally {
-                cursor.close();
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         }
 
@@ -239,7 +243,9 @@ public class SmsPopupUtils {
                     return new ContactIdentification(contactId, contactLookup, contactName);
                 }
             } finally {
-                cursor.close();
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         }
         return null;
@@ -526,7 +532,9 @@ public class SmsPopupUtils {
                     // Log.v("Timestamp = " + cursor.getLong(1));
                 }
             } finally {
-                cursor.close();
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         }
 
@@ -663,7 +671,9 @@ public class SmsPopupUtils {
                     }
                 }
             } finally {
-                cursor.close();
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         }
         return messages;
@@ -709,7 +719,9 @@ public class SmsPopupUtils {
                     }
                 }
             } finally {
-                cursor.close();
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         }
         return messages;
@@ -940,7 +952,9 @@ public class SmsPopupUtils {
                 }
 
             } finally {
-                cursor.close();
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         }
         return null;
@@ -974,7 +988,9 @@ public class SmsPopupUtils {
                     return cursor.getString(0);
                 }
             } finally {
-                cursor.close();
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         }
 
