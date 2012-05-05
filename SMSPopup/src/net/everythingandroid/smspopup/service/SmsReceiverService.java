@@ -1,5 +1,7 @@
 package net.everythingandroid.smspopup.service;
 
+import java.util.List;
+
 import net.everythingandroid.smspopup.BuildConfig;
 import net.everythingandroid.smspopup.R;
 import net.everythingandroid.smspopup.provider.SmsMmsMessage;
@@ -13,8 +15,12 @@ import net.everythingandroid.smspopup.util.ManageWakeLock;
 import net.everythingandroid.smspopup.util.SmsMessageSender;
 import net.everythingandroid.smspopup.util.SmsPopupUtils;
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -155,7 +161,7 @@ public class SmsReceiverService extends WakefulIntentService {
 
         // get docked state of phone
         boolean docked = mPrefs.getInt(R.string.pref_docked_key, Intent.EXTRA_DOCK_STATE_UNDOCKED)
-        		!= Intent.EXTRA_DOCK_STATE_UNDOCKED;
+                != Intent.EXTRA_DOCK_STATE_UNDOCKED;
 
         mPrefs.close();
 
@@ -273,17 +279,17 @@ public class SmsReceiverService extends WakefulIntentService {
                             SmsReceiverService.this,
                             SmsReceiverService.this
                                     .getString(R.string.quickreply_failed_send_later),
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
                     break;
                 case TOAST_HANDLER_MESSAGE_FAILED:
                     Toast.makeText(SmsReceiverService.this,
                             SmsReceiverService.this.getString(R.string.quickreply_failed),
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
                     break;
                 case TOAST_HANDLER_MESSAGE_CUSTOM:
                     Toast.makeText(SmsReceiverService.this,
                             msg.obj.toString(),
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
                     break;
                 }
             }
@@ -297,17 +303,66 @@ public class SmsReceiverService extends WakefulIntentService {
         if (BuildConfig.DEBUG)
             Log.v("SMSReceiver: Handle SMS sent");
 
-        final Uri uri = intent.getData();
+        PackageManager pm = getPackageManager();
+        Intent sysIntent = null;
+        Intent tempIntent;
+        List<ResolveInfo> receiverList;
+        boolean forwardToSystemApp = true;
 
-        if (mResultCode == Activity.RESULT_OK) {
-            SmsMessageSender.moveMessageToFolder(this, uri, SmsMessageSender.MESSAGE_TYPE_SENT);
-        } else if ((mResultCode == SmsManager.RESULT_ERROR_RADIO_OFF) ||
-                (mResultCode == SmsManager.RESULT_ERROR_NO_SERVICE)) {
-            SmsMessageSender.moveMessageToFolder(this, uri,
-                    SmsMessageSender.MESSAGE_TYPE_QUEUED);
-        } else {
-            SmsMessageSender.moveMessageToFolder(this, uri,
-                    SmsMessageSender.MESSAGE_TYPE_FAILED);
+        // Search for system messaging app that will receive our "message sent complete" type intent
+        tempIntent = intent.setClassName(
+                SmsMessageSender.MESSAGING_PACKAGE_NAME,
+                SmsMessageSender.MESSAGING_RECEIVER_CLASS_NAME);
+
+        receiverList = pm.queryBroadcastReceivers(tempIntent, 0);
+
+        if (receiverList.size() > 0) {
+            if (BuildConfig.DEBUG) {
+                Log.v("SMSReceiver: Found system messaging app - " + receiverList.get(0).toString());
+            }
+
+            sysIntent = tempIntent;
+
+            // This is quite a hack - it seems most OEMs will replace the stock android messaging
+            // app, however Samsung changes it but keeps the same package name. One change is that
+            // it won't finish moving the messaging from "outbox" to "sent" or "failed" for us so
+            // this checks to see if the modified samsung app is there and if so, we'll handle the
+            // final move of the message ourselves.
+
+            // Only the samsung sms/mms apk has this modified compose class
+            final Intent samsungIntent = new Intent();
+            samsungIntent.setClassName(
+                    SmsMessageSender.MESSAGING_PACKAGE_NAME,
+                    SmsMessageSender.SAMSUNG_MESSAGING_COMPOSE_CLASS_NAME);
+            receiverList = pm.queryIntentActivities(samsungIntent, 0);
+            if (receiverList.size() > 0) {
+                // no stock system app found to finish the message move
+                sysIntent = null;
+            }
+        }
+
+        /*
+         * No system messaging app was found to forward this intent to, therefore we will need to do
+         * the final piece of this ourselves which is basically moving the message to the correct
+         * folder depending on the result.
+         */
+        if (sysIntent == null) {
+            forwardToSystemApp = false;
+            if (BuildConfig.DEBUG)
+                Log.v("SMSReceiver: Did not find system messaging app, moving messages directly");
+
+            Uri uri = intent.getData();
+
+            if (mResultCode == Activity.RESULT_OK) {
+                SmsMessageSender.moveMessageToFolder(this, uri, SmsMessageSender.MESSAGE_TYPE_SENT);
+            } else if ((mResultCode == SmsManager.RESULT_ERROR_RADIO_OFF) ||
+                    (mResultCode == SmsManager.RESULT_ERROR_NO_SERVICE)) {
+                SmsMessageSender.moveMessageToFolder(this, uri,
+                        SmsMessageSender.MESSAGE_TYPE_QUEUED);
+            } else {
+                SmsMessageSender.moveMessageToFolder(this, uri,
+                        SmsMessageSender.MESSAGE_TYPE_FAILED);
+            }
         }
 
         // Check the result and notify the user using a toast
@@ -315,17 +370,31 @@ public class SmsReceiverService extends WakefulIntentService {
             if (BuildConfig.DEBUG)
                 Log.v("SMSReceiver: Message was sent");
             mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_SENT);
+
         } else if ((mResultCode == SmsManager.RESULT_ERROR_RADIO_OFF) ||
                 (mResultCode == SmsManager.RESULT_ERROR_NO_SERVICE)) {
             if (BuildConfig.DEBUG)
                 Log.v("SMSReceiver: Error sending message (will send later)");
             // The system shows a Toast here so no need to show one
             // mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_SEND_LATER);
+
         } else {
             if (BuildConfig.DEBUG)
                 Log.v("SMSReceiver: Error sending message");
             // ManageNotification.notifySendFailed(this);
             mToastHandler.sendEmptyMessage(TOAST_HANDLER_MESSAGE_FAILED);
+        }
+
+        /*
+         * Start the broadcast via PendingIntent so result code is passed over correctly
+         */
+        if (forwardToSystemApp) {
+            try {
+                Log.v("SMSReceiver: Broadcasting send complete to system messaging app");
+                PendingIntent.getBroadcast(this, 0, sysIntent, 0).send(mResultCode);
+            } catch (CanceledException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
