@@ -70,10 +70,10 @@ public class ManageWakeLock {
             Log.v("**Wakelock (partial) acquired");
         mPartialWakeLock.setReferenceCounted(false);
 
-        // Set timeout of 60seconds in case for some reason the wakelock is not released by the
+        // Set timeout of 5mins in case for some reason the wakelock is not released by the
         // activity. Note that this only works because setReferenceCounted(false), otherwise a
         // system bug causes a crash (http://code.google.com/p/android/issues/detail?id=14184).
-        mPartialWakeLock.acquire(60000);
+        mPartialWakeLock.acquire(300000);
     }
 
     public static synchronized void releaseFull() {
