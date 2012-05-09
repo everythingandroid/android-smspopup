@@ -609,7 +609,6 @@ public class SmsPopupUtils {
             }
         });
         messages.trimToSize();
-        final String a = "1";
         return messages;
     }
 
