@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2012-03-04 18:33-0500\n"
-"PO-Revision-Date: 2012-02-28 10:59+0000\n"
-"Last-Translator: Daniel Dietrich <Unknown>\n"
+"PO-Revision-Date: 2012-04-11 20:10+0000\n"
+"Last-Translator: Ghenrik <Unknown>\n"
 "Language-Team: de <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-08 00:16+0000\n"
-"X-Generator: Launchpad (build 14907)\n"
+"X-Launchpad-Export-Date: 2012-05-09 02:28+0000\n"
+"X-Generator: Launchpad (build 15213)\n"
 "Generated-By: Babel 1.0\n"
 
 #. Notification Strings
@@ -35,7 +35,7 @@ msgstr "Neue Nachricht von: %s"
 
 msgctxt "notification_scroll_privacy_no_name"
 msgid "New message"
-msgstr ""
+msgstr "Neue Nachricht"
 
 #. Button Strings
 msgctxt "button_close"
@@ -68,7 +68,7 @@ msgstr "Entsperren"
 
 msgctxt "button_tts"
 msgid "Text-to-speech"
-msgstr "Text-to-Speech"
+msgstr "Text-zu-Sprache"
 
 msgctxt "button_speak"
 msgid "Speak"
@@ -89,7 +89,7 @@ msgstr "Deaktiviert"
 #. Main Preferences
 msgctxt "pref_config_title"
 msgid "SMS Popup Configuration"
-msgstr "SMS Popup Einstellungen"
+msgstr "Popup-Einstellungen für SMS"
 
 msgctxt "pref_other_title"
 msgid "Other"
@@ -97,19 +97,19 @@ msgstr "Sonstiges"
 
 msgctxt "pref_enabled_title"
 msgid "Enable SMS Popup"
-msgstr "SMS Popup aktivieren"
+msgstr "SMS-Popup aktivieren"
 
 msgctxt "pref_enabled_summaryon"
 msgid "SMS Popup is enabled"
-msgstr "SMS Popup ist aktiviert"
+msgstr "SMS-Popup ist aktiviert"
 
 msgctxt "pref_enabled_summaryoff"
 msgid "SMS Popup is disabled"
-msgstr "SMS Popup ist deaktiviert"
+msgstr "SMS-Popup ist deaktiviert"
 
 msgctxt "pref_about_title"
 msgid "About"
-msgstr "Info"
+msgstr "Über"
 
 msgctxt "pref_about_summary"
 msgid "About SMS Popup"
@@ -125,32 +125,32 @@ msgstr "Häufig gestellte Fragen"
 
 msgctxt "pref_sendemail_title"
 msgid "E-mail the Developer"
-msgstr "Email an den Entwickler"
+msgstr "Dem Entwickler eine E-Mail schreiben"
 
 msgctxt "pref_sendemail_dialog"
 msgid ""
 "Can I include your system information in the e-mail (this will help me "
 "troubleshoot bugs easier)?"
 msgstr ""
-"Sollen Systeminformationen in der Email mitgeschickt werden? Diese "
-"Informationen erleichtern die Problemlösung."
+"Dürfen Informationen über Ihr System in der E-Mail mitgeschickt werden? "
+"Diese Informationen erleichtern die Problemlösung."
 
 msgctxt "pref_sendemail_buttonok"
 msgid "Sure"
-msgstr "Ja"
+msgstr "Sicher"
 
 msgctxt "pref_sendemail_buttoncancel"
 msgid "No way"
-msgstr "Nein"
+msgstr "Auf keinen Fall"
 
 #. Additional Preferences
 msgctxt "pref_additional_title"
 msgid "Additional Settings"
-msgstr "Zusätzliche Einstellungen"
+msgstr "Erweiterte Einstellungen"
 
 msgctxt "pref_additional_summary"
 msgid "Additional SMS Popup configuration"
-msgstr "Zusätzliche SMS Popup Einstellungen"
+msgstr "Erweiterte Popup-Einstellungen für SMS"
 
 msgctxt "pref_timeout_title"
 msgid "Screen Timeout"
@@ -174,39 +174,39 @@ msgstr "Popup-Anzeige ist hell"
 
 msgctxt "pref_privacy_category"
 msgid "Privacy"
-msgstr ""
+msgstr "Privatsphäre"
 
 msgctxt "pref_privacy_title"
 msgid "Privacy Mode"
-msgstr "Privatsphäre"
+msgstr "Privatsphärenmodus"
 
 msgctxt "pref_privacy_summaryon"
 msgid "Popup will use privacy mode"
-msgstr ""
+msgstr "Das Popup wird den Privatsphärenmodus verwenden"
 
 msgctxt "pref_privacy_summaryoff"
 msgid "Popup will show all message details"
-msgstr ""
+msgstr "Das Popup wird alle Nachrichtendetails anzeigen"
 
 msgctxt "pref_privacy_sender_title"
 msgid "Hide Contact Name"
-msgstr ""
+msgstr "Namen des Kontakts verstecken"
 
 msgctxt "pref_privacy_sender_summaryon"
 msgid "Message sender name will also be hidden"
-msgstr ""
+msgstr "Der Name des Nachrichtenabsenders wird ebenso versteckt werden"
 
 msgctxt "pref_privacy_sender_summaryoff"
 msgid "Message sender name will be shown"
-msgstr ""
+msgstr "Der Name des Nachrichtenabsenders wird angezeigt werden"
 
 msgctxt "pref_privacy_always_title"
 msgid "Always Use Privacy Mode"
-msgstr ""
+msgstr "Immer Privatsphärenmodus benutzen"
 
 msgctxt "pref_privacy_always_summaryon"
 msgid "Privacy mode will always be used"
-msgstr ""
+msgstr "Privatsphärenmodus wird immer genutzt"
 
 msgctxt "pref_privacy_always_summaryoff"
 msgid "Only use privacy mode when screen is locked"
@@ -349,23 +349,23 @@ msgstr "Dieser Ton wird beim Empfang abgespielt"
 
 msgctxt "pref_notifyOnCall_title"
 msgid "Notify On Call"
-msgstr ""
+msgstr "Während Gesprächen benachrichtigen"
 
 msgctxt "pref_notifyOnCall_summaryon"
 msgid "Sound will play while on a call"
-msgstr ""
+msgstr "Klang wiedergeben, während ein Gespräch geführt wird"
 
 msgctxt "pref_notifyOnCall_summaryoff"
 msgid "Sound will not play while on a call"
-msgstr ""
+msgstr "Keinen Klang wiedergeben, während ein Gespräch geführt wird"
 
 msgctxt "pref_notif_icon_title"
 msgid "Notification Icon"
-msgstr ""
+msgstr "Benachrichtigungssymbol"
 
 msgctxt "pref_notif_icon_summary"
 msgid "Change the notification area icon"
-msgstr ""
+msgstr "Symbol im Benachrichtigungsbereich ändern"
 
 msgctxt "pref_vibrate_title"
 msgid "Vibrate"
@@ -693,7 +693,7 @@ msgstr "Abschicken"
 #. Text-To-Speech and Voice Transcription Strings
 msgctxt "loading_message"
 msgid "Loading…"
-msgstr ""
+msgstr "Ladevorgang …"
 
 msgctxt "error_message"
 msgid "Error"
@@ -878,7 +878,7 @@ msgstr "Nachricht löschen?"
 
 msgctxt "pref_show_delete_button_dialog_text"
 msgid "Are you sure?"
-msgstr "Wirklich löschen?"
+msgstr "Sind Sie sicher?"
 
 msgctxt "quickreply_sent_toast"
 msgid "Message Sent"

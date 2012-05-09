@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: smspopup\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-03-04 18:33-0500\n"
-"PO-Revision-Date: 2010-12-30 12:12+0000\n"
-"Last-Translator: Νιάνιος Ρωμανός <Unknown>\n"
+"PO-Revision-Date: 2012-04-30 20:44+0000\n"
+"Last-Translator: Nickolas M <maslarinosnickolas@gmail.com>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-08 00:16+0000\n"
-"X-Generator: Launchpad (build 14907)\n"
+"X-Launchpad-Export-Date: 2012-05-09 02:28+0000\n"
+"X-Generator: Launchpad (build 15213)\n"
 
 #. Notification Strings
 msgctxt "notification_multiple_title"
@@ -34,7 +34,7 @@ msgstr "Νέο μήνυμα από: %s"
 
 msgctxt "notification_scroll_privacy_no_name"
 msgid "New message"
-msgstr ""
+msgstr "Νέο μήνυμα"
 
 #. Button Strings
 msgctxt "button_close"
@@ -104,7 +104,7 @@ msgstr "To SMS Popup ενεργοποιήθηκε"
 
 msgctxt "pref_enabled_summaryoff"
 msgid "SMS Popup is disabled"
-msgstr "To SMS Popup απενεργοποιήθηκε."
+msgstr "Το SMS Popup είναι απενεργοποιημένο"
 
 msgctxt "pref_about_title"
 msgid "About"
@@ -161,55 +161,57 @@ msgstr "Η οθόνη θα σβήσει μετά από αυτό το χρονι
 
 msgctxt "pref_dimscreen_title"
 msgid "Dim Popup Screen"
-msgstr "Σκοτεινή προβολή του Popup"
+msgstr "Σκοτεινή προβολή του αναδυόμενου παραθύρου"
 
 msgctxt "pref_dimscreen_summaryon"
 msgid "Popup screen will be dim (saves battery)"
-msgstr "Η προβολή του Popup θα είναι σκοτεινή (σώνει μπαταρία)"
+msgstr ""
+"Η προβολή του αναδυόμενου παραθύρου θα είναι σκοτεινή (διατηρεί μπαταρία)"
 
 msgctxt "pref_dimscreen_summaryoff"
 msgid "Popup screen will be bright"
-msgstr "Η προβολή του Popup θα είναι φωτεινή."
+msgstr "Η προβολή του αναδυόμενου παραθύρου θα είναι φωτεινή."
 
 msgctxt "pref_privacy_category"
 msgid "Privacy"
-msgstr ""
+msgstr "Απόρρητο"
 
 msgctxt "pref_privacy_title"
 msgid "Privacy Mode"
-msgstr "Προσωπική λειτουργία."
+msgstr "Απόρρητη λειτουργία"
 
 msgctxt "pref_privacy_summaryon"
 msgid "Popup will use privacy mode"
-msgstr ""
+msgstr "Το αναδυόμενο παράθυρο θα χρησιμοποιεί την απόρρητη λειτουργία"
 
 msgctxt "pref_privacy_summaryoff"
 msgid "Popup will show all message details"
 msgstr ""
+"Το αναδυόμενο παράθυρο θα εμφανίζει όλες τις λεπτομέρειες του μηνύματος"
 
 msgctxt "pref_privacy_sender_title"
 msgid "Hide Contact Name"
-msgstr ""
+msgstr "Απόκρυψη ονόματος επαφής"
 
 msgctxt "pref_privacy_sender_summaryon"
 msgid "Message sender name will also be hidden"
-msgstr ""
+msgstr "Το όνομα του αποστολέα θα αποκρύπτεται επίσης"
 
 msgctxt "pref_privacy_sender_summaryoff"
 msgid "Message sender name will be shown"
-msgstr ""
+msgstr "Το όνομα του αποστολέα θα εμφανίζεται"
 
 msgctxt "pref_privacy_always_title"
 msgid "Always Use Privacy Mode"
-msgstr ""
+msgstr "Πάντα χρήση της απόρρητης λειτουργίας"
 
 msgctxt "pref_privacy_always_summaryon"
 msgid "Privacy mode will always be used"
-msgstr ""
+msgstr "Η απόρρητη λειτουργία θα χρησιμοποιείται πάντα"
 
 msgctxt "pref_privacy_always_summaryoff"
 msgid "Only use privacy mode when screen is locked"
-msgstr ""
+msgstr "Χρήση της απόρρητης λειτουργίας όταν η οθόνη είναι κλειδωμένη"
 
 msgctxt "pref_markread_title"
 msgid "Mark Read"
@@ -227,40 +229,41 @@ msgstr ""
 
 msgctxt "pref_onlyShowOnKeyguard_title"
 msgid "Restrict Popup"
-msgstr "Περιορισμένο Popup"
+msgstr "Περιορισμένο αναδυόμενο παράθυρο"
 
 msgctxt "pref_onlyShowOnKeyguard_summaryon"
 msgid "Popup window will only show when keyguard is engaged"
 msgstr ""
-"Η προβολή του Popup Θα γίνεται μόνο όταν το πληκτρολόγιο είναι ενεργό."
+"Η προβολή του αναδυόμενου παραθύρου θα γίνεται μόνο όταν το πληκτρολόγιο "
+"είναι ενεργό."
 
 msgctxt "pref_onlyShowOnKeyguard_summaryoff"
 msgid "Popup will always show"
-msgstr "Η προβολή του Popup θα γίνεται πάντα"
+msgstr "Η προβολή του αναδυόμενου παραθύρου θα γίνεται πάντα"
 
 msgctxt "pref_useUnlockButton_title"
 msgid "Show Unlock Button"
-msgstr ""
+msgstr "Εμφάνιση κουμπιού Ξεκλειδώματος"
 
 msgctxt "pref_useUnlockButton_summaryon"
 msgid "Unlock button will show when screen is locked"
-msgstr ""
+msgstr "Το κουμπί Ξεκλειδώματος θα εμφανίζεται όταν η οθόνη είναι κλειδωμένη"
 
 msgctxt "pref_useUnlockButton_summaryoff"
 msgid "Regular buttons will show when screen is locked"
-msgstr ""
+msgstr "Τα κανονικά κουμπιά θα εμφανίζονται όταν η οθόνη είναι κλειδωμένη"
 
 msgctxt "pref_show_buttons_title"
 msgid "Show Buttons On Popup"
-msgstr "Εμφάνιση κουμπιών στο Popup"
+msgstr "Εμφάνιση κουμπιών στο αναδυόμενο παράθυρο"
 
 msgctxt "pref_show_buttons_summaryon"
 msgid "Buttons on popup are visible"
-msgstr "Τα κουμπιά στο Popup είναι εμφανή"
+msgstr "Τα κουμπιά στο αναδυόμενο παράθυρο είναι ορατά"
 
 msgctxt "pref_show_buttons_summaryoff"
 msgid "Buttons are hidden in long press menu"
-msgstr "Τα κουμπιά είναι κριμένα στη μακροχρόνια πίεση στο μενού."
+msgstr "Τα κουμπιά είναι κρυμένα στο μενού μακροχρόνιας πίεσης"
 
 #. Notification Preferences
 msgctxt "pref_notif_title"
@@ -274,7 +277,7 @@ msgstr "Ρύθμιση Ειδοποιήσεων"
 #. Category headings
 msgctxt "pref_notif_category_title"
 msgid "Notification Configuration"
-msgstr "Ρύθμιση Ειδοποιήσεων"
+msgstr "Ρύθμιση Ειδοποίησης"
 
 msgctxt "pref_vibrate_category_title"
 msgid "Vibrate Configuration"
@@ -320,27 +323,27 @@ msgstr ""
 
 msgctxt "pref_popup_enabled_title"
 msgid "Show a Popup"
-msgstr "Εμφάνιση Popup"
+msgstr "Εμφάνιση ενός αναδυόμενου παραθύρου"
 
 msgctxt "pref_popup_enabled_summaryon"
 msgid "Message will open in a popup"
-msgstr "Το μήνυμα θα ανοίξει σε Popup"
+msgstr "Το μήνυμα θα ανοίξει σε αναδυόμενο παράθυρο"
 
 msgctxt "pref_popup_enabled_summaryoff"
 msgid "Message will only show in notification area"
-msgstr ""
+msgstr "Το μήνυμα θα εμφανίζεται μόνο στην περιοχή των ειδοποιήσεων"
 
 msgctxt "pref_notif_test_title"
 msgid "Test Notification"
-msgstr "Δοκιμάστε τις ειδοποιήσεις"
+msgstr "Δοκιμή ειδοποίησης"
 
 msgctxt "pref_notif_test_summary"
 msgid "Test out your notification"
-msgstr "Δοκιμάστε τις επιλογές που κάνατε στις ειδοποιήσεις"
+msgstr "Δοκιμάστε την ειδοποίηση σας"
 
 msgctxt "pref_notif_test_message"
 msgid "Testing your notification now!"
-msgstr "Δοκιμή των ειδοποιήσεων τώρα!"
+msgstr "Δοκιμή της ειδοποίησης τώρα!"
 
 msgctxt "pref_notif_sound_title"
 msgid "Notification Sound"
@@ -352,23 +355,23 @@ msgstr "Αυτός ο ήχος θα ακούγετε όταν ένα μήνυμ�
 
 msgctxt "pref_notifyOnCall_title"
 msgid "Notify On Call"
-msgstr ""
+msgstr "Ειδοποίηση κατά την κλήση"
 
 msgctxt "pref_notifyOnCall_summaryon"
 msgid "Sound will play while on a call"
-msgstr ""
+msgstr "Ο ήχος να ακουστεί κατά τη τη διάρκεια μιας κλήσης"
 
 msgctxt "pref_notifyOnCall_summaryoff"
 msgid "Sound will not play while on a call"
-msgstr ""
+msgstr "Ο ήχος δεν θα ακουστεί κατά τη διάρκεια μιας κλήσης"
 
 msgctxt "pref_notif_icon_title"
 msgid "Notification Icon"
-msgstr ""
+msgstr "Εικονίδιο ειδοποίησης"
 
 msgctxt "pref_notif_icon_summary"
 msgid "Change the notification area icon"
-msgstr ""
+msgstr "Αλλαγή του εικονιδίου στην περιοχή των ειδοποιήσεων"
 
 msgctxt "pref_vibrate_title"
 msgid "Vibrate"
@@ -417,15 +420,15 @@ msgstr ""
 #. LED Preferences
 msgctxt "pref_flashled_title"
 msgid "Blink LED"
-msgstr "Αναβoσβήσιμο του LED"
+msgstr "Αναβοσβήσιμο του LED"
 
 msgctxt "pref_flashled_summaryon"
 msgid "Blink LED when a message is received"
-msgstr "Αναβoσβήσιμο του LED όταν ένα μήνυμα έχει ληφθεί"
+msgstr "Αναβοσβήσιμο του LED όταν ένα μήνυμα έχει ληφθεί"
 
 msgctxt "pref_flashled_summaryoff"
 msgid "Do not blink LED when a message is received"
-msgstr "Μη αναβoσβήσιμο του LED όταν ένα μήνυμα έχει ληφθεί"
+msgstr "Μη αναβοσβήσιμο του LED όταν ένα μήνυμα έχει ληφθεί"
 
 msgctxt "pref_flashled_color_title"
 msgid "LED Color"
@@ -516,7 +519,7 @@ msgstr "Αριθμός υπενθυμίσεων"
 
 msgctxt "pref_notif_repeat_times_summary"
 msgid "The number of reminder notifications to play"
-msgstr "Ο αριθμός της υπενθύμισης ειδοποιήσεων  για να ενεργήσει"
+msgstr "Ο αριθμός των υπενθυμίσεων για τις ειδοποιήσεις"
 
 msgctxt "pref_notif_repeat_screen_on_title"
 msgid "Screen On for Reminders"
@@ -566,6 +569,16 @@ msgid ""
 "show a popup while the rest trigger a regular notification. You could also "
 "ignore certain contacts by setting their notification to silent."
 msgstr ""
+"Το SMS Popup προσφέρει τη δυνατότητα να προσαρμόσετε τις ειδοποιήσεις για "
+"κάθε επαφή. Όταν λαμβάνεται ένα καινούριο μήνυμα, το SMS Popup πρώτα θα "
+"ελέγξει αν η επαφή έχει μία προσαρμοσμένη ειδοποίηση. Αν έχει, αυτές οι "
+"ρυθμίσεις χρησιμοποιούνται, αλλιώς οι προεπιλεγμένες ειδοποιήσεις "
+"χρησιμοποιούνται.\n"
+"\n"
+"Χρησιμοποιώντας αυτή τη λειτουργία, μπορείτε να ρυθμίσετε την εφαρμογή ώστε "
+"μόνο μερικές επαφές να εμφανίζουν αναδυόμενο παράθυρο ενώ οι υπόλοιπες να "
+"ενεργοποιούν μία κανονική ειδοποίηση. Μπορείτε επίσης να αγνοήσετε ορισμένες "
+"επαφές ρυθμίζοντας τις ειδοποιήσεις τους στο αθόρυβο."
 
 msgctxt "contact_customization_add"
 msgid "Add Custom Notifications"
@@ -600,7 +613,7 @@ msgstr "Οι ειδοποιήσεις έχουν απενεργοποιηθεί 
 
 msgctxt "contact_customization_add_hint"
 msgid "Add/Edit contact notifications…"
-msgstr ""
+msgstr "Προσθήκη/Επεξεργασία ειδοποιήσεων επαφής"
 
 msgctxt "ringtone_silent"
 msgid "Silent"
@@ -687,7 +700,7 @@ msgstr "Αποστολή"
 
 msgctxt "quickreply_sending_toast"
 msgid "Sending message…"
-msgstr ""
+msgstr "Αποστολή μηνύματος..."
 
 msgctxt "quickreply_nomessage_toast"
 msgid "Send"
@@ -696,7 +709,7 @@ msgstr "Αποστολή"
 #. Text-To-Speech and Voice Transcription Strings
 msgctxt "loading_message"
 msgid "Loading…"
-msgstr ""
+msgstr "Γίνεται φόρτωση..."
 
 msgctxt "error_message"
 msgid "Error"
@@ -704,7 +717,7 @@ msgstr "Σφάλμα"
 
 msgctxt "error_no_voice_recognition"
 msgid "Voice recognition not available on this device"
-msgstr "Η αναγνώριση φωνής δεν είναι δυνατή σε αυτή τη συσκευή"
+msgstr "Η αναγνώριση φωνής δεν είναι διαθέσιμη σε αυτή τη συσκευή"
 
 #. Popup Button Configuration
 msgctxt "pref_button_config_title"
@@ -713,7 +726,7 @@ msgstr "Διαμόρφωση Κουμπιών"
 
 msgctxt "pref_button_config_summary"
 msgid "Popup button configuration"
-msgstr "Ρύθμιση κουμπιών στο Popup"
+msgstr "Ρύθμιση κουμπιών στο αναδυόμενο παράθυρο"
 
 #, c-format
 msgctxt "pref_button_summary"
@@ -745,13 +758,13 @@ msgid ""
 "Thanks!"
 msgstr ""
 "Το SMS Popup είναι μια δωρεάν εφαρμογή που την δουλεύω στον ελεύθερό μου "
-"χρόνο. Αν την βρίσκετε χρήσιμη . και έχετε να ξοδέψετε μερικά ευρώ, μία "
-"δωρεά θα εκτιμηθεί πολύ.\n"
+"χρόνο. Αν την βρίσκετε χρήσιμη  και έχετε να ξοδέψετε μερικά ευρώ, μία δωρεά "
+"θα εκτιμηθεί πολύ.\n"
 "Ευχαριστώ!"
 
 msgctxt "pref_donate_market_button"
 msgid "Donate via Android Market"
-msgstr "Δωρεά μέσω του Android Market"
+msgstr "Δωρεά μέσω του Play Store"
 
 msgctxt "pref_donate_paypal_button"
 msgid "Donate via PayPal"
@@ -853,27 +866,29 @@ msgstr "Η αυτόματη περιστροφή πάντα ενεργή"
 
 msgctxt "pref_autorotate_summaryon"
 msgid "Popup will always autorotate"
-msgstr "Το Popup πάντα θα περιστρέφεται αυτόματα"
+msgstr "Το αναδυόμενο παράθυρο πάντα θα περιστρέφεται αυτόματα"
 
 msgctxt "pref_autorotate_summaryoff"
 msgid "Popup will auto-rotate based on the screen behind it"
-msgstr "Το Popup θα περιστρέφεται αυτόματα με βάση το μενού πίσω του"
+msgstr ""
+"Το αναδυόμενο παράθυρο θα περιστρέφεται αυτόματα με βάση το μενού πίσω του"
 
 msgctxt "pref_screen_on_title"
 msgid "Screen On for Popup"
-msgstr "Η οθόνη ενεργή για το Popup"
+msgstr "Η οθόνη ενεργή για το αναδυόμενο παράθυρο"
 
 msgctxt "pref_screen_on_summaryon"
 msgid "Screen will turn on when popup shows"
-msgstr "Η οθόνη θα γίνεται ενεργή όταν το εμφανίζεται το Popup"
+msgstr "Η οθόνη θα γίνεται ενεργή όταν το εμφανίζεται το αναδυόμενο παράθυρο"
 
 msgctxt "pref_screen_on_summaryoff"
 msgid "Screen will not turn on when popup shows"
-msgstr "Η οθόνη θα γίνεται ανενεργή όταν το εμφανίζεται το Popup"
+msgstr ""
+"Η οθόνη θα γίνεται ανενεργή όταν το εμφανίζεται το αναδυόμενο παράθυρο"
 
 msgctxt "pref_screen_category"
 msgid "Screen Control"
-msgstr "Χειρισμός Μενού"
+msgstr "Επιλογές Οθόνης"
 
 #. Other new Quick Reply prefs
 msgctxt "pref_show_delete_button_dialog_title"
@@ -971,7 +986,7 @@ msgstr "Κίτρινο"
 
 msgctxt "pref_led_color_magenta"
 msgid "Magenta"
-msgstr "Πορφυρό"
+msgstr "Μωβ"
 
 msgctxt "pref_led_color_cyan"
 msgid "Cyan"

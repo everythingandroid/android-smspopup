@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: smspopup\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-03-04 18:33-0500\n"
-"PO-Revision-Date: 2011-04-12 17:37+0000\n"
-"Last-Translator: eelco.bel <Unknown>\n"
+"PO-Revision-Date: 2012-04-19 15:36+0000\n"
+"Last-Translator: Gunter <gunter.selleslagh@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-08 00:16+0000\n"
-"X-Generator: Launchpad (build 14907)\n"
+"X-Launchpad-Export-Date: 2012-05-09 02:28+0000\n"
+"X-Generator: Launchpad (build 15213)\n"
 
 #. Notification Strings
 msgctxt "notification_multiple_title"
@@ -34,7 +34,7 @@ msgstr "Nieuw bericht van: %s"
 
 msgctxt "notification_scroll_privacy_no_name"
 msgid "New message"
-msgstr ""
+msgstr "Nieuw bericht"
 
 #. Button Strings
 msgctxt "button_close"
@@ -173,7 +173,7 @@ msgstr "Popup scherm is helder"
 
 msgctxt "pref_privacy_category"
 msgid "Privacy"
-msgstr ""
+msgstr "Privacy"
 
 msgctxt "pref_privacy_title"
 msgid "Privacy Mode"
@@ -181,35 +181,35 @@ msgstr "Privacy Mode"
 
 msgctxt "pref_privacy_summaryon"
 msgid "Popup will use privacy mode"
-msgstr ""
+msgstr "Popup gebruikt privacy instellingen"
 
 msgctxt "pref_privacy_summaryoff"
 msgid "Popup will show all message details"
-msgstr ""
+msgstr "Bericht details tonen in popup"
 
 msgctxt "pref_privacy_sender_title"
 msgid "Hide Contact Name"
-msgstr ""
+msgstr "Contact naam verbergen"
 
 msgctxt "pref_privacy_sender_summaryon"
 msgid "Message sender name will also be hidden"
-msgstr ""
+msgstr "Naam afzender verbergen"
 
 msgctxt "pref_privacy_sender_summaryoff"
 msgid "Message sender name will be shown"
-msgstr ""
+msgstr "Naam afzender tonen"
 
 msgctxt "pref_privacy_always_title"
 msgid "Always Use Privacy Mode"
-msgstr ""
+msgstr "Altijd privacy instellingen gebruiken"
 
 msgctxt "pref_privacy_always_summaryon"
 msgid "Privacy mode will always be used"
-msgstr ""
+msgstr "Privacy instellingen altijd gebruiken"
 
 msgctxt "pref_privacy_always_summaryoff"
 msgid "Only use privacy mode when screen is locked"
-msgstr ""
+msgstr "Privacy instellingen enkel gebruiken indien scherm geblokkeerd"
 
 msgctxt "pref_markread_title"
 msgid "Mark Read"
@@ -240,15 +240,15 @@ msgstr "Popup wordt altijd getoond"
 
 msgctxt "pref_useUnlockButton_title"
 msgid "Show Unlock Button"
-msgstr ""
+msgstr "Tonen ontgrendel knop"
 
 msgctxt "pref_useUnlockButton_summaryon"
 msgid "Unlock button will show when screen is locked"
-msgstr ""
+msgstr "Ontgrendel knop tonen indien scherm geblokkeerd"
 
 msgctxt "pref_useUnlockButton_summaryoff"
 msgid "Regular buttons will show when screen is locked"
-msgstr ""
+msgstr "Normale knoppen tonen indien scherm geblokkeerd"
 
 msgctxt "pref_show_buttons_title"
 msgid "Show Buttons On Popup"
@@ -325,7 +325,7 @@ msgstr "Het bericht wordt in een Popup getoond"
 
 msgctxt "pref_popup_enabled_summaryoff"
 msgid "Message will only show in notification area"
-msgstr ""
+msgstr "Bericht enkel in status balk tonen"
 
 msgctxt "pref_notif_test_title"
 msgid "Test Notification"
@@ -349,23 +349,23 @@ msgstr "Dit geluid wordt gespeeld bij ontvangst van een bericht"
 
 msgctxt "pref_notifyOnCall_title"
 msgid "Notify On Call"
-msgstr ""
+msgstr "Verwittigen tijdens gesprek"
 
 msgctxt "pref_notifyOnCall_summaryon"
 msgid "Sound will play while on a call"
-msgstr ""
+msgstr "Geluid afspelen indien in gesprek"
 
 msgctxt "pref_notifyOnCall_summaryoff"
 msgid "Sound will not play while on a call"
-msgstr ""
+msgstr "Geluid dempen indien in gesprek"
 
 msgctxt "pref_notif_icon_title"
 msgid "Notification Icon"
-msgstr ""
+msgstr "Bericht icoon"
 
 msgctxt "pref_notif_icon_summary"
 msgid "Change the notification area icon"
-msgstr ""
+msgstr "Wijzig bericht icoon status balk"
 
 msgctxt "pref_vibrate_title"
 msgid "Vibrate"
@@ -563,6 +563,10 @@ msgid ""
 "show a popup while the rest trigger a regular notification. You could also "
 "ignore certain contacts by setting their notification to silent."
 msgstr ""
+"SMS Popup maakt het mogelijk om meldingen per contact te personalizeren. SMS "
+"Popup controleert of er voor een contact personalisaties zijn ingesteld. "
+"Indien dit zo is worden deze gebruikt, anders worden de algemene "
+"instellingen gebruikt."
 
 msgctxt "contact_customization_add"
 msgid "Add Custom Notifications"
@@ -597,7 +601,7 @@ msgstr "Meldingen uitgeschakeld voor %s"
 
 msgctxt "contact_customization_add_hint"
 msgid "Add/Edit contact notifications…"
-msgstr ""
+msgstr "Toevoegen/wijzigen contact meldingen"
 
 msgctxt "ringtone_silent"
 msgid "Silent"
@@ -684,7 +688,7 @@ msgstr "Verzenden"
 
 msgctxt "quickreply_sending_toast"
 msgid "Sending message…"
-msgstr ""
+msgstr "Bericht versturen..."
 
 msgctxt "quickreply_nomessage_toast"
 msgid "Send"
@@ -693,7 +697,7 @@ msgstr "Verzenden"
 #. Text-To-Speech and Voice Transcription Strings
 msgctxt "loading_message"
 msgid "Loading…"
-msgstr ""
+msgstr "Bezig met laden…"
 
 msgctxt "error_message"
 msgid "Error"
