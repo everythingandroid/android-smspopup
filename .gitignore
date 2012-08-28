@@ -11,6 +11,25 @@
 # generated files
 bin/
 gen/
+out/
 
 # Local configuration file (sdk path, etc)
 local.properties
+
+# Eclipse project files
+.classpath
+.project
+
+# Mac thumbnail
+.DS_Store
+
+# Idea project fileS
+*.idea
+*.iml
+*.ipr
+*.iws
+.idea
+
+# Sandbox stuff
+_sandbox
+

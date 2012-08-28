@@ -15,8 +15,6 @@
 package com.commonsware.cwac.wakeful;
 
 import java.io.IOException;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -26,8 +24,9 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.XmlResourceParser;
-import android.util.Log;
 import com.commonsware.cwac.wakeful.WakefulIntentService.AlarmListener;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 public class AlarmReceiver extends BroadcastReceiver {
   private static final String WAKEFUL_META_DATA="com.commonsware.cwac.wakeful";
@@ -78,22 +77,22 @@ public class AlarmReceiver extends BroadcastReceiver {
       }
     }
     catch (NameNotFoundException e) {
-      Log.e(getClass().getName(), "Cannot find own info???", e);
+      throw new RuntimeException("Cannot find own info???", e);
     }
     catch (XmlPullParserException e) {
-      Log.e(getClass().getName(), "Malformed metadata resource XML", e);
+      throw new RuntimeException("Malformed metadata resource XML", e);
     }
     catch (IOException e) {
-      Log.e(getClass().getName(), "Could not read resource XML", e);
+      throw new RuntimeException("Could not read resource XML", e);
     }
     catch (ClassNotFoundException e) {
-      Log.e(getClass().getName(), "Listener class not found", e);
+      throw new RuntimeException("Listener class not found", e);
     }
     catch (IllegalAccessException e) {
-      Log.e(getClass().getName(), "Listener is not public or lacks public constructor", e);
+      throw new RuntimeException("Listener is not public or lacks public constructor", e);
     }
     catch (InstantiationException e) {
-      Log.e(getClass().getName(), "Could not create instance of listener", e);
+      throw new RuntimeException("Could not create instance of listener", e);
     }
     
     return(null);
