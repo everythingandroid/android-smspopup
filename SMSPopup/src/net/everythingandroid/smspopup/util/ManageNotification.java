@@ -23,6 +23,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -98,7 +99,7 @@ public class ManageNotification {
      * Class to hold the popup notification elements
      */
     static class PopupNotification {
-        public Notification notification;
+        public NotificationCompat.Builder notificationBuilder;
         public boolean privacyMode;
         public boolean privacySender;
         public boolean privacyAlways;
@@ -107,8 +108,8 @@ public class ManageNotification {
 
         public boolean replyToThread;
 
-        PopupNotification(Notification n) {
-            this.notification = n;
+        PopupNotification(NotificationCompat.Builder builder) {
+            notificationBuilder = builder;
         }
 
         public void notify(Context context, int notif) {
@@ -120,7 +121,7 @@ public class ManageNotification {
 
             if (BuildConfig.DEBUG)
                 Log.v("*** Notify running ***");
-            myNM.notify(notif, notification);
+            myNM.notify(notif, notificationBuilder.build());
         }
     }
 
@@ -247,9 +248,9 @@ public class ManageNotification {
          */
 
         // Set the icon, scrolling text and timestamp
-        n.notification.icon = n.notifIcon;
-        n.notification.tickerText = scrollText;
-        n.notification.when = timestamp;
+        n.notificationBuilder.setSmallIcon(n.notifIcon);
+        n.notificationBuilder.setTicker(scrollText);
+        n.notificationBuilder.setWhen(timestamp);
 
         // Notification notification =
         // new Notification(R.drawable.stat_notify_sms, scrollText, timestamp);
@@ -258,11 +259,14 @@ public class ManageNotification {
         PendingIntent notifIntent = PendingIntent.getActivity(context, 0, smsIntent, 0);
 
         // Set the messages that show when the status bar is pulled down
-        n.notification.setLatestEventInfo(context, contentTitle, contentText, notifIntent);
+        n.notificationBuilder
+                .setContentIntent(notifIntent)
+                .setContentTitle(contentTitle)
+                .setContentText(contentText);
 
         // Set number of events that this notification signifies (unread messages)
         if (messageCount > 1) {
-            n.notification.number = messageCount;
+            n.notificationBuilder.setNumber(messageCount);
         }
 
         n.notify(context, notif);
@@ -379,12 +383,8 @@ public class ManageNotification {
          * Ok, let's create our Notification object and set up all its parameters.
          */
         Notification notification = new Notification();
-
-        // Set auto-cancel flag
-        notification.flags = Notification.FLAG_AUTO_CANCEL;
-
-        // Set audio stream to ring
-        notification.audioStreamType = Notification.STREAM_DEFAULT;
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context);
+        notificationBuilder.setAutoCancel(true);
 
         /*
          * If this is a new notification (not updating a notification) then set LED, vibrate and
@@ -394,27 +394,19 @@ public class ManageNotification {
 
             // Set up LED pattern and color
             if (flashLed) {
-
-                notification.flags |= Notification.FLAG_SHOW_LIGHTS;
-
                 /*
                  * Set up LED blinking pattern
                  */
-                int[] led_pattern = null;
-
+                int[] ledPattern = null;
                 if (context.getString(R.string.pref_custom_val).equals(flashLedPattern)) {
-                    led_pattern = parseLEDPattern(flashLedPatternCustom);
+                    ledPattern = parseLEDPattern(flashLedPatternCustom);
                 } else {
-                    led_pattern = parseLEDPattern(flashLedPattern);
+                    ledPattern = parseLEDPattern(flashLedPattern);
                 }
-
                 // Set to default if there was a problem
-                if (led_pattern == null) {
-                    led_pattern = parseLEDPattern(Defaults.PREFS_LED_PATTERN);
+                if (ledPattern == null) {
+                    ledPattern = parseLEDPattern(Defaults.PREFS_LED_PATTERN);
                 }
-
-                notification.ledOnMS = led_pattern[0];
-                notification.ledOffMS = led_pattern[1];
 
                 /*
                  * Set up LED color
@@ -425,18 +417,14 @@ public class ManageNotification {
                 }
 
                 // Default in case the parse fails
-                int col = Color.parseColor(Defaults.PREFS_LED_COLOR);
-
+                int finalLedColor = Color.parseColor(Defaults.PREFS_LED_COLOR);
                 // Try and parse the color
                 if (flashLedCol != null) {
                     try {
-                        col = Color.parseColor(flashLedCol);
-                    } catch (IllegalArgumentException e) {
-                        // No need to do anything here
-                    }
+                        finalLedColor = Color.parseColor(flashLedCol);
+                    } catch (IllegalArgumentException e) {}
                 }
-
-                notification.ledARGB = col;
+                notificationBuilder.setLights(finalLedColor, ledPattern[0], ledPattern[1]);
             }
 
             // Get system telephony manager
@@ -445,32 +433,30 @@ public class ManageNotification {
 
             // Setup vibrate and notification sound only if call state is idle (not on a call)
             if (mTM.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
-
                 /*
                  * Set up vibrate pattern
                  */
                 // If vibrate is ON, or if phone is set to vibrate
                 if ((vibrate || AudioManager.RINGER_MODE_VIBRATE == mAM.getRingerMode())) {
 
-                    long[] vibrate_pattern = null;
-
+                    long[] vibratePattern = null;
                     if (context.getString(R.string.pref_custom_val).equals(vibrate_pattern_raw)) {
-                        vibrate_pattern = parseVibratePattern(vibrate_pattern_custom_raw);
+                        vibratePattern = parseVibratePattern(vibrate_pattern_custom_raw);
                     } else {
-                        vibrate_pattern = parseVibratePattern(vibrate_pattern_raw);
+                        vibratePattern = parseVibratePattern(vibrate_pattern_raw);
                     }
 
-                    if (vibrate_pattern != null) {
-                        notification.vibrate = vibrate_pattern;
+                    if (vibratePattern != null) {
+                        notificationBuilder.setVibrate(vibratePattern);
                     } else {
-                        notification.defaults = Notification.DEFAULT_VIBRATE;
+                        notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
                     }
                 }
 
                 /*
                  * Set up notification sound
                  */
-                notification.sound = notifSoundUri;
+                notificationBuilder.setSound(notifSoundUri);
 
             } else if (notifyOnCall) { // On a call or making a call
 
@@ -488,6 +474,10 @@ public class ManageNotification {
                 } catch (IllegalStateException e) {
                     if (BuildConfig.DEBUG)
                         Log.v("MediaPlayer, IllegalStateException - " + e);
+                } finally {
+                    if (mPlayer != null) {
+                        mPlayer.release();
+                    }
                 }
             }
         }
@@ -497,10 +487,9 @@ public class ManageNotification {
         Intent deleteIntent = new Intent(new Intent(context, ReminderReceiver.class));
         deleteIntent.setAction(Intent.ACTION_DELETE);
         PendingIntent pendingDeleteIntent = PendingIntent.getBroadcast(context, 0, deleteIntent, 0);
+        notificationBuilder.setDeleteIntent(pendingDeleteIntent);
 
-        notification.deleteIntent = pendingDeleteIntent;
-
-        PopupNotification popupNotification = new PopupNotification(notification);
+        PopupNotification popupNotification = new PopupNotification(notificationBuilder);
         popupNotification.replyToThread = replyToThread;
         popupNotification.privacyMode = privacyMode;
         popupNotification.privacySender = privacySender;
@@ -659,15 +648,18 @@ public class ManageNotification {
         }
 
         // Set the icon, scrolling text and timestamp
-        n.notification.icon = n.notifFailedIcon;
-        n.notification.tickerText = contentTitle;
-        n.notification.when = System.currentTimeMillis();
+        n.notificationBuilder.setSmallIcon(n.notifFailedIcon)
+                .setTicker(contentTitle)
+                .setWhen(System.currentTimeMillis());
 
         // Set the PendingIntent if the status message is clicked
         PendingIntent notifIntent = PendingIntent.getActivity(context, 0, smsIntent, 0);
 
         // Set the messages that show when the status bar is pulled down
-        n.notification.setLatestEventInfo(context, contentTitle, contentText, notifIntent);
+        n.notificationBuilder
+                .setContentTitle(contentTitle)
+                .setContentText(contentText)
+                .setContentIntent(notifIntent);
 
         n.notify(context, NOTIFICATION_SEND_FAILED);
     }
