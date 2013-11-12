@@ -1,14 +1,5 @@
 package net.everythingandroid.smspopup.util;
 
-import java.util.ArrayList;
-
-import net.everythingandroid.smspopup.BuildConfig;
-import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.provider.SmsMmsMessage;
-import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
-import net.everythingandroid.smspopup.receiver.ReminderReceiver;
-import net.everythingandroid.smspopup.service.SmsMonitorService;
-import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -28,6 +19,16 @@ import android.telephony.TelephonyManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+
+import net.everythingandroid.smspopup.BuildConfig;
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.provider.SmsMmsMessage;
+import net.everythingandroid.smspopup.provider.SmsPopupContract.ContactNotifications;
+import net.everythingandroid.smspopup.receiver.ReminderReceiver;
+import net.everythingandroid.smspopup.service.SmsMonitorService;
+import net.everythingandroid.smspopup.util.ManagePreferences.Defaults;
+
+import java.util.ArrayList;
 
 /*
  * This class handles the Notifications (sounds/vibrate/LED)
@@ -240,7 +241,7 @@ public class ManageNotification {
             contentTitle = context.getString(R.string.notification_multiple_title);
             contentText = context.getString(R.string.notification_multiple_text, messageCount);
         } else { // Else 1 message, set intent accordingly
-            smsIntent = message.getReplyIntent(n.replyToThread);
+            smsIntent = message.getReplyIntent();
         }
 
         /*
@@ -643,8 +644,8 @@ public class ManageNotification {
         } else { // Else 1 message failed
             contentTitle = "Error sending message";
             contentText = "Error sending message";
-            long threadId = (threadIdResult[0] != 0 ? threadIdResult[0] : 0);
-            smsIntent = SmsPopupUtils.getSmsToIntent(context, threadId);
+//            long threadId = (threadIdResult[0] != 0 ? threadIdResult[0] : 0);
+//            smsIntent = SmsPopupUtils.getSmsToIntent(context, threadId);
         }
 
         // Set the icon, scrolling text and timestamp

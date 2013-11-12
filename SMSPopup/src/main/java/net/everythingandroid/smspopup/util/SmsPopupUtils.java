@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.preference.PreferenceManager;
-import android.provider.BaseColumns;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.PhoneLookup;
@@ -61,7 +60,7 @@ public class SmsPopupUtils {
     public static final Uri THREAD_ID_CONTENT_URI =
             Uri.withAppendedPath(MMS_SMS_CONTENT_URI, "threadID");
     public static final Uri CONVERSATION_CONTENT_URI = Threads.CONTENT_URI;
-    public static final String SMSTO_URI = "smsto:";
+    public static final String SMSTO_SCHEMA = "smsto:";
     private static final String UNREAD_CONDITION = TextBasedSmsColumns.READ + "=0";
 
     public static final Uri SMS_CONTENT_URI = Sms.CONTENT_URI;
@@ -70,18 +69,11 @@ public class SmsPopupUtils {
     public static final Uri MMS_CONTENT_URI = Mms.CONTENT_URI;
     public static final Uri MMS_INBOX_CONTENT_URI = Mms.Inbox.CONTENT_URI;
 
-    public static final String SMSMMS_ID = BaseColumns._ID;
     public static final String SMS_MIME_TYPE = "vnd.android-dir/mms-sms";
     public static final int READ_THREAD = 1;
-    public static final int MESSAGE_TYPE_SMS = 1;
-    public static final int MESSAGE_TYPE_MMS = 2;
 
     // The max size of either the width or height of the contact photo
     public static final int CONTACT_PHOTO_MAXSIZE = 1024;
-
-    // Bitmap cache
-//    private static final int bitmapCacheSize = 5;
-//    private static LruCache<Uri, Bitmap> bitmapCache = null;
 
     private static final String[] AUTHOR_CONTACT_INFO =
             { "Adam K <smspopup@everythingandroid.net>" };
@@ -92,8 +84,6 @@ public class SmsPopupUtils {
             Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8246419");
     public static final Uri DONATE_MARKET_URI =
             Uri.parse("market://details?id=net.everythingandroid.smspopupdonate");
-
-    public static final String SAMSUNG_OEM_NAME = "samsung";
 
     public static boolean hasHoneycomb() {
         // Can use static final constants like HONEYCOMB, declared in later versions
@@ -228,7 +218,7 @@ public class SmsPopupUtils {
         if (email == null)
             return null;
 
-        Cursor cursor = null;
+        Cursor cursor;
         try {
             cursor = context.getContentResolver().query(
                     Uri.withAppendedPath(
@@ -375,7 +365,7 @@ public class SmsPopupUtils {
      */
     @SuppressLint("NewApi")
     public static Bitmap loadContactPhoto(Context context, Uri contactUri,
-    		BitmapFactory.Options options) {
+            BitmapFactory.Options options) {
 
         if (contactUri == null) {
             return null;
@@ -849,47 +839,13 @@ public class SmsPopupUtils {
     }
 
     /**
-     * Get system view sms thread Intent
-     *
-     * @param context
-     *            context
-     * @param threadId
-     *            the message thread id to view
-     * @return the intent that can be started with startActivity()
-     */
-    public static Intent getSmsToIntent(Context context, long threadId) {
-        Intent popup = new Intent(Intent.ACTION_VIEW);
-
-        // Should *NOT* be using FLAG_ACTIVITY_MULTIPLE_TASK however something is broken on
-        // a few popular devices that received recent Froyo upgrades that means this is required
-        // in order to refresh the system compose message UI
-        int flags =
-                Intent.FLAG_ACTIVITY_NEW_TASK |
-                        // Intent.FLAG_ACTIVITY_SINGLE_TOP |
-                        Intent.FLAG_ACTIVITY_CLEAR_TOP;
-        // Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-
-        popup.setFlags(flags);
-
-        if (threadId > 0) {
-            // Log.v("^^Found threadId (" + threadId + "), sending to Sms intent");
-            popup.setData(Uri.withAppendedPath(THREAD_ID_CONTENT_URI, String.valueOf(threadId)));
-        } else {
-            return getSmsInboxIntent();
-        }
-        return popup;
-    }
-
-    /**
      * Get system sms-to Intent (normally "compose message" activity)
      *
-     * @param context
-     *            context
      * @param phoneNumber
      *            the phone number to compose the message to
      * @return the intent that can be started with startActivity()
      */
-    public static Intent getSmsToIntent(Context context, String phoneNumber) {
+    public static Intent getSmsToIntent(String phoneNumber) {
 
         Intent popup = new Intent(Intent.ACTION_SENDTO);
 
@@ -906,7 +862,7 @@ public class SmsPopupUtils {
 
         if (!"".equals(phoneNumber)) {
             // Log.v("^^Found threadId (" + threadId + "), sending to Sms intent");
-            popup.setData(Uri.parse(SMSTO_URI + Uri.encode(phoneNumber)));
+            popup.setData(Uri.parse(SMSTO_SCHEMA + Uri.encode(phoneNumber)));
         } else {
             return getSmsInboxIntent();
         }
@@ -1218,6 +1174,15 @@ public class SmsPopupUtils {
 
         ActivityManager mAM = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
+        String messagingAppPackageName = null;
+        if (hasKitKat()) {
+            messagingAppPackageName = Sms.getDefaultSmsPackage(context);
+        }
+
+        if (messagingAppPackageName == null) {
+            messagingAppPackageName = SmsMessageSender.MESSAGING_PACKAGE_NAME;
+        }
+
         final List<RunningTaskInfo> mRunningTaskList = mAM.getRunningTasks(1);
         final Iterator<RunningTaskInfo> mIterator = mRunningTaskList.iterator();
         RunningTaskInfo mRunningTask;
@@ -1225,16 +1190,17 @@ public class SmsPopupUtils {
             mRunningTask = mIterator.next();
             if (mRunningTask != null) {
                 final ComponentName runningTaskComponent = mRunningTask.baseActivity;
-                if (SmsMessageSender.MESSAGING_PACKAGE_NAME.equals(
+                if (messagingAppPackageName.equals(
                         runningTaskComponent.getPackageName())) {
-                    final String runClassName = runningTaskComponent.getClassName();
-                    for (int i=0; i<SmsMessageSender.MESSAGING_APP_ACTIVITIES.length; i++) {
-                        if (SmsMessageSender.MESSAGING_APP_ACTIVITIES[i].equals(runClassName)) {
-                            if (BuildConfig.DEBUG)
-                                Log.v("User in messaging app - from running task");
-                            return true;
-                        }
-                    }
+                    return true;
+//                    final String runClassName = runningTaskComponent.getClassName();
+//                    for (int i=0; i<SmsMessageSender.MESSAGING_APP_ACTIVITIES.length; i++) {
+//                        if (SmsMessageSender.MESSAGING_APP_ACTIVITIES[i].equals(runClassName)) {
+//                            if (BuildConfig.DEBUG)
+//                                Log.v("User in messaging app - from running task");
+//                            return true;
+//                        }
+//                    }
                 }
             }
         }
