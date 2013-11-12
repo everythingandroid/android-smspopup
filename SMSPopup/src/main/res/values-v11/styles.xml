@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="DialogTheme" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowIsFloating">false</item>
+        
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+
+    </style>
+
+    <style name="ButtonBar" parent="@android:style/Holo.ButtonBar.AlertDialog"></style>
+
+    <style name="ButtonBarButton" parent="@android:style/Widget.Holo.Button.Borderless.Small"></style>
+
+    <style name="NotificationIconPreferenceListItem" parent="@android:style/TextAppearance.Large"></style>
+
+</resources>
