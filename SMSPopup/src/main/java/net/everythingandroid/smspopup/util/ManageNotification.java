@@ -234,7 +234,7 @@ public class ManageNotification {
         message.setNotify(false);
 
         // The default intent when the notification is clicked (Inbox)
-        Intent smsIntent = SmsPopupUtils.getSmsInboxIntent();
+        Intent smsIntent = SmsPopupUtils.getSmsInboxIntent(context);
 
         // If more than one message waiting ...
         if (messageCount > 1) {
@@ -634,7 +634,7 @@ public class ManageNotification {
         int failedCount = getUndeliveredMessageCount(context, threadIdResult);
 
         // The default intent when the notification is clicked (Inbox)
-        Intent smsIntent = SmsPopupUtils.getSmsInboxIntent();
+        Intent smsIntent = SmsPopupUtils.getSmsInboxIntent(context);
 
         // If more than one message failed
         if (failedCount > 1) {

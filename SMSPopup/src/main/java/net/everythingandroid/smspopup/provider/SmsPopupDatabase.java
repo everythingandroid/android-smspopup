@@ -95,18 +95,20 @@ public class SmsPopupDatabase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (BuildConfig.DEBUG) Log.v("SmsPopupDatabase: Upgrading Database");
         if (oldVersion == 2 && newVersion == 3) {
+            // From v2->v3 a new column was added to the contacts table plus a new index
             db.execSQL("ALTER TABLE " + CONTACTS_DB_TABLE + " ADD COLUMN " +
                     ContactNotifications.CONTACT_ID  + " integer");
             db.execSQL(CONTACTS_DB_INDEX2_CREATE);
             SmsPopupUtilsService.startSyncContactNames(mContext);
+        } else if (oldVersion == 3 && newVersion == 4) {
+            // From v3->v4 the new messages table was added
+            db.execSQL(MESSAGES_DB_CREATE);
         } else {
+            // All other scenarios just drop all tables and recreate
             db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_DB_TABLE);
             db.execSQL("DROP TABLE IF EXISTS " + QUICKMESSAGES_DB_TABLE);
+            db.execSQL("DROP TABLE IF EXISTS " + MESSAGES_DB_CREATE);
             onCreate(db);
-        }
-
-        if (newVersion == 4) {
-            db.execSQL(MESSAGES_DB_CREATE);
         }
     }
 }

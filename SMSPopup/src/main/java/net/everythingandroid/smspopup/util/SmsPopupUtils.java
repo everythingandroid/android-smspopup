@@ -824,18 +824,26 @@ public class SmsPopupUtils {
      *
      * @return
      */
-    public static Intent getSmsInboxIntent() {
-        Intent conversations = new Intent(Intent.ACTION_MAIN);
-        // conversations.addCategory(Intent.CATEGORY_DEFAULT);
-        conversations.setType(SMS_MIME_TYPE);
-        // should I be using FLAG_ACTIVITY_RESET_TASK_IF_NEEDED??
-        int flags =
-                Intent.FLAG_ACTIVITY_NEW_TASK |
-                        Intent.FLAG_ACTIVITY_SINGLE_TOP |
-                        Intent.FLAG_ACTIVITY_CLEAR_TOP;
-        conversations.setFlags(flags);
+    public static Intent getSmsInboxIntent(Context context) {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
 
-        return conversations;
+        int flags = Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_SINGLE_TOP |
+                Intent.FLAG_ACTIVITY_CLEAR_TOP;
+        intent.setFlags(flags);
+
+        if (hasKitKat()) {
+            // From KitKat onward start the default SMS app
+            final String defaultSmsPackage = Sms.getDefaultSmsPackage(context);
+            if (defaultSmsPackage != null) {
+                intent.setPackage(defaultSmsPackage);
+            }
+        } else {
+            // Pre-KitKat use mime type to start the SMS app
+            intent.setType(SMS_MIME_TYPE);
+        }
+
+        return intent;
     }
 
     /**
@@ -845,7 +853,7 @@ public class SmsPopupUtils {
      *            the phone number to compose the message to
      * @return the intent that can be started with startActivity()
      */
-    public static Intent getSmsToIntent(String phoneNumber) {
+    public static Intent getSmsToIntent(Context context, String phoneNumber) {
 
         Intent popup = new Intent(Intent.ACTION_SENDTO);
 
@@ -864,7 +872,7 @@ public class SmsPopupUtils {
             // Log.v("^^Found threadId (" + threadId + "), sending to Sms intent");
             popup.setData(Uri.parse(SMSTO_SCHEMA + Uri.encode(phoneNumber)));
         } else {
-            return getSmsInboxIntent();
+            return getSmsInboxIntent(context);
         }
         return popup;
     }

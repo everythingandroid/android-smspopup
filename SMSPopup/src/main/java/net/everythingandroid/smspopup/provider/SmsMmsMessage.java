@@ -304,7 +304,7 @@ public class SmsMmsMessage {
      */
     public Intent getReplyIntent() {
         if (BuildConfig.DEBUG) Log.v("Replying by address: " + fromAddress);
-        return SmsPopupUtils.getSmsToIntent(fromAddress);
+        return SmsPopupUtils.getSmsToIntent(context, fromAddress);
     }
 
     public void setThreadRead() {

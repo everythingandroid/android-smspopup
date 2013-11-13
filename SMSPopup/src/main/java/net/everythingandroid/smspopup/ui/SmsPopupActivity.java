@@ -1041,7 +1041,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
         ManageKeyguard.exitKeyguardSecurely(new LaunchOnKeyguardExit() {
             @Override
             public void LaunchOnKeyguardExitSuccess() {
-                Intent i = SmsPopupUtils.getSmsInboxIntent();
+                Intent i = SmsPopupUtils.getSmsInboxIntent(SmsPopupActivity.this);
                 SmsPopupActivity.this.getApplicationContext().startActivity(i);
                 inbox = true;
                 myFinish();
