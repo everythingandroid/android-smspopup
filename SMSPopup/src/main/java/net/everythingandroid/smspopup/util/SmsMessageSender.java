@@ -16,12 +16,6 @@
  */
 package net.everythingandroid.smspopup.util;
 
-import java.util.ArrayList;
-
-import net.everythingandroid.smspopup.BuildConfig;
-import net.everythingandroid.smspopup.R;
-import net.everythingandroid.smspopup.receiver.SmsReceiver;
-import net.everythingandroid.smspopup.service.SmsReceiverService;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -33,6 +27,13 @@ import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
+
+import net.everythingandroid.smspopup.BuildConfig;
+import net.everythingandroid.smspopup.R;
+import net.everythingandroid.smspopup.receiver.SmsReceiver;
+import net.everythingandroid.smspopup.service.SmsReceiverService;
+
+import java.util.ArrayList;
 
 public class SmsMessageSender {
     private final Context mContext;
@@ -217,10 +218,8 @@ public class SmsMessageSender {
                 for (int j = 0; j < messageCount; j++) {
                     Uri uri = null;
                     try {
-                        uri =
-                                addMessage(mContext.getContentResolver(), mDests[i], messages
-                                        .get(j),
-                                        null, mTimestamp, requestDeliveryReport, mThreadId);
+                        uri = addMessage(mContext.getContentResolver(), mDests[i], messages.get(j),
+                                null, mTimestamp, requestDeliveryReport, mThreadId);
                     } catch (SQLiteException e) {
                         // TODO: show error here
                         // SqliteWrapper.checkSQLiteException(mContext, e);
@@ -228,30 +227,25 @@ public class SmsMessageSender {
 
                     PendingIntent deliveryReportIntent = null;
                     if (requestDeliveryReport) {
-                        deliveryReportIntent =
-                                PendingIntent.getBroadcast(mContext, 0,
-                                        new Intent(MESSAGING_STATUS_RECEIVED_ACTION, uri)
-                                                .setClassName(MESSAGING_PACKAGE_NAME,
-                                                        MESSAGING_STATUS_CLASS_NAME), 0);
+                        deliveryReportIntent = PendingIntent.getBroadcast(mContext, 0,
+                                new Intent(MESSAGING_STATUS_RECEIVED_ACTION, uri)
+                                        .setClassName(MESSAGING_PACKAGE_NAME,
+                                                MESSAGING_STATUS_CLASS_NAME), 0);
                     }
 
-                    PendingIntent sentIntent =
-                            PendingIntent.getBroadcast(mContext, 0,
-                                    new Intent(SmsReceiverService.MESSAGE_SENT_ACTION, uri)
-                                            .setClass(mContext, SmsReceiver.class), 0);
+                    PendingIntent sentIntent = PendingIntent.getBroadcast(mContext, 0,
+                            new Intent(SmsReceiverService.MESSAGE_SENT_ACTION, uri)
+                                    .setClass(mContext, SmsReceiver.class), 0);
 
-                    smsManager.sendTextMessage(
-                            mDests[i], mServiceCenter, messages.get(j), sentIntent,
-                            deliveryReportIntent);
+                    smsManager.sendTextMessage(mDests[i], mServiceCenter, messages.get(j),
+                            sentIntent, deliveryReportIntent);
                 }
 
             } else { // Otherwise send as multipart message
                 Uri uri = null;
                 try {
-                    uri =
-                            addMessage(mContext.getContentResolver(), mDests[i], mMessageText,
-                                    null,
-                                    mTimestamp, requestDeliveryReport, mThreadId);
+                    uri = addMessage(mContext.getContentResolver(), mDests[i], mMessageText, null,
+                            mTimestamp, requestDeliveryReport, mThreadId);
                 } catch (SQLiteException e) {
                     // TODO: show error here
                     // SqliteWrapper.checkSQLiteException(mContext, e);
@@ -260,16 +254,14 @@ public class SmsMessageSender {
                 for (int j = 0; j < messageCount; j++) {
                     if (requestDeliveryReport) {
                         deliveryIntents.add(PendingIntent.getBroadcast(mContext, 0,
-                                new Intent(
-                                        MESSAGING_STATUS_RECEIVED_ACTION, uri).setClassName(
+                                new Intent(MESSAGING_STATUS_RECEIVED_ACTION, uri).setClassName(
                                         MESSAGING_PACKAGE_NAME, MESSAGING_STATUS_CLASS_NAME),
                                 // MessageStatusReceiver.class),
                                 0));
                     }
 
                     sentIntents.add(PendingIntent.getBroadcast(mContext, 0,
-                            new Intent(
-                                    SmsReceiverService.MESSAGE_SENT_ACTION, uri).setClass(
+                            new Intent(SmsReceiverService.MESSAGE_SENT_ACTION, uri).setClass(
                                     mContext, SmsReceiver.class),
                             // .setClassName(MMS_PACKAGE_NAME, MMS_SENT_CLASS_NAME),
                             // SmsReceiver.class
@@ -277,8 +269,12 @@ public class SmsMessageSender {
                 }
                 if (BuildConfig.DEBUG)
                     Log.v("Sending message in " + messageCount + " parts");
-                smsManager.sendMultipartTextMessage(
-                        mDests[i], mServiceCenter, messages, sentIntents, deliveryIntents);
+                try {
+                    smsManager.sendMultipartTextMessage(mDests[i], mServiceCenter, messages,
+                            sentIntents, deliveryIntents);
+                } catch (Exception e) {
+                    Log.e("Error sending multipart text message");
+                }
             }
         }
         return false;

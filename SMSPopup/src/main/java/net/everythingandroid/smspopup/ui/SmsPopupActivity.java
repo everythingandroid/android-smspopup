@@ -1067,7 +1067,7 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
     private void sendQuickReply(String quickReplyMessage) {
         hideSoftKeyboard();
         if (quickReplyMessage != null) {
-            if (quickReplyMessage.length() > 0) {
+            if (quickReplyMessage.length() > 0 && quickReplySmsMessage != null) {
                 Intent i = new Intent(SmsPopupActivity.this.getApplicationContext(),
                         SmsPopupUtilsService.class);
                 i.setAction(SmsPopupUtilsService.ACTION_QUICKREPLY);
@@ -1125,7 +1125,10 @@ public class SmsPopupActivity extends FragmentActivity implements SmsPopupButton
                 contactIntent.setData(Uri.fromParts("mailto", address, null));
             }
         }
-        startActivity(contactIntent);
+
+        if (contactIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(contactIntent);
+        }
     }
 
     /**
