@@ -19,7 +19,3 @@ Screenshots:
 | ![http://4.bp.blogspot.com/-GOdUK2NGMLQ/T4m7fK1tWmI/AAAAAAACZNA/o1a2PZ5Ezus/s480/screenshot5.png](http://4.bp.blogspot.com/-GOdUK2NGMLQ/T4m7fK1tWmI/AAAAAAACZNA/o1a2PZ5Ezus/s480/screenshot5.png) | ![http://1.bp.blogspot.com/-IyZY19XaMn0/T4m7gO0U_jI/AAAAAAACZNI/ZUgTQbtQXCc/s480/screenshot6.png](http://1.bp.blogspot.com/-IyZY19XaMn0/T4m7gO0U_jI/AAAAAAACZNI/ZUgTQbtQXCc/s480/screenshot6.png) |
 | ![http://1.bp.blogspot.com/-P3zo6f20w6U/T4m7gs3c0FI/AAAAAAACZNQ/dCqv3UMHrq8/s480/screenshot7.png](http://1.bp.blogspot.com/-P3zo6f20w6U/T4m7gs3c0FI/AAAAAAACZNQ/dCqv3UMHrq8/s480/screenshot7.png) | ![http://3.bp.blogspot.com/-Bc8hgiuhRB0/T4m7g9oOQgI/AAAAAAACZNY/3y34fyxNB1w/s480/screenshot8.png](http://3.bp.blogspot.com/-Bc8hgiuhRB0/T4m7g9oOQgI/AAAAAAACZNY/3y34fyxNB1w/s480/screenshot8.png) |
 | ![http://3.bp.blogspot.com/-xj3wPGz8AvM/T4m7hcI7ELI/AAAAAAACZNg/n4RzqvGOX1Y/s480/screenshot9.png](http://3.bp.blogspot.com/-xj3wPGz8AvM/T4m7hcI7ELI/AAAAAAACZNg/n4RzqvGOX1Y/s480/screenshot9.png) |  |
-
-QR code to download page:
-
-![http://qrcode.kaywa.com/img.php?s=5&d=http://code.google.com/p/android-smspopup/downloads/list%3Fcan%3D2%26q%3Dfeatured&nothing=nothing.png](http://qrcode.kaywa.com/img.php?s=5&d=http://code.google.com/p/android-smspopup/downloads/list%3Fcan%3D2%26q%3Dfeatured&nothing=nothing.png)
