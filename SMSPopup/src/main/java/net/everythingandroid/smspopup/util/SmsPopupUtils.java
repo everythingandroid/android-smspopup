@@ -80,10 +80,10 @@ public class SmsPopupUtils {
     private static final String[] AUTHOR_CONTACT_INFO_DONATE =
             { "Adam K <smspopup+donate@everythingandroid.net>" };
 
-    public static final Uri DONATE_PAYPAL_URI =
-            Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8246419");
     public static final Uri DONATE_MARKET_URI =
             Uri.parse("market://details?id=net.everythingandroid.smspopupdonate");
+    public static final Uri DONATE_WEB_MARKET_URI =
+            Uri.parse("https://play.google.com/store/apps/details?id=net.everythingandroid.smspopupdonate");
 
     public static boolean hasHoneycomb() {
         // Can use static final constants like HONEYCOMB, declared in later versions

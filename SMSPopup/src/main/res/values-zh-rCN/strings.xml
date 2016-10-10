@@ -143,7 +143,6 @@
   <string name="pref_donate_title">捐赠 SMS Popup</string>
   <string name="pref_donate_text">SMS Popup 是我在业余时间制作的一款免费的程序。如果您感觉它很有用，可以捐赠我的开发。\n\n感谢支持!</string>
   <string name="pref_donate_market_button">通过Android Market捐赠</string>
-  <string name="pref_donate_paypal_button">通过PayPal捐赠</string>
   <string name="view_contact">查看联络</string>
   <string name="pref_quickreply_title">快速回复</string>
   <string name="pref_quickreply_summaryon">快速回复已启动</string>

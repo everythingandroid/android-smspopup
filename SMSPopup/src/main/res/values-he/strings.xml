@@ -166,7 +166,6 @@
   <string name="pref_donate_title">תרום ל SMS Popup</string>
   <string name="pref_donate_text">אס אמ אס פופאפ היא אפליקציה חופשית שעבדתי עליה בזמני החופשי. אם מצאת אותה מועילה, ואתה יכול לתרום מעט שקלים, התרומה תוערך בהחלט.\n\nתודה!</string>
   <string name="pref_donate_market_button">תרום באמצעות המרקט</string>
-  <string name="pref_donate_paypal_button">תרום באמצעות פייפל</string>
   <string name="view_contact">צפה באיש קשר</string>
   <string name="pref_quickreply_title">תגובה מהירה</string>
   <string name="pref_quickreply_summaryon">תגובה מהירה מאופשרת</string>

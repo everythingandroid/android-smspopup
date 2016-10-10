@@ -1,12 +1,14 @@
+apply plugin: 'com.android.application'
+
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.6.+'
+        classpath 'com.android.tools.build:gradle:2.2.0'
     }
 }
-apply plugin: 'android'
+
 
 repositories {
     maven {
@@ -17,11 +19,16 @@ repositories {
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.0"
+    buildToolsVersion "19.1"
 
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 19
+    }
+
+    lintOptions {
+        abortOnError false
+        disable 'MissingTranslation'
     }
 }
 

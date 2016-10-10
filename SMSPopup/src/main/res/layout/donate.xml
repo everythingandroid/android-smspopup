@@ -28,11 +28,5 @@
       android:id="@+id/DonateMarketButton"
       android:layout_gravity="center_horizontal"
       android:text="@string/pref_donate_market_button"></Button>
-    <Button
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:id="@+id/DonatePaypalButton"
-      android:layout_gravity="center_horizontal"
-      android:text="@string/pref_donate_paypal_button"></Button>
   </LinearLayout>
 </ScrollView>

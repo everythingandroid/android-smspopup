@@ -166,7 +166,6 @@
   <string name="pref_donate_title">Δωρεά στο SMS Popup</string>
   <string name="pref_donate_text">"Το SMS Popup είναι μια δωρεάν εφαρμογή που την δουλεύω στον ελεύθερό μου χρόνο. Αν την βρίσκετε χρήσιμη  και έχετε να ξοδέψετε μερικά ευρώ, μία δωρεά θα εκτιμηθεί πολύ.\nΕυχαριστώ!"</string>
   <string name="pref_donate_market_button">Δωρεά μέσω του Play Store</string>
-  <string name="pref_donate_paypal_button">Δωρεά μέσω του Paypal</string>
   <string name="view_contact">Προβολή Επαφής</string>
   <string name="pref_quickreply_title">Γρήγορη απάντηση</string>
   <string name="pref_quickreply_summaryon">Η Γρήγορη απάντηση έχει ενεργοποιηθεί</string>

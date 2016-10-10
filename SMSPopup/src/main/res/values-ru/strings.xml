@@ -143,7 +143,6 @@
   <string name="pref_donate_title">Пожертвовать для SMS Popup</string>
   <string name="pref_donate_text">SMS Popup - это бесплатная программа, над которой я работаю в свое свободное время. Если она вам понравилась и у вас есть пара лишних долларов, я буду признателен за ваши пожертвования.\n\nСпасибо!</string>
   <string name="pref_donate_market_button">Пожертвовать через Android Market</string>
-  <string name="pref_donate_paypal_button">Пожертвовать через PayPal</string>
   <string name="view_contact">Посмотреть контакт</string>
   <string name="pref_quickreply_title">Быстрый ответ</string>
   <string name="pref_quickreply_summaryon">Быстрый ответ включён</string>

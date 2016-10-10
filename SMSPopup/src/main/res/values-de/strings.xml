@@ -158,7 +158,6 @@
   <string name="pref_donate_title">an SMS Popup spenden</string>
   <string name="pref_donate_text">SMS Popup ist ein freies Programm an dem ich in meiner Freizeit arbeite. Wenn Sie es nützlich finden wäre es sehr hilfreich wenn Sie einige Fehler melden oder etwas spenden könnten \n\nDanke!</string>
   <string name="pref_donate_market_button">"über Android Market  spenden"</string>
-  <string name="pref_donate_paypal_button">über PayPal spenden</string>
   <string name="view_contact">Kontakt anzeigen</string>
   <string name="pref_quickreply_title">Schnellantwort</string>
   <string name="pref_quickreply_summaryon">Schnellantwort ist eingeschaltet</string>

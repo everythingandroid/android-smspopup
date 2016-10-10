@@ -166,7 +166,6 @@
   <string name="pref_donate_title">Донирајте за SMS Popup</string>
   <string name="pref_donate_text">"SMS Popup  је бесплатна апликација коју сам радио у слободно време. Ако сматрате да је корисна и можете издвојити нешто новца, веома ћу ценити сваку донацију.\n\nХвала!"</string>
   <string name="pref_donate_market_button">Донирајте преко Андроид Маркета</string>
-  <string name="pref_donate_paypal_button">Донирај преко PayPal-a</string>
   <string name="view_contact">Погледај контакт</string>
   <string name="pref_quickreply_title">Брзи одговор</string>
   <string name="pref_quickreply_summaryon">Брзи одговор је укључен</string>

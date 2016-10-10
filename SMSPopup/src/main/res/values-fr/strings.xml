@@ -166,7 +166,6 @@
   <string name="pref_donate_title">Don pour SMS Popup</string>
   <string name="pref_donate_text">SMS Popup est une application gratuite sur laquelle je travaille pendant mon temps libre. Si vous la trouvez utile, et que vous pouvez lui céder quelques Ecu sonnant et trébuchant, c\'est avec plaisir que j\'accepterai cette donation.\n\nThanks!</string>
   <string name="pref_donate_market_button">Don via Android Market</string>
-  <string name="pref_donate_paypal_button">Don via PayPal</string>
   <string name="view_contact">Voir Contact</string>
   <string name="pref_quickreply_title">Réponse rapide</string>
   <string name="pref_quickreply_summaryon">Réponse rapide est activée</string>

@@ -166,7 +166,6 @@
   <string name="pref_donate_title">기부하기</string>
   <string name="pref_donate_text">SMS 팝업은 제가 남는 시간을 쪼개 만든 공개 앱입니다. 유용하게 사용중이고 약간의 여유자금으로 기부하신다면 아주 감사히 받도록 하겠습니다.\n\n감사합니다.</string>
   <string name="pref_donate_market_button">안드로이드 마켓을 통해 기부</string>
-  <string name="pref_donate_paypal_button">PayPal을 통해 기부</string>
   <string name="view_contact">연락처 보기</string>
   <string name="pref_quickreply_title">빠른 답장</string>
   <string name="pref_quickreply_summaryon">빠른 답장을 사용합니다</string>

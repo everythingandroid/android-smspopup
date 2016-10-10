@@ -2,6 +2,7 @@ package net.everythingandroid.smspopup.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -274,20 +275,15 @@ public class SmsPopupConfigActivity extends PreferenceActivity {
             donateMarketButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(SmsPopupUtils.DONATE_MARKET_URI);
-                    SmsPopupConfigActivity.this.startActivity(
-                            Intent.createChooser(i, getString(R.string.pref_donate_title)));
-                }
-            });
-
-            Button donatePaypalButton = (Button) donateView.findViewById(R.id.DonatePaypalButton);
-            donatePaypalButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(SmsPopupUtils.DONATE_PAYPAL_URI);
-                    SmsPopupConfigActivity.this.startActivity(i);
+                    try {
+                        SmsPopupConfigActivity.this.startActivity(
+                                new Intent(Intent.ACTION_VIEW,
+                                SmsPopupUtils.DONATE_MARKET_URI));
+                    } catch (ActivityNotFoundException e) {
+                        SmsPopupConfigActivity.this.startActivity(
+                                new Intent(Intent.ACTION_VIEW,
+                                SmsPopupUtils.DONATE_WEB_MARKET_URI));
+                    }
                 }
             });
 

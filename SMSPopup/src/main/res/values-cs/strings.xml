@@ -142,7 +142,6 @@
   <string name="pref_donate_title">Podpořte SMS Popup</string>
   <string name="pref_donate_text">SMS Popup je zdarma a pracuji na ní ve svém volném čase. Pokud se Vám zdá užitečná a můžete oželet pár drobných, podpoříte vývoj dalších aplikací.\n\nDěkuji!</string>
   <string name="pref_donate_market_button">Podpořit přes Android Market</string>
-  <string name="pref_donate_paypal_button">Podpořit přes PayPal</string>
   <string name="view_contact">Prohlédnout kontakt</string>
   <string name="pref_show_delete_button_dialog_title">Smazat zprávu</string>
   <string name="pref_show_delete_button_dialog_text">Jste si jisti?</string>

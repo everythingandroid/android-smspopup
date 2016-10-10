@@ -158,7 +158,6 @@
   <string name="pref_button3_title">Düğme 3 Yapılandırması</string>
   <string name="pref_donate_title">SMS Popup\'a bağış yapın</string>
   <string name="pref_donate_market_button">Android Market yoluyla bağış yapın</string>
-  <string name="pref_donate_paypal_button">PayPal yoluyla bağış yapın</string>
   <string name="view_contact">Kişiyi Göster</string>
   <string name="pref_quickreply_title">Hızlı Yanıt</string>
   <string name="pref_quickreply_summaryoff">Hızlı Yanıt etkisiz</string>

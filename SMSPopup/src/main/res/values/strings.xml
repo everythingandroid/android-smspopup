@@ -203,8 +203,7 @@
     <!-- Donate Strings (not used right now) -->
     <string name="pref_donate_title">Donate to SMS Popup</string>
     <string name="pref_donate_text">SMS Popup is a free application that I work on in my spare time.  If you find it useful, and can spare a few bucks, a donation would be much appreciated.\n\nThanks!</string>
-    <string name="pref_donate_market_button">Donate via Android Market</string>
-    <string name="pref_donate_paypal_button">Donate via PayPal</string>
+    <string name="pref_donate_market_button">Donate via Google Play</string>
 
     <!-- Misc missing string -->
     <string name="view_contact">View Contact</string>

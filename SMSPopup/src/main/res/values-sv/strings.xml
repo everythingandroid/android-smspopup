@@ -143,7 +143,6 @@
   <string name="pref_donate_title">Donera till SMS Popup</string>
   <string name="pref_donate_text">SMS Popup är en gratis applikation som jag arbetar med på min fritid. Om du tycker den är användbar och kan avvara några kronor skulle en donation vara mycket uppskattad.\n\nTack!</string>
   <string name="pref_donate_market_button">Donera via Android Market</string>
-  <string name="pref_donate_paypal_button">Donera via Paypal</string>
   <string name="view_contact">Visa kontakt</string>
   <string name="pref_quickreply_title">Snabbsvar</string>
   <string name="pref_quickreply_summaryon">Snabbsvar är aktiverat</string>
